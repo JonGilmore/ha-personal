@@ -21,43 +21,22 @@ jobs:
 #         with:
 #           args: python -m homeassistant --config configuration.yaml --script check_config --info all
 
-  ha_check:
+  # ha_check:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Getting your configuration from GitHub
+  #       uses: actions/checkout@v1
+  #     - name: Setup fake secrets.yaml
+  #       run: mv ./fake_secrets.yaml ./secrets.yaml
+  #     - name: Home Assistant Configuration Check
+  #       uses: ludeeus/action-ha-config-check@0.0.1
+  #       env:
+  #         ACTION_VERSION: STABLE
+  #         ACTION_CONFIG_PATH: ./
+  secret_check:
     runs-on: ubuntu-latest
     steps:
-      - name: Getting your configuration from GitHub
-        uses: actions/checkout@v1
-      - name: Setup fake secrets.yaml
-        run: mv ./fake_secrets.yaml ./secrets.yaml
-      - name: Home Assistant Configuration Check
-        uses: ludeeus/action-ha-config-check@0.0.1
-        env:
-          ACTION_VERSION: STABLE
-          ACTION_CONFIG_PATH: ./
-#         - name: Home Assistant Check
-#           uses: "docker://homeassistant/home-assistant:stable"
-#           with:
-#             args: python -m homeassistant --config ./ --script check_config --info all
-#     secret_check:
-#       runs-on: ubuntu-latest
-#       steps:
-#         - name: gitleaks-action
-#           uses: eshork/gitleaks-action@v1.0.0
-#         - name: Secret Scan
-#           uses: max/secret-scan@1.0.0
-
-# jobs:
-#   home_assistant_stable:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Getting your configuration from GitHub
-#         uses: actions/checkout@v1
-#       - name: Home Assistant Version
-#         uses: "docker://homeassistant/home-assistant:stable"
-#         with:
-#           args: |
-#             python -m homeassistant --version
-#       - name: Home Assistant Check
-#         uses: "docker://homeassistant/home-assistant:stable"
-#         with:
-#           #args: python -m homeassistant --config ./config/ --script check_config --info all
-#           args: python -m homeassistant --config ./ --script check_config --info all
+      - name: gitleaks-action
+        uses: eshork/gitleaks-action@v1.0.0
+      - name: Secret Scan
+        uses: max/secret-scan@1.0.0
