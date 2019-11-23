@@ -1,0 +1,61 @@
+name: CI
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: 0 12 * * *
+jobs:
+#   lint:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: YAML Lint
+#         uses: "docker://pipelinecomponents/yamllint:latest"
+#         with:
+#           args: yamllint .
+#   config_check:
+#     needs: [lint]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: HA Check
+#         uses: "docker://homeassistant/home-assistant:latest"
+#         with:
+#           args: python -m homeassistant --config configuration.yaml --script check_config --info all
+
+  ha_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v1
+      - name: Home Assistant Configuration Check
+        uses: ludeeus/action-ha-config-check@0.0.1
+        env:
+          ACTION_VERSION: STABLE
+          ACTION_CONFIG_PATH: ./
+#         - name: Home Assistant Check
+#           uses: "docker://homeassistant/home-assistant:stable"
+#           with:
+#             args: python -m homeassistant --config ./ --script check_config --info all
+#     secret_check:
+#       runs-on: ubuntu-latest
+#       steps:
+#         - name: gitleaks-action
+#           uses: eshork/gitleaks-action@v1.0.0
+#         - name: Secret Scan
+#           uses: max/secret-scan@1.0.0
+
+# jobs:
+#   home_assistant_stable:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Getting your configuration from GitHub
+#         uses: actions/checkout@v1
+#       - name: Home Assistant Version
+#         uses: "docker://homeassistant/home-assistant:stable"
+#         with:
+#           args: |
+#             python -m homeassistant --version
+#       - name: Home Assistant Check
+#         uses: "docker://homeassistant/home-assistant:stable"
+#         with:
+#           #args: python -m homeassistant --config ./config/ --script check_config --info all
+#           args: python -m homeassistant --config ./ --script check_config --info all

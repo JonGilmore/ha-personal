@@ -8,6 +8,8 @@
 !*.md
 !esphome
 !esphome/*
+!.github
+!.github/**
 
 # Ignore folders.
 .storage
