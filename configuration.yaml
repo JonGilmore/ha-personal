@@ -243,3 +243,7 @@ panel_iframe:
 #   password: !secret isy_passwd
 
 browser_mod:
+device_tracker:
+  - platform: mqtt
+    devices:
+      paulus_oneplus: 'device_tracker/jon/state'
