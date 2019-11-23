@@ -1,0 +1,20 @@
+- platform: template
+  covers:
+    garage_momentary_single:
+      value_template: "{{ states.sensor.single_garage.state == 'Violated' }}"
+      friendly_name: Single Garage
+      open_cover:
+        service: scene.turn_on
+        entity_id: scene.task_004
+      close_cover:
+        service: scene.turn_on
+        entity_id: scene.task_002
+    garage_momentary_double:
+      value_template: "{{ states.sensor.double_garage.state == 'Violated' }}"
+      friendly_name: Double Garage
+      open_cover:
+        service: scene.turn_on
+        entity_id: scene.task_003
+      close_cover:
+        service: scene.turn_on
+        entity_id: scene.task_001

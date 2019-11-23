@@ -1,0 +1,156 @@
+sensor.dark_sky_humidity:
+  friendly_name: Exterior Humidity
+sensor.dark_sky_apparent_temperature:
+  friendly_name: Outside Feels
+switch.exterior_light:
+  friendly_name: Roof Outlet
+light.great_room_great_room_cans:
+  friendly_name: Great Room Cans
+switch.great_room_lamp:
+  friendly_name: Living Room Lamp
+light.kitchen_sunroom:
+  friendly_name: Sunroom Cans
+switch.laundry_light:
+  friendly_name: Laundry
+switch.master_bedroom_entry:
+  friendly_name: Master Entry
+light.master_bedroom_jons_lamp:
+  friendly_name: Jons Lamp
+switch.master_bedroom_lauras_lamp:
+  friendly_name: Lauras Lamp
+light.master_bedroom_sitting_cans:
+  friendly_name: Master Sitting Cans
+switch.sunroom_sunroom_lamp:
+  friendly_name: Sunroom Lamp
+switch.exterior_foyer:
+  friendly_name: Foyer
+light.exterior_patio:
+  friendly_name: Patio
+light.exterior_deck:
+  friendly_name: Deck
+switch.exterior_outlets:
+  friendly_name: Backyard Outlets
+switch.exterior_posts:
+  friendly_name: Deck Posts
+light.master_bedroom_fixtures:
+  friendly_name: Master Bath Fixture
+light.master_bedroom_fixture:
+  friendly_name: Master Toilet
+light.master_bedroom_master_cans:
+  friendly_name: Master Cans
+light.master_bedroom_master_fan:
+  friendly_name: Master Fan
+light.mudroom_garage_lights:
+  friendly_name: Garage Lights
+switch.mudroom_kitchen_cans:
+  friendly_name: Kitchen Cans
+switch.mudroom_kitchen_pendants:
+  friendly_name: Kitchen Pendants
+switch.mudroom_mudroom:
+  friendly_name: Mudroom
+switch.pulte_planning_center_lauras_office:
+  friendly_name: Lauras Office
+switch.upstairs_hall_hall:
+  friendly_name: Upstairs Hall
+switch.upstairs_hall_main_stairs:
+  friendly_name: Main Floor Stairs
+switch.upstairs_hall_treads:
+  friendly_name: Main Floor Tread Stairs
+switch.exterior_uplights:
+  friendly_name: Front Uplights
+switch.exterior_lights:
+  friendly_name: Backyard Uplights
+switch.master_bedroom_fan:
+  friendly_name: Master Bath Fan
+light.craftroom_craftroom_fan:
+  friendly_name: Craftroom Fan
+switch.office_lights:
+  friendly_name: Desk Lights
+switch.princess_light:
+  friendly_name: Princess Bathroom Light
+switch.princess_toilet_fan:
+  friendly_name: Princess Bathroom Fan
+switch.basement_fan:
+  friendly_name: Workshop Fan
+sensor.bsmt_temperature:
+  friendly_name: Freeze Alarm
+sensor.counter001:
+  friendly_name: Beep Status
+switch.front_door_light_on:
+  friendly_name: Doorbird IR
+sensor.dark_sky_daytime_high_temperature_0d:
+  friendly_name: Today's High
+sensor.dark_sky_temperature:
+  friendly_name: Current Temperature
+sensor.dark_sky_daily_summary:
+  friendly_name: Daily Summary
+##################################
+# lutron scenes
+scene.equipment_room_enclosure_device_001_ph_all_but_master:
+  friendly_name: All_but_master
+scene.equipment_room_enclosure_device_001_ph_all_off:
+  friendly_name: All_off
+scene.equipment_room_enclosure_device_001_ph_all_on:
+  friendly_name: All_on
+scene.equipment_room_enclosure_device_001_ph_basement_off:
+  friendly_name: Basement_off
+scene.equipment_room_enclosure_device_001_ph_basement_on:
+  friendly_name: Basement_on
+scene.equipment_room_enclosure_device_001_ph_cleaners_on:
+  friendly_name: PH_Cleaners-on
+scene.equipment_room_enclosure_device_001_ph_exterior_off:
+  friendly_name: Exterior_off
+scene.equipment_room_enclosure_device_001_ph_exterior_on:
+  friendly_name: Exterior_on
+scene.equipment_room_enclosure_device_001_ph_interior_off:
+  friendly_name: Interior_off
+scene.equipment_room_enclosure_device_001_ph_interior_on:
+  friendly_name: Interior_on
+scene.equipment_room_enclosure_device_001_ph_kitchenhall_off:
+  friendly_name: kitchenhall-off
+scene.equipment_room_enclosure_device_001_ph_kitchen_off:
+  friendly_name: kitchen-off
+scene.equipment_room_enclosure_device_001_ph_kitchen_on:
+  friendly_name: kitchen-on
+scene.equipment_room_enclosure_device_001_ph_main_off:
+  friendly_name: Main_off
+scene.equipment_room_enclosure_device_001_ph_main_on:
+  friendly_name: Main_on
+scene.equipment_room_enclosure_device_001_ph_second_off:
+  friendly_name: Second_off
+scene.equipment_room_enclosure_device_001_ph_second_on:
+  friendly_name: Second_on
+scene.equipment_room_enclosure_device_001_ph_sunset1:
+  friendly_name: Sunset1
+scene.equipment_room_enclosure_device_001_ph_sunset2:
+  friendly_name: Sunset2
+binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed:
+  friendly_name: Jon in bed?
+binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed:
+  friendly_name: Laura in bed?
+sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_sleepnumber:
+  friendly_name: Jons Sleep Number
+sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_sleepnumber:
+  friendly_name: Lauras Sleep Number
+##################################
+# battery customizations
+sensor.life360_jon_battery:
+  battery_alert_disabled: true
+sensor.pixel_3_ariela_battery:
+  battery_alert_disabled: true
+sensor.pixel_3_ariela_battery_sensor:
+  battery_alert_disabled: true
+sensor.pixel_3_battery:
+  battery_alert_disabled: true
+sensor.pixel_3_battery_2:
+  battery_alert_disabled: true
+sensor.zw_002_multilevel_sensor_battery:
+  battery_alert_disabled: true
+sensor.jon_battery:
+  battery_alert_disabled: true
+sensor.lauras_iphone_battery:
+  battery_alert_disabled: true
+sensor.lauras_iphone_battery_level:
+  battery_alert_disabled: true
+sensor.garage_thermostat_battery:
+  battery_alert_disabled: true

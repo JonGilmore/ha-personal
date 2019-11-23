@@ -1,0 +1,245 @@
+homeassistant:
+  name: Reeder
+  latitude: !secret ha_latitude
+  longitude: !secret ha_longitude
+  elevation: !secret ha_elevation
+  unit_system: imperial
+  time_zone: !secret ha_tz
+  customize: !include customize.yaml
+  whitelist_external_dirs:
+    - /tmp
+  packages: !include_dir_named packages
+
+cloud:
+  google_actions:
+    filter:
+      include_entities:
+        - climate.basement_thermostat
+        - climate.main_thermostat
+        - climate.upstairs_thermostat
+        - climate.garage_thermostat
+        - group.christmaslights
+      include_domains:
+        - light
+        - switch
+        - fan
+        - scene
+        - camera
+      exclude_domains:
+        - alert
+        - automation
+        - lock
+        - group
+        - input_boolean
+        - script
+        - sensor
+        - cover
+        - media_player
+        - climate
+        - binary_sensor
+        - vacuum
+  alexa:
+    filter:
+      include_entities:
+        - climate.basement_thermostat
+        - climate.main_thermostat
+        - climate.upstairs_thermostat
+        - climate.garage_thermostat
+        - group.christmaslights
+      include_domains:
+        - light
+        - switch
+        - fan
+        - scene
+      exclude_domains:
+        - group
+        - input_boolean
+        - script
+        - cover
+        - media_player
+        - climate
+        - camera
+
+http:
+updater:
+  reporting: false
+tts:
+  - platform: google_translate
+    service_name: google_say
+recorder:
+  purge_keep_days: 1
+  purge_interval: 1
+
+system_health:
+
+influxdb:
+  host: localhost
+  username: !secret influx_usr
+  password: !secret influx_pwd
+  database: !secret influx_db
+  include:
+    domains:
+      - sensor
+      - binary_sensor
+      - climate
+      - device_tracker
+      - lock
+    entities:
+      - switch.equipment_room_recirculation_pump
+      - switch.water_main_shut_off
+  
+weather:
+  - platform: darksky
+    api_key: !secret darksky_api
+
+elkm1:
+  host: !secret url_elk
+  temperature_unit: F
+  area:
+    exclude: [2-8]
+  zone:
+    exclude: [17-24, 29-32, 41-208]
+  output:
+    exclude: [1-8, 11-208]
+  counter:
+    exclude: [2-64]
+  keypad:
+    include: [1-5]
+  task:
+    include: [1-4]
+  thermostat:
+    enabled: false
+  plc:
+    enabled: false
+  setting:
+    enabled: false
+
+# hass_opensprinkler:
+#   host: !secret os_host
+#   password: !secret os_passwd
+
+sleepiq:
+  username: !secret sleep_usr
+  password: !secret sleep_pwd
+
+doorbird:
+  devices:
+    - host: !secret db_ip
+      username: !secret db_usr
+      password: !secret db_pwd
+      token: !secret db_token
+      name: Front Door
+      events:
+        - doorbell
+
+lutron:
+  host: !secret rr_ip
+  username: !secret rr_usr
+  password: !secret rr_pwd
+
+water_heater:
+  - platform: econet
+    username: !secret econet_user
+    password: !secret econet_pwd
+
+scene:
+  platform: hunterdouglas_powerview
+  address: !secret powerview_ip
+
+notify:
+  - name: telegram_jon
+    platform: telegram
+    chat_id: !secret telegram_chat
+  # - platform: ios
+  #   name: laura
+
+# ios:
+#   push:
+#     categories:
+#       - name: cameras
+#         identifier: 'camera'
+      
+telegram_bot:
+  - platform: polling
+    parse_mode: html
+    api_key: !secret telegram_api
+    allowed_chat_ids:
+      - !secret telegram_chat
+
+####################################################
+#                     Includes                     #
+####################################################
+sensor: !include sensors.yaml
+binary_sensor: !include binary_sensors.yaml
+climate: !include climate.yaml
+automation: !include automation.yaml
+group: !include groups.yaml
+script: !include scripts.yaml
+shell_command: !include shell_commands.yaml
+switch: !include switches.yaml
+cover: !include covers.yaml
+camera: !include cameras.yaml
+rest_command: !include rest_commands.yaml
+input_boolean: !include input_boolean.yaml
+timer: !include timers.yaml
+zone: !include zones.yaml
+
+logger:
+  default: error
+
+history:
+sun:
+conversation:
+logbook:
+frontend:
+  themes: !include_dir_merge_named themes/
+
+hacs:
+  token: !secret hacs
+
+person:
+lovelace:
+  mode: yaml
+config:
+hassio:
+map:
+discovery:
+  ignore:
+    - axis
+    - plex_mediaserver
+    - igd
+    - homekit
+
+speedtestdotnet:
+  scan_interval:
+    minutes: 121
+
+# media_player:
+#   - platform: webostv
+#     host: 192.168.45.
+#     name: Living Room TV
+#     filename: webostv.conf
+#     timeout: 5
+#     turn_on_action:
+#       service: persistent_notification.create
+#       data:
+#         message: "Turn on action"
+#     customize:
+#       sources:
+#         - youtubetv
+#         - netflix
+
+mobile_app:
+
+panel_iframe:
+  grafana:
+    title: 'Grafana'
+    url: 'http://192.168.45.249:3000'
+    icon: mdi:chart-timeline
+
+# isy994:
+#   host: !secret url_isy
+#   username: !secret isy_user
+#   password: !secret isy_passwd
+
+browser_mod:

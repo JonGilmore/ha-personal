@@ -1,0 +1,14 @@
+block_all_motion_lights:
+  name: Block All Motion Lights
+motion_lights:
+  name: Motion Lights
+master_blinds_run_once:
+  name: Master Blinds Once
+sunset_run_once:
+  name: Sunset Run Once
+morning_lights_run_once:
+  name: Morning Lights Run Once
+guests:
+  name: Guests?
+party:
+  name: Party?

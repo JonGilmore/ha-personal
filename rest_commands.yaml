@@ -1,0 +1,15 @@
+patio_fan_off:
+  method: PUT
+  url: !secret patio_fan_off
+  headers:
+    content_type: "application/json"
+    BOND-Token: !secret bond_api
+  payload: "{}"
+
+patio_fan_speed4:
+  method: PUT
+  url: !secret patio_fan_speed4
+  headers:
+    content_type: "application/json"
+    BOND-Token: !secret bond_api
+  payload: "{}"

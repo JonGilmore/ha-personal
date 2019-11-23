@@ -1,0 +1,6 @@
+cam_driveway_vid: !secret cam_driveway_vid
+cam_daisy_vid: !secret cam_daisy_vid
+cam_deck_vid: !secret cam_deck_vid
+cam_garage_vid: !secret cam_garage_vid
+cam_kitchen_vid: !secret cam_kitchen_vid
+cam_doorbell_vid: !secret cam_doorbell_vid

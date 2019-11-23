@@ -1,0 +1,25 @@
+esphome:
+  name: switch2
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: 'iot'
+  password: !secret iot_pw
+
+# Enable logging
+logger:
+  level: ERROR
+
+# Enable Home Assistant API
+api:
+  password: !secret hass_api
+
+ota:
+  password: !secret esp_ota
+
+switch:
+  - platform: gpio
+    name: "Switch2"
+    pin: GPIO12
+    id: relay

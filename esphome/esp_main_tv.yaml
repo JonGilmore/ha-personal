@@ -1,0 +1,28 @@
+esphome:
+  name: esp_main_tv
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: "iot"
+  password: !secret iot_pw
+
+# Enable logging
+logger:
+  level: ERROR
+
+# Enable Home Assistant API
+api:
+  password: !secret hass_api
+
+ota:
+  password: !secret esp_ota
+
+sensor:
+  - platform: adc
+    pin: A0
+    name: "lux"
+    unit_of_measurement: lux
+    filters:
+      - lambda: |-
+          return (x / 10000.0) * 2000000.0;

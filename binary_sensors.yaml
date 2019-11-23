@@ -1,0 +1,186 @@
+- platform: hikvision
+  host: 192.168.45.233
+  username: !secret hik_usr
+  password: !secret hik_pwd
+  customize:
+    motion:
+      delay: 30
+- platform: hikvision
+  host: 192.168.45.231
+  username: !secret hik_usr
+  password: !secret hik_pwd
+  customize:
+    motion:
+      delay: 30
+- platform: hikvision
+  host: 192.168.45.230
+  username: !secret hik_usr
+  password: !secret hik_pwd
+  customize:
+    motion:
+      delay: 240
+- platform: hikvision
+  host: 192.168.45.237
+  username: !secret hik_usr
+  password: !secret hik_pwd
+  customize:
+    motion:
+      delay: 30
+- platform: hikvision
+  host: 192.168.45.238
+  username: !secret hik_usr
+  password: !secret hik_pwd
+  customize:
+    motion:
+      delay: 30
+
+- platform: mqtt
+  name: "Deck Person"
+  state_topic: "frigate/deck/objects"
+  value_template: "{{ value_json.person }}"
+  device_class: moving
+  availability_topic: "frigate/available"
+- platform: mqtt
+  name: "Deck Stairs Person"
+  state_topic: "frigate/deck_stairs/objects"
+  value_template: "{{ value_json.person }}"
+  device_class: moving
+  availability_topic: "frigate/available"
+- platform: mqtt
+  name: "Driveway Person"
+  state_topic: "frigate/driveway/objects"
+  value_template: "{{ value_json.person }}"
+  device_class: moving
+  availability_topic: "frigate/available"
+- platform: mqtt
+  name: "Doorbell Person"
+  state_topic: "frigate/doorbell/objects"
+  value_template: "{{ value_json.person }}"
+  device_class: moving
+  availability_topic: "frigate/available"
+- platform: mqtt
+  name: "Garage Person"
+  state_topic: "frigate/garage/objects"
+  value_template: "{{ value_json.person }}"
+  device_class: moving
+  availability_topic: "frigate/available"
+- platform: mqtt
+  name: "Reolink Person"
+  state_topic: "frigate/reolink/objects"
+  value_template: "{{ value_json.person }}"
+  device_class: moving
+  availability_topic: "frigate/available"
+
+- platform: template
+  sensors:
+    main_fridge_open_close:
+      device_class: opening
+      value_template: "{% if states.sensor.main_fridge_access_control.state == '23' %}Closed{% elif states.sensor.main_fridge_access_control.state == '22' %}Open{% else %}Unknown{% endif %}"
+      friendly_name: "Main Fridge - open/close"
+    basement_motions:
+      friendly_name: "Basement Motions"
+      device_class: motion
+      value_template: >-
+        {{ (states.sensor.basement_pir.state == "Violated")
+        or (states.sensor.workshop_pir.state == "Violated")
+        or (states.sensor.basement_stairs_pir.state == "Violated")
+        or (states.sensor.storage_pir.state == "Violated")
+        or (states.sensor.bar_pir.state == "Violated") }}
+    main_motions:
+      friendly_name: "Main Motions"
+      device_class: motion
+      value_template: >-
+        {{ (states.sensor.foyer_pir.state == "Violated")
+        or (states.sensor.kitchen_pir.state == "Violated")
+        or (states.binary_sensor.living_room_multi_motion.state == "on")
+        or (states.binary_sensor.office_multi_motion.state == "on") }}
+    garage_doors:
+      friendly_name: "Garage Doors"
+      device_class: garage_door
+      value_template: >-
+        {{ (states.sensor.double_garage.state == "Violated")
+        or (states.sensor.single_garage.state == "Violated") }}
+    house_doors:
+      friendly_name: "House Doors"
+      device_class: door
+      value_template: >-
+        {{ (states.sensor.front_door.state == "Violated")
+        or (states.sensor.garage_door.state == "Violated")
+        or (states.sensor.basement_door.state == "Violated")
+        or (states.sensor.deck_door.state == "Violated") }}
+    moisture_sensors:
+      friendly_name: "Moisture Sensors"
+      device_class: moisture
+      value_template: >-
+        {{ (states.sensor.water_heater_leak_sensor.state == "Violated")
+        or (states.sensor.bar_fridge_leak_sensor.state == "Violated")
+        or (states.sensor.laundry_leak_sensor.state == "Violated")
+        or (states.binary_sensor.powder_room_water.state == "on")
+        or (states.binary_sensor.basement_fridge_water.state == "on")
+        or (states.binary_sensor.kitchen_dishwasher_leak_water.state == "on")
+        or (states.binary_sensor.kitchen_fridge_leak_water.state == "on")
+        or (states.binary_sensor.kitchen_sink_leak_water.state == "on")
+        or (states.sensor.sump_leak_sensor.state == "Violated") }}
+    vacation_status:
+      friendly_name: "Vacation?"
+      device_class: occupancy
+      value_template: >-
+        {{ states.alarm_control_panel.area001.attributes["armed_status"] == "armed_to_vacation" }}
+    alarm_occupancy_status:
+      friendly_name: "Occupied-Alarm?"
+      device_class: occupancy
+      value_template: >-
+        {{ not (states.alarm_control_panel.area001.attributes["armed_status"] == "armed_to_vacation" or states.alarm_control_panel.area001.attributes["armed_status"] == "armed_away") }}
+    cell_occupancy_status:
+      friendly_name: "Occupied-Cell?"
+      device_class: occupancy
+      value_template: >-
+        {{ states.device_tracker.jon_ot.state == "home" or states.device_tracker.lauras_iphone.state == "home" }}
+    sleep_status:
+      friendly_name: "Sleeping?"
+      value_template: >-
+        {{ states.alarm_control_panel.area001.attributes["armed_status"] == "armed_to_night_instant" or states.alarm_control_panel.area001.attributes["armed_status"] == "armed_to_night" }}
+    light_inside:
+      friendly_name: "Light Inside?"
+      device_class: light
+      value_template: >-
+        {{ states.sensor.main_tv_lux.state | int > 110 }}
+    # nabu_casa_cloud:
+    #   friendly_name: 'Nabu Casa Cloud'
+    #   value_template: >-
+    #     {{ not states.binary_sensor.sleep_status.state or states.binary_sensor.vacation_status.state or states.binary_sensor.jon_presence.state == "off" or states.device_tracker.lauras_iphone.state != "home" }}
+    anybody_home:
+      friendly_name: "Anybody Home"
+      device_class: presence
+      entity_id:
+        - person.jon
+        - person.laura
+      value_template: >-
+        {% set ns = namespace(found=false) %}
+        {% for state in states.person %}
+          {% if state.state == 'home' %}
+            {% set ns.found = true %}
+          {% endif %}
+        {% endfor %}
+        {{ns.found}}
+    anybody_away:
+      friendly_name: "Anybody Away"
+      entity_id:
+        - person.jon
+        - person.laura
+      value_template: >-
+        {% set ns = namespace(found=false) %}
+        {% for state in states.person %}
+          {% if state.state != 'home' %}
+            {% set ns.found = true %}
+          {% endif %}
+        {% endfor %}
+        {{ns.found}}
+    # jon_occupancy:
+    #   device_class: presence
+    #   value_template: >-
+    #     {{ states.device_tracker.jon_pi.state == 'home') }}
+    # laura_occupancy:
+    #   device_class: presence
+    #   value_template: >-
+    #     {{ states.device_tracker.laura_pi.state == 'home') }}

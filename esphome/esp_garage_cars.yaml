@@ -1,0 +1,29 @@
+esphome:
+  name: esp_garage_cars
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: "iot"
+  password: !secret iot_pw
+
+# Enable logging
+logger:
+  # level: ERROR
+
+# Enable Home Assistant API
+api:
+  password: !secret hass_api
+
+ota:
+  password: !secret esp_ota
+
+sensor:
+  - platform: ultrasonic
+    trigger_pin: D1
+    echo_pin: D2
+    name: "Jons Car"
+    update_interval: 5s
+    filters:
+      - filter_out: nan
+      - lambda: return (1-x)/1*100;

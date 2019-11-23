@@ -1,0 +1,75 @@
+#############################
+# 10 second videos
+video_driveway:
+  alias: "driveway video"
+  sequence:
+    - service: shell_command.cam_driveway_vid
+      data:
+        filename: /tmp/driveway.mp4
+    - delay:
+        seconds: 12
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/tmp/driveway.mp4"
+    # - service: notify.ios_lauras_iphone
+    #   data:
+    #     message: "driveway video"
+    #     data:
+    #       attachment:
+    #         file: "/tmp/driveway.mp4"
+    #         hide-thumbnail: false
+video_daisy:
+  alias: "Daisy video"
+  sequence:
+    - service: shell_command.cam_daisy_vid
+      data:
+        filename: /tmp/daisy.mp4
+    - delay:
+        seconds: 12
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/tmp/daisy.mp4"
+video_deck:
+  alias: "deck video"
+  sequence:
+    - service: shell_command.cam_deck_vid
+      data:
+        filename: /tmp/deck.mp4
+    - delay:
+        seconds: 12
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/tmp/deck.mp4"
+video_garage:
+  alias: "garage video"
+  sequence:
+    - service: shell_command.cam_garage_vid
+      data:
+        filename: /tmp/garage.mp4
+    - delay:
+        seconds: 12
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/tmp/garage.mp4"
+video_kitchen:
+  alias: "kitchen video"
+  sequence:
+    - service: shell_command.cam_kitchen_vid
+      data:
+        filename: /tmp/kitchen.mp4
+    - delay:
+        seconds: 12
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/tmp/kitchen.mp4"
+video_doorbell:
+  alias: "doorbell video"
+  sequence:
+    - service: shell_command.cam_doorbell_vid
+      data:
+        filename: /tmp/doorbell.mp4
+    - delay:
+        seconds: 12
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/tmp/doorbell.mp4"

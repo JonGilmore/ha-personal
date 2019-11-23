@@ -1,0 +1,62 @@
+###################################
+# mjpeg cameras
+- platform: mjpeg
+  mjpeg_url: http://192.168.45.230:80/Streaming/Channels/2/preview
+  name: Deck
+  username: admin
+  password: !secret hik_pwd
+- platform: mjpeg
+  mjpeg_url: http://192.168.45.238:80/Streaming/Channels/2/preview
+  name: Deck Stairs
+  username: admin
+  password: !secret hik_pwd
+- platform: mjpeg
+  mjpeg_url: http://192.168.45.231:80/Streaming/Channels/2/preview
+  name: Front Door
+  username: admin
+  password: !secret hik_pwd
+- platform: mjpeg
+  mjpeg_url: http://192.168.45.233:80/Streaming/Channels/2/preview
+  name: Driveway
+  username: admin
+  password: !secret hik_pwd
+- platform: mjpeg
+  mjpeg_url: http://192.168.45.235:80/Streaming/Channels/2/preview
+  name: Daisy
+  username: admin
+  password: !secret hik_pwd
+- platform: mjpeg
+  mjpeg_url: http://192.168.45.237:80/Streaming/Channels/2/preview
+  name: Garage
+  username: admin
+  password: !secret hik_pwd
+
+###################################
+- platform: doorbird
+- platform: ffmpeg
+  name: Kitchen Camera
+  input: !secret kitchen_cam
+- platform: ffmpeg
+  name: Patio
+  input: !secret patio_cam
+- platform: ffmpeg
+  name: Wyze
+  input: !secret wyze_cam
+
+###################################
+# still image cameras
+- name: Deck Last Person
+  platform: mqtt
+  topic: frigate/deck/snapshot
+- name: Driveway Last Person
+  platform: mqtt
+  topic: frigate/driveway/snapshot
+- name: Doorbell Last Person
+  platform: mqtt
+  topic: frigate/doorbell/snapshot
+- name: Garage Last Person
+  platform: mqtt
+  topic: frigate/garage/snapshot
+- name: Deck Stairs Last Person
+  platform: mqtt
+  topic: frigate/deck_stairs/snapshot

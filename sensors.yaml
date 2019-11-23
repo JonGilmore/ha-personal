@@ -1,0 +1,290 @@
+# Get the mean value of the different humidity sensors
+- platform: min_max
+  name: House Humidity
+  round_digits: 0
+  type: mean
+  entity_ids:
+    # - sensor.living_room_multi_relative_humidity_measurement
+    - sensor.office_multi_relative_humidity_measurement
+    - sensor.master_entry_humidity
+    - sensor.sunroom_humidity
+
+# Presence Sensors
+- platform: mqtt
+  state_topic: "monitor/pizero1/jonspixelbt"
+  value_template: "{{ value_json.confidence }}"
+  unit_of_measurement: "%"
+  name: "Tracker Living Room Jon"
+- platform: mqtt
+  state_topic: "monitor/pizero2/jonspixelbt"
+  value_template: "{{ value_json.confidence }}"
+  unit_of_measurement: "%"
+  name: "Tracker Garage Jon"
+- platform: mqtt
+  state_topic: "monitor/pi-presence1/jonspixelbt"
+  value_template: "{{ value_json.confidence }}"
+  unit_of_measurement: "%"
+  name: "Tracker Theatre Jon"
+- platform: mqtt
+  state_topic: "monitor/pi-ovpn1/jonspixelbt"
+  value_template: "{{ value_json.confidence }}"
+  unit_of_measurement: "%"
+  name: "Tracker Master Jon"
+
+- platform: mqtt
+  state_topic: "monitor/pizero1/laurasiphonebt"
+  value_template: "{{ value_json.confidence }}"
+  unit_of_measurement: "%"
+  name: "Tracker Living Room Laura"
+- platform: mqtt
+  state_topic: "monitor/pizero2/laurasiphonebt"
+  value_template: "{{ value_json.confidence }}"
+  unit_of_measurement: "%"
+  name: "Tracker Garage Laura"
+- platform: mqtt
+  state_topic: "monitor/pi-presence1/laurasiphonebt"
+  value_template: "{{ value_json.confidence }}"
+  unit_of_measurement: "%"
+  name: "Tracker Theatre Laura"
+- platform: mqtt
+  state_topic: "monitor/pi-ovpn1/laurasiphonebt"
+  value_template: "{{ value_json.confidence }}"
+  unit_of_measurement: "%"
+  name: "Tracker Master Laura"
+
+- platform: min_max
+  name: "Jon Occupancy Confidence"
+  type: max
+  round_digits: 0
+  entity_ids:
+    - sensor.tracker_living_room_jon
+    - sensor.tracker_garage_jon
+    - sensor.tracker_theatre_jon
+    - sensor.tracker_master_jon
+- platform: min_max
+  name: "Laura Occupancy Confidence"
+  type: max
+  round_digits: 0
+  entity_ids:
+    - sensor.tracker_living_room_laura
+    - sensor.tracker_garage_laura
+    - sensor.tracker_theatre_laura
+    - sensor.tracker_master_laura
+- platform: min_max
+  name: "House Occupancy Confidence"
+  type: max
+  round_digits: 0
+  entity_ids:
+    - sensor.tracker_living_room_jon
+    - sensor.tracker_garage_jon
+    - sensor.tracker_theatre_jon
+    - sensor.tracker_master_jon
+    - sensor.tracker_living_room_laura
+    - sensor.tracker_garage_laura
+    - sensor.tracker_theatre_laura
+    - sensor.tracker_master_laura
+
+# Template Sensors
+- platform: template
+  sensors:
+    armed_status:
+      entity_id: alarm_control_panel.area001
+      value_template: '{{ states.alarm_control_panel.area001.attributes["armed_status"] }}'
+      friendly_name: "House Armed Status"
+    arm_up_state:
+      entity_id: alarm_control_panel.area001
+      value_template: '{{ states.alarm_control_panel.area001.attributes["arm_up_state"] }}'
+      friendly_name: "House Arm Up State"
+    alarm_state:
+      entity_id: alarm_control_panel.area001
+      value_template: '{{ states.alarm_control_panel.area001.attributes["alarm_state"] }}'
+      friendly_name: "House Alarm State"
+    garage_double_state:
+      entity_id: sensor.double_garage
+      value_template: "{% if states.sensor.double_garage.state == 'Normal' %}closed{% elif states.sensor.double_garage.state == 'Violated' %}open{% else %}unknown{% endif %}"
+      friendly_name: "Garage Double State"
+    garage_single_state:
+      entity_id: sensor.single_garage
+      value_template: "{% if states.sensor.single_garage.state == 'Normal' %}closed{% elif states.sensor.single_garage.state == 'Violated' %}open{% else %}unknown{% endif %}"
+      friendly_name: "Garage Single State"
+    garage_fridge_power:
+      entity_id: switch.garage_fridge
+      value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
+      friendly_name: "Garage Fridge Power"
+    garage_fridge_energy:
+      entity_id: switch.garage_fridge
+      value_template: '{{ states.switch.garage_fridge.attributes["today_energy_kwh"] }}'
+      friendly_name: "Garage Fridge Energy"
+    sensor_count:
+      friendly_name: "Number of Sensors"
+      value_template: >
+        {%- set domains = ['sensor'] -%}
+        {%- for domain in domains -%}
+          {%- for item in states[domain] -%}
+            {% if loop.first %}
+              {{loop.length}}
+            {% endif %}
+          {%- endfor -%}
+        {%- endfor -%}
+    lights_on:
+      entity_id: sensor.time
+      friendly_name: Lights
+      unit_of_measurement: "On"
+      value_template: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
+
+# DARK SKY
+- platform: darksky
+  api_key: !secret darksky_api
+  forecast:
+    - 0
+    - 1
+    - 2
+  monitored_conditions:
+    - summary
+    - icon
+    - nearest_storm_distance
+    - nearest_storm_bearing
+    - precip_type
+    - precip_intensity
+    - precip_probability
+    - temperature
+    - apparent_temperature
+    - dew_point
+    - wind_speed
+    - wind_bearing
+    - cloud_cover
+    - humidity
+    - pressure
+    - visibility
+    - ozone
+    - minutely_summary
+    - hourly_summary
+    - daily_summary
+    - temperature_high
+    - temperature_low
+    - apparent_temperature_high
+    - apparent_temperature_low
+    - precip_intensity_max
+
+# # # DARKNESS SENSORS
+- platform: template
+  sensors:
+    period_of_day:
+      friendly_name: "period of the day"
+      value_template: >-
+        {% if (as_timestamp(states.sun.sun.attributes.next_dusk)) - (as_timestamp(states.sun.sun.attributes.next_setting)) < 0 %}dusk
+        {% elif (as_timestamp(states.sun.sun.attributes.next_rising)) - (as_timestamp(states.sun.sun.attributes.next_dawn)) < 0 %}dawn
+        {% elif (states.sun.sun.attributes.elevation) < -4 %}night
+        {% else %}day
+        {% endif %}
+      icon_template: >-
+        {% if (as_timestamp(states.sun.sun.attributes.next_dusk)) - (as_timestamp(states.sun.sun.attributes.next_setting)) < 0 %}mdi:weather-sunset-down
+        {% elif (as_timestamp(states.sun.sun.attributes.next_rising)) - (as_timestamp(states.sun.sun.attributes.next_dawn)) < 0 %}mdi:weather-sunset-up
+        {% elif (states.sun.sun.attributes.elevation) < -4 %}mdi:weather-night
+        {% else %}mdi:weather-sunny
+        {% endif %}
+- platform: darksky
+  api_key: !secret darksky_api
+  monitored_conditions:
+    - icon
+- platform: illuminance
+  name: DSS Illuminance
+  entity_id: sensor.dark_sky_icon
+
+# Target Humidity States
+- platform: template
+  sensors:
+    target_humidity_max_winter:
+      value_template: >-
+        {% if   states.sensor.dark_sky_temperature.state | int < -20 %}25
+        {% elif states.sensor.dark_sky_temperature.state | int < -10 %}30
+        {% elif states.sensor.dark_sky_temperature.state | int <   0 %}35
+        {% elif states.sensor.dark_sky_temperature.state | int <  10 %}40
+        {% elif states.sensor.dark_sky_temperature.state | int <  20 %}45
+        {% else %} 55 {% endif %}
+      friendly_name: "Target Humidity - Max"
+    target_humidity_min_winter:
+      value_template: >-
+        {% if   states.sensor.dark_sky_temperature.state | int < -20 %}15
+        {% elif states.sensor.dark_sky_temperature.state | int < -10 %}20
+        {% elif states.sensor.dark_sky_temperature.state | int <   0 %}25
+        {% elif states.sensor.dark_sky_temperature.state | int <  10 %}30
+        {% elif states.sensor.dark_sky_temperature.state | int <  20 %}35
+        {% else %} 40 {% endif %}
+      friendly_name: "Target Humidity - Min"
+
+# LOAD SENSORS
+- platform: template
+  sensors:
+    ############################   esp8266 - esphome
+    # master_bed_occupied:
+    #   value_template: >-
+    #     {% if states.sensor.master_bed_value.state | int < 20400000 %}occupied
+    #     {% else %} unoccupied {% endif %}
+    #   friendly_name: 'Master Bed Occupied'
+    # master_bed_people:
+    #   value_template: >-
+    #     {% if   states.sensor.master_bed_value.state | int < -3300000 %}both
+    #     {% elif states.sensor.master_bed_value.state | int < -2680000 %}one
+    #     {% else %} nobody {% endif %}
+    #   friendly_name: 'Master Bed People'
+    ############################   SleepNumber
+    master_bed_occupied:
+      value_template: >-
+        {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on") or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}occupied
+        {% else %} unoccupied {% endif %}
+      friendly_name: "Master Bed Occupied"
+    master_bed_people:
+      value_template: >-
+        {% if   (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on") and (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}both
+        {% elif (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on") or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}one
+        {% else %} nobody {% endif %}
+      friendly_name: "Master Bed People"
+
+# GRAFANA
+- platform: command_line
+  name: "CPU Temperature"
+  command: "cat /sys/class/thermal/thermal_zone3/temp"
+  value_template: "{{ value | multiply(0.001) | round(2) }}"
+  # device_class: "temperature"
+  unit_of_measurement: "°C"
+
+- platform: systemmonitor
+  resources:
+    - type: last_boot
+    - type: disk_use_percent
+      arg: /
+    - type: memory_use_percent
+    - type: processor_use
+
+# NUC Uptime Sensor
+- platform: template
+  sensors:
+    nuc_uptime:
+      friendly_name: NUC Uptime
+      entity_id: sensor.time
+      value_template: >
+        {% set up_time = as_timestamp(now()) - as_timestamp(states('sensor.last_boot')) %}
+        {% set minutes = (up_time // 60) | int %}
+        {% set hours = (minutes // 60) %}
+        {% set days = (hours // 24) %}
+        {% set weeks = (days // 7) %}
+        {% set minutes = (minutes % 60) %}
+        {% set hours =  (hours % 24) %}
+        {% set days = (days % 7) %}
+        {% macro phrase(value, name) %}
+                  {%- set value = value %}
+                  {%- set end = 's' if value > 1 else '' %}
+                  {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+        {%- endmacro %}
+        {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hr'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
+        {% set last_comma = text.rfind(',') %}
+        {% if last_comma != -1 %}
+          {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
+        {% endif %}
+        {{ text }}
+
+# - platform: unifigateway
+#   host: !secret unifi_ip
+#   username: !secret unifi_usr
+#   password: !secret unifi_pwd
