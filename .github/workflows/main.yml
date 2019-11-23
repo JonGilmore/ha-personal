@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Getting your configuration from GitHub
         uses: actions/checkout@v1
+      - name: Setup fake secrets.yaml
+        run: mv ./fake_secrets.yaml ./secrets.yaml
       - name: Home Assistant Configuration Check
         uses: ludeeus/action-ha-config-check@0.0.1
         env:
