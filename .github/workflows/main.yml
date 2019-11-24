@@ -33,7 +33,7 @@ jobs:
       - name: Running YAMLlint
         uses: "docker://pipelinecomponents/yamllint:latest"
         with:
-          args: yamllint . # yamllint disable-line rule:truthy rule:line-length
+          args: yamllint -c ../yamllint.cfg . 
   # config_check:
   #   needs: [lint]
   #   runs-on: ubuntu-latest
