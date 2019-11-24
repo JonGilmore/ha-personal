@@ -67,6 +67,7 @@ tts:
   - platform: google_translate
     service_name: google_say
 recorder:
+  db_url: !secret url_db
   purge_keep_days: 1
   purge_interval: 1
 
