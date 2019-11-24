@@ -238,7 +238,7 @@
     ############################   SleepNumber
     master_bed_occupied:
       value_template: >-
-        {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on") 
+        {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
         or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}occupied
         {% else %} unoccupied {% endif %}
       friendly_name: "Master Bed Occupied"

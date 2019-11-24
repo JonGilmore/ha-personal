@@ -323,7 +323,7 @@
       to: "Normal"
       for:
         minutes: 10
-  condition: ## Ensure Motion Lights aren't disabled
+  condition:  ## Ensure Motion Lights aren't disabled
     - condition: state
       entity_id: input_boolean.block_all_motion_lights
       state: "off"
@@ -336,8 +336,8 @@
         {% set trigger_entity = trigger.entity_id %}
         {% if trigger_entity == 'sensor.foyer_pir' %}
           switch.exterior_foyer
-        # {% elif trigger_entity == 'sensor.kitchen_pir' %}
-        #   switch.kitchen_cabinets
+        {% elif trigger_entity == 'sensor.kitchen_pir' %}
+          switch.kitchen_cabinets
         {% elif trigger_entity == 'sensor.basement_pir' %}
           switch.basement_main
         {% elif trigger_entity == 'sensor.bar_pir' %}
@@ -772,7 +772,7 @@
     - platform: numeric_state
       entity_id: sensor.master_entry_temperature
       below: "55"
-  condition: # workaround temp of 0.00
+  condition:   # workaround temp of 0.00
     - condition: template
       value_template: "{{ not is_state(trigger.to_state.entity_id, '0.00') }}"
   action:
@@ -1627,7 +1627,7 @@
   action:
     - service: mqtt.publish
       data_template:
-        topic: 'device_tracker/jon/state'
+        topic: "device_tracker/jon/state"
         payload_template: >
           {% if trigger.to_state.state == 'on' %}home
           {% else %}not_home
