@@ -5,6 +5,25 @@ on:
   schedule:
     - cron: 0 12 * * *
 jobs:
+  secret_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v1
+      - name: gitleaks-action
+        uses: eshork/gitleaks-action@v1.0.0
+      - name: Secret Scan
+        uses: max/secret-scan@1.0.0
+  remarklint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v1
+      - name: Running Remark lint
+        uses: "docker://pipelinecomponents/remark-lint:latest"
+        with:
+          args: "remark --no-stdout --color --frail --use preset-lint-recommended ."
+
 #   lint:
 #     runs-on: ubuntu-latest
 #     steps:
@@ -33,12 +52,3 @@ jobs:
   #       env:
   #         ACTION_VERSION: STABLE
   #         ACTION_CONFIG_PATH: ./
-  secret_check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Getting your configuration from GitHub
-        uses: actions/checkout@v1
-      - name: gitleaks-action
-        uses: eshork/gitleaks-action@v1.0.0
-      - name: Secret Scan
-        uses: max/secret-scan@1.0.0
