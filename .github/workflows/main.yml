@@ -33,7 +33,7 @@ jobs:
       - name: Running YAMLlint
         uses: "docker://pipelinecomponents/yamllint:latest"
         with:
-          args: yamllint -c ../yamllint.cfg . 
+          args: yamllint -c ./.github/yamllint.cfg . 
   # config_check:
   #   needs: [lint]
   #   runs-on: ubuntu-latest
