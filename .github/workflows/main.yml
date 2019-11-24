@@ -19,18 +19,19 @@ jobs:
     steps:
       - name: Getting your configuration from GitHub
         uses: actions/checkout@v1
-      - name: Running Remark lint
+      - name: Remark lint
         uses: "docker://pipelinecomponents/remark-lint:latest"
         with:
           args: "remark --no-stdout --color --frail --use preset-lint-recommended ."
-
-#   lint:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: YAML Lint
-#         uses: "docker://pipelinecomponents/yamllint:latest"
-#         with:
-#           args: yamllint .
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v1
+      - name: YAML Lint
+        uses: "docker://pipelinecomponents/yamllint:latest"
+        with:
+          args: yamllint .
 #   config_check:
 #     needs: [lint]
 #     runs-on: ubuntu-latest
