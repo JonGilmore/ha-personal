@@ -1,10 +1,13 @@
 ---
-name: CI
-on:  # yamllint disable-line rule:truthy
+name: Home Assistant CI
+
+# yamllint disable-line rule:truthy
+on:
   push:
   pull_request:
   schedule:
     - cron: 0 12 * * *
+
 jobs:
   secret_check:
     runs-on: ubuntu-latest
@@ -29,7 +32,7 @@ jobs:
     steps:
       - name: Getting your configuration from GitHub
         uses: actions/checkout@v1
-      - name: YAML Lint
+      - name: Running YAMLlint
         uses: "docker://pipelinecomponents/yamllint:latest"
         with:
           args: yamllint .
