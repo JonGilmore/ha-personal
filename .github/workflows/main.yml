@@ -1,7 +1,7 @@
 ---
 name: CI
 
-# yamllint disable-line rule:truthy
+# yamllint disable-line rule:line-length
 on:
   push:
 
