@@ -1,3 +1,4 @@
+---
 esphome:
   name: esp_sunroom
   platform: ESP8266

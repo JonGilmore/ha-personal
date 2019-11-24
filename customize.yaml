@@ -1,3 +1,4 @@
+---
 sensor.dark_sky_humidity:
   friendly_name: Exterior Humidity
 sensor.dark_sky_apparent_temperature:

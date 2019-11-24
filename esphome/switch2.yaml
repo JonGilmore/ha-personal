@@ -1,3 +1,4 @@
+---
 esphome:
   name: switch2
   platform: ESP8266

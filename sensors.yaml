@@ -1,3 +1,4 @@
+---
 # Get the mean value of the different humidity sensors
 - platform: min_max
   name: House Humidity
@@ -101,11 +102,17 @@
       friendly_name: "House Alarm State"
     garage_double_state:
       entity_id: sensor.double_garage
-      value_template: "{% if states.sensor.double_garage.state == 'Normal' %}closed{% elif states.sensor.double_garage.state == 'Violated' %}open{% else %}unknown{% endif %}"
+      value_template: >-
+        {% if states.sensor.double_garage.state == 'Normal' %}closed
+        {% elif states.sensor.double_garage.state == 'Violated' %}open
+        {% else %}unknown{% endif %}
       friendly_name: "Garage Double State"
     garage_single_state:
       entity_id: sensor.single_garage
-      value_template: "{% if states.sensor.single_garage.state == 'Normal' %}closed{% elif states.sensor.single_garage.state == 'Violated' %}open{% else %}unknown{% endif %}"
+      value_template: >-
+        {% if states.sensor.single_garage.state == 'Normal' %}closed
+        {% elif states.sensor.single_garage.state == 'Violated' %}open
+        {% else %}unknown{% endif %}
       friendly_name: "Garage Single State"
     garage_fridge_power:
       entity_id: switch.garage_fridge
@@ -231,7 +238,8 @@
     ############################   SleepNumber
     master_bed_occupied:
       value_template: >-
-        {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on") or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}occupied
+        {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on") 
+        or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}occupied
         {% else %} unoccupied {% endif %}
       friendly_name: "Master Bed Occupied"
     master_bed_people:

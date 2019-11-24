@@ -1,3 +1,4 @@
+---
 cam_driveway_vid: !secret cam_driveway_vid
 cam_daisy_vid: !secret cam_daisy_vid
 cam_deck_vid: !secret cam_deck_vid

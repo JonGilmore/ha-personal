@@ -1,3 +1,4 @@
+---
 esphome:
   name: esp_master_sitting
   platform: ESP8266

@@ -12,13 +12,6 @@ video_driveway:
     - service: telegram_bot.send_video
       data_template:
         file: "/tmp/driveway.mp4"
-    # - service: notify.ios_lauras_iphone
-    #   data:
-    #     message: "driveway video"
-    #     data:
-    #       attachment:
-    #         file: "/tmp/driveway.mp4"
-    #         hide-thumbnail: false
 video_daisy:
   alias: "Daisy video"
   sequence:

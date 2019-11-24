@@ -1,3 +1,4 @@
+---
 esphome:
   name: esp_garage_cars
   platform: ESP8266
@@ -9,7 +10,7 @@ wifi:
 
 # Enable logging
 logger:
-  # level: ERROR
+  level: ERROR
 
 # Enable Home Assistant API
 api:

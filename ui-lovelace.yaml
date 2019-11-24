@@ -1,3 +1,4 @@
+---
 title: Reeder Ridge
 background: var(--background-image)
 resources:
@@ -33,7 +34,6 @@ views:
   - title: Home
     id: home
     icon: mdi:home
-    #theme: dark-mode
     cards:
       - id: alarmPanel
         type: alarm-panel
@@ -280,14 +280,6 @@ views:
           - sensor.dark_sky_cloud_coverage
       - type: weather-forecast
         entity: weather.dark_sky
-      # - type: picture-glance
-      #   image:
-      #   camera_image: camera.temperatures
-      #   title: Temperatures
-      #   entities:
-      #     - sensor.thermostat_basement_temperature
-      #     - sensor.thermostat_main_temperature
-      #     - sensor.thermostat_upstairs_temperature
   ##########################################
   # CAMERA TAB
   ##########################################

@@ -1,3 +1,4 @@
+---
 block_all_motion_lights:
   name: Block All Motion Lights
 motion_lights:

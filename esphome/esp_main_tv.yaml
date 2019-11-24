@@ -1,3 +1,4 @@
+---
 esphome:
   name: esp_main_tv
   platform: ESP8266
