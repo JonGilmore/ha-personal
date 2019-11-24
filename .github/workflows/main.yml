@@ -1,6 +1,6 @@
 ---
 name: CI
-on:
+on:  # yamllint disable-line rule:truthy
   push:
   pull_request:
   schedule:
@@ -33,15 +33,14 @@ jobs:
         uses: "docker://pipelinecomponents/yamllint:latest"
         with:
           args: yamllint .
-#   config_check:
-#     needs: [lint]
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: HA Check
-#         uses: "docker://homeassistant/home-assistant:latest"
-#         with:
-#           args: python -m homeassistant --config configuration.yaml --script check_config --info all
-
+  # config_check:
+  #   needs: [lint]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: HA Check
+  #       uses: "docker://homeassistant/home-assistant:latest"
+  #       with:
+  #         args: python -m homeassistant --config configuration.yaml --script check_config --info all
   # ha_check:
   #   runs-on: ubuntu-latest
   #   steps:
