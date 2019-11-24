@@ -1,7 +1,5 @@
 ---
 name: Home Assistant CI
-
-# yamllint disable-line rule:truthy rule:line-length
 on:
   push:
   pull_request:
@@ -35,7 +33,7 @@ jobs:
       - name: Running YAMLlint
         uses: "docker://pipelinecomponents/yamllint:latest"
         with:
-          args: yamllint .
+          args: yamllint . # yamllint disable-line rule:truthy rule:line-length
   # config_check:
   #   needs: [lint]
   #   runs-on: ubuntu-latest
