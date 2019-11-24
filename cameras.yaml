@@ -1,3 +1,4 @@
+---
 ###################################
 # mjpeg cameras
 - platform: mjpeg

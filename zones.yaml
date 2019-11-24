@@ -1,3 +1,4 @@
+---
 - name: home
   latitude: !secret ha_latitude
   longitude: !secret ha_longitude

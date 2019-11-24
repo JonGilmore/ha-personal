@@ -1,3 +1,4 @@
+---
 patio_fan_off:
   method: PUT
   url: !secret patio_fan_off
