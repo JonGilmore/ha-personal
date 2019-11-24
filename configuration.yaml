@@ -87,7 +87,7 @@ influxdb:
     entities:
       - switch.equipment_room_recirculation_pump
       - switch.water_main_shut_off
-  
+
 weather:
   - platform: darksky
     api_key: !secret darksky_api
@@ -158,7 +158,7 @@ notify:
 #     categories:
 #       - name: cameras
 #         identifier: 'camera'
-      
+
 telegram_bot:
   - platform: polling
     parse_mode: html
@@ -233,8 +233,8 @@ mobile_app:
 
 panel_iframe:
   grafana:
-    title: 'Grafana'
-    url: 'http://192.168.45.249:3000'
+    title: "Grafana"
+    url: "http://192.168.45.249:3000"
     icon: mdi:chart-timeline
 
 # isy994:
@@ -246,4 +246,4 @@ browser_mod:
 device_tracker:
   - platform: mqtt
     devices:
-      paulus_oneplus: 'device_tracker/jon/state'
+      jon_st: "device_tracker/jon/state"
