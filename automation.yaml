@@ -1382,22 +1382,20 @@
 #     - service: notify.telegram_jon
 #       data_template:
 #         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-########################################
-# device_tracker stuff
-- alias: "pi device_tracker"
-  trigger:
-    - platform: state
-      entity_id: device_tracker.jon_pi
-    - platform: state
-      entity_id: device_tracker.laura_pi
-    - platform: state
-      entity_id: binary_sensor.jon_gilmore_s_pixel_3_presence
-    # - platform: state
-    #   entity_id: device_tracker.pixel3
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
+# ########################################
+# # device_tracker stuff
+# - alias: "pi device_tracker"
+#   trigger:
+#     - platform: state
+#       entity_id: device_tracker.jon_pi
+#     - platform: state
+#       entity_id: device_tracker.laura_pi
+#     - platform: state
+#       entity_id: binary_sensor.jon_gilmore_s_pixel_3_presence
+#   action:
+#     - service: notify.telegram_jon
+#       data_template:
+#         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 ########################################
 # pizero, device_tracker stuff
 - alias: Jon Occupancy On
