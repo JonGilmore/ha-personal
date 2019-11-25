@@ -1,47 +1,11 @@
----
-name: CI
-
-# yamllint disable-line rule:line-length
-on:
-  push:
-
-jobs:
-  yamllint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Getting your configuration from GitHub
-        uses: actions/checkout@v1
-      - name: Running YAMLlint
-        uses: "docker://pipelinecomponents/yamllint:latest"
-        with:
-          args: yamllint .
 # ---
-# name: Home Assistant CI
+# name: CI
+
+# # yamllint disable-line rule:line-length
 # on:
 #   push:
-#   pull_request:
-#   schedule:
-#     - cron: 0 12 * * *
 
 # jobs:
-#   secret_check:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Getting your configuration from GitHub
-#         uses: actions/checkout@v1
-#       - name: gitleaks-action
-#         uses: eshork/gitleaks-action@v1.0.0
-#       - name: Secret Scan
-#         uses: max/secret-scan@1.0.0
-#   remarklint:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Getting your configuration from GitHub
-#         uses: actions/checkout@v1
-#       - name: Remark lint
-#         uses: "docker://pipelinecomponents/remark-lint:latest"
-#         with:
-#           args: "remark --no-stdout --color --frail --use preset-lint-recommended ."
 #   yamllint:
 #     runs-on: ubuntu-latest
 #     steps:
@@ -50,24 +14,60 @@ jobs:
 #       - name: Running YAMLlint
 #         uses: "docker://pipelinecomponents/yamllint:latest"
 #         with:
-#           args: yamllint -c ./.github/yamllint.cfg .
-#   config_check:
-#     needs: [lint]
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: HA Check
-#         uses: "docker://homeassistant/home-assistant:latest"
-#         with:
-#           args: python -m homeassistant --config configuration.yaml --script check_config --info all
-#   ha_check:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Getting your configuration from GitHub
-#         uses: actions/checkout@v1
-#       - name: Setup fake secrets.yaml
-#         run: mv ./fake_secrets.yaml ./secrets.yaml
-#       - name: Home Assistant Configuration Check
-#         uses: ludeeus/action-ha-config-check@0.0.1
-#         env:
-#           ACTION_VERSION: STABLE
-#           ACTION_CONFIG_PATH: ./
+#           args: yamllint .
+---
+name: Home Assistant CI
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: 0 12 * * *
+
+jobs:
+  secret_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v1
+      - name: gitleaks-action
+        uses: eshork/gitleaks-action@v1.0.0
+      - name: Secret Scan
+        uses: max/secret-scan@1.0.0
+  remarklint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v1
+      - name: Remark lint
+        uses: "docker://pipelinecomponents/remark-lint:latest"
+        with:
+          args: "remark --no-stdout --color --frail --use preset-lint-recommended ."
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v1
+      - name: Running YAMLlint
+        uses: "docker://pipelinecomponents/yamllint:latest"
+        with:
+          args: yamllint -c ./.github/yamllint.cfg .
+  config_check:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: HA Check
+        uses: "docker://homeassistant/home-assistant:latest"
+        with:
+          args: python -m homeassistant --config configuration.yaml --script check_config --info all
+  ha_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v1
+      - name: Setup fake secrets.yaml
+        run: mv ./fake_secrets.yaml ./secrets.yaml
+      - name: Home Assistant Configuration Check
+        uses: ludeeus/action-ha-config-check@0.0.1
+        env:
+          ACTION_VERSION: STABLE
+          ACTION_CONFIG_PATH: ./
