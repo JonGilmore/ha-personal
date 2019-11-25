@@ -51,14 +51,6 @@ jobs:
         uses: "docker://pipelinecomponents/yamllint:latest"
         with:
           args: yamllint -c ./.github/yamllint.cfg .
-  config_check:
-    needs: [yamllint, remarklint]
-    runs-on: ubuntu-latest
-    steps:
-      - name: HA Check
-        uses: "docker://homeassistant/home-assistant:latest"
-        with:
-          args: python -m homeassistant --config configuration.yaml --script check_config --info all
   ha_check:
     runs-on: ubuntu-latest
     steps:
