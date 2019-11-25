@@ -1,7 +1,8 @@
 ---
 name: CI
+# yamllint disable rule:line-length
 
-on:  # yamllint disable rule:line-length
+on:
   push:
 
 jobs:
