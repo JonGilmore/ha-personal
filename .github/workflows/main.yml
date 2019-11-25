@@ -52,7 +52,7 @@ jobs:
         with:
           args: yamllint -c ./.github/yamllint.cfg .
   config_check:
-    needs: [lint]
+    needs: [yamllint, remarklint]
     runs-on: ubuntu-latest
     steps:
       - name: HA Check
