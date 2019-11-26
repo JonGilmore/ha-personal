@@ -1,9 +1,11 @@
 # Home Assistant Configuration
+
 Here's an overview of my Home Assistant configuration as well as the devices that are used in it.
 
 ## Devices/Hardware
 
 Hardware
+
 * Intel Nuc: NUC5i7RYB
   * Google Coral
 * SmartThings v2 hub
@@ -32,7 +34,7 @@ Hardware
   * M1XIN
   * P212S(2x)
   * M1RB
-  * SP12F
+  * SP12f
 * Cameras:
   * Hikvision
   * Wyze
@@ -49,7 +51,7 @@ Hardware
   * esp8266 using various: dht22,
 * Smoke Detectors: Nest
 * Blinds: Hunter Douglas PowerView
-* WiFi Bulbs: Lifx 
+* WiFi Bulbs: Lifx
 * Water Heater: Rheem Econet
 * Voice
   * Google Home Hub, Google Home Mini
