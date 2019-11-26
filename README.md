@@ -25,16 +25,18 @@ Hardware
   * Wireless Remotes: PJ2-4B
   * Motion Sensors: LRF2-OCR2B-P
 * Alarm: Elk M1 Gold
-  * Motion Sensors: ISC-BPR2-WP12
-  * Leak Sensors: GRI 2600
-  * Smoke Detectors: System Sensor 2WT-B
-  * M1XEP
-  * M1KP2
-  * ELK-73
-  * M1XIN
-  * P212S(2x)
-  * M1RB
-  * SP12f
+  * Motion Sensors: [ISC-BPR2-WP12](https://resource.boschsecurity.com/documents/BlueLine_Gen_2_Data_sheet_enUS_2603228171.pdf)
+  * Leak Sensors: [GRI 2600](http://www.grisk.com/images/product_pdfs/liquid_detection/2600_12volt_dc_water_sensor.pdf)
+  * Smoke Detectors: [System Sensor 2WT-B](https://www.systemsensor.com/en-us/Pages/2WT-B.aspx)
+  * [ELK-M1KP](https://www.elkproducts.com/products/elk-m1kp-m1-lcd-keypad)
+  * [ELK-M1KP2](https://www.elkproducts.com/products/elk-m1kp2-m1-lcd-low-profile-keypad)
+  * [ELK-M1XIN](https://www.elkproducts.com/products/elk-m1xin-m1-16-zone-input-expander)
+  * [ELK-M1RB](https://www.elkproducts.com/products/elk-m1rb-m1-relay-board)
+  * [ELK-M1DBH](https://www.elkproducts.com/products/elk-m1dbh-m1-data-bus-hub)
+  * [ELK-M1XEP](https://www.elkproducts.com/products/elk-m1xep-m1-ethernet-interface)
+  * [ELK-P212S](https://www.elkproducts.com/products/elk-p212s-supervised-remote-power-supply)
+  * [ELK-SP12F](https://www.elkproducts.com/product-catalog/elk-sp12f-flush-mount-speaker)
+  * [ELK-73](https://www.elkproducts.com/product-catalog/elk-73-echo-series-compact-speaker-20-watt-8-ohms)
 * Cameras:
   * Hikvision
   * Wyze
