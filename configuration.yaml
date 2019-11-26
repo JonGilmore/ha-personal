@@ -225,12 +225,6 @@ speedtestdotnet:
 
 mobile_app:
 
-panel_iframe:
-  grafana:
-    title: "Grafana"
-    url: "http://192.168.45.249:3000"
-    icon: mdi:chart-timeline
-
 # isy994:
 #   host: !secret url_isy
 #   username: !secret isy_user

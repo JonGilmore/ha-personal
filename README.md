@@ -6,8 +6,8 @@ Here's an overview of my Home Assistant configuration as well as the devices tha
 
 Hardware
 
-* Intel Nuc: NUC5i7RYB
-  * Google Coral
+* Intel Nuc: [NUC5i7RYB](https://www.intel.com/content/dam/support/us/en/documents/boardsandkits/NUC5i7RYB_NUC5i7RYBR_TechProdSpec.pdf)
+  * [Google Coral](https://coral.withgoogle.com/products/accelerator)
 * SmartThings v2 hub
   * Leak: SmartThings F-WTR-UK-V2
   * Open/Close: SmartThings ST-CEN-OC-1
@@ -39,16 +39,16 @@ Hardware
   * Hikvision
   * Wyze
   * Samsung
-  * Doorbird
+  * [Doorbird](https://www.doorbird.com/downloads/datasheet_d101s_en.pdf)
 * Network:
-  * Firewall/Router: Ubiquiti USG-PRO-4
-  * Switches: US-24-250W, US-16-150W
-  * WiFi: AP-AC-Pro(2x), AP-nanoHD(2x)
-  * Management: UC-CK
+  * Firewall/Router: [Ubiquiti USG-PRO-4](https://www.ui.com/unifi-routing/unifi-security-gateway-pro-4/)
+  * Switches: [US-24-250W](https://store.ui.com/products/unifiswitch-24-250w), [US-16-150W](https://store.ui.com/products/unifi-switch-16-150w)
+  * WiFi: [AP-AC-Pro](https://www.ui.com/unifi/unifi-ap-ac-pro/), [AP-nanoHD](https://unifi-nanohd.ui.com/)
+  * Management: [UC-CK](https://store.ui.com/products/unifi-cloud-key)
 * NAS: Synology 1515
   * 8TB HGST NAS drives
 * Sensors:
-  * esp8266 using various: dht22,
+  * esp8266 using various: [dht22](https://www.amazon.com/gp/product/B014SMNBJC), [infrared PIR](https://www.amazon.com/gp/product/B016Y10B3O), [lux sensors](https://www.amazon.com/gp/product/B00AF278A8)
 * Smoke Detectors: Nest
 * Blinds: Hunter Douglas PowerView
 * WiFi Bulbs: Lifx
@@ -58,7 +58,9 @@ Hardware
   * Echo Dot V3, Echo Show 5
 * Audio
   * Sonos Amp
-  * Sonos Beam
-  * Sonos One
+  * [Sonos Beam](https://www.sonos.com/en-us/shop/beam.html)
+  * [Sonos One](https://www.sonos.com/en-us/shop/one.html)
   * Sonos Play:5
   * Sonos Play:3
+* Random Hardware:
+  * [Bond](https://bondhome.io/bond-bridge/)

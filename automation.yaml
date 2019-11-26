@@ -1555,8 +1555,8 @@
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 #########################################
-# test scene notification
-- alias: "test scene notification"
+# test pico scene notification
+- alias: "test pico scene notification"
   trigger:
     - platform: event
       event_type: lutron_event
@@ -1567,6 +1567,19 @@
     - service: notify.telegram_jon
       data:
         message: "pico on"
+#########################################
+# test hybrid scene notification
+- alias: "test hybrid scene notification"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: sitting_keypad_main_down
+        action: single
+  action:
+    - service: notify.telegram_jon
+      data:
+        message: "hybrid on"
 #########################################
 # doorbell notification event capture and notify
 - alias: doorbell notification event capture and notify
