@@ -620,10 +620,10 @@
           - climate.basement_thermostat
         temperature: 85
         hvac_mode: cool
-    - service: water_heater.econet_add_vacation
-      data:
-        entity_id: water_heater.heat_pump_water_heater_gen_4
-        end_date: "{{ (now().strftime('%s') | float + (10080*60)) }}"
+    # - service: water_heater.econet_add_vacation
+    #   data:
+    #     entity_id: water_heater.heat_pump_water_heater_gen_4
+    #     end_date: "{{ (now().strftime('%s') | float + (10080*60)) }}"
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
     - service: notify.telegram_jon
@@ -652,10 +652,16 @@
           - climate.basement_thermostat
         temperature: 62
         hvac_mode: heat
-    - service: water_heater.econet_add_vacation
+    - service: climate.set_temperature
       data:
-        entity_id: water_heater.heat_pump_water_heater_gen_4
-        end_date: "{{ (now().strftime('%s') | float + (10080*60)) }}"
+        entity_id:
+          - climate.garage_thermostat
+        temperature: 42
+        hvac_mode: heat
+    # - service: water_heater.econet_add_vacation
+    #   data:
+    #     entity_id: water_heater.heat_pump_water_heater_gen_4
+    #     end_date: "{{ (now().strftime('%s') | float + (10080*60)) }}"
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
     - service: notify.telegram_jon
@@ -693,8 +699,8 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.water_main_shut_off
-    - service: water_heater.econet_delete_vacation
-      entity_id: water_heater.heat_pump_water_heater_gen_4
+    # - service: water_heater.econet_delete_vacation
+    #   entity_id: water_heater.heat_pump_water_heater_gen_4
     - service: climate.set_temperature
       data:
         entity_id:
@@ -721,8 +727,8 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.water_main_shut_off
-    - service: water_heater.econet_delete_vacation
-      entity_id: water_heater.heat_pump_water_heater_gen_4
+    # - service: water_heater.econet_delete_vacation
+    #   entity_id: water_heater.heat_pump_water_heater_gen_4
     - service: climate.set_temperature
       data:
         entity_id:
