@@ -139,10 +139,10 @@ lutron:
   username: !secret rr_usr
   password: !secret rr_pwd
 
-water_heater:
-  - platform: econet
-    username: !secret econet_user
-    password: !secret econet_pwd
+# water_heater:
+#   - platform: econet
+#     username: !secret econet_user
+#     password: !secret econet_pwd
 
 scene:
   platform: hunterdouglas_powerview
