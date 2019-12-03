@@ -11,22 +11,6 @@
     - service: homeassistant.turn_on
       entity_id: switch.exterior_light
 #########################################
-- alias: christmas trees on (only in december) with geolocation
-  trigger:
-    - platform: state
-      entity_id: person.laura
-      to: "home"
-  condition:
-    - condition: template
-      value_template: '{{ now().strftime("%m")|int == 12 }}'
-    - condition: time
-      after: "17:00:00"
-    - condition: time
-      before: "23:00:00"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: group.christmasTrees
-#########################################
 - alias: christmas trees on (only in december) if occupied
   trigger:
     - platform: time
@@ -64,3 +48,27 @@
   action:
     - service: homeassistant.turn_off
       entity_id: group.christmasLights
+#########################################
+- alias: xmas lights off/on with geolocation presence (only in Dec)
+  trigger:
+    - platform: state
+      entity_id: person.laura
+      to: "home"
+    - platform: state
+      entity_id: person.laura
+      to: "not_home"
+  condition:
+    - condition: template
+      value_template: '{{ now().strftime("%m")|int == 12 }}'
+    - condition: time
+      after: "17:00:00"
+    - condition: time
+      before: "23:00:00"
+  action:
+    - service_template: >
+        {% if trigger.to_state.state == 'home' %}homeassistant.turn_on
+        {% else %}homeassistant.turn_off{% endif %}
+      entity_id: group.christmasTrees
+    - service: notify.telegram_jon
+      data_template:
+        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees are toggled"
