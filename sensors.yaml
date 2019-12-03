@@ -291,8 +291,3 @@
           {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
         {% endif %}
         {{ text }}
-
-# - platform: unifigateway
-#   host: !secret unifi_ip
-#   username: !secret unifi_usr
-#   password: !secret unifi_pwd

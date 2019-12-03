@@ -79,6 +79,8 @@ interior_lights:
     - switch.upstairs_hall_hall
     - switch.upstairs_hall_main_stairs
     - switch.upstairs_hall_treads
+    - switch.switch1
+    - switch.switch2
 
 sunset:
   name: Sunset Lights
@@ -95,5 +97,12 @@ christmasLights:
   entities:
     - switch.exterior_light
     - switch.exterior_outlets
+    - switch.switch1
+    - switch.switch2
+
+christmasTrees:
+  name: Christmas Trees
+  view: no
+  entities:
     - switch.switch1
     - switch.switch2

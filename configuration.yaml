@@ -20,6 +20,7 @@ cloud:
         - climate.upstairs_thermostat
         - climate.garage_thermostat
         - group.christmaslights
+        - group.christmasTrees
       include_domains:
         - light
         - switch
@@ -47,6 +48,7 @@ cloud:
         - climate.upstairs_thermostat
         - climate.garage_thermostat
         - group.christmaslights
+        - group.christmasTrees
       include_domains:
         - light
         - switch
