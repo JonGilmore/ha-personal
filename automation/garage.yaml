@@ -1,0 +1,77 @@
+---
+#########################################
+- alias: "Garage open notify & action - single"
+  trigger:
+    - platform: state
+      entity_id: sensor.single_garage
+      to: "Violated"
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: sensor.single_garage
+      to: "Violated"
+      for:
+        minutes: 60
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        message: "placeholder"
+        data:
+          inline_keyboard:
+            - "Yes:/closegarage_single, No:/do_nothing"
+          photo:
+            - url: !secret hik_garage_pic
+              caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
+#########################################
+- alias: "Garage open notify & action - double"
+  trigger:
+    - platform: state
+      entity_id: sensor.double_garage
+      to: "Violated"
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: sensor.double_garage
+      to: "Violated"
+      for:
+        minutes: 60
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        message: "placeholder"
+        data:
+          inline_keyboard:
+            - "Yes:/closegarage_double, No:/do_nothing"
+          photo:
+            - url: !secret hik_garage_pic
+              caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
+#########################################
+- alias: "Garage open - close - single"
+  trigger:
+    platform: event
+    event_type: telegram_callback
+    event_data:
+      data: "/closegarage_single"
+  action:
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: "{{ trigger.event.data.id }}"
+        message: "Closing the {{ trigger }}"
+        show_alert: true
+    - service: scene.turn_on
+      entity_id: scene.task_002
+#########################################
+- alias: "Garage open - close - double"
+  trigger:
+    platform: event
+    event_type: telegram_callback
+    event_data:
+      data: "/closegarage_double"
+  action:
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: "{{ trigger.event.data.id }}"
+        message: "Closing the {{ trigger }}"
+        show_alert: true
+    - service: scene.turn_on
+      entity_id: scene.task_001
