@@ -1,0 +1,66 @@
+---
+#########################################
+- alias: christmas roof lights on (only in december)
+  trigger:
+    - platform: time
+      at: "17:00:00"
+  condition:
+    - condition: template
+      value_template: '{{ now().strftime("%m")|int == 12 }}'
+  action:
+    - service: homeassistant.turn_on
+      entity_id: switch.exterior_light
+#########################################
+- alias: christmas trees on (only in december) with geolocation
+  trigger:
+    - platform: state
+      entity_id: person.laura
+      to: "home"
+  condition:
+    - condition: template
+      value_template: '{{ now().strftime("%m")|int == 12 }}'
+    - condition: time
+      after: "17:00:00"
+    - condition: time
+      before: "23:00:00"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: group.christmasTrees
+#########################################
+- alias: christmas trees on (only in december) if occupied
+  trigger:
+    - platform: time
+      at: "17:00:00"
+  condition:
+    - condition: template
+      value_template: '{{ now().strftime("%m")|int == 12 }}'
+    - condition: state
+      entity_id: person.laura
+      state: "home"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: group.christmasTrees
+#########################################
+- alias: christmas off (only in december)
+  trigger:
+    platform: time
+    at: "23:00:00"
+  condition:
+    - condition: template
+      value_template: '{{ now().strftime("%m")|int == 12 }}'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: group.christmasLights
+#########################################
+- alias: "christmas off - sleeping (only in december)"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.sleep_status
+      from: "off"
+      to: "on"
+  condition:
+    - condition: template
+      value_template: '{{ now().strftime("%m")|int == 12 }}'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: group.christmasLights
