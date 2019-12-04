@@ -25,7 +25,7 @@ camera:
 
 automation:
   - alias: create_history
-    trigger: 
+    trigger:
       - entity_id: binary_sensor.driveway_person
         from: "off"
         platform: state
