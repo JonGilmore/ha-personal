@@ -167,7 +167,7 @@
         entity_id: switch.exterior_posts
         state: "on"
   action:
-    - service: scene.turn_off
+    - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_deck_off
 #########################################
 # garage person, dark out,garage lights on
