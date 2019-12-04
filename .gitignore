@@ -12,6 +12,8 @@
 !.github/**
 !automation
 !automation/**
+!packages
+!packages/**
 
 # Ignore folders.
 .storage
