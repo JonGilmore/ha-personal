@@ -1,0 +1,133 @@
+---
+# ########################################
+# # device_tracker stuff
+# - alias: "pi device_tracker"
+#   trigger:
+#     - platform: state
+#       entity_id: device_tracker.jon_pi
+#     - platform: state
+#       entity_id: device_tracker.laura_pi
+#     - platform: state
+#       entity_id: binary_sensor.jon_gilmore_s_pixel_3_presence
+#   action:
+#     - service: notify.telegram_jon
+#       data_template:
+#         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
+########################################
+# pizero, device_tracker stuff
+- alias: Jon Occupancy On
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.jon_occupancy_confidence
+      above: 10
+  action:
+    - service: device_tracker.see
+      data:
+        dev_id: jon_pi
+        location_name: home
+        source_type: bluetooth
+- alias: Jon Occupancy Off
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.jon_occupancy_confidence
+      below: 10
+  action:
+    - service: device_tracker.see
+      data:
+        dev_id: jon_pi
+        location_name: not_home
+        source_type: bluetooth
+- alias: Laura Occupancy On
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.laura_occupancy_confidence
+      above: 10
+  action:
+    - service: device_tracker.see
+      data:
+        dev_id: laura_pi
+        location_name: home
+        source_type: bluetooth
+- alias: Laura Occupancy Off
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.laura_occupancy_confidence
+      below: 10
+  action:
+    - service: device_tracker.see
+      data:
+        dev_id: laura_pi
+        location_name: not_home
+        source_type: bluetooth
+########################################
+## HA restart - restart monitor - ha boot
+- alias: "Restart Monitor service on HA startup"
+  initial_state: "on"
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - service: mqtt.publish
+      data:
+        topic: "monitor/scan/restart"
+    - service: speedtestdotnet.speedtest
+
+# ## Publish Message - Arrival Scan
+# - alias: Publish Message - Arrival Scan
+#   trigger:
+#     # - platform: state
+#     #   entity_id: binary_sensor.driveway_line_crossing, binary_sensor.house_doors
+#     #   from: 'off'
+#     #   to: 'on'
+#     - platform: state
+#       entity_id: binary_sensor.deck_line_crossing, binary_sensor.driveway_line_crossing, binary_sensor.front_door_line_crossing
+#       from: 'off'
+#       to: 'on'
+#   # condition:
+#   #   - condition: state
+#   #     entity_id: device_tracker.jon_pi
+#   #     state: 'not_home'
+#   #   - condition: state
+#   #     entity_id: device_tracker.laura_pi
+#   #     state: 'not_home'
+#   action:
+#     - service: mqtt.publish
+#       data:
+#         topic: "monitor/scan/arrive"
+## Publish Message - Departure Scan
+- alias: Publish Message - Departure Scan
+  trigger:
+    # - platform: state
+    #   entity_id: binary_sensor.house_doors
+    #   from: 'on'
+    #   to: 'off'
+    - platform: state
+      entity_id: sensor.front_door, sensor.garage_door, sensor.double_garage, sensor.single_garage
+      from: "Violated"
+      to: "Normal"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: device_tracker.jon_pi
+        state: "home"
+      - condition: state
+        entity_id: device_tracker.laura_pi
+        state: "home"
+  action:
+    - delay: "00:00:15"
+    - service: mqtt.publish
+      data:
+        topic: "monitor/scan/depart"
+    - delay: "00:30:00"
+    - service: mqtt.publish
+      data:
+        topic: "monitor/scan/depart"
+    - delay: "00:01:00"
+    - service: mqtt.publish
+      data:
+        topic: "monitor/scan/depart"
+    - delay: "00:02:00"
+    - service: mqtt.publish
+      data:
+        topic: "monitor/scan/depart"
