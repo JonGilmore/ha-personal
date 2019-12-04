@@ -14,10 +14,10 @@
     - condition: or
       conditions:
         - condition: state
-          entity_id: "person.jon"
+          entity_id: person.jon
           state: "home"
         - condition: state
-          entity_id: "person.laura"
+          entity_id: person.laura
           state: "home"
   action:
     - service: climate.set_temperature
@@ -42,10 +42,10 @@
     - condition: or
       conditions:
         - condition: state
-          entity_id: "person.jon"
+          entity_id: person.jon
           state: "home"
         - condition: state
-          entity_id: "person.laura"
+          entity_id: person.laura
           state: "home"
   action:
     - service: climate.set_temperature
@@ -71,10 +71,10 @@
     - condition: and
       conditions:
         - condition: state
-          entity_id: "person.jon"
+          entity_id: person.jon
           state: "not_home"
         - condition: state
-          entity_id: "person.laura"
+          entity_id: person.laura
           state: "not_home"
   action:
     - service: climate.set_temperature
@@ -98,10 +98,10 @@
     - condition: and
       conditions:
         - condition: state
-          entity_id: "person.jon"
+          entity_id: person.jon
           state: "not_home"
         - condition: state
-          entity_id: "person.laura"
+          entity_id: person.laura
           state: "not_home"
   action:
     - service: climate.set_temperature

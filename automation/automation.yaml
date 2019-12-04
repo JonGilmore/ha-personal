@@ -1011,14 +1011,12 @@
   condition:
     condition: or
     conditions:
-      # - condition: state
-      #   entity_id: binary_sensor.alarm_occupancy_status
-      #   state: 'off'
       - condition: state
         entity_id: binary_sensor.sleep_status
         state: "on"
-      - condition: template
-        value_template: "{{ not is_state('person.jon', 'home') }}"
+      - condition: state
+        entity_id: person.jon
+        state: "not_home"
   action:
     - service: script.turn_on
       data_template:
