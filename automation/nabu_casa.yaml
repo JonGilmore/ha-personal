@@ -1,14 +1,13 @@
 ---
-########################################################################################################################
+#####################################################
 # Different scenarios for cloud disconnect/reconnect
-#   - arm alarm night, all phones are here: kill cloud
-#   - alarm disarmed, all phones here, kill cloud
-#   - both phones show home, kill cloud
-#   - either phone leaves: enable cloud
+#   - arm alarm night, all ppl are here: kill cloud
+#   - wake up, all ppl here, kill cloud
+#   - both ppl show home, kill cloud
+#   - either person leaves: enable cloud
 #   - vacation started, enable cloud
-########################################
-# nabu casa cloud disconnect/reconnect
-- alias: "Sleeping, phones home: remote UI disconnect"
+#####################################################
+- alias: "Sleeping, both home: nabucasa disconnect"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -22,11 +21,8 @@
       state: "home"
   action:
     - service: cloud.remote_disconnect
-    # - service: notify.telegram_jon
-    #   data_template:
-    #     message: "Cloud Disconnect at night: {{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 
-- alias: "Not sleeping, phones home: remote UI disconnect"
+- alias: "Not sleeping, both people home: nabucasa disconnect"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -40,11 +36,8 @@
       state: "home"
   action:
     - service: cloud.remote_disconnect
-    # - service: notify.telegram_jon
-    #   data_template:
-    #     message: "Cloud Disconnect at morning: {{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 
-- alias: "jons phone home (and lauras is home): remote UI disconnect"
+- alias: "Jons home (and Laura is home): nabucasa disconnect"
   trigger:
     - platform: state
       entity_id: person.jon
@@ -55,10 +48,8 @@
       state: "home"
   action:
     - service: cloud.remote_disconnect
-    # - service: notify.telegram_jon
-    #   data_template:
-    #     message: "Cloud Disconnect when phone is home: {{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-- alias: "lauras phone home (and jons is home): remote UI disconnect"
+
+- alias: "Lauras home (and Jon is home): nabucasa disconnect"
   trigger:
     - platform: state
       entity_id: person.laura
@@ -69,32 +60,22 @@
       state: "home"
   action:
     - service: cloud.remote_disconnect
-    # - service: notify.telegram_jon
-    #   data_template:
-    #     message: "Cloud Disconnect when phone is home: {{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 
-- alias: "Phone left: remote UI connect"
+- alias: "Person leaves: nabucasa connect"
   trigger:
     - platform: state
       entity_id: person.jon
       to: "not_home"
     - platform: state
       entity_id: person.laura
-      from: "home"
       to: "not_home"
   action:
     - service: cloud.remote_connect
-    # - service: notify.telegram_jon
-    #   data_template:
-    #     message: "Cloud Connect when device left: {{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 
-- alias: "Vacation on, enable remote UI connect"
+- alias: "Vacation on, enable nabucasa connect"
   trigger:
     - platform: state
       entity_id: binary_sensor.vacation_status
       to: "on"
   action:
     - service: cloud.remote_connect
-    # - service: notify.telegram_jon
-    #   data_template:
-    #     message: "Cloud Connect on vacation mode: {{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
