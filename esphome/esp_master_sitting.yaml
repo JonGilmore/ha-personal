@@ -7,6 +7,10 @@ esphome:
 wifi:
   ssid: "iot"
   password: !secret iot_pw
+  manual_ip:
+    static_ip: 192.168.45.209
+    gateway: 192.168.45.1
+    subnet: 255.255.255.0
 
 # Enable logging
 logger:
