@@ -179,3 +179,7 @@
           {% endif %}
         {% endfor %}
         {{ns.found}}
+
+- platform: car_wash
+  weather: weather.dark_sky
+  days: 3
