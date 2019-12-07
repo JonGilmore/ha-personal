@@ -75,3 +75,27 @@
         show_alert: true
     - service: scene.turn_on
       entity_id: scene.task_001
+#########################################
+- alias: "Garage open for 10min notify & kill heat if it is on"
+  trigger:
+    - platform: state
+      entity_id: sensor.single_garage
+      to: "Violated"
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: sensor.double_garage
+      to: "Violated"
+      for:
+        minutes: 10
+  condition:
+    - condition: state
+      entity_id: climate.garage_thermostat
+      state: "heat"
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        title: "Temperature Alert!"
+        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
+    - service: climate.turn_off
+      entity_id: climate.garage_thermostat
