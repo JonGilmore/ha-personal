@@ -255,6 +255,17 @@
           switch.basement_storage_lights
         {% endif %}
 #########################################
+- alias: "lauras office lights off"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.mudroom_occupancy
+      to: "off"
+      for:
+        minutes: 5
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.pulte_planning_center_lauras_office
+#########################################
 # server rack lights - on
 # - alias: "server rack lights - on"
 #   trigger:
