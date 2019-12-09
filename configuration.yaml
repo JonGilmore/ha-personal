@@ -227,10 +227,10 @@ speedtestdotnet:
 
 mobile_app:
 
-# isy994:
-#   host: !secret url_isy
-#   username: !secret isy_user
-#   password: !secret isy_passwd
+isy994:
+  host: !secret url_isy
+  username: !secret isy_user
+  password: !secret isy_passwd
 
 browser_mod:
 device_tracker:
