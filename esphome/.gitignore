@@ -7,3 +7,6 @@
 **/lib/
 **/src/
 **/platformio.ini
+
+# include esphome secrets - nothing to hide in here, just includes the main secrets file
+!secrets.yaml
