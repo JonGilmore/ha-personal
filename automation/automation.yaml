@@ -820,7 +820,7 @@
       entity_id: input_boolean.motion_lights
       state: "on"
   action:
-    - service: light.lifx_set_state
+    - service: lifx.set_state
       data:
         entity_id: light.master_entry_lifx
       data_template:
@@ -847,7 +847,7 @@
       entity_id: input_boolean.motion_lights
       state: "on"
   action:
-    - service: light.lifx_set_state
+    - service: lifx.set_state
       data:
         entity_id: light.master_entry_lifx
       data_template:
@@ -884,7 +884,7 @@
       entity_id: input_boolean.motion_lights
       state: "on"
   action:
-    - service: light.lifx_set_state
+    - service: lifx.set_state
       data:
         entity_id: light.sitting_room_lifx
       data_template:
@@ -1190,3 +1190,23 @@
     - service: notify.telegram_jon
       data:
         message: "OK to wash the car!"
+#########################################
+- alias: victorops notification - turn on light
+  trigger:
+    - platform: template
+      value_template: "{{ 'victor' in states.sensor.pixel_3_ariela_notification_grabber_sensor.state }}"
+    - platform: template
+      value_template: "{{ 'Incident' in states.sensor.pixel_3_ariela_notification_grabber_sensor.state }}"
+  condition:
+    - condition: template
+      value_template: "{{ not is_state('sensor.period_of_day', 'day') }}"
+    - condition: state
+      entity_id: person.jon
+      state: "home"
+  action:
+    - service: notify.telegram_jon
+      data:
+        message: "ALERT! Work page"
+    - service: homeassistant.turn_on
+      # entity_id: light.master_bedroom_jons_lamp
+      entity_id: light.master_bedroom_jons_lamp
