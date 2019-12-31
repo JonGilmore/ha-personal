@@ -237,3 +237,8 @@ device_tracker:
   - platform: mqtt
     devices:
       jon_st: "device_tracker/jon/state"
+
+# joaoapps_join:
+#   - name: NAME_OF_GROUP
+#     device_id: GROUP.GROUP_NAME
+#     api_key: !secret join_api
