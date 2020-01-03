@@ -1146,6 +1146,15 @@
       data:
         message: "pico on"
 #########################################
+- alias: "Alarm trouble notification"
+  trigger:
+    - platform: state
+      entity_id: sensor.alarm_trouble
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
+#########################################
 - alias: "test hybrid scene notification"
   trigger:
     - platform: event

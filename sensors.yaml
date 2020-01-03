@@ -100,6 +100,10 @@
       entity_id: alarm_control_panel.area001
       value_template: '{{ states.alarm_control_panel.area001.attributes["alarm_state"] }}'
       friendly_name: "House Alarm State"
+    alarm_trouble:
+      entity_id: sensor.elkm1
+      value_template: '{{ states.sensor.elkm1.attributes["system_trouble_status"] }}'
+      friendly_name: "Alarm Trouble"
     garage_double_state:
       entity_id: sensor.double_garage
       value_template: >-
