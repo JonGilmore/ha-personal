@@ -5,7 +5,6 @@
   round_digits: 0
   type: mean
   entity_ids:
-    # - sensor.living_room_multi_relative_humidity_measurement
     - sensor.office_multi_relative_humidity_measurement
     - sensor.master_entry_humidity
     - sensor.sunroom_humidity

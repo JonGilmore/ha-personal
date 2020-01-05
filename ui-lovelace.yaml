@@ -253,7 +253,6 @@ views:
         show_header_toggle: false
         entities:
           - sensor.keypad004
-          - sensor.living_room_multi_temperature_measurement
           - sensor.master_entry_temperature
           - sensor.office_multi_temperature_measurement
           - sensor.sunroom_temperature
@@ -262,7 +261,6 @@ views:
         show_header_toggle: false
         entities:
           - sensor.dark_sky_humidity
-          - sensor.living_room_multi_relative_humidity_measurement
           - sensor.master_entry_humidity
           - sensor.office_multi_relative_humidity_measurement
           - sensor.sunroom_humidity
@@ -288,81 +286,113 @@ views:
     icon: mdi:camera
     cards:
       - type: picture-glance
-        image:
         camera_image: camera.driveway
         title: Exterior
         entities:
           - scene.equipment_room_enclosure_device_001_ph_sunset1
       - type: picture-glance
-        image:
         camera_image: camera.front_door
         title: Front Door
         entities:
           - scene.equipment_room_enclosure_device_001_ph_sunset1
       - type: picture-glance
-        image:
         camera_image: camera.garage
         title: Garage
         entities:
           - light.mudroom_garage_lights
       - type: picture-glance
-        image:
         camera_image: camera.daisy
         title: Daisy
         entities:
           - switch.pulte_planning_center_lauras_office
           - light.pulte_planning_center_lamp
       - type: picture-glance
-        image:
         camera_image: camera.deck
         title: Deck
         entities:
           - switch.exterior_posts
       - type: picture-glance
-        image:
         camera_image: camera.deck_stairs
         title: Deck Stairs
         entities:
           - switch.exterior_posts
       - type: picture-glance
-        image:
         camera_image: camera.front_door_live
         title: Doorbell
         entities:
           - scene.equipment_room_enclosure_device_001_ph_sunset1
       - type: picture-glance
-        image:
         camera_image: camera.kitchen_camera
         title: Kitchen
         entities:
           - sensor.kitchen_pir
-          - binary_sensor.living_room_multi_motion
           - scene.equipment_room_enclosure_device_001_ph_main_off
           - scene.equipment_room_enclosure_device_001_ph_main_on
-      - type: picture-glance
-        camera_image: camera.wyze
-        entities: []
-        title: Wyze Cam
-      - type: picture-glance
-        camera_image: camera.deck_last_person
-        entities: []
-        title: Deck Last Person
-      - type: picture-glance
-        camera_image: camera.doorbell_last_person
-        entities: []
-        title: Doorbell Last Person
-      - type: picture-glance
-        camera_image: camera.driveway_last_person
-        entities: []
-        title: Driveway Last Person
-      - type: picture-glance
-        camera_image: camera.garage_last_person
-        entities: []
-        title: Garage Last Person
-      - type: picture-glance
-        camera_image: camera.deck_stairs_last_person
-        entities: []
-        title: Deck Stairs Last Person
+      - type: "custom:swipe-card"
+        start_card: 5
+        cards:
+          - type: picture-entity
+            entity: camera.driveway_history1
+          - type: picture-entity
+            entity: camera.driveway_history2
+          - type: picture-entity
+            entity: camera.driveway_history3
+          - type: picture-entity
+            entity: camera.driveway_history4
+          - type: picture-entity
+            entity: camera.driveway_history5
+      - type: "custom:swipe-card"
+        start_card: 5
+        cards:
+          - type: picture-entity
+            entity: camera.doorbell_history1
+          - type: picture-entity
+            entity: camera.doorbell_history2
+          - type: picture-entity
+            entity: camera.doorbell_history3
+          - type: picture-entity
+            entity: camera.doorbell_history4
+          - type: picture-entity
+            entity: camera.doorbell_history5
+      - type: "custom:swipe-card"
+        start_card: 5
+        cards:
+          - type: picture-entity
+            entity: camera.deck_history1
+          - type: picture-entity
+            entity: camera.deck_history2
+          - type: picture-entity
+            entity: camera.deck_history3
+          - type: picture-entity
+            entity: camera.deck_history4
+          - type: picture-entity
+            entity: camera.deck_history5
+      - type: "custom:swipe-card"
+        start_card: 5
+        cards:
+          - type: picture-entity
+            entity: camera.deck_stairs_history1
+          - type: picture-entity
+            entity: camera.deck_stairs_history2
+          - type: picture-entity
+            entity: camera.deck_stairs_history3
+          - type: picture-entity
+            entity: camera.deck_stairs_history4
+          - type: picture-entity
+            entity: camera.deck_stairs_history5
+      - type: "custom:swipe-card"
+        start_card: 5
+        cards:
+          - type: picture-entity
+            entity: camera.garage_history1
+          - type: picture-entity
+            entity: camera.garage_history2
+          - type: picture-entity
+            entity: camera.garage_history3
+          - type: picture-entity
+            entity: camera.garage_history4
+          - type: picture-entity
+            entity: camera.garage_history5
   ##########################################
   # MUSIC TAB
   ##########################################
@@ -738,7 +768,6 @@ views:
           - sensor.kitchen_sink_leak_temperature_measurement
           - sensor.kitchen_dishwasher_leak_temperature_measurement
           - sensor.kitchen_fridge_leak_temperature_measurement
-          - sensor.living_room_multi_temperature_measurement
           - sensor.basement_fridge_temperature_measurement
           - sensor.daisy_temperature_measurement
           - sensor.dryer_temperature_measurement

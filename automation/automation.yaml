@@ -727,17 +727,6 @@
     - service: script.turn_on
       entity_id: script.video_daisy
 #########################################
-# if 'alarm_state' turns to anything (except no_alarm_active or entrance_delay_active), notify!
-- alias: "alarm testing"
-  trigger:
-    - platform: template
-      value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "{{ trigger.to_state.attributes.friendly_name }} Changed"
-        message: "Changed to {{ trigger.to_state.state }}."
-#########################################
 # fire active, unlock locks, lights on
 - alias: "fire active, unlock locks, lights on"
   trigger:
@@ -1073,29 +1062,6 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_basement_off
 ########################################
-- alias: "pir tamper alert"
-  trigger:
-    - platform: state
-      entity_id:
-        - binary_sensor.living_room_multi_tamper
-        - binary_sensor.office_multi_tamper
-      to: "on"
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        message: "ALERT: {{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-# ########################################
-# # person alert
-# - alias: 'person alert'
-#   trigger:
-#     - platform: state
-#       entity_id: person.jon, person.laura
-#   action:
-#     - service: notify.telegram_jon
-#       data_template:
-#         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-
-########################################
 # patio fan off
 - alias: "patio fan off"
   trigger:
@@ -1125,15 +1091,6 @@
         - scene.basement_keypad_theater
         - scene.basement_keypad_bar
 #########################################
-- alias: "Kitchen dishwasher notification"
-  trigger:
-    - platform: state
-      entity_id: switch.dishwasher
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-#########################################
 - alias: "test pico scene notification"
   trigger:
     - platform: event
@@ -1146,10 +1103,13 @@
       data:
         message: "pico on"
 #########################################
-- alias: "Alarm trouble notification"
+- alias: "Elk Alarm trouble notification"
   trigger:
     - platform: state
       entity_id: sensor.alarm_trouble
+  condition:
+    - condition: template
+      value_template: "{{ not is_state('sensor.alarm_trouble', '') }}"
   action:
     - service: notify.telegram_jon
       data_template:
@@ -1219,3 +1179,17 @@
     - service: homeassistant.turn_on
       # entity_id: light.master_bedroom_jons_lamp
       entity_id: light.master_bedroom_jons_lamp
+#########################################
+- alias: "general notifications"
+  trigger:
+    - platform: state
+      entity_id: switch.dishwasher
+    - platform: template
+      value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
+    - platform: state
+      entity_id: binary_sensor.office_multi_tamper
+      to: "on"
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
