@@ -37,37 +37,37 @@
 
 - platform: mqtt
   name: "Deck Person"
-  state_topic: "frigate/deck/objects"
+  state_topic: "frigate/deck/person"
   value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Deck Stairs Person"
-  state_topic: "frigate/deck_stairs/objects"
+  state_topic: "frigate/deck_stairs/person"
   value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Driveway Person"
-  state_topic: "frigate/driveway/objects"
+  state_topic: "frigate/driveway/person"
   value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Doorbell Person"
-  state_topic: "frigate/doorbell/objects"
+  state_topic: "frigate/doorbell/person"
   value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Garage Person"
-  state_topic: "frigate/garage/objects"
+  state_topic: "frigate/garage/person"
   value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Reolink Person"
-  state_topic: "frigate/reolink/objects"
+  state_topic: "frigate/reolink/person"
   value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
@@ -96,7 +96,6 @@
       value_template: >-
         {{ (states.sensor.foyer_pir.state == "Violated")
         or (states.sensor.kitchen_pir.state == "Violated")
-        or (states.binary_sensor.living_room_multi_motion.state == "on")
         or (states.binary_sensor.office_multi_motion.state == "on") }}
     garage_doors:
       friendly_name: "Garage Doors"

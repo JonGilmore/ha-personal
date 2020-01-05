@@ -40,24 +40,24 @@
 - platform: ffmpeg
   name: Patio
   input: !secret patio_cam
-- platform: ffmpeg
-  name: Wyze
-  input: !secret wyze_cam
+# - platform: ffmpeg
+#   name: Wyze
+#   input: !secret wyze_cam
 
 ###################################
 # still image cameras
 - name: Deck Last Person
   platform: mqtt
-  topic: frigate/deck/snapshot
+  topic: frigate/deck/person/snapshot
 - name: Driveway Last Person
   platform: mqtt
-  topic: frigate/driveway/snapshot
+  topic: frigate/driveway/person/snapshot
 - name: Doorbell Last Person
   platform: mqtt
-  topic: frigate/doorbell/snapshot
+  topic: frigate/doorbell/person/snapshot
 - name: Garage Last Person
   platform: mqtt
-  topic: frigate/garage/snapshot
+  topic: frigate/garage/person/snapshot
 - name: Deck Stairs Last Person
   platform: mqtt
-  topic: frigate/deck_stairs/snapshot
+  topic: frigate/deck_stairs/person/snapshot

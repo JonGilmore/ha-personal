@@ -1,0 +1,77 @@
+---
+homeassistant:
+  whitelist_external_dirs:
+    - /config/www
+
+camera:
+  - platform: mjpeg
+    name: doorbell_hist
+    mjpeg_url: !secret frigate_doorbell_cam
+  - platform: local_file
+    name: doorbell_history1
+    file_path: /config/www/doorbell_image1.jpg
+  - platform: local_file
+    name: doorbell_history2
+    file_path: /config/www/doorbell_image2.jpg
+  - platform: local_file
+    name: doorbell_history3
+    file_path: /config/www/doorbell_image3.jpg
+  - platform: local_file
+    name: doorbell_history4
+    file_path: /config/www/doorbell_image4.jpg
+  - platform: local_file
+    name: doorbell_history5
+    file_path: /config/www/doorbell_image5.jpg
+
+automation:
+  - alias: create_history_doorbell
+    trigger:
+      - entity_id: binary_sensor.doorbell_person
+        from: "off"
+        platform: state
+        to: "on"
+    action:
+      - data:
+          entity_id: camera.doorbell_history2
+          filename: /config/www/doorbell_image1.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.doorbell_history3
+          filename: /config/www/doorbell_image2.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.doorbell_history4
+          filename: /config/www/doorbell_image3.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.doorbell_history5
+          filename: /config/www/doorbell_image4.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.doorbell_hist
+          filename: /config/www/doorbell_image5.jpg
+        service: camera.snapshot
+
+script:
+  setup_frigate_history_doorbell:
+    sequence:
+      - data:
+          entity_id: camera.doorbell_hist
+          filename: /config/www/doorbell_image5.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.doorbell_hist
+          filename: /config/www/doorbell_image4.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.doorbell_hist
+          filename: /config/www/doorbell_image3.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.doorbell_hist
+          filename: /config/www/doorbell_image2.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.doorbell_hist
+          filename: /config/www/doorbell_image1.jpg
+        service: camera.snapshot
