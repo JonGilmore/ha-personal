@@ -136,11 +136,35 @@
             {% endif %}
           {%- endfor -%}
         {%- endfor -%}
-    lights_on:
+    lights_on_number:
       entity_id: sensor.time
       friendly_name: Lights
       unit_of_measurement: "On"
       value_template: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
+    doors_locked:
+      entity_id:
+        - lock.front_door_lock
+        - lock.garage_door_lock
+      friendly_name: Doors Locked
+      value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='name')| list|join(', ') }}"
+    doors_locked_number:
+      entity_id:
+        - lock.front_door_lock
+        - lock.garage_door_lock
+      friendly_name: Number of Doors Locked
+      value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|length }}"
+    people_home:
+      entity_id:
+        - person.jon
+        - person.laura
+      friendly_name: People Home
+      value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|map(attribute='name')| list|join(', ') }}"
+    people_home_number:
+      entity_id:
+        - person.jon
+        - person.laura
+      friendly_name: Number of People Home
+      value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
 
 # DARK SKY
 - platform: darksky
