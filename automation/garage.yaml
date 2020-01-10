@@ -96,6 +96,6 @@
     - service: notify.telegram_jon
       data_template:
         title: "Temperature Alert!"
-        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
+        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}, current temperature is {{ states('sensor.garage_temperature') }}"
     - service: climate.turn_off
       entity_id: climate.garage_thermostat

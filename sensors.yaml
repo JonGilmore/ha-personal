@@ -117,6 +117,10 @@
         {% elif states.sensor.single_garage.state == 'Violated' %}open
         {% else %}unknown{% endif %}
       friendly_name: "Garage Single State"
+    garage_temperature:
+      entity_id: climate.garage_thermostat
+      value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
+      friendly_name: "Garage Temperature"
     garage_fridge_power:
       entity_id: switch.garage_fridge
       value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
