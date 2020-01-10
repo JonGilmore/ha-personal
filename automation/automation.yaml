@@ -597,6 +597,7 @@
       data_template:
         title: "Temperature Alert!"
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
+    - delay: "00:20:00"
 #########################################
 # bedtime, garage check
 - alias: "bedtime, garage check"
@@ -734,6 +735,8 @@
       entity_id: sensor.alarm_state
       to: "fire_alarm"
   action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.fire
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_on
     - service: lock.unlock
@@ -747,6 +750,19 @@
           - script.video_driveway
           - script.video_deck
           - script.video_doorbell
+    - service: script.turn_on
+      entity_id: script.fire_alarm
+#########################################
+# turn off notifications b/c user interaction
+- alias: "fire turnoffnotification"
+  trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: "/turnoffnotification"
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.fire
 #########################################
 # burglar active, lights on, send some videos
 - alias: "burglar active, lights on, send some videos"

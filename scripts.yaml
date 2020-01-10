@@ -19,7 +19,7 @@ video_daisy:
       data:
         filename: /tmp/daisy.mp4
     - delay:
-        seconds: 12
+        seconds: 13
     - service: telegram_bot.send_video
       data_template:
         file: "/tmp/daisy.mp4"
@@ -67,3 +67,38 @@ video_doorbell:
     - service: telegram_bot.send_video
       data_template:
         file: "/tmp/doorbell.mp4"
+
+fire_alarm:
+  alias: "fire alarm"
+  sequence:
+    - service: notify.telegram_jon
+      data_template:
+        title: 'Disable this notification?'
+        message: "Disable this notification?"
+        inline_keyboard:
+          - "Yes:/turnoffnotification"
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.basement_ghm, media_player.googlehomehub6982
+        volume_level: "0.90"
+    - service: tts.google_say
+      data:
+        entity_id: media_player.basement_ghm, media_player.googlehomehub6982
+        message: "Fire Alarm, Evacuate Immediately"
+    - delay:
+        seconds: 2
+    - service: script.turn_on
+      data:
+        entity_id: script.fire_alarm_loop
+
+fire_alarm_loop:
+  alias: "fire alarm loop"
+  sequence:
+    - condition: state
+      entity_id: input_boolean.fire
+      state: 'on'
+    - delay:
+        seconds: 5
+    - service: script.turn_on
+      data:
+        entity_id: script.fire_alarm

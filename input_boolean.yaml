@@ -13,3 +13,5 @@ guests:
   name: Guests?
 party:
   name: Party?
+fire:
+  name: Fire Active
