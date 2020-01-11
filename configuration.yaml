@@ -11,58 +11,6 @@ homeassistant:
     - /tmp
   packages: !include_dir_named packages
 
-cloud:
-  google_actions:
-    filter:
-      include_entities:
-        - climate.basement_thermostat
-        - climate.main_thermostat
-        - climate.upstairs_thermostat
-        - climate.garage_thermostat
-        - group.christmaslights
-        - group.christmasTrees
-      include_domains:
-        - light
-        - switch
-        - fan
-        - scene
-        - camera
-      exclude_domains:
-        - alert
-        - automation
-        - lock
-        - group
-        - input_boolean
-        - script
-        - sensor
-        - cover
-        - media_player
-        - climate
-        - binary_sensor
-        - vacuum
-  alexa:
-    filter:
-      include_entities:
-        - climate.basement_thermostat
-        - climate.main_thermostat
-        - climate.upstairs_thermostat
-        - climate.garage_thermostat
-        - group.christmaslights
-        - group.christmasTrees
-      include_domains:
-        - light
-        - switch
-        - fan
-        - scene
-      exclude_domains:
-        - group
-        - input_boolean
-        - script
-        - cover
-        - media_player
-        - climate
-        - camera
-
 http:
 updater:
   reporting: false
