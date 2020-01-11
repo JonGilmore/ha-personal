@@ -1,5 +1,5 @@
 ---
-title: Reeder Ridge
+title: Reeder
 background: var(--background-image)
 resources:
   - url: /community_plugin/mini-media-player/mini-media-player.js
@@ -26,6 +26,10 @@ resources:
     type: module
   - url: /community_plugin/swipe-card/swipe-card.js
     type: module
+  - url: /community_plugin/lovelace-auto-entities/auto-entities.js
+    type: module
+  - url: /community_plugin/secondaryinfo-entity-row/secondaryinfo-entity-row.js
+    type: js 
 
 views:
   ##########################################
@@ -39,9 +43,6 @@ views:
         type: alarm-panel
         entity: alarm_control_panel.area001
         name: Reeder Ridge
-        style: "--alarm-color-disarmed: var(--label-badge-blue);"
-        show_keypad: true
-        display_letters: true
         states:
           - arm_home
           - arm_away
@@ -193,6 +194,24 @@ views:
           - "on"
         card:
           title: Enabled Lights
+      - type: "custom:auto-entities"
+        card:
+          show_header_toggle: false
+          title: Important Dates
+          type: entities
+        sort:
+          method: state
+          numeric: true
+        filter:
+          include:
+            - entity_id: "/(birthday|anniversary)/"
+              state: < 45
+              options:
+                type: "custom:secondaryinfo-entity-row"
+                secondary_info: >-
+                  [[ {entity}.attributes.date ]]  ( [[
+                  {entity}.attributes.years_at_next_anniversary ]] Years )
+        show_empty: true
       - type: entities
         title: Equipment
         show_header_toggle: false
@@ -248,25 +267,32 @@ views:
       - type: "custom:simple-thermostat"
         entity: climate.garage_thermostat
         step_size: 1
-      - type: entities
-        title: Temperatures
-        show_header_toggle: false
-        entities:
-          - sensor.keypad004
-          - sensor.master_entry_temperature
-          - sensor.office_multi_temperature_measurement
-          - sensor.sunroom_temperature
-      - type: entities
-        title: Humidity
-        show_header_toggle: false
-        entities:
-          - sensor.dark_sky_humidity
-          - sensor.master_entry_humidity
-          - sensor.office_multi_relative_humidity_measurement
-          - sensor.sunroom_humidity
-          - sensor.house_humidity
-          - sensor.target_humidity_max_winter
-          - sensor.target_humidity_min_winter
+      - type: "custom:auto-entities"
+        card:
+          show_header_toggle: false
+          title: Temperatures
+          type: entities
+        sort:
+          method: state
+        filter:
+          include:
+            - entity_id: "/^sensor.*temperature.*/"
+          exclude:
+            - entity_id: "/dark_sky/"
+        show_empty: false
+      - type: "custom:auto-entities"
+        card:
+          show_header_toggle: false
+          title: Humidity
+          type: entities
+        sort:
+          method: state
+        filter:
+          include:
+            - entity_id: "/^sensor.*humidity.*/"
+          exclude:
+            - entity_id: "/(dark_sky|cpu|alarm)/"
+        show_empty: false
       - type: entities
         title: Weather
         show_header_toggle: false
@@ -790,14 +816,17 @@ views:
     id: energy
     icon: mdi:power-plug
     cards:
-      - type: entities
-        title: energy
-        show_header_toggle: false
-        entities:
-          - sensor.aeotec_hem_energy_meter
-          - sensor.aeotec_hem_power_meter
-          - sensor.garage_fridge_energy
-          - sensor.garage_fridge_power
+      - type: "custom:auto-entities"
+        card:
+          show_header_toggle: false
+          title: Energy
+          type: entities
+        sort:
+          method: state
+        filter:
+          include:
+            - entity_id: "/^(sensor.*power|sensor.*energy).*/"
+        show_empty: false
   ##########################################
   # SCENES TAB
   ##########################################
@@ -829,72 +858,72 @@ views:
   ##########################################
   # SPRINKLER TAB
   ##########################################
-  - title: Sprinklers
-    id: sprinklers
-    icon: mdi:flower
-    cards:
-      - type: entities
-        title: Sprinkler Zones
-        show_header_toggle: false
-        entities:
-          - switch.front_right_sidewalk
-          - switch.side_right_front_right
-          - switch.backyard_far
-          - switch.backyard_middle
-          - switch.backyard_near
-          - switch.side_left
-          - switch.front_left
-          - switch.drip_right
-          - switch.drip_left
-          - switch.front_pots
-          - switch.backyard_drip
-          - switch.backyard_pots
-      - type: entities
-        title: Timers
-        show_header_toggle: false
-        entities:
-          - input_number.front_right_sidewalk_timer
-          - input_number.side_right_front_right_timer
-          - input_number.backyard_far_timer
-          - input_number.backyard_middle_timer
-          - input_number.backyard_near_timer
-          - input_number.side_left_timer
-          - input_number.front_left_timer
-          - input_number.drip_right_timer
-          - input_number.drip_left_timer
-          - input_number.front_pots_timer
-          - input_number.backyard_drip_timer
-          - input_number.backyard_pots_timer
-      - type: glance
-        title: Sprinkler Programs
-        entities:
-          - scene.p1_normal
-          - scene.p2_drip
-          - scene.p3_pots
-      # - type: entities
-      #   title: Sprinkler Zones
-      #   show_header_toggle: false
-      #   entities:
-      #     - binary_sensor.front_right_sidewalk
-      #     - binary_sensor.side_right_front_right
-      #     - binary_sensor.backyard_far
-      #     - binary_sensor.backyard_middle
-      #     - binary_sensor.backyard_near
-      #     - binary_sensor.side_left
-      #     - binary_sensor.front_left
-      #     - binary_sensor.drip_right
-      #     - binary_sensor.drip_left
-      #     - binary_sensor.front_pots
-      #     - binary_sensor.backyard_drip
-      #     - binary_sensor.backyard_pots
-      - type: glance
-        title: Sensors
-        entities:
-          - binary_sensor.rain_sensor
-          - binary_sensor.rain_delay
-          - sensor.rain_delay_stop_time
-          - sensor.water_level
-          - sensor.last_run
+  # - title: Sprinklers
+  #   id: sprinklers
+  #   icon: mdi:flower
+  #   cards:
+  #     - type: entities
+  #       title: Sprinkler Zones
+  #       show_header_toggle: false
+  #       entities:
+  #         - switch.front_right_sidewalk
+  #         - switch.side_right_front_right
+  #         - switch.backyard_far
+  #         - switch.backyard_middle
+  #         - switch.backyard_near
+  #         - switch.side_left
+  #         - switch.front_left
+  #         - switch.drip_right
+  #         - switch.drip_left
+  #         - switch.front_pots
+  #         - switch.backyard_drip
+  #         - switch.backyard_pots
+  #     - type: entities
+  #       title: Timers
+  #       show_header_toggle: false
+  #       entities:
+  #         - input_number.front_right_sidewalk_timer
+  #         - input_number.side_right_front_right_timer
+  #         - input_number.backyard_far_timer
+  #         - input_number.backyard_middle_timer
+  #         - input_number.backyard_near_timer
+  #         - input_number.side_left_timer
+  #         - input_number.front_left_timer
+  #         - input_number.drip_right_timer
+  #         - input_number.drip_left_timer
+  #         - input_number.front_pots_timer
+  #         - input_number.backyard_drip_timer
+  #         - input_number.backyard_pots_timer
+  #     - type: glance
+  #       title: Sprinkler Programs
+  #       entities:
+  #         - scene.p1_normal
+  #         - scene.p2_drip
+  #         - scene.p3_pots
+  #     # - type: entities
+  #     #   title: Sprinkler Zones
+  #     #   show_header_toggle: false
+  #     #   entities:
+  #     #     - binary_sensor.front_right_sidewalk
+  #     #     - binary_sensor.side_right_front_right
+  #     #     - binary_sensor.backyard_far
+  #     #     - binary_sensor.backyard_middle
+  #     #     - binary_sensor.backyard_near
+  #     #     - binary_sensor.side_left
+  #     #     - binary_sensor.front_left
+  #     #     - binary_sensor.drip_right
+  #     #     - binary_sensor.drip_left
+  #     #     - binary_sensor.front_pots
+  #     #     - binary_sensor.backyard_drip
+  #     #     - binary_sensor.backyard_pots
+  #     - type: glance
+  #       title: Sensors
+  #       entities:
+  #         - binary_sensor.rain_sensor
+  #         - binary_sensor.rain_delay
+  #         - sensor.rain_delay_stop_time
+  #         - sensor.water_level
+  #         - sensor.last_run
   ##########################################
   # MAINTENANCE TAB
   ##########################################
