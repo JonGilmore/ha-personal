@@ -29,7 +29,7 @@ resources:
   - url: /community_plugin/lovelace-auto-entities/auto-entities.js
     type: module
   - url: /community_plugin/secondaryinfo-entity-row/secondaryinfo-entity-row.js
-    type: js 
+    type: js
 
 views:
   ##########################################
