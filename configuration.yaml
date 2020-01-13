@@ -174,19 +174,11 @@ speedtestdotnet:
 #         - netflix
 
 mobile_app:
-
-isy994:
-  host: !secret url_isy
-  username: !secret isy_user
-  password: !secret isy_passwd
+breaking_changes:
+  scan_interval: 21600
 
 browser_mod:
 device_tracker:
   - platform: mqtt
     devices:
       jon_st: "device_tracker/jon/state"
-
-# joaoapps_join:
-#   - name: NAME_OF_GROUP
-#     device_id: GROUP.GROUP_NAME
-#     api_key: !secret join_api
