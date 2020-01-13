@@ -978,16 +978,6 @@
     - service: automation.turn_on
       entity_id: automation.person_motion_template
 ########################################
-# Irrigation (opensprinkler) rain sensor
-- alias: "opensprinkler rain sensor"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.rain_sensor
-  action:
-    service: notify.telegram_jon
-    data_template:
-      message: "{{ trigger.to_state.attributes.friendly_name }} changed to {{ trigger.to_state.state }}"
-########################################
 - alias: basement off with no motion
   trigger:
     - platform: state
@@ -1013,7 +1003,7 @@
   action:
     - service: rest_command.patio_fan_off
 ########################################
-- alias: party lights
+- alias: backyard party lights
   trigger:
     - platform: state
       entity_id: sensor.basement_door
@@ -1028,18 +1018,6 @@
         - scene.basement_keypad_theater
         - scene.basement_keypad_bar
 #########################################
-- alias: "test pico scene notification"
-  trigger:
-    - platform: event
-      event_type: lutron_event
-      event_data:
-        id: office_pico_on
-        action: single
-  action:
-    - service: notify.telegram_jon
-      data:
-        message: "pico on"
-#########################################
 - alias: "Elk Alarm trouble notification"
   trigger:
     - platform: state
@@ -1051,18 +1029,6 @@
     - service: notify.telegram_jon
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-#########################################
-- alias: "test hybrid scene notification"
-  trigger:
-    - platform: event
-      event_type: lutron_event
-      event_data:
-        id: sitting_keypad_main_down
-        action: single
-  action:
-    - service: notify.telegram_jon
-      data:
-        message: "hybrid on"
 #########################################
 - alias: doorbell notification event capture and notify
   trigger:
@@ -1124,6 +1090,8 @@
       to: "on"
     - platform: state
       entity_id: sensor.potential_breaking_changes
+    - platform: state
+      entity_id: binary_sensor.rain_sensor
   action:
     - service: notify.telegram_jon
       data_template:
