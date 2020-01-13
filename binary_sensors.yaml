@@ -38,37 +38,26 @@
 - platform: mqtt
   name: "Deck Person"
   state_topic: "frigate/deck/person"
-  value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Deck Stairs Person"
   state_topic: "frigate/deck_stairs/person"
-  value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Driveway Person"
   state_topic: "frigate/driveway/person"
-  value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Doorbell Person"
   state_topic: "frigate/doorbell/person"
-  value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 - platform: mqtt
   name: "Garage Person"
   state_topic: "frigate/garage/person"
-  value_template: "{{ value_json.person }}"
-  device_class: moving
-  availability_topic: "frigate/available"
-- platform: mqtt
-  name: "Reolink Person"
-  state_topic: "frigate/reolink/person"
-  value_template: "{{ value_json.person }}"
   device_class: moving
   availability_topic: "frigate/available"
 
