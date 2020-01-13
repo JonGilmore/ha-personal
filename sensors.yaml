@@ -157,6 +157,18 @@
         - lock.garage_door_lock
       friendly_name: Number of Doors Locked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|length }}"
+    doors_unlocked:
+      entity_id:
+        - lock.front_door_lock
+        - lock.garage_door_lock
+      friendly_name: Doors Unlocked
+      value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
+    doors_unlocked_number:
+      entity_id:
+        - lock.front_door_lock
+        - lock.garage_door_lock
+      friendly_name: Number of Doors Unlocked
+      value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|length }}"
     people_home:
       entity_id:
         - person.jon
@@ -275,8 +287,10 @@
       friendly_name: "Master Bed Occupied"
     master_bed_people:
       value_template: >-
-        {% if   (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on") and (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}both
-        {% elif (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on") or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}one
+        {% if   (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
+        and (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}both
+        {% elif (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
+        or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}one
         {% else %} nobody {% endif %}
       friendly_name: "Master Bed People"
 
