@@ -68,37 +68,53 @@ video_doorbell:
       data_template:
         file: "/tmp/doorbell.mp4"
 
-fire_alarm:
-  alias: "fire alarm"
+alarm:
+  alias: "alarm"
   sequence:
     - service: notify.telegram_jon
       data_template:
-        title: 'Disable this notification?'
-        message: "Disable this notification?"
-        inline_keyboard:
-          - "Yes:/turnoffnotification"
+        message: "Alarm active, do you want to disable this?"
+        data:
+          inline_keyboard:
+            - "Yes:/turnoffnotification, No:/do_nothing"
     - service: media_player.volume_set
       data:
-        entity_id: media_player.basement_ghm, media_player.googlehomehub6982
+        entity_id: media_player.office_googlehome, media_player.main_googlehome, media_player.basement_googlehome
         volume_level: "0.90"
     - service: tts.google_say
       data:
-        entity_id: media_player.basement_ghm, media_player.googlehomehub6982
-        message: "Fire Alarm, Evacuate Immediately"
-    - delay:
-        seconds: 2
+        entity_id: media_player.office_googlehome, media_player.main_googlehome, media_player.basement_googlehome
+        message: "Alert!"
     - service: script.turn_on
-      data:
-        entity_id: script.fire_alarm_loop
+      entity_id: script.send_videos
+    - service: script.turn_on
+      entity_id: script.alarm_loop
 
-fire_alarm_loop:
-  alias: "fire alarm loop"
+alarm_loop:
+  alias: "alarm loop"
   sequence:
     - condition: state
-      entity_id: input_boolean.fire
-      state: 'on'
+      entity_id: input_boolean.alarm_notifier
+      state: "on"
     - delay:
-        seconds: 5
+        seconds: 60
     - service: script.turn_on
+      entity_id: script.alarm
+
+lock_doors:
+  alias: "lock doors"
+  sequence:
+    - service: lock.lock
       data:
-        entity_id: script.fire_alarm
+        entity_id:
+          - lock.garage_door_lock
+          - lock.front_door_lock
+
+send_videos:
+  alias: "send videos"
+  sequence:
+    - service: script.turn_on
+      entity_id:
+        - script.video_driveway
+        - script.video_doorbell
+        - script.video_kitchen

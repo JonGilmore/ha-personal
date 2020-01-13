@@ -190,7 +190,6 @@
     - service: homeassistant.turn_off
       entity_id: light.mudroom_garage_lights
 #########################################
-# wake up - good morning (only between Oct-May)
 - alias: "wake up - good morning (only between Oct-May)"
   trigger:
     - platform: state
@@ -308,8 +307,7 @@
     - service: homeassistant.turn_on
       entity_id: input_boolean.master_blinds_run_once
 #########################################
-# close Master Blinds at night
-- alias: Master Blinds at night
+- alias: Close master blinds at night
   trigger:
     - platform: sun
       event: sunset
@@ -319,7 +317,6 @@
     - service: homeassistant.turn_on
       entity_id: input_boolean.master_blinds_run_once
 #########################################
-# open master blinds in the morning (after 45min of unoccupied bed)
 - alias: open master blinds in the morning (after 45min of unoccupied bed)
   trigger:
     - platform: state
@@ -346,7 +343,6 @@
       data_template:
         message: "Master Bed changed status: {{ trigger.to_state.state }}"
 #########################################
-# reset run-once variables - noon
 - alias: reset run-once variables - noon
   trigger:
     platform: time
@@ -362,11 +358,8 @@
       entity_id: binary_sensor.sleep_status
       to: "on"
   action:
-    - service: lock.lock
-      data:
-        entity_id:
-          - lock.garage_door_lock
-          - lock.front_door_lock
+    - service: script.turn_on
+      entity_id: script.lock_doors
     - service: climate.set_fan_mode
       data:
         entity_id:
@@ -379,8 +372,7 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_but_master
 #########################################
-# done sleeping, turn the HVAC fan off
-- alias: "done sleeping, turn the HVAC fan off"
+- alias: "done sleeping, HVAC fan off, recirculation pump on"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -393,6 +385,8 @@
           - climate.main_thermostat
           - climate.upstairs_thermostat
         fan_mode: "auto"
+    - service: homeassistant.turn_on
+      entity_id: switch.equipment_room_recirculation_pump
 #########################################
 # away, turn the HVAC fans on & the recirculation pump off
 - alias: "away, turn the HVAC fans on & the recirculation pump off"
@@ -599,7 +593,6 @@
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
     - delay: "00:20:00"
 #########################################
-# bedtime, garage check
 - alias: "bedtime, garage check"
   trigger:
     - platform: state
@@ -620,7 +613,6 @@
         title: "Garage Door is Open!"
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
 #########################################
-# bedtime, doors unlocked and notify
 - alias: "bedtime, doors unlocked and notify"
   trigger:
     - platform: state
@@ -641,24 +633,6 @@
         title: "Door(s) UNLOCKED!"
         message: "Locking the door(s)"
 #########################################
-# # battery life notifications
-# - alias: Low Battery Notification
-#   trigger:
-#     - platform: template
-#       value_template: >
-#         {% for zwave in states.zwave if zwave.attributes.battery_level %}
-#           {%- if zwave.attributes.battery_level | int < 20 -%}
-#             {{true}}
-#           {%- endif -%}
-#         {%- endfor -%}
-#   action:
-#     - service: notify.telegram_jon
-#       data_template:
-#         title: "Low Battery!"
-#         message: >
-#           {{ trigger.to_state.attributes.friendly_name }} needs new batteries.
-#########################################
-# indoor humidity check - winter - see if its below the high threshold
 - alias: indoor humidity check - winter - see if its below the high threshold
   trigger:
     - platform: time
@@ -672,7 +646,6 @@
         title: "Humidity Warning!"
         message: "Humidity in the house is too high: {{ states.sensor.house_humidity.state }}"
 #########################################
-# indoor humidity check - winter - see if its above the low threshold
 - alias: indoor humidity check - winter - see if its above the low threshold
   trigger:
     - platform: time
@@ -686,7 +659,6 @@
         title: "Humidity Warning!"
         message: "Humidity in the house is too low: {{ states.sensor.house_humidity.state }}"
 #########################################
-# water leak, notify, close the water valve, turn off recirc pump
 - alias: "water leak, notify, close the water valve, turn off recirc pump"
   trigger:
     - platform: state
@@ -719,24 +691,17 @@
       - condition: time
         before: "14:00:00"
   action:
-    # - service: notify.telegram_jon
-    #   data:
-    #     message: "Dog walker here"
-    #     data:
-    #       photo:
-    #         - url: !secret hik_daisy_pic
     - service: script.turn_on
       entity_id: script.video_daisy
 #########################################
-# fire active, unlock locks, lights on
-- alias: "fire active, unlock locks, lights on"
+- alias: "fire active, unlock locks, send videos, lights on, hvac off, repeat notifications"
   trigger:
     - platform: state
       entity_id: sensor.alarm_state
       to: "fire_alarm"
   action:
     - service: input_boolean.turn_on
-      entity_id: input_boolean.fire
+      entity_id: input_boolean.alarm_notifier
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_on
     - service: lock.unlock
@@ -745,27 +710,9 @@
           - lock.garage_door_lock
           - lock.front_door_lock
     - service: script.turn_on
-      data:
-        entity_id:
-          - script.video_driveway
-          - script.video_deck
-          - script.video_doorbell
-    - service: script.turn_on
-      entity_id: script.fire_alarm
+      entity_id: script.alarm
 #########################################
-# turn off notifications b/c user interaction
-- alias: "fire turnoffnotification"
-  trigger:
-    - platform: event
-      event_type: telegram_callback
-      event_data:
-        data: "/turnoffnotification"
-  action:
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.fire
-#########################################
-# burglar active, lights on, send some videos
-- alias: "burglar active, lights on, send some videos"
+- alias: "burglar active, lights on, send videos, repeat notifications"
   trigger:
     - platform: state
       entity_id: sensor.alarm_state
@@ -774,34 +721,23 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_on
     - service: script.turn_on
-      data:
-        entity_id:
-          - script.video_driveway
-          - script.video_deck
-          - script.video_doorbell
-    - delay:
-        minutes: 1
-    - service: script.turn_on
-      data:
-        entity_id:
-          - script.video_driveway
-          - script.video_deck
-          - script.video_doorbell
-########################################
-# Turn on recirculation pump in the AM (when we're not on vacation)
-- alias: Turn on recirculation pump in the AM (when we're not on vacation)
+      entity_id: script.alarm
+#########################################
+- alias: "turn off alarm notifications b/c user interaction"
   trigger:
-    - platform: time
-      at: "06:00:00"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.vacation_status
-      state: "off"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: "/turnoffnotification"
   action:
-    - service: homeassistant.turn_on
-      entity_id: switch.equipment_room_recirculation_pump
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: "{{ trigger.event.data.id }}"
+        message: "Disabling notifications for {{ trigger }}"
+        show_alert: true
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.alarm_notifier
 ########################################
-# updater notification
 - alias: "Update Available Notifications"
   trigger:
     platform: state
@@ -811,7 +747,6 @@
     data:
       message: "Update for Home Assistant is available."
 ########################################
-# master entry motion light - bed unoccupied
 - alias: master entry motion light - bed unoccupied
   trigger:
     platform: state
@@ -836,16 +771,12 @@
         transition: 0
         power: on
 ########################################
-# master entry motion light - bed occupied
 - alias: master entry motion light - bed occupied
   trigger:
     platform: state
     entity_id: binary_sensor.master_entry_pir
     to: "on"
   condition:
-    # - condition: state
-    #   entity_id: sensor.master_bed_occupied
-    #   state: 'occupied'
     - condition: template
       value_template: "{{ states.sensor.master_bed_people.state != 'nobody' }}"
     - condition: state
@@ -863,7 +794,6 @@
         transition: 0
         power: on
 ########################################
-# Master entry motion lights Off
 - alias: Master entry motion lights Off
   trigger:
     - platform: state
@@ -875,7 +805,6 @@
     - service: homeassistant.turn_off
       entity_id: light.master_entry_lifx
 ########################################
-# master sitting motion light - bed unoccupied
 - alias: master sitting motion light - bed unoccupied
   trigger:
     platform: state
@@ -900,7 +829,6 @@
         transition: 0
         power: on
 ########################################
-# sitting room motion lights off
 - alias: sitting room motion lights off
   trigger:
     - platform: state
@@ -912,7 +840,6 @@
     - service: homeassistant.turn_off
       entity_id: light.sitting_room_lifx
 ########################################
-# sitting room lights off when bed occupied
 - alias: sitting room lights off when bed occupied
   trigger:
     - platform: state
@@ -927,7 +854,6 @@
     - service: homeassistant.turn_off
       entity_id: light.sitting_room_lifx
 ########################################
-# kitchen off with no motion
 - alias: kitchen off with no motion
   trigger:
     - platform: state
@@ -939,7 +865,6 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_kitchen_off
 ########################################
-# daisy cam photo every 45 minutes when armed away and kennel closed
 - alias: daisy cam photo every 45 minutes when armed away and kennel closed
   trigger:
     - platform: state
@@ -978,8 +903,7 @@
       data:
         entity_id: timer.daisy_cam_timer
 #########################################
-# motion lights enable 2hour before sunset, disable 2hour after sunrise
-- alias: motion lights enable
+- alias: motion lights enable 2hours before sunset, disable 2hour after sunrise
   trigger:
     - platform: sun
       event: sunset
@@ -1014,8 +938,7 @@
 #       entity_id:
 #         - switch.kitchen_cabinets
 #########################################
-# person motion template (sleeping or away)
-- alias: "person motion template"
+- alias: "person motion template (sleeping or away)"
   trigger:
     - platform: state
       entity_id:
@@ -1065,7 +988,6 @@
     data_template:
       message: "{{ trigger.to_state.attributes.friendly_name }} changed to {{ trigger.to_state.state }}"
 ########################################
-# basement off with no motion
 - alias: basement off with no motion
   trigger:
     - platform: state
@@ -1078,7 +1000,6 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_basement_off
 ########################################
-# patio fan off
 - alias: "patio fan off"
   trigger:
     - platform: time
@@ -1152,7 +1073,6 @@
       data:
         message: "doorbell rang"
 #########################################
-# mqtt smartthings device_tracker workaround
 - alias: "mqtt smartthings device_tracker workaround"
   trigger:
     - platform: state
@@ -1179,9 +1099,7 @@
 - alias: victorops notification - turn on light
   trigger:
     - platform: template
-      value_template: "{{ 'victor' in states.sensor.pixel_3_ariela_notification_grabber_sensor.state }}"
-    - platform: template
-      value_template: "{{ 'Incident' in states.sensor.pixel_3_ariela_notification_grabber_sensor.state }}"
+      value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel_3_ariela_notification_grabber_sensor.attributes['packageName'] }}"
   condition:
     - condition: template
       value_template: "{{ not is_state('sensor.period_of_day', 'day') }}"
@@ -1193,7 +1111,6 @@
       data:
         message: "ALERT! Work page"
     - service: homeassistant.turn_on
-      # entity_id: light.master_bedroom_jons_lamp
       entity_id: light.master_bedroom_jons_lamp
 #########################################
 - alias: "general notifications"
@@ -1205,6 +1122,8 @@
     - platform: state
       entity_id: binary_sensor.office_multi_tamper
       to: "on"
+    - platform: state
+      entity_id: sensor.potential_breaking_changes
   action:
     - service: notify.telegram_jon
       data_template:
