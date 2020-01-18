@@ -1,6 +1,6 @@
 ---
 #########################################
-- alias: "driveway line crossing - telegram"
+- alias: "driveway line crossing - telegram & tv notify"
   trigger:
     - platform: state
       entity_id: binary_sensor.driveway_line_crossing
@@ -13,6 +13,9 @@
         data:
           photo:
             - url: !secret hik_driveway_pic
+    - service: notify.living_room_tv
+      data:
+        message: "Driveway motion detected"
 #########################################
 - alias: "deck line crossing (only while alarm is not disarmed) - telegram"
   trigger:
@@ -44,6 +47,9 @@
         data:
           photo:
             - url: !secret db_pic
+    - service: notify.living_room_tv
+      data:
+        message: "Movement detected: Front Door"
 #########################################
 - alias: "front door line or doorbell, dark out, occupied, foyer and ext on"
   trigger:
@@ -112,13 +118,13 @@
   action:
     - service: media_player.play_media
       data_template:
-        entity_id: media_player.googlehomehub6982
+        entity_id: media_player.main_googlehome
         media_content_id: "http://192.168.45.249:8123/api/camera_proxy_stream/camera.front_door_live?token={{ states.camera.front_door_live.attributes.access_token }}"
         media_content_type: image/jpg
     - delay: "00:00:30"
     - service: media_player.turn_off
       data:
-        entity_id: media_player.googlehomehub6982
+        entity_id: media_player.main_googlehome
 #########################################
 - alias: "deck person, dark out, occupied, deck lights on"
   trigger:
@@ -351,14 +357,12 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.sunset_run_once
 #########################################
-- alias: "bedtime, lock doors, set HVAC fans on, turn off recirc pump, all lights, xmas lights, and main tv"
+- alias: "bedtime, set HVAC fans on, turn off recirc pump, all lights, xmas lights, and main tv"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
       to: "on"
   action:
-    - service: script.turn_on
-      entity_id: script.lock_doors
     - service: climate.set_fan_mode
       data:
         entity_id:
@@ -374,6 +378,48 @@
       data:
         entity_id: media_player.living_room_tv
         command: "system/turnOff"
+#########################################
+- alias: "bedtime, garage check"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.sleep_status
+      to: "on"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: sensor.double_garage
+        state: "Violated"
+      - condition: state
+        entity_id: sensor.single_garage
+        state: "Violated"
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        title: "Garage Door is Open!"
+        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
+#########################################
+- alias: "bedtime, doors unlocked and notify"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.sleep_status
+      to: "on"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: lock.front_door_lock
+        state: "unlocked"
+      - condition: state
+        entity_id: lock.garage_door_lock
+        state: "unlocked"
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        title: "{{ states.sensor.doors_unlocked_number.state }} door(s) UNLOCKED!"
+        message: "Locking {{ states.sensor.doors_unlocked.state }}"
+    - service: script.turn_on
+      entity_id: script.lock_doors
 #########################################
 - alias: "done sleeping, HVAC fan off, recirculation pump on"
   trigger:
@@ -549,27 +595,25 @@
     - service: lock.lock
       entity_id: lock.front_door_lock
 #########################################
-# if main fridge temp goes >42 or <30, notify
-- alias: "main fridge temp goes >42 or <30, notify"
+- alias: "main fridge temp >42 or <30"
   trigger:
     - platform: numeric_state
-      entity_id: sensor.main_fridge_temperature
+      entity_id: sensor.kitchen_fridge_door_temperature_measurement
       above: "42"
       for:
-        minutes: 5
+        minutes: 10
     - platform: numeric_state
-      entity_id: sensor.main_fridge_temperature
+      entity_id: sensor.kitchen_fridge_door_temperature_measurement
       below: "30"
       for:
-        minutes: 5
+        minutes: 10
   action:
     - service: notify.telegram_jon
       data_template:
         title: "Main Fridge Temperature Alert!"
-        message: "Main Fridge temp is {{ states.sensor.main_fridge_temperature.state }}!"
+        message: "Main Fridge temp is {{ states.sensor.kitchen_fridge_door_temperature_measurement.state }}!"
 #########################################
-# if house temps >84 or <55, notify
-- alias: "if house temps >84 or <55, notify"
+- alias: "house temps >84 or <55, notify"
   trigger:
     - platform: numeric_state
       entity_id: sensor.thermostat_basement_temperature
@@ -593,46 +637,6 @@
         title: "Temperature Alert!"
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
     - delay: "00:20:00"
-#########################################
-- alias: "bedtime, garage check"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.sleep_status
-      to: "on"
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: sensor.double_garage
-        state: "Violated"
-      - condition: state
-        entity_id: sensor.single_garage
-        state: "Violated"
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "Garage Door is Open!"
-        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
-#########################################
-- alias: "bedtime, doors unlocked and notify"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.sleep_status
-      to: "on"
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: lock.front_door_lock
-        state: "unlocked"
-      - condition: state
-        entity_id: lock.garage_door_lock
-        state: "unlocked"
-  action:
-    - service: notify.telegram_jon
-      data:
-        title: "Door(s) UNLOCKED!"
-        message: "Locking the door(s)"
 #########################################
 - alias: indoor humidity check - winter - see if its below the high threshold
   trigger:
@@ -739,14 +743,16 @@
     - service: input_boolean.turn_off
       entity_id: input_boolean.alarm_notifier
 ########################################
-- alias: "Update Available Notifications"
+- alias: Update Available Notification
   trigger:
-    platform: state
-    entity_id: updater.updater
+    - platform: state
+      entity_id: binary_sensor.updater
+      from: "off"
+      to: "on"
   action:
-    service: notify.telegram_jon
-    data:
-      message: "Update for Home Assistant is available."
+    - service: notify.telegram_jon
+      data_template:
+        message: "Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} is available."
 ########################################
 - alias: master entry motion light - bed unoccupied
   trigger:
@@ -974,7 +980,6 @@
     - service: automation.turn_off
       entity_id: automation.person_motion_template
     - delay:
-        #        minutes: 2
         seconds: 15
     - service: automation.turn_on
       entity_id: automation.person_motion_template
@@ -1090,6 +1095,9 @@
       entity_id: binary_sensor.office_multi_tamper
       to: "on"
     - platform: state
+      entity_id: binary_sensor.kitchen_fridge_door_tamper
+      to: "on"
+    - platform: state
       entity_id: sensor.potential_breaking_changes
     - platform: state
       entity_id: binary_sensor.rain_sensor
@@ -1097,3 +1105,30 @@
     - service: notify.telegram_jon
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
+#########################################
+- alias: important date (birthday & anniversaries)
+  trigger:
+    - platform: time
+      at: "07:00:00"
+  condition:
+    - condition: template
+      value_template: "{{ not is_state('sensor.important_dates', '') }}"
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        title: "Humidity Warning!"
+        message: "Humidity in the house is too high: {{ states.sensor.house_humidity.state }}"
+#########################################
+# - alias: create group of groups (and exlude unwanted groups)
+# https://community.home-assistant.io/t/create-combinatoric-groups-including-and-excluding-entities-from-other-groups/121259
+#   trigger:
+#     - platform: homeassistant
+#       event: start
+#   action:
+#     - service: script.group_set
+#       data_template:
+#         name: Test group
+#         include:
+#           - group.kids_room
+#           - group.bedroom
+#         exclude: group.night_lights,group.decorations
