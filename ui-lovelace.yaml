@@ -598,8 +598,9 @@ views:
         title: Google Home
         show_header_toggle: false
         entities:
-          - media_player.basement_ghm
-          - media_player.kitchen_ghm
+          - media_player.basement_googlehome
+          - media_player.office_googlehome
+          - media_player.main_googlehome
   ##########################################
   # TV TAB
   ##########################################
