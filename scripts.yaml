@@ -130,3 +130,28 @@ tvs_off:
       data:
         entity_id: media_player.living_room_tv
         command: "system/turnOff"
+
+group_set:
+  alias: Create groups with enhanced include/exclude statements
+  sequence:
+    - service: group.set
+      data_template:
+        object_id: "{{ object_id }}"
+        name: "{{ name or object_id }}"
+        icon: "{{ icon or '' }}"
+        visible: "{{ visible or True }}"
+        all: "{{ all or False }}"
+        entities: >-
+          {# ENTITIES #}
+          {% set ns = namespace(entities =
+                          (entities.split(',') if entities is string else entities or [])) %}
+          {# INCLUDE #}
+          {% for group in (include.split(',')  if include  is string else include  or []) %}
+          {% set ns.entities = ns.entities +               states.group[group|regex_replace('^.*\.')].attributes.entity_id  | list %}
+          {% endfor %}
+          {# EXCLUDE #}
+          {% for group in (exclude.split(',')  if exclude  is string else exclude  or []) %}
+          {% set ns.entities = ns.entities | reject('in',  states.group[group|regex_replace('^.*\.')].attributes.entity_id) | list %}
+          {% endfor %}
+          {# OUTPUT #}
+          {{ ns.entities|join(',') }}
