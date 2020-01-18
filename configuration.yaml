@@ -158,20 +158,18 @@ speedtestdotnet:
   scan_interval:
     minutes: 121
 
-# media_player:
-#   - platform: webostv
-#     host: 192.168.45.
-#     name: Living Room TV
-#     filename: webostv.conf
-#     timeout: 5
-#     turn_on_action:
-#       service: persistent_notification.create
-#       data:
-#         message: "Turn on action"
-#     customize:
-#       sources:
-#         - youtubetv
-#         - netflix
+webostv:
+  - host: !secret lg_living_room
+    name: Living Room TV
+    standby_connection: true
+    turn_on_action:
+      service: persistent_notification.create
+      data:
+        message: "Turn on action"
+    customize:
+      sources:
+        - youtubetv
+        - netflix
 
 mobile_app:
 breaking_changes:
