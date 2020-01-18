@@ -351,8 +351,7 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.sunset_run_once
 #########################################
-# at bedtime, lock the front & garage door locks, set the HVAC fans to on, turn off recirculation pump, turn off all lights & xmas lights
-- alias: "lock the garage door lock & set the HVAC fans to on - thermostat"
+- alias: "bedtime, lock doors, set HVAC fans on, turn off recirc pump, all lights, xmas lights, and main tv"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -371,6 +370,10 @@
       entity_id: switch.equipment_room_recirculation_pump
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_but_master
+    - service: webostv.command
+      data:
+        entity_id: media_player.living_room_tv
+        command: "system/turnOff"
 #########################################
 - alias: "done sleeping, HVAC fan off, recirculation pump on"
   trigger:
@@ -388,8 +391,7 @@
     - service: homeassistant.turn_on
       entity_id: switch.equipment_room_recirculation_pump
 #########################################
-# away, turn the HVAC fans on & the recirculation pump off
-- alias: "away, turn the HVAC fans on & the recirculation pump off"
+- alias: "away, turn the HVAC fans on, recirc pump and main tv off"
   trigger:
     - platform: state
       entity_id: binary_sensor.alarm_occupancy_status
@@ -404,6 +406,10 @@
         fan_mode: "on"
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
+    - service: webostv.command
+      data:
+        entity_id: media_player.living_room_tv
+        command: "system/turnOff"
 #########################################
 # away during the day, turn lights off
 - alias: "away during the day, turn lights off"
