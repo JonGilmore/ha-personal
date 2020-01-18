@@ -151,6 +151,12 @@
         - lock.garage_door_lock
       friendly_name: Doors Locked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='name')| list|join(', ') }}"
+    doors_locked_entities:
+      entity_id:
+        - lock.front_door_lock
+        - lock.garage_door_lock
+      friendly_name: Doors Locked Entities
+      value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='entity_id')| list|join(', ') }}"
     doors_locked_number:
       entity_id:
         - lock.front_door_lock
@@ -163,6 +169,12 @@
         - lock.garage_door_lock
       friendly_name: Doors Unlocked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
+    doors_unlocked_entities:
+      entity_id:
+        - lock.front_door_lock
+        - lock.garage_door_lock
+      friendly_name: Doors Unlocked Entities
+      value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='entity_id')| list|join(', ') }}"
     doors_unlocked_number:
       entity_id:
         - lock.front_door_lock
@@ -181,6 +193,14 @@
         - person.laura
       friendly_name: Number of People Home
       value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
+    important_dates:
+      # create a list of entities daily of special dates that are 7 days away
+      entity_id: sensor.lauras_birthday
+      friendly_name: Important Dates
+      value_template: >
+        {%-for state in states if (('birthday' in state.entity_id or 'anniversary' in state.entity_id) and state.state | int == 4) -%}
+          {{state.name}}
+        {% endfor%}
 
 # DARK SKY
 - platform: darksky
