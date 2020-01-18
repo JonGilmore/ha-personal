@@ -1,6 +1,6 @@
 ---
 title: Reeder
-background: var(--background-image)
+# background: var(--background-image)
 resources:
   - url: /community_plugin/mini-media-player/mini-media-player.js
     type: module
@@ -62,7 +62,6 @@ views:
           - cover.garage_momentary_single
           - cover.garage_momentary_double
       - type: picture-glance
-        image:
         camera_image: camera.driveway
         title: Exterior
         entities:
@@ -118,82 +117,15 @@ views:
               service: script.turn_on
               service_data:
                 entity_id: script.video_kitchen
-      - type: entity-filter
-        entities:
-          - light.basement_bar
-          - switch.basement_bar_cabinets
-          - switch.basement_bathroom_fan
-          - switch.basement_bathroom_shower
-          - switch.basement_main
-          - switch.basement_stair_treads
-          - switch.basement_stairs
-          - switch.basement_storage_lights
-          - light.basement_theater
-          - light.basement_theater_front_lamp
-          - light.basement_theater_rear_lamp
-          - light.craftroom_cans
-          - light.craftroom_craftroom_fan
-          - light.dining_room_cans
-          - light.dining_room_chandelier
-          - switch.exterior_cans
-          - light.exterior_deck
-          - switch.exterior_foyer
-          - switch.exterior_light
-          - switch.exterior_lights
-          - switch.exterior_outlets
-          - light.exterior_patio
-          - switch.exterior_posts
-          - switch.exterior_uplights
-          - switch.great_room_cabinets
-          - light.great_room_great_room_cans
-          - switch.great_room_lamp
-          - light.gym_cans
-          - switch.jack_and_jill_fan
-          - switch.jack_and_jill_light
-          - switch.jack_and_jill_lights
-          - switch.kitchen_cabinets
-          - light.kitchen_sunroom
-          - light.kitchen_table
-          - switch.laundry_light
-          - light.loft_cans
-          - switch.master_bedroom_entry
-          - switch.master_bedroom_fan
-          - light.master_bedroom_fixture
-          - light.master_bedroom_fixtures
-          - light.master_bedroom_jons_lamp
-          - switch.master_bedroom_lauras_lamp
-          - light.master_bedroom_master_cans
-          - light.master_bedroom_master_fan
-          - switch.master_bedroom_shower
-          - light.master_bedroom_sitting_cans
-          - switch.master_bedroom_toilet_fan
-          - light.master_bedroom_tub
-          - light.mudroom_garage_lights
-          - switch.mudroom_kitchen_cans
-          - switch.mudroom_kitchen_pendants
-          - switch.mudroom_mudroom
-          - light.nook_cans
-          - light.office_cans
-          - switch.office_lights
-          - switch.powder_room_fan
-          - switch.powder_room_hall_light
-          - light.princess_cans
-          - light.princess_fan
-          - switch.princess_light
-          - switch.princess_shower
-          - switch.princess_toilet_fan
-          - light.pulte_planning_center_lamp
-          - switch.pulte_planning_center_lauras_office
-          - light.second_bedroom_cans
-          - light.second_bedroom_fan
-          - switch.sunroom_sunroom_lamp
-          - switch.upstairs_hall_hall
-          - switch.upstairs_hall_main_stairs
-          - switch.upstairs_hall_treads
-        state_filter:
-          - "on"
+      - type: custom:auto-entities
+        show_empty: false
         card:
-          title: Enabled Lights
+          type: entities
+          title: Lights On
+        filter:
+          include:
+            - group: group.all_lights
+              state: "on"
       - type: "custom:auto-entities"
         card:
           show_header_toggle: false
@@ -220,7 +152,7 @@ views:
           - switch.equipment_room_recirculation_pump
           - binary_sensor.light_inside
           - sensor.period_of_day
-          - water_heater.heat_pump_water_heater_gen_4
+          # - water_heater.heat_pump_water_heater_gen_4
           - sensor.dss_illuminance
       - type: custom:mini-graph-card
         name: Lux Sensors
@@ -684,101 +616,56 @@ views:
     id: lights
     icon: mdi:lightbulb
     cards:
-      - type: entities
-        title: Basement Lights
-        entities:
-          - light.basement_bar
-          - switch.basement_bar_cabinets
-          - switch.basement_bathroom_shower
-          - switch.basement_main
-          - switch.basement_stair_treads
-          - switch.basement_stairs
-          - switch.basement_storage_lights
-          - light.basement_theater
-          - light.basement_theater_front_lamp
-          - light.basement_theater_rear_lamp
-          - light.gym_cans
-          - light.nook_cans
-          - switch.switch1
-      - type: entities
-        title: Main Floor Lights
-        entities:
-          - light.dining_room_cans
-          - light.dining_room_chandelier
-          - switch.exterior_foyer
-          - switch.great_room_cabinets
-          - light.great_room_great_room_cans
-          - switch.great_room_lamp
-          - switch.kitchen_cabinets
-          - light.kitchen_sunroom
-          - light.kitchen_table
-          - switch.laundry_light
-          - light.mudroom_garage_lights
-          - switch.mudroom_kitchen_cans
-          - switch.mudroom_kitchen_pendants
-          - switch.mudroom_mudroom
-          - light.office_cans
-          - switch.office_lights
-          - switch.powder_room_hall_light
-          - light.pulte_planning_center_lamp
-          - switch.pulte_planning_center_lauras_office
-          - switch.sunroom_sunroom_lamp
-          - switch.pantry
-          - light.living_room_lifx
-          - light.sunroom_lifx
-      - type: entities
-        title: Upstairs Lights
-        entities:
-          - light.craftroom_cans
-          - switch.jack_and_jill_light
-          - switch.jack_and_jill_lights
-          - light.loft_cans
-          - switch.master_bedroom_entry
-          - light.master_bedroom_fixture
-          - light.master_bedroom_fixtures
-          - light.master_bedroom_jons_lamp
-          - switch.master_bedroom_lauras_lamp
-          - light.master_bedroom_master_cans
-          - switch.master_bedroom_shower
-          - light.master_bedroom_sitting_cans
-          - light.master_bedroom_tub
-          - light.princess_cans
-          - switch.princess_light
-          - switch.princess_shower
-          - light.second_bedroom_cans
-          - switch.upstairs_hall_hall
-          - switch.upstairs_hall_main_stairs
-          - switch.upstairs_hall_treads
-          - switch.master_closet
-          - light.sitting_room_lifx
-          - light.master_entry_lifx
-          - light.lauras_lamp_lifx
-      - type: entities
-        title: Exterior Lights
-        entities:
-          - switch.exterior_cans
-          - light.exterior_deck
-          - switch.exterior_light
-          - switch.exterior_lights
-          - switch.exterior_outlets
-          - light.exterior_patio
-          - switch.exterior_posts
-          - switch.exterior_uplights
-      - type: entities
-        title: All Fans
-        entities:
-          - switch.basement_bathroom_fan
-          - switch.basement_fan
-          - switch.powder_room_fan
-          - light.princess_fan
-          - switch.princess_toilet_fan
-          - light.second_bedroom_fan
-          - switch.jack_and_jill_fan
-          - light.craftroom_craftroom_fan
-          - switch.master_bedroom_fan
-          - light.master_bedroom_master_fan
-          - switch.master_bedroom_toilet_fan
-
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Basement Lights
+        filter:
+          include:
+            - group: group.basement_lights
+        sort:
+          method: name
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Main Floor Lights
+        filter:
+          include:
+            - group: group.main_floor_lights
+        sort:
+          method: name
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Upstairs Lights
+        filter:
+          include:
+            - group: group.upstairs_lights
+        sort:
+          method: name
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Exterior Lights
+        filter:
+          include:
+            - group: group.exterior_lights
+        sort:
+          method: name
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: All Fans
+        filter:
+          include:
+            - group: group.all_fans
+        sort:
+          method: name
   ##########################################
   # SMARTTHINGS TAB
   ##########################################
@@ -834,27 +721,16 @@ views:
     id: scenes
     icon: mdi:movie-outline
     cards:
-      - type: entities
-        title: Light Scenes
-        show_header_toggle: false
-        entities:
-          - scene.equipment_room_enclosure_device_001_ph_all_off
-          - scene.equipment_room_enclosure_device_001_ph_all_on
-          - scene.equipment_room_enclosure_device_001_ph_basement_off
-          - scene.equipment_room_enclosure_device_001_ph_basement_on
-          - scene.equipment_room_enclosure_device_001_ph_main_off
-          - scene.equipment_room_enclosure_device_001_ph_main_on
-          - scene.equipment_room_enclosure_device_001_ph_second_off
-          - scene.equipment_room_enclosure_device_001_ph_second_on
-          - scene.equipment_room_enclosure_device_001_ph_cleaners_on
-          - scene.equipment_room_enclosure_device_001_ph_exterior_off
-          - scene.equipment_room_enclosure_device_001_ph_exterior_on
-          - scene.equipment_room_enclosure_device_001_ph_interior_off
-          - scene.equipment_room_enclosure_device_001_ph_interior_on
-          - scene.equipment_room_enclosure_device_001_ph_kitchen_off
-          - scene.equipment_room_enclosure_device_001_ph_kitchen_on
-          - scene.equipment_room_enclosure_device_001_ph_sunset1
-          - scene.equipment_room_enclosure_device_001_ph_sunset2
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Lights Scenes
+          show_header_toggle: false
+        filter:
+          include:
+            - entity_id: /scene.equipment_room_enclosure_device_001_.*/
+        sort:
+          method: name
   ##########################################
   # SPRINKLER TAB
   ##########################################
@@ -931,19 +807,7 @@ views:
     id: maintenance
     icon: mdi:wrench
     cards:
-      - type: custom:card-modder
-        style:
-          --paper-card-background-color: rgba(0, 100, 0, 0.2)
-          --paper-item-icon-color: white
-          border-radius: 5px
-          color: rgb(0, 0, 100)
-        card:
-          type: glance
-          title: Styled card
-          entities:
-            - scene.equipment_room_enclosure_device_001_ph_sunset1
       - type: picture-glance
-        image:
         camera_image: camera.driveway
         title: Exterior
         entities:
