@@ -391,7 +391,7 @@
     - service: homeassistant.turn_on
       entity_id: switch.equipment_room_recirculation_pump
 #########################################
-- alias: "away, turn the HVAC fans on, recirc pump and main tv off"
+- alias: "away, turn the HVAC fans on, recirc pump and tvs off"
   trigger:
     - platform: state
       entity_id: binary_sensor.alarm_occupancy_status
@@ -406,12 +406,9 @@
         fan_mode: "on"
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
-    - service: webostv.command
-      data:
-        entity_id: media_player.living_room_tv
-        command: "system/turnOff"
+    - service: script.turn_on
+      entity_id: script.tvs_off
 #########################################
-# away during the day, turn lights off
 - alias: "away during the day, turn lights off"
   trigger:
     - platform: state
@@ -425,7 +422,6 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
 #########################################
-# while on vacation, turn off all lights at 23:30
 - alias: "while on vacation, turn off all lights at 23:30"
   trigger:
     - platform: time
@@ -467,8 +463,7 @@
         title: "Elk Disconnected"
         message: "Check the Elk M1XEP connection"
 ########################################
-# Turn on sunset lights at dark or sunset, set dark theme
-- alias: Turn on sunset lights at dark or sunset
+- alias: "turn on sunset lights at dark or sunset, set dark theme"
   trigger:
     - platform: state
       entity_id: binary_sensor.light_inside
@@ -489,7 +484,7 @@
       entity_id: input_boolean.sunset_run_once
     - service: frontend.set_theme
       data:
-        name: dark_theme
+        name: aqua-fiesta
 ########################################
 # Turn on master fan at night (if AC is on)
 - alias: Turn on master fan at night
@@ -517,7 +512,7 @@
       entity_id: light.master_bedroom_master_fan
     - service: frontend.set_theme
       data:
-        name: clear
+        name: google_light_theme
 #########################################
 - alias: "on vacation, check the front door lock"
   trigger:
