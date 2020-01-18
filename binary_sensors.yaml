@@ -63,13 +63,6 @@
 
 - platform: template
   sensors:
-    main_fridge_open_close:
-      device_class: opening
-      value_template: >-
-        {% if states.sensor.main_fridge_access_control.state == '23' %}Closed
-        {% elif states.sensor.main_fridge_access_control.state == '22' %}Open
-        {% else %}Unknown{% endif %}
-      friendly_name: "Main Fridge - open/close"
     basement_motions:
       friendly_name: "Basement Motions"
       device_class: motion
