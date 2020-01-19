@@ -109,8 +109,7 @@
     vacation_status:
       friendly_name: "Vacation?"
       device_class: occupancy
-      value_template: >-
-        {{ states.alarm_control_panel.area001.attributes["armed_status"] == "armed_to_vacation" }}
+      value_template: "{{ states.alarm_control_panel.area001.attributes['armed_status'] == 'armed_to_vacation' }}"
     alarm_occupancy_status:
       friendly_name: "Occupied-Alarm?"
       device_class: occupancy
@@ -131,8 +130,7 @@
     light_inside:
       friendly_name: "Light Inside?"
       device_class: light
-      value_template: >-
-        {{ states.sensor.main_tv_lux.state | int > 110 }}
+      value_template: "{{ states.sensor.main_tv_lux.state | int > 110 }}"
     anybody_home:
       friendly_name: "Anybody Home"
       device_class: presence

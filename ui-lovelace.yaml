@@ -1,6 +1,5 @@
 ---
 title: Reeder
-# background: var(--background-image)
 resources:
   - url: /community_plugin/mini-media-player/mini-media-player.js
     type: module
@@ -30,6 +29,18 @@ resources:
     type: module
   - url: /community_plugin/secondaryinfo-entity-row/secondaryinfo-entity-row.js
     type: js
+
+decluttering_templates:
+  cam_small:
+    card:
+      type: custom:button-card
+      icon: "[[icon]]"
+      color: rgb(28, 128, 199)
+      tap_action:
+        action: call-service
+        service: script.turn_on
+        service_data:
+          entity_id: "[[entity_id]]"
 
 views:
   ##########################################
@@ -77,46 +88,31 @@ views:
           - binary_sensor.jon_gilmore_s_pixel_3_presence
       - type: horizontal-stack
         cards:
-          - type: "custom:button-card"
-            icon: mdi:oil
-            color: rgb(28, 128, 199)
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.video_driveway
-          - type: "custom:button-card"
-            icon: mdi:dog-side
-            color: rgb(28, 128, 199)
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.video_daisy
-          - type: "custom:button-card"
-            icon: mdi:chair-school
-            color: rgb(28, 128, 199)
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.video_deck
-          - type: "custom:button-card"
-            icon: mdi:car
-            color: rgb(28, 128, 199)
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.video_garage
-          - type: "custom:button-card"
-            icon: mdi:knife
-            color: rgb(28, 128, 199)
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.video_kitchen
+          - type: custom:decluttering-card
+            template: cam_small
+            variables:
+              - icon: mdi:oil
+              - entity_id: script.video_driveway
+          - type: custom:decluttering-card
+            template: cam_small
+            variables:
+              - icon: mdi:dog-side
+              - entity_id: script.video_daisy
+          - type: custom:decluttering-card
+            template: cam_small
+            variables:
+              - icon: mdi:chair-school
+              - entity_id: script.video_deck
+          - type: custom:decluttering-card
+            template: cam_small
+            variables:
+              - icon: mdi:car
+              - entity_id: script.video_garage
+          - type: custom:decluttering-card
+            template: cam_small
+            variables:
+              - icon: mdi:knife
+              - entity_id: script.video_kitchen
       - type: custom:auto-entities
         show_empty: false
         card:
@@ -365,235 +361,46 @@ views:
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.garage
-              name: Garage
-            - entity: media_player.guest_bathroom
-              name: Guest Bathroom
-            - entity: media_player.gym_3
-              name: Gym
-            - entity: media_player.kitchen
-              name: Kitchen
-            - entity: media_player.laundry
-              name: Laundry
-            - entity: media_player.master
-              name: Master
-            - entity: media_player.office
-              name: Office
-            - entity: media_player.portable
-              name: Portable
       - type: custom:mini-media-player
         entity: media_player.garage
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.deck
-              name: Deck
-            - entity: media_player.guest_bathroom
-              name: Guest Bathroom
-            - entity: media_player.gym_3
-              name: Gym
-            - entity: media_player.kitchen
-              name: Kitchen
-            - entity: media_player.laundry
-              name: Laundry
-            - entity: media_player.master
-              name: Master
-            - entity: media_player.office
-              name: Office
-            - entity: media_player.portable
-              name: Portable
       - type: custom:mini-media-player
         entity: media_player.guest_bathroom
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.deck
-              name: Deck
-            - entity: media_player.garage
-              name: Garage
-            - entity: media_player.gym_3
-              name: Gym
-            - entity: media_player.kitchen
-              name: Kitchen
-            - entity: media_player.laundry
-              name: Laundry
-            - entity: media_player.master
-              name: Master
-            - entity: media_player.office
-              name: Office
-            - entity: media_player.portable
-              name: Portable
       - type: custom:mini-media-player
         entity: media_player.gym_3
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.deck
-              name: Deck
-            - entity: media_player.garage
-              name: Garage
-            - entity: media_player.guest_bathroom
-              name: Guest Bathroom
-            - entity: media_player.kitchen
-              name: Kitchen
-            - entity: media_player.laundry
-              name: Laundry
-            - entity: media_player.master
-              name: Master
-            - entity: media_player.office
-              name: Office
-            - entity: media_player.portable
-              name: Portable
       - type: custom:mini-media-player
         entity: media_player.kitchen
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.deck
-              name: Deck
-            - entity: media_player.garage
-              name: Garage
-            - entity: media_player.guest_bathroom
-              name: Guest Bathroom
-            - entity: media_player.gym_3
-              name: Gym
-            - entity: media_player.laundry
-              name: Laundry
-            - entity: media_player.master
-              name: Master
-            - entity: media_player.office
-              name: Office
-            - entity: media_player.portable
-              name: Portable
       - type: custom:mini-media-player
         entity: media_player.laundry
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.deck
-              name: Deck
-            - entity: media_player.garage
-              name: Garage
-            - entity: media_player.guest_bathroom
-              name: Guest Bathroom
-            - entity: media_player.gym_3
-              name: Gym
-            - entity: media_player.kitchen
-              name: Kitchen
-            - entity: media_player.master
-              name: Master
-            - entity: media_player.office
-              name: Office
-            - entity: media_player.portable
-              name: Portable
       - type: custom:mini-media-player
         entity: media_player.master
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.deck
-              name: Deck
-            - entity: media_player.garage
-              name: Garage
-            - entity: media_player.guest_bathroom
-              name: Guest Bathroom
-            - entity: media_player.gym_3
-              name: Gym
-            - entity: media_player.kitchen
-              name: kitchen
-            - entity: media_player.laundry
-              name: Laundry
-            - entity: media_player.office
-              name: Office
-            - entity: media_player.portable
-              name: Portable
       - type: custom:mini-media-player
         entity: media_player.office
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.deck
-              name: Deck
-            - entity: media_player.garage
-              name: Garage
-            - entity: media_player.guest_bathroom
-              name: Guest Bathroom
-            - entity: media_player.gym_3
-              name: Gym
-            - entity: media_player.kitchen
-              name: Kitchen
-            - entity: media_player.laundry
-              name: Laundry
-            - entity: media_player.master
-              name: Master
-            - entity: media_player.portable
-              name: Portable
       - type: custom:mini-media-player
         entity: media_player.portable
         hide:
           power: true
           icon: true
-          source: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity: media_player.deck
-              name: Deck
-            - entity: media_player.garage
-              name: Garage
-            - entity: media_player.guest_bathroom
-              name: Guest Bathroom
-            - entity: media_player.gym_3
-              name: Gym
-            - entity: media_player.kitchen
-              name: Kitchen
-            - entity: media_player.laundry
-              name: Laundry
-            - entity: media_player.master
-              name: Master
-            - entity: media_player.office
-              name: Office
       - type: entities
         title: Google Home
         show_header_toggle: false

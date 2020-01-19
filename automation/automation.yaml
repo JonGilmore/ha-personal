@@ -503,6 +503,8 @@
     - platform: state
       entity_id: binary_sensor.light_inside
       to: "off"
+      for:
+        minutes: 5
     - platform: sun
       event: sunset
   condition:
@@ -845,7 +847,7 @@
       data:
         entity_id: timer.daisy_cam_timer
 #########################################
-- alias: motion lights enable 2hours before sunset, disable 2hour after sunrise
+- alias: enable motion lights 2hours before sunset, disable 2hour after sunrise
   trigger:
     - platform: sun
       event: sunset
@@ -853,7 +855,7 @@
   action:
     - service: homeassistant.turn_on
       entity_id: input_boolean.motion_lights
-- alias: motion lights disable 1hour sunrise
+- alias: disable motion lights 2hours sunrise
   trigger:
     - platform: sun
       event: sunrise
@@ -1050,12 +1052,12 @@
       entity_id: sensor.kitchen_fridge_door_temperature_measurement
       above: "44"
       for:
-        minutes: 15
+        minutes: 20
     - platform: numeric_state
       entity_id: sensor.kitchen_fridge_door_temperature_measurement
       below: "30"
       for:
-        minutes: 15
+        minutes: 20
     - platform: state
       entity_id: sensor.elkm1
       to: "Disconnected"
