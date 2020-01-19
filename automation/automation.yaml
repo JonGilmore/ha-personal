@@ -497,17 +497,6 @@
       entity_id: switch.equipment_room_recirculation_pump
     - service: timer.cancel
       entity_id: timer.daisy_cam_timer
-#########################################
-- alias: "elk disconnected - telegram"
-  trigger:
-    - platform: state
-      entity_id: sensor.elkm1
-      to: "Disconnected"
-  action:
-    - service: notify.telegram_jon
-      data:
-        title: "Elk Disconnected"
-        message: "Check the Elk M1XEP connection"
 ########################################
 - alias: "turn on sunset lights at dark or sunset, set dark theme"
   trigger:
@@ -594,49 +583,6 @@
         message: "Locking the front door"
     - service: lock.lock
       entity_id: lock.front_door_lock
-#########################################
-- alias: "main fridge temp >42 or <30"
-  trigger:
-    - platform: numeric_state
-      entity_id: sensor.kitchen_fridge_door_temperature_measurement
-      above: "42"
-      for:
-        minutes: 10
-    - platform: numeric_state
-      entity_id: sensor.kitchen_fridge_door_temperature_measurement
-      below: "30"
-      for:
-        minutes: 10
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "Main Fridge Temperature Alert!"
-        message: "Main Fridge temp is {{ states.sensor.kitchen_fridge_door_temperature_measurement.state }}!"
-#########################################
-- alias: "house temps >84 or <55, notify"
-  trigger:
-    - platform: numeric_state
-      entity_id: sensor.thermostat_basement_temperature
-      above: "84"
-    - platform: numeric_state
-      entity_id: sensor.thermostat_basement_temperature
-      below: "55"
-    - platform: numeric_state
-      entity_id: sensor.master_entry_temperature
-      above: "84"
-    - platform: numeric_state
-      entity_id: sensor.master_entry_temperature
-      below: "55"
-  condition:
-    # workaround temp of 0.00
-    - condition: template
-      value_template: "{{ not is_state(trigger.to_state.entity_id, '0.00') }}"
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "Temperature Alert!"
-        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
-    - delay: "00:20:00"
 #########################################
 - alias: indoor humidity check - winter - see if its below the high threshold
   trigger:
@@ -742,17 +688,6 @@
         show_alert: true
     - service: input_boolean.turn_off
       entity_id: input_boolean.alarm_notifier
-########################################
-- alias: Update Available Notification
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.updater
-      from: "off"
-      to: "on"
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        message: "Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} is available."
 ########################################
 - alias: master entry motion light - bed unoccupied
   trigger:
@@ -1058,11 +993,21 @@
           {% else %}not_home
           {% endif %}
 #########################################
-- alias: car wash okay sensor
+- alias: car wash
   trigger:
     - platform: state
       entity_id: binary_sensor.car_wash
       to: "on"
+  condition:
+    # run once per 24hrs condition
+    - condition: template
+      value_template: >
+        {% if states.automation.car_wash.last_triggered is not none %}
+          {% if as_timestamp(now()) | int   -  as_timestamp(states.automation.car_wash.attributes.last_triggered) | int > 86400 %} true {% else %} false
+          {% endif %}
+        {% else %}
+        false
+        {% endif %}
   action:
     - service: notify.telegram_jon
       data:
@@ -1101,23 +1046,60 @@
       entity_id: sensor.potential_breaking_changes
     - platform: state
       entity_id: binary_sensor.rain_sensor
+    - platform: numeric_state
+      entity_id: sensor.kitchen_fridge_door_temperature_measurement
+      above: "44"
+      for:
+        minutes: 15
+    - platform: numeric_state
+      entity_id: sensor.kitchen_fridge_door_temperature_measurement
+      below: "30"
+      for:
+        minutes: 15
+    - platform: state
+      entity_id: sensor.elkm1
+      to: "Disconnected"
+    - platform: numeric_state
+      entity_id: sensor.keypad004
+      above: "84"
+      for:
+        minutes: 15
+    - platform: numeric_state
+      entity_id: sensor.keypad004
+      below: "55"
+      for:
+        minutes: 15
+    - platform: numeric_state
+      entity_id: sensor.master_entry_temperature
+      above: "84"
+      for:
+        minutes: 15
+    - platform: numeric_state
+      entity_id: sensor.master_entry_temperature
+      below: "55"
+      for:
+        minutes: 15
+    - platform: state
+      entity_id: binary_sensor.updater
+      from: "off"
+      to: "on"
   action:
     - service: notify.telegram_jon
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 #########################################
-- alias: important date (birthday & anniversaries)
+- alias: important date (birthday & anniversary)
   trigger:
     - platform: time
       at: "07:00:00"
-  condition:
-    - condition: template
-      value_template: "{{ not is_state('sensor.important_dates', '') }}"
   action:
     - service: notify.telegram_jon
       data_template:
-        title: "Humidity Warning!"
-        message: "Humidity in the house is too high: {{ states.sensor.house_humidity.state }}"
+        title: "Important date closing in!"
+        message: >
+          {% for state in states if (('birthday' in state.entity_id or 'anniversary' in state.entity_id) and state.state | int == 14) %}
+          {{state.name}}
+          {% endfor %}
 #########################################
 # - alias: create group of groups (and exlude unwanted groups)
 # https://community.home-assistant.io/t/create-combinatoric-groups-including-and-excluding-entities-from-other-groups/121259
