@@ -29,6 +29,8 @@ resources:
     type: module
   - url: /community_plugin/secondaryinfo-entity-row/secondaryinfo-entity-row.js
     type: js
+  - url: /community_plugin/custom-header/custom-header.js
+    type: module 
 
 decluttering_templates:
   cam_small:
@@ -42,6 +44,15 @@ decluttering_templates:
         service_data:
           entity_id: "[[entity_id]]"
 
+# hide settings tabs from wife
+custom_header:
+  hide_help: true
+  exceptions:
+    - conditions:
+        user: !secret wife
+      config:
+        hide_tabs: 9 to 10
+
 views:
   ##########################################
   # HOME TAB
@@ -53,7 +64,7 @@ views:
       - id: alarmPanel
         type: alarm-panel
         entity: alarm_control_panel.area001
-        name: Reeder Ridge
+        name: Reeder
         states:
           - arm_home
           - arm_away
@@ -138,9 +149,7 @@ views:
               state: < 45
               options:
                 type: "custom:secondaryinfo-entity-row"
-                secondary_info: >-
-                  [[ {entity}.attributes.date ]]  ( [[
-                  {entity}.attributes.years_at_next_anniversary ]] Years )
+                secondary_info: "[[ {entity}.attributes.date ]]  ([[ {entity}.attributes.years_at_next_anniversary ]] yrs)"
         show_empty: true
       - type: entities
         title: Equipment

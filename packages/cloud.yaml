@@ -9,6 +9,9 @@ cloud:
         - climate.garage_thermostat
         - group.christmaslights
         - group.christmasTrees
+        - media_player.living_room_tv
+        - media_player.roku_gym_tv
+        - media_player.roku_master_tv
       include_domains:
         - light
         - switch
@@ -37,6 +40,9 @@ cloud:
         - climate.garage_thermostat
         - group.christmaslights
         - group.christmasTrees
+        - media_player.living_room_tv
+        - media_player.roku_gym_tv
+        - media_player.roku_master_tv
       include_domains:
         - light
         - switch
