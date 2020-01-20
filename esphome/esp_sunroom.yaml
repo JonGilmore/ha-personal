@@ -7,6 +7,7 @@ esphome:
 wifi:
   ssid: "iot"
   password: !secret iot_pw
+  power_save_mode: none
   manual_ip:
     static_ip: 192.168.45.205
     gateway: 192.168.45.1
