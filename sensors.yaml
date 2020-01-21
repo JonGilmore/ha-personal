@@ -302,44 +302,18 @@
         {% else %} nobody {% endif %}
       friendly_name: "Master Bed People"
 
+- platform: version
+  name: HA Version
+  scan_interval: 86400
+
 - platform: command_line
-  name: "CPU Temperature"
+  name: Public IP
+  command: "dig +short myip.opendns.com @resolver1.opendns.com"
+  scan_interval: 1800
+
+- platform: command_line
+  name: CPU Temperature
   command: "cat /sys/class/thermal/thermal_zone3/temp"
   value_template: "{{ value | multiply(0.001) | round(2) }}"
-  # device_class: "temperature"
   unit_of_measurement: "°C"
-
-- platform: systemmonitor
-  resources:
-    - type: last_boot
-    - type: disk_use_percent
-      arg: /
-    - type: memory_use_percent
-    - type: processor_use
-
-# NUC Uptime Sensor
-- platform: template
-  sensors:
-    nuc_uptime:
-      friendly_name: NUC Uptime
-      entity_id: sensor.time
-      value_template: >
-        {% set up_time = as_timestamp(now()) - as_timestamp(states('sensor.last_boot')) %}
-        {% set minutes = (up_time // 60) | int %}
-        {% set hours = (minutes // 60) %}
-        {% set days = (hours // 24) %}
-        {% set weeks = (days // 7) %}
-        {% set minutes = (minutes % 60) %}
-        {% set hours =  (hours % 24) %}
-        {% set days = (days % 7) %}
-        {% macro phrase(value, name) %}
-                  {%- set value = value %}
-                  {%- set end = 's' if value > 1 else '' %}
-                  {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
-        {%- endmacro %}
-        {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hr'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
-        {% set last_comma = text.rfind(',') %}
-        {% if last_comma != -1 %}
-          {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
-        {% endif %}
-        {{ text }}
+  scan_interval: 600
