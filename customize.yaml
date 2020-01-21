@@ -88,47 +88,61 @@ sensor.dark_sky_daily_summary:
 ##################################
 # lutron scenes
 scene.equipment_room_enclosure_device_001_ph_all_but_master:
-  friendly_name: All_but_master
+  friendly_name: all but master
 scene.equipment_room_enclosure_device_001_ph_all_off:
-  friendly_name: All_off
+  friendly_name: all off
 scene.equipment_room_enclosure_device_001_ph_all_on:
-  friendly_name: All_on
+  friendly_name: all on
 scene.equipment_room_enclosure_device_001_ph_basement_off:
-  friendly_name: Basement_off
+  friendly_name: basement off
 scene.equipment_room_enclosure_device_001_ph_basement_on:
-  friendly_name: Basement_on
+  friendly_name: basement on
 scene.equipment_room_enclosure_device_001_ph_cleaners_on:
-  friendly_name: PH_Cleaners-on
+  friendly_name: cleaners on
 scene.equipment_room_enclosure_device_001_ph_exterior_off:
-  friendly_name: Exterior_off
+  friendly_name: exterior off
 scene.equipment_room_enclosure_device_001_ph_exterior_on:
-  friendly_name: Exterior_on
+  friendly_name: exterior on
 scene.equipment_room_enclosure_device_001_ph_interior_off:
-  friendly_name: Interior_off
+  friendly_name: interior off
 scene.equipment_room_enclosure_device_001_ph_interior_on:
-  friendly_name: Interior_on
+  friendly_name: interior on
 scene.equipment_room_enclosure_device_001_ph_kitchenhall_off:
-  friendly_name: kitchenhall-off
+  friendly_name: kitchen/hall off
 scene.equipment_room_enclosure_device_001_ph_kitchen_off:
-  friendly_name: kitchen-off
+  friendly_name: kitchen off
 scene.equipment_room_enclosure_device_001_ph_kitchen_on:
-  friendly_name: kitchen-on
+  friendly_name: kitchen on
 scene.equipment_room_enclosure_device_001_ph_main_off:
-  friendly_name: Main_off
+  friendly_name: main off
 scene.equipment_room_enclosure_device_001_ph_main_on:
-  friendly_name: Main_on
+  friendly_name: main on
 scene.equipment_room_enclosure_device_001_ph_second_off:
-  friendly_name: Second_off
+  friendly_name: second off
 scene.equipment_room_enclosure_device_001_ph_second_on:
-  friendly_name: Second_on
+  friendly_name: second on
 scene.equipment_room_enclosure_device_001_ph_sunset1:
-  friendly_name: Sunset1
+  friendly_name: sunset1
 scene.equipment_room_enclosure_device_001_ph_sunset2:
-  friendly_name: Sunset2
+  friendly_name: sunset2
+scene.equipment_room_enclosure_device_001_emergency:
+  friendly_name: emergency lights
+scene.equipment_room_enclosure_device_001_ext_flash:
+  friendly_name: ext flash
+scene.equipment_room_enclosure_device_001_ph_deck_off:
+  friendly_name: deck off
+scene.equipment_room_enclosure_device_001_ph_deck_on:
+  friendly_name: deck on
+scene.equipment_room_enclosure_device_001_ph_masterbath_off:
+  friendly_name: masterbath off
+scene.equipment_room_enclosure_device_001_ph_masterbath_on:
+  friendly_name: masterbath on
+scene.equipment_room_enclosure_device_001_phantom_all_off:
+  friendly_name: phantom all off
 binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed:
-  friendly_name: Jon in bed?
+  friendly_name: jon in bed?
 binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed:
-  friendly_name: Laura in bed?
+  friendly_name: laura in bed?
 sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_sleepnumber:
   friendly_name: Jons Sleep Number
 sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_sleepnumber:

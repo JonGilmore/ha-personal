@@ -30,7 +30,7 @@ resources:
   - url: /community_plugin/secondaryinfo-entity-row/secondaryinfo-entity-row.js
     type: js
   - url: /community_plugin/custom-header/custom-header.js
-    type: module 
+    type: module
 
 decluttering_templates:
   cam_small:
@@ -550,6 +550,8 @@ views:
         filter:
           include:
             - entity_id: /scene.equipment_room_enclosure_device_001_.*/
+          exclude:
+            - entity_id: /(.*flash.*|.*emergency.*)/
         sort:
           method: name
   ##########################################
