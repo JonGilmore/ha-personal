@@ -23,6 +23,7 @@ recorder:
   purge_interval: 1
 
 system_health:
+circadian_lighting:
 
 influxdb:
   host: localhost

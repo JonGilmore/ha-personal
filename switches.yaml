@@ -1,20 +1,6 @@
-# - platform: template
-#   switches:
-#     garage_momentary_single:
-#       value_template: "{{ is_state('sensor.single_garage', 'Violated') }}"
-#       friendly_name: Single Garage
-#       turn_on:
-#         service: scene.turn_on
-#         entity_id: scene.task_004
-#       turn_off:
-#         service: scene.turn_on
-#         entity_id: scene.task_002
-#     garage_momentary_double:
-#       value_template: "{{ is_state('sensor.double_garage', 'Violated') }}"
-#       friendly_name: Double Garage
-#       turn_on:
-#         service: scene.turn_on
-#         entity_id: scene.task_003
-#       turn_off:
-#         service: scene.turn_on
-#         entity_id: scene.task_001
+---
+- platform: circadian_lighting
+  name: Master
+  lights_ct:
+    - light.master_entry_lifx
+    - light.sitting_room_lifx

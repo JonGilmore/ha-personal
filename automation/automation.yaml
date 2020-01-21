@@ -707,12 +707,6 @@
     - service: lifx.set_state
       data:
         entity_id: light.master_entry_lifx
-      data_template:
-        brightness: >
-          {% set hour=now().hour %}
-          {% set brightness = [10, 15, 20, 30, 55, 80, 125, 150, 175, 185, 240, 250, 255, 230, 205, 250, 230, 190, 170, 150, 140, 120, 100, 50] %}
-          {{ brightness[hour] }}
-        transition: 0
         power: on
 ########################################
 - alias: master entry motion light - bed occupied
@@ -731,11 +725,6 @@
       data:
         entity_id: light.master_entry_lifx
       data_template:
-        brightness: >
-          {% set hour=now().hour %}
-          {% set brightness = [10, 15, 20, 30, 55, 80, 105, 130, 145, 180, 205, 230, 255, 230, 205, 180, 155, 130, 120, 100, 80, 70, 60, 15] %}
-          {{ brightness[hour] }}
-        transition: 0
         power: on
 ########################################
 - alias: Master entry motion lights Off
@@ -766,11 +755,6 @@
       data:
         entity_id: light.sitting_room_lifx
       data_template:
-        brightness: >
-          {% set hour=now().hour %}
-          {% set brightness = [10, 15, 20, 30, 55, 80, 125, 150, 175, 185, 240, 250, 255, 230, 205, 250, 230, 190, 170, 150, 140, 120, 100, 50] %}
-          {{ brightness[hour] }}
-        transition: 0
         power: on
 ########################################
 - alias: sitting room motion lights off
@@ -1036,6 +1020,8 @@
   trigger:
     - platform: state
       entity_id: switch.dishwasher
+    - platform: state
+      entity_id: sensor.public_ip
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state
