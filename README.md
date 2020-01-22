@@ -24,10 +24,14 @@ Hardware
     -   Fan Controls: RRD-2ANF
     -   Wireless Remotes: PJ2-4B
     -   Motion Sensors: LRF2-OCR2B-P
+-   A/V Equipment
+    -   [OLED65B8](https://www.rtings.com/tv/reviews/lg/b8-oled)
+    -   [TCL 49S517](https://www.tclusa.com/products/home-theater/5-series/tcl-49-class-5-series-4k-uhd-hdr-roku-smart-tv-49s517)
+    -   [TCL 43S517](https://www.tclusa.com/products/home-theater/5-series/tcl-43-class-5-series-4k-uhd-hdr-roku-smart-tv-43s517)
 -   Alarm: Elk M1 Gold
-    -   Motion Sensors: [ISC-BPR2-WP12](https://resource.boschsecurity.com/documents/BlueLine_Gen_2_Data_sheet_enUS_2603228171.pdf)
-    -   Leak Sensors: [GRI 2600](http://www.grisk.com/images/product_pdfs/liquid_detection/2600_12volt_dc_water_sensor.pdf)
-    -   Smoke Detectors: [System Sensor 2WT-B](https://www.systemsensor.com/en-us/Pages/2WT-B.aspx)
+    -   [Motion Sensors: ISC-BPR2-WP12](https://resource.boschsecurity.com/documents/BlueLine_Gen_2_Data_sheet_enUS_2603228171.pdf)
+    -   [Leak Sensors: GRI 2600](http://www.grisk.com/images/product_pdfs/liquid_detection/2600_12volt_dc_water_sensor.pdf)
+    -   [Smoke Detectors: System Sensor 2WT-B](https://www.systemsensor.com/en-us/Pages/2WT-B.aspx)
     -   [ELK-M1KP](https://www.elkproducts.com/products/elk-m1kp-m1-lcd-keypad)
     -   [ELK-M1KP2](https://www.elkproducts.com/products/elk-m1kp2-m1-lcd-low-profile-keypad)
     -   [ELK-M1XIN](https://www.elkproducts.com/products/elk-m1xin-m1-16-zone-input-expander)
@@ -39,7 +43,7 @@ Hardware
     -   [ELK-73](https://www.elkproducts.com/product-catalog/elk-73-echo-series-compact-speaker-20-watt-8-ohms)
 -   Cameras:
     -   Hikvision
-    -   Wyze
+    -   [Wyze](https://wyze.com/wyze-cam.html)
     -   Samsung
     -   [Doorbird](https://www.doorbird.com/downloads/datasheet_d101s_en.pdf)
 -   Network:
@@ -47,8 +51,10 @@ Hardware
     -   Switches: [US-24-250W](https://store.ui.com/products/unifiswitch-24-250w), [US-16-150W](https://store.ui.com/products/unifi-switch-16-150w)
     -   WiFi: [AP-AC-Pro](https://www.ui.com/unifi/unifi-ap-ac-pro/), [AP-nanoHD](https://unifi-nanohd.ui.com/)
     -   Management: [UC-CK](https://store.ui.com/products/unifi-cloud-key)
--   NAS: Synology 1515
+-   NAS: Synology DS1515
     -   8TB HGST NAS drives
+-   NAS: Synology DS413j
+    -   4TB WD Reds
 -   Sensors:
     -   esp8266 using various: [dht22](https://www.amazon.com/gp/product/B014SMNBJC), [infrared PIR](https://www.amazon.com/gp/product/B016Y10B3O), [lux sensors](https://www.amazon.com/gp/product/B00AF278A8)
 -   Smoke Detectors: Nest
