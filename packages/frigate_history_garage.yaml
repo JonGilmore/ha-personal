@@ -1,8 +1,4 @@
 ---
-homeassistant:
-  whitelist_external_dirs:
-    - /config/www
-
 camera:
   - platform: mjpeg
     name: garage_hist

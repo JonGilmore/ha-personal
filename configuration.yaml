@@ -9,6 +9,7 @@ homeassistant:
   customize: !include customize.yaml
   whitelist_external_dirs:
     - /tmp
+    - /config/www
   packages: !include_dir_named packages
 
 http:
