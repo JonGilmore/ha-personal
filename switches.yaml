@@ -1,6 +1,7 @@
 ---
 - platform: circadian_lighting
   name: Master
+  min_brightness: 25
   lights_ct:
     - light.master_entry_lifx
     - light.sitting_room_lifx
