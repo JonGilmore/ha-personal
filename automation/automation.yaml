@@ -73,6 +73,10 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.exterior_foyer, switch.exterior_cans
+    - service: script.popup_camera
+      data:
+        deviceID: "wallpanel"
+        camera: "camera.front_door_live"
 #########################################
 - alias: "front door line or doorbell, dark out, unoccupied, foyer and ext on for 10 min"
   trigger:
@@ -418,8 +422,7 @@
       data_template:
         title: "{{ states.sensor.doors_unlocked_number.state }} door(s) UNLOCKED!"
         message: "Locking {{ states.sensor.doors_unlocked.state }}"
-    - service: script.turn_on
-      entity_id: script.lock_doors
+    - service: script.lock_doors
 #########################################
 - alias: "done sleeping, HVAC fan off, recirculation pump on"
   trigger:
@@ -452,8 +455,7 @@
         fan_mode: "on"
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
-    - service: script.turn_on
-      entity_id: script.tvs_off
+    - service: script.tvs_off
 #########################################
 - alias: "away during the day, turn lights off"
   trigger:
@@ -644,8 +646,7 @@
       - condition: time
         before: "14:00:00"
   action:
-    - service: script.turn_on
-      entity_id: script.video_daisy
+    - service: script.video_daisy
 #########################################
 - alias: "fire active, unlock locks, send videos, lights on, hvac off, repeat notifications"
   trigger:
@@ -662,8 +663,7 @@
         entity_id:
           - lock.garage_door_lock
           - lock.front_door_lock
-    - service: script.turn_on
-      entity_id: script.alarm
+    - service: script.alarm
 #########################################
 - alias: "burglar active, lights on, send videos, repeat notifications"
   trigger:
@@ -673,8 +673,7 @@
   action:
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_on
-    - service: script.turn_on
-      entity_id: script.alarm
+    - service: script.alarm
 #########################################
 - alias: "turn off alarm notifications b/c user interaction"
   trigger:
@@ -738,7 +737,14 @@
     - service: homeassistant.turn_off
       entity_id: light.master_entry_lifx
 ########################################
-- alias: master sitting motion light - bed unoccupied
+# sitting room light scenarios
+# - motion in sitting while bed has nobody
+# - sitting light on when chair occupied
+# - no motion for a while (and chair unoccupied), turn off
+# - sitting light off when bed occupied (& chair unoccupied)
+# - sitting light off when chair unoccupied (& bed occupied)
+########################################
+- alias: sitting motion light - bed unoccupied
   trigger:
     platform: state
     entity_id: binary_sensor.sitting_room_pir
@@ -751,24 +757,39 @@
       entity_id: input_boolean.motion_lights
       state: "on"
   action:
-    - service: lifx.set_state
-      data:
-        entity_id: light.sitting_room_lifx
-      data_template:
-        power: on
+    - service: homeassistant.turn_on
+      entity_id: light.sitting_room_lifx
 ########################################
-- alias: sitting room motion lights off
+- alias: sitting light on when chair occupied
+  trigger:
+    platform: state
+    entity_id: sensor.master_sitting_chair_occupied
+    from: "unoccupied"
+    to: "occupied"
+  condition:
+    - condition: state
+      entity_id: input_boolean.motion_lights
+      state: "on"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: light.sitting_room_lifx
+########################################
+- alias: sitting motion light off
   trigger:
     - platform: state
       entity_id: binary_sensor.sitting_room_pir
       to: "off"
       for:
         minutes: 10
+  condition:
+    - condition: state
+      entity_id: sensor.master_sitting_chair_occupied
+      state: "unoccupied"
   action:
     - service: homeassistant.turn_off
       entity_id: light.sitting_room_lifx
 ########################################
-- alias: sitting room lights off when bed occupied
+- alias: sitting light off when bed occupied (& chair unoccupied)
   trigger:
     - platform: state
       entity_id: sensor.master_bed_people
@@ -778,6 +799,29 @@
       entity_id: sensor.master_bed_people
       from: "nobody"
       to: "both"
+  condition:
+    - condition: state
+      entity_id: sensor.master_sitting_chair_occupied
+      state: "unoccupied"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: light.sitting_room_lifx
+########################################
+- alias: sitting light off when chair unoccupied (& bed occupied)
+  trigger:
+    - platform: state
+      entity_id: sensor.master_sitting_chair_occupied
+      from: "occupied"
+      to: "unoccupied"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: sensor.master_bed_people
+        state: "one"
+      - condition: state
+        entity_id: sensor.master_bed_people
+        state: "both"
   action:
     - service: homeassistant.turn_off
       entity_id: light.sitting_room_lifx
@@ -825,8 +869,7 @@
           entity_id: binary_sensor.daisy_contact
           state: "off"
   action:
-    - service: script.turn_on
-      entity_id: script.video_daisy
+    - service: script.video_daisy
     - service: timer.start
       data:
         entity_id: timer.daisy_cam_timer
@@ -848,62 +891,21 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.motion_lights
 # ########################################
-# # kitchen motion light
-# - alias: kitchen motion light
-#   trigger:
-#     platform: state
-#     entity_id: binary_sensor.living_room_multi_motion
-#     to: "Violated"
-#   condition:
-#     - condition: state
-#       entity_id: binary_sensor.light_inside
-#       state: 'off'
-#     - condition: state
-#       entity_id: input_boolean.motion_lights
-#       state: 'on'
-#   action:
-#     - service: homeassistant.turn_on
-#       entity_id:
-#         - switch.kitchen_cabinets
-#########################################
-- alias: "person motion template (sleeping or away)"
+- alias: kitchen motion light
   trigger:
-    - platform: state
-      entity_id:
-        - binary_sensor.driveway_person
-        - binary_sensor.deck_person
-        - binary_sensor.garage_person
-        - binary_sensor.doorbell_person
-      to: "on"
+    platform: state
+    entity_id: binary_sensor.living_room_multi_motion
+    to: "Violated"
   condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.sleep_status
-        state: "on"
-      - condition: state
-        entity_id: person.jon
-        state: "not_home"
+    - condition: state
+      entity_id: binary_sensor.light_inside
+      state: "off"
+    - condition: state
+      entity_id: input_boolean.motion_lights
+      state: "on"
   action:
-    - service: script.turn_on
-      data_template:
-        entity_id: >
-          {% set trigger_entity = trigger.entity_id %}
-          {% if trigger_entity == 'binary_sensor.driveway_person' %}
-            script.video_driveway
-          {% elif trigger_entity == 'binary_sensor.deck_person' %}
-            script.video_deck
-          {% elif trigger_entity == 'binary_sensor.garage_person' %}
-            script.video_garage
-          {% elif trigger_entity == 'binary_sensor.doorbell_person' %}
-            script.video_doorbell
-          {% endif %}
-    - service: automation.turn_off
-      entity_id: automation.person_motion_template
-    - delay:
-        seconds: 15
-    - service: automation.turn_on
-      entity_id: automation.person_motion_template
+    - service: homeassistant.turn_on
+      entity_id: switch.kitchen_cabinets
 ########################################
 - alias: basement off with no motion
   trigger:
@@ -1102,3 +1104,18 @@
 #           - group.kids_room
 #           - group.bedroom
 #         exclude: group.night_lights,group.decorations
+#########################################
+- alias: Popup Camera
+  trigger:
+    - platform: state
+      entity_id: switch.mudroom_kitchen_pendants
+      to: "on"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: light.wallpanel
+    - service: script.popup_camera
+      data:
+        deviceID: "37a201ed-e63fb778"
+        camera: "camera.front_door_live"
+    - delay: "00:00:30"
+    - service: browser_mod.close_popup

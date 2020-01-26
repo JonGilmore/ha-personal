@@ -1,0 +1,37 @@
+---
+esphome:
+  name: esp_master_sitting_chair
+  platform: ESP8266
+  board: nodemcuv2
+
+wifi:
+  ssid: "iot"
+  password: !secret iot_pw
+  power_save_mode: none
+  manual_ip:
+    static_ip: 192.168.45.206
+    gateway: 192.168.45.1
+    subnet: 255.255.255.0
+  ap:
+    ssid: "esp_master_sitting_chair_hotspot"
+    password: !secret iot_pw
+
+captive_portal:
+
+logger:
+  level: ERROR
+
+# Enable Home Assistant API
+api:
+  password: !secret hass_api
+
+ota:
+  password: !secret esp_ota
+
+sensor:
+  - platform: hx711
+    name: "Master Sitting Chair"
+    dout_pin: D0
+    clk_pin: D1
+    gain: 128
+    update_interval: 10s

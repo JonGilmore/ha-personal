@@ -274,19 +274,11 @@
 # LOAD SENSORS
 - platform: template
   sensors:
-    ############################   esp8266 - esphome
-    # master_bed_occupied:
-    #   value_template: >-
-    #     {% if states.sensor.master_bed_value.state | int < 20400000 %}occupied
-    #     {% else %} unoccupied {% endif %}
-    #   friendly_name: 'Master Bed Occupied'
-    # master_bed_people:
-    #   value_template: >-
-    #     {% if   states.sensor.master_bed_value.state | int < -3300000 %}both
-    #     {% elif states.sensor.master_bed_value.state | int < -2680000 %}one
-    #     {% else %} nobody {% endif %}
-    #   friendly_name: 'Master Bed People'
-    ############################   SleepNumber
+    master_sitting_chair_occupied:
+      value_template: >-
+        {% if states.sensor.master_sitting_chair.state | int < -1000000 %}occupied
+        {% else %} unoccupied {% endif %}
+      friendly_name: "Master Sitting Chair Occupied"
     master_bed_occupied:
       value_template: >-
         {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
@@ -317,3 +309,11 @@
   value_template: "{{ value | multiply(0.001) | round(2) }}"
   unit_of_measurement: "°C"
   scan_interval: 600
+
+# fully kiosk sensors
+- platform: template
+  sensors:
+    basement_tablet_battery:
+      friendly_name: basement tablet battery
+      unit_of_measurement: "%"
+      value_template: "{{ states.sensor.basement_tablet.attributes.batteryLevel }}"
