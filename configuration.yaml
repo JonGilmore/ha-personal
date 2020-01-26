@@ -49,7 +49,6 @@ weather:
 
 elkm1:
   host: !secret url_elk
-  temperature_unit: F
   area:
     exclude: [2-8]
   zone:
@@ -179,6 +178,12 @@ breaking_changes:
   scan_interval: 21600
 
 browser_mod:
+  devices:
+    37a201ed-e63fb778:
+      name: wallpanel
+    4ef21a5e-67e6ec16:
+      name: chrome-mac
+
 device_tracker:
   - platform: mqtt
     devices:
