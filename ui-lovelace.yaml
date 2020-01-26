@@ -31,6 +31,10 @@ resources:
     type: js
   - url: /community_plugin/custom-header/custom-header.js
     type: module
+  - url: /community_plugin/lovelace-multiple-entity-row/multiple-entity-row.js
+    type: module
+  - url: /browser_mod.js
+    type: module
 
 decluttering_templates:
   cam_small:
@@ -92,11 +96,20 @@ views:
         title: Presence
         show_header_toggle: false
         entities:
-          - person.jon
-          - person.laura
-          - binary_sensor.anybody_away
-          - binary_sensor.anybody_home
-          - binary_sensor.jon_gilmore_s_pixel_3_presence
+          - entity: binary_sensor.anybody_home
+            type: custom:multiple-entity-row
+            name: Presence
+            secondary_info: last-changed
+            primary:
+              entity: binary_sensor.anybody_away
+          - entity: binary_sensor.anybody_home
+            type: custom:multiple-entity-row
+            name: People
+            hide_state: true
+            primary:
+              entity: person.jon
+            secondary:
+              entity: person.laura
       - type: horizontal-stack
         cards:
           - type: custom:decluttering-card
@@ -155,12 +168,28 @@ views:
         title: Equipment
         show_header_toggle: false
         entities:
-          - switch.water_main_shut_off
-          - switch.equipment_room_recirculation_pump
-          - binary_sensor.light_inside
-          - sensor.period_of_day
-          # - water_heater.heat_pump_water_heater_gen_4
-          - sensor.dss_illuminance
+          - entity: switch.water_main_shut_off
+            type: custom:multiple-entity-row
+            name: Water Main
+            secondary_info: last-changed
+            primary:
+              entity: switch.water_main_shut_off
+              name: Main
+              toggle: true
+            secondary:
+              entity: switch.equipment_room_recirculation_pump
+              name: Recirc
+              toggle: true
+          - entity: sensor.period_of_day
+            type: custom:multiple-entity-row
+            name: Period of Day
+            secondary_info: last-changed
+            primary:
+              entity: binary_sensor.light_inside
+            secondary:
+              entity: sensor.dss_illuminance
+              name: illuminance
+
       - type: custom:mini-graph-card
         name: Lux Sensors
         icon: mdi:brightness-6
@@ -397,11 +426,6 @@ views:
           icon: true
       - type: custom:mini-media-player
         entity: media_player.master
-        hide:
-          power: true
-          icon: true
-      - type: custom:mini-media-player
-        entity: media_player.office
         hide:
           power: true
           icon: true

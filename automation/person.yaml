@@ -1,0 +1,116 @@
+---
+#########################################
+- alias: "person motion deck"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.deck_person
+      to: "on"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.sleep_status
+        state: "on"
+      - condition: state
+        entity_id: person.jon
+        state: "not_home"
+  action:
+    - service: script.video_deck
+    - service: automation.turn_off
+      entity_id: automation.person_motion_deck
+    - delay:
+        seconds: 15
+    - service: automation.turn_on
+      entity_id: automation.person_motion_deck
+#########################################
+- alias: "person motion deckstairs"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.deck_stairs_person
+      to: "on"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.sleep_status
+        state: "on"
+      - condition: state
+        entity_id: person.jon
+        state: "not_home"
+  action:
+    - service: script.video_deckstairs
+    - service: automation.turn_off
+      entity_id: automation.person_motion_deckstairs
+    - delay:
+        seconds: 15
+    - service: automation.turn_on
+      entity_id: automation.person_motion_deckstairs
+#########################################
+- alias: "person motion driveway"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.driveway_person
+      to: "on"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.sleep_status
+        state: "on"
+      - condition: state
+        entity_id: person.jon
+        state: "not_home"
+  action:
+    - service: script.video_driveway
+    - service: automation.turn_off
+      entity_id: automation.person_motion_driveway
+    - delay:
+        seconds: 15
+    - service: automation.turn_on
+      entity_id: automation.person_motion_driveway
+#########################################
+- alias: "person motion garage"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.garage_person
+      to: "on"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.sleep_status
+        state: "on"
+      - condition: state
+        entity_id: person.jon
+        state: "not_home"
+  action:
+    - service: script.video_garage
+    - service: automation.turn_off
+      entity_id: automation.person_motion_garage
+    - delay:
+        seconds: 45
+    - service: automation.turn_on
+      entity_id: automation.person_motion_garage
+#########################################
+- alias: "person motion doorbell"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.doorbell_person
+      to: "on"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.sleep_status
+        state: "on"
+      - condition: state
+        entity_id: person.jon
+        state: "not_home"
+  action:
+    - service: script.video_doorbell
+    - service: automation.turn_off
+      entity_id: automation.person_motion_doorbell
+    - delay:
+        seconds: 15
+    - service: automation.turn_on
+      entity_id: automation.person_motion_doorbell

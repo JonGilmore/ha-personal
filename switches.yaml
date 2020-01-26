@@ -5,3 +5,13 @@
   lights_ct:
     - light.master_entry_lifx
     - light.sitting_room_lifx
+
+# fully kiosk switches
+- platform: command_line
+  switches:
+    basement_tablet_screen:
+      command_on: !secret basement_tablet_screen_on
+      command_off: !secret basement_tablet_screen_off
+      command_state: !secret basement_tablet_screen_state
+      value_template: "{{ value == 'on' }}"
+      friendly_name: basement tablet screen
