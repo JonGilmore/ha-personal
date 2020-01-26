@@ -34,6 +34,17 @@ video_deck:
     - service: telegram_bot.send_video
       data_template:
         file: "/tmp/deck.mp4"
+video_deckstairs:
+  alias: "deck stairs video"
+  sequence:
+    - service: shell_command.cam_deckstairs_vid
+      data:
+        filename: /tmp/deckstairs.mp4
+    - delay:
+        seconds: 12
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/tmp/deckstairs.mp4"
 video_garage:
   alias: "garage video"
   sequence:
@@ -155,3 +166,12 @@ group_set:
           {% endfor %}
           {# OUTPUT #}
           {{ ns.entities|join(',') }}
+
+popup_camera:
+  sequence:
+    - service: browser_mod.command
+      data_template:
+        command: more-info
+        entity_id: "{{ camera }}"
+        deviceID:
+          - "{{ deviceID }}"
