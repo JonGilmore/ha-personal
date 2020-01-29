@@ -1,0 +1,77 @@
+---
+#########################################
+- alias: away - enable wireguard portfwd
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "off"
+  action:
+    - service: shell_command.unifi_portfwd
+      data:
+        username: !secret unifi_usr
+        password: !secret unifi_pwd
+        baseurl: !secret unifi_ip
+        name: !secret wireguard_name
+        enabled: 'true'
+        dst_port: !secret wireguard_port
+        ip: !secret hass_ip
+        fwd_port: !secret wireguard_port
+        proto: !secret wireguard_proto
+        id: !secret wireguard_id
+        unifi_site: !secret unifi_site
+- alias: home - disable wireguard portfwd
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "on"
+  action:
+    - service: shell_command.unifi_portfwd
+      data:
+        username: !secret unifi_usr
+        password: !secret unifi_pwd
+        baseurl: !secret unifi_ip
+        name: !secret wireguard_name
+        enabled: 'false'
+        dst_port: !secret wireguard_port
+        ip: !secret hass_ip
+        fwd_port: !secret wireguard_port
+        proto: !secret wireguard_proto
+        id: !secret wireguard_id
+        unifi_site: !secret unifi_site
+#########################################
+- alias: NAS port fwd for backup - enable
+  trigger:
+    platform: time
+    at: "1:58:00"
+  action:
+    - service: shell_command.unifi_portfwd
+      data:
+        username: !secret unifi_usr
+        password: !secret unifi_pwd
+        baseurl: !secret unifi_ip
+        name: !secret nas_name
+        enabled: 'true'
+        dst_port: !secret nas_port_ext
+        ip: !secret nas_ip
+        fwd_port: !secret nas_port_int
+        proto: !secret nas_proto
+        id: !secret nas_id
+        unifi_site: !secret unifi_site
+- alias: NAS port fwd for backup - disable
+  trigger:
+    platform: time
+    at: "2:58:00"
+  action:
+    - service: shell_command.unifi_portfwd
+      data:
+        username: !secret unifi_usr
+        password: !secret unifi_pwd
+        baseurl: !secret unifi_ip
+        name: !secret nas_name
+        enabled: 'false'
+        dst_port: !secret nas_port_ext
+        ip: !secret nas_ip
+        fwd_port: !secret nas_port_int
+        proto: !secret nas_proto
+        id: !secret nas_id
+        unifi_site: !secret unifi_site

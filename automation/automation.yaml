@@ -760,19 +760,19 @@
     - service: homeassistant.turn_on
       entity_id: light.sitting_room_lifx
 ########################################
-- alias: sitting light on when chair occupied
-  trigger:
-    platform: state
-    entity_id: sensor.master_sitting_chair_occupied
-    from: "unoccupied"
-    to: "occupied"
-  condition:
-    - condition: state
-      entity_id: input_boolean.motion_lights
-      state: "on"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: light.sitting_room_lifx
+# - alias: sitting light on when chair occupied
+#   trigger:
+#     platform: state
+#     entity_id: sensor.master_sitting_chair_occupied
+#     from: "unoccupied"
+#     to: "occupied"
+#   condition:
+#     - condition: state
+#       entity_id: input_boolean.motion_lights
+#       state: "on"
+#   action:
+#     - service: homeassistant.turn_on
+#       entity_id: light.sitting_room_lifx
 ########################################
 - alias: sitting motion light off
   trigger:
@@ -781,10 +781,10 @@
       to: "off"
       for:
         minutes: 10
-  condition:
-    - condition: state
-      entity_id: sensor.master_sitting_chair_occupied
-      state: "unoccupied"
+  # condition:
+  #   - condition: state
+  #     entity_id: sensor.master_sitting_chair_occupied
+  #     state: "unoccupied"
   action:
     - service: homeassistant.turn_off
       entity_id: light.sitting_room_lifx
@@ -1108,7 +1108,7 @@
 - alias: Popup Camera
   trigger:
     - platform: state
-      entity_id: switch.mudroom_kitchen_pendants
+      entity_id: light.master_bedroom_jons_lamp
       to: "on"
   action:
     - service: homeassistant.turn_on
