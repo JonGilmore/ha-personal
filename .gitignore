@@ -16,6 +16,8 @@
 !packages/**
 !scripts
 !scripts/**
+!images
+!images/**
 
 # Ignore folders.
 .storage
