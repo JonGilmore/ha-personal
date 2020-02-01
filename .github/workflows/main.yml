@@ -10,12 +10,10 @@ jobs:
   secret_check:
     runs-on: ubuntu-latest
     steps:
-      - name: Getting your configuration from GitHub
-        uses: actions/checkout@v1
-      # - name: gitleaks-action
-      #   uses: eshork/gitleaks-action@v1.0.0
-      - name: Secret Scan
-        uses: max/secret-scan@1.0.0
+      - uses: actions/checkout@master
+      - name: trufflehog-actions-scan
+        uses: edplato/trufflehog-actions-scan@master
+
   remarklint:
     runs-on: ubuntu-latest
     steps:
