@@ -2,6 +2,10 @@
 
 Here's an overview of my Home Assistant configuration as well as the devices that are used in it.
 
+## Lovelace
+
+![alt text](https://raw.githubusercontent.com/JonGilmore/ha-personal/master/images/lovelace0.png)
+
 ## Devices/Hardware
 
 Hardware

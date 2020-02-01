@@ -1,5 +1,5 @@
 ---
-title: Reeder
+title: !secret name
 resources:
   - url: /community_plugin/mini-media-player/mini-media-player.js
     type: module
@@ -66,7 +66,7 @@ views:
       - id: alarmPanel
         type: alarm-panel
         entity: alarm_control_panel.area001
-        name: Reeder
+        name: !secret name
         states:
           - arm_home
           - arm_away
@@ -185,8 +185,8 @@ views:
             primary:
               entity: binary_sensor.light_inside
             secondary:
-              entity: sensor.dss_illuminance
-              name: illuminance
+              entity: binary_sensor.light_inside_master
+              name: master
 
       - type: custom:mini-graph-card
         name: Lux Sensors

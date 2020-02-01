@@ -14,6 +14,8 @@
 !automation/**
 !packages
 !packages/**
+!scripts
+!scripts/**
 
 # Ignore folders.
 .storage

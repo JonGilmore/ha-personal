@@ -1,6 +1,6 @@
 ---
 homeassistant:
-  name: Reeder
+  name: !secret name
   latitude: !secret ha_latitude
   longitude: !secret ha_longitude
   elevation: !secret ha_elevation
