@@ -245,9 +245,6 @@
         {% elif (states.sun.sun.attributes.elevation) < -4 %}mdi:weather-night
         {% else %}mdi:weather-sunny
         {% endif %}
-- platform: illuminance
-  name: DSS Illuminance
-  entity_id: sensor.dark_sky_icon
 
 # Target Humidity States
 - platform: template
