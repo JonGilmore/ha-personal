@@ -4,7 +4,7 @@ Here's an overview of my Home Assistant configuration as well as the devices tha
 
 ## Lovelace
 
-![Lovelace](https://raw.githubusercontent.com/JonGilmore/ha-personal/master/images/lovelace0.png)
+![Lovelace](https://github.com/JonGilmore/ha-personal/blob/master/images/lovelace0.png)
 
 ## Devices/Hardware
 
