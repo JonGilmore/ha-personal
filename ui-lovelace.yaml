@@ -196,8 +196,10 @@ views:
         entities:
           - entity: sensor.main_tv_lux
             name: Main TV Lux
+            show_state: true
           - entity: sensor.sitting_room_lux
             name: Sitting Room Lux
+            show_state: true
       - type: "custom:swipe-card"
         start_card: 5
         cards:
@@ -247,6 +249,7 @@ views:
             - entity_id: "/^sensor.*temperature.*/"
           exclude:
             - entity_id: "/dark_sky/"
+            - state: "unavailable"
         show_empty: false
       - type: "custom:auto-entities"
         card:
@@ -260,6 +263,7 @@ views:
             - entity_id: "/^sensor.*humidity.*/"
           exclude:
             - entity_id: "/(dark_sky|cpu|alarm)/"
+            - state: "unavailable"
         show_empty: false
       - type: entities
         title: Weather
@@ -272,6 +276,18 @@ views:
           - sensor.dark_sky_cloud_coverage
       - type: weather-forecast
         entity: weather.dark_sky
+      - type: custom:mini-graph-card
+        name: HVAC Runtime
+        entities:
+          - entity: sensor.hvac_duty_cycle
+            # name: Main TV Lux
+            show_state: true
+          - entity: sensor.hvac_on_count
+            # name: Sitting Room Lux
+            show_state: true
+          - entity: sensor.hvac_on_time
+            # name: Sitting Room Lux
+            show_state: true
   ##########################################
   # CAMERA TAB
   ##########################################
@@ -721,10 +737,13 @@ views:
         entities:
           - entity: sensor.speedtest_download
             name: download
+            show_state: true
           - entity: sensor.speedtest_ping
             name: ping
+            show_state: true
           - entity: sensor.speedtest_upload
             name: upload
+            show_state: true
       - type: custom:search-card
         max_results: 10
 

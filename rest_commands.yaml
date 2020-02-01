@@ -14,3 +14,35 @@ patio_fan_speed4:
     content_type: "application/json"
     BOND-Token: !secret bond_api
   payload: "{}"
+
+living_room_fireplace_off:
+  method: PUT
+  url: !secret living_room_fireplace_off
+  headers:
+    content_type: "application/json"
+    BOND-Token: !secret bond_api
+  payload: "{}"
+
+living_room_fireplace_on:
+  method: PUT
+  url: !secret living_room_fireplace_on
+  headers:
+    content_type: "application/json"
+    BOND-Token: !secret bond_api
+  payload: "{}"
+
+basement_fireplace_off:
+  method: PUT
+  url: !secret basement_fireplace_off
+  headers:
+    content_type: "application/json"
+    BOND-Token: !secret bond_api
+  payload: "{}"
+
+basement_fireplace_on:
+  method: PUT
+  url: !secret basement_fireplace_on
+  headers:
+    content_type: "application/json"
+    BOND-Token: !secret bond_api
+  payload: "{}"

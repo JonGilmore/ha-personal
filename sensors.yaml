@@ -234,13 +234,13 @@
     period_of_day:
       friendly_name: "period of the day"
       value_template: >-
-        {% if (as_timestamp(states.sun.sun.attributes.next_dusk)) - (as_timestamp(states.sun.sun.attributes.next_setting)) < 0 %}dusk
+        {% if   (as_timestamp(states.sun.sun.attributes.next_dusk)) - (as_timestamp(states.sun.sun.attributes.next_setting)) < 0 %}dusk
         {% elif (as_timestamp(states.sun.sun.attributes.next_rising)) - (as_timestamp(states.sun.sun.attributes.next_dawn)) < 0 %}dawn
         {% elif (states.sun.sun.attributes.elevation) < -4 %}night
         {% else %}day
         {% endif %}
       icon_template: >-
-        {% if (as_timestamp(states.sun.sun.attributes.next_dusk)) - (as_timestamp(states.sun.sun.attributes.next_setting)) < 0 %}mdi:weather-sunset-down
+        {% if   (as_timestamp(states.sun.sun.attributes.next_dusk)) - (as_timestamp(states.sun.sun.attributes.next_setting)) < 0 %}mdi:weather-sunset-down
         {% elif (as_timestamp(states.sun.sun.attributes.next_rising)) - (as_timestamp(states.sun.sun.attributes.next_dawn)) < 0 %}mdi:weather-sunset-up
         {% elif (states.sun.sun.attributes.elevation) < -4 %}mdi:weather-night
         {% else %}mdi:weather-sunny
@@ -271,6 +271,92 @@
         {% else %} 40 {% endif %}
       friendly_name: "Target Humidity - Min"
 
+# HVAC tracking
+- platform: history_stats
+  name: daily hvac on time
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: time
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+- platform: history_stats
+  name: daily hvac duty cycle
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: ratio
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+- platform: history_stats
+  name: daily hvac on count
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: count
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+
+- platform: history_stats
+  name: weekly hvac on time since past monday
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: time
+  start: "{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}"
+  end: "{{ now() }}"
+- platform: history_stats
+  name: weekly hvac on time rolling
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: time
+  end: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
+  duration:
+    days: 7
+- platform: history_stats
+  name: weekly hvac duty cycle
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: ratio
+  start: "{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}"
+  end: "{{ now() }}"
+- platform: history_stats
+  name: weekly hvac on count
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: count
+  start: "{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}"
+  end: "{{ now() }}"
+
+- platform: history_stats
+  name: monthly hvac on time since 1st
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: time
+  start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0).replace(day=1) }}"
+  end: "{{ now() }}"
+- platform: history_stats
+  name: monthly hvac on time rolling
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: time
+  end: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
+  duration:
+    days: 30
+- platform: history_stats
+  name: monthly hvac duty cycle
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: ratio
+  start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0).replace(day=1) }}"
+  end: "{{ now() }}"
+- platform: history_stats
+  name: monthly hvac on count
+  entity_id: binary_sensor.hvac_status
+  state: "on"
+  type: count
+  start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0).replace(day=1) }}"
+  end: "{{ now() }}"
+
 # LOAD SENSORS
 - platform: template
   sensors:
@@ -287,7 +373,7 @@
       friendly_name: "Master Bed Occupied"
     master_bed_people:
       value_template: >-
-        {% if   (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
+        {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
         and (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}both
         {% elif (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
         or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}one
@@ -309,6 +395,17 @@
   value_template: "{{ value | multiply(0.001) | round(2) }}"
   unit_of_measurement: "°C"
   scan_interval: 600
+
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /
+    - type: memory_use_percent
+    - type: load_1m
+    - type: load_5m
+    - type: load_15m
+    - type: last_boot
+- platform: uptime
 
 # fully kiosk sensors
 - platform: template
