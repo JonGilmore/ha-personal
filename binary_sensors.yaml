@@ -166,7 +166,7 @@
       friendly_name: "hvac status"
       value_template: >-
         {{ (states.climate.basement_thermostat.attributes['hvac_action'] != "idle")
-        or (states.climate.main_thermostat.attributes['hvac_action'] != "idle") 
+        or (states.climate.main_thermostat.attributes['hvac_action'] != "idle")
         or (states.climate.upstairs_thermostat.attributes['hvac_action'] != "idle") }}
 
 - platform: car_wash
