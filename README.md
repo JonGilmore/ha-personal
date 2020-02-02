@@ -12,8 +12,8 @@ Hardware
 
 -   Intel Nuc: [NUC5i7RYB](https://www.intel.com/content/dam/support/us/en/documents/boardsandkits/NUC5i7RYB_NUC5i7RYBR_TechProdSpec.pdf)
     -   [Google Coral](https://coral.withgoogle.com/products/accelerator)
--   SmartThings hub
-    -   Leak: [SmartThings](https://amzn.to/37TLLVe)
+-   [SmartThings hub](https://amzn.to/37TLLVe)
+    -   Leak: [SmartThings](https://amzn.to/36R6Luk)
     -   Open/Close: [SmartThings](https://amzn.to/2RRxbIq)
     -   Thermostats: [Trane XR524](https://amzn.to/2tq6l0A), [GC-TBZ48](https://amzn.to/2RPjMk8)
     -   Energy: [Aeotec ZW095](https://amzn.to/2UgVJfn)
