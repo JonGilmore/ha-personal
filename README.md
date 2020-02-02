@@ -68,3 +68,48 @@ Hardware
     -   [Sonos Amp](https://amzn.to/2RNeAx2)
 -   Random Hardware:
     -   [Bond](https://amzn.to/3b5aVlS)
+
+## Automations
+
+Here are some example automations
+
+-   If a garage is open for 10 minutes, and the garage heater is on, turn off the heat and notify.
+-   If a garage door is open for 5 or 60 minutes, notify and push an actionable notification
+-   If a person is detected on external cameras, and its nighttime or I'm away, send a short clip via Telegram
+-   Based on house occupancy status, either enable or disable port forwarding for WireGuard VPN
+-   Set thermostats to comfortable temperatures during the day as long as vacation mode isn't on
+-   If vacation mode is enabled during the summer, set back thermostats, disable the recirculation pump and notify of actions
+-   If vacation mode is enabled during the winter, set back thermostats (including the garage), disable the recirculation pump and notify of actions
+-   If vacation mode is enabled, check the front door lock. If unlocked, notify and attempt to lock
+-   Christmas light automations: only during December, turn on lights as long as the house is occupied. Turn off the Xmas trees when Laura gets into bed or we leave the house
+-   If the front door camera has somebody cross a virtual line, or the doorbell rings, turn on the foyer and exterior lights. If we're not home, turn them off in 10 minutes
+-   If the front door camera has somebody cross a virtual line, send a push notification to the Living Room TV and push a picture
+-   If the doorbell rings, stream the Doorbird video to the Nest hub and the basement wallpanel
+-   If a person is detected on the deck or in the garage at night, turn on the appropriate lights
+-   Between Oct-May, when we wake up, turn on some lights
+-   Close the blinds on the main floor at dusk, open them at 7:30am daily
+-   At bedtime, setback HVAC, set HVAC fans to on, turn off all the lights, turn off all TVs and turn off the recirculation pump
+    -   If the garage doors are open, send a push notification
+    -   If the doors are unlocked, lock and notify which one(s) were unlocked
+-   Upon awakening, set HVAC fans to auto and turn the recirculation pump back on
+-   If the house becomes unoccupied during the day, turn off all lights and TVs, turn on the recirculation pump and set HVAC fans to on
+-   While on vacation, turn all lights off at 11:30pm
+-   If the indoor light sensor goes below a threshold for 5 minutes, turn on the normal sunset lights and set the HomeAssistant theme to dark mode
+-   If AC is on, turn on the Master bedroom fan at 8pm
+-   At 10am daily, check to make sure humidity in the house is set appropriately based on outside temperature. Notify if not
+-   If a water leak is detected, close the water main, turn off the recirculation pump and notify
+-   If a fire is active, unlock locks, send videos from cameras, turn lights on, send repeat notifications until acknowledged
+-   If burglar alarm goes off, turn all lights on, send clips from cameras and send repeat notifications
+-   In the evening, if motion is detected in the master bedroom, enable circadian lighting on a couple of different lamps (not in the sitting room if bed is occupied)
+-   Kill kitchen lights if no motion is detected in 20 minutes
+-   When we're away from the house, check if Daisy is in her kennel. If so, send a video clip ever 45 minutes for updates
+-   If no motion in the basement for 30 minutes, turn off the entire basement
+-   If the Elk alarm gets a trouble indication, notify
+-   If Jon gets a work page at night, turn on the bedside lamp
+-   Notify on the following triggers:
+    -   Dishwasher status
+    -   Public IP change
+    -   Office PIR or kitchen fridge tamper
+    -   Kitchen fridge, Elk alarm, or master bedroom temps are out of expected range
+    -   If there is a Home Assistant update available
+-   Daily check for important dates that are 2 weeks out (birthdays, anniversaries)

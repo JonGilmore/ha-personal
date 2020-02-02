@@ -553,26 +553,11 @@
       data:
         name: google_light_theme
 #########################################
-- alias: "on vacation, check the front door lock"
+- alias: "on vacation or armed away, check the front door lock"
   trigger:
     - platform: state
       entity_id: binary_sensor.vacation_status
       to: "on"
-  condition:
-    - condition: state
-      entity_id: lock.front_door_lock
-      state: "unlocked"
-  action:
-    - service: notify.telegram_jon
-      data:
-        title: "Front Door is UNLOCKED!"
-        message: "Locking the front door"
-    - service: lock.lock
-      entity_id: lock.front_door_lock
-#########################################
-# armed away, check the front door lock
-- alias: "armed away, check the front door lock"
-  trigger:
     - platform: state
       entity_id: sensor.armed_status
       to: "armed_away"
