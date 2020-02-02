@@ -36,15 +36,7 @@ Hardware
     -   [Motion Sensors: ISC-BPR2-WP12](https://amzn.to/2UcQNrY)
     -   [Leak Sensors: GRI 2600](https://amzn.to/3aZMrua)
     -   [Smoke Detectors: System Sensor 2WT-B](https://amzn.to/2S8YvAO)
-    -   [ELK-M1KP](https://amzn.to/2vzUFsD)
-    -   [ELK-M1KP2](https://amzn.to/2OlSj7c)
-    -   [ELK-M1XIN](https://amzn.to/2GIPU2b)
-    -   [ELK-M1RB](https://amzn.to/2RPn9re)
-    -   [ELK-M1DBH](https://amzn.to/2GHxcIm)
-    -   [ELK-M1XEP](https://amzn.to/3b61qma)
-    -   [ELK-P212S](https://amzn.to/31oudhG)
-    -   [ELK-SP12F](https://amzn.to/38Yaqbm)
-    -   [ELK-73](https://amzn.to/2SdWFPb)
+    -   [ELK-M1KP](https://amzn.to/2vzUFsD), [ELK-M1KP2](https://amzn.to/2OlSj7c), [ELK-M1XIN](https://amzn.to/2GIPU2b), [ELK-M1RB](https://amzn.to/2RPn9re), [ELK-M1DBH](https://amzn.to/2GHxcIm), [ELK-M1XEP](https://amzn.to/3b61qma), [ELK-P212S](https://amzn.to/31oudhG), [ELK-SP12F](https://amzn.to/38Yaqbm), [ELK-73](https://amzn.to/2SdWFPb)
 -   Cameras:
     -   [Hikvision turret](https://amzn.to/2tkG2bX), [Hikvision dome](https://amzn.to/2uawctH), [Hikvision bullet](https://amzn.to/38XvuPc)
     -   [Wyze](https://amzn.to/2Ul8WDV)
@@ -66,10 +58,9 @@ Hardware
 -   WiFi Bulbs: [Lifx](https://amzn.to/3aZQqa6)
 -   Water Heater: Rheem Econet
 -   Voice
-    -   Google Home Hub, Google Home Mini
+    -   [Google Home Hub](https://store.google.com/us/product/google_nest_hub), [Google Home Mini](https://store.google.com/us/product/google_home_mini)
     -   [Echo Dot V3](https://amzn.to/2UiezTy), [Echo Show 5](https://amzn.to/2OkOwag)
 -   Audio
-    -   Sonos Amp
     -   [Sonos Beam](https://amzn.to/2UjSOma)
     -   [Sonos One](https://amzn.to/2Se170l)
     -   [Sonos Play:5](https://amzn.to/3b2u3kr)
