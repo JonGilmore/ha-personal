@@ -27,8 +27,6 @@ resources:
     type: module
   - url: /community_plugin/secondaryinfo-entity-row/secondaryinfo-entity-row.js
     type: js
-  - url: /community_plugin/custom-header/custom-header.js
-    type: module
   - url: /community_plugin/lovelace-multiple-entity-row/multiple-entity-row.js
     type: module
   - url: /browser_mod.js
@@ -47,13 +45,13 @@ decluttering_templates:
           entity_id: "[[entity_id]]"
 
 # hide settings tabs from wife
-custom_header:
-  hide_help: true
-  exceptions:
-    - conditions:
-        user: !secret wife
-      config:
-        hide_tabs: 9 to 10
+# custom_header:
+#   hide_help: true
+#   exceptions:
+#     - conditions:
+#         user: !secret wife
+#       config:
+#         hide_tabs: 9 to 10
 
 views:
   ##########################################
@@ -255,7 +253,7 @@ views:
           title: Humidity
           type: entities
         sort:
-          method: state
+          method: name
         filter:
           include:
             - entity_id: "/^sensor.*humidity.*/"
