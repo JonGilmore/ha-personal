@@ -1,55 +1,28 @@
 ---
 #########################################
-- alias: "driveway line crossing - telegram & tv notify"
+- alias: line crossing template - telegram & tv notify
   trigger:
     - platform: state
-      entity_id: binary_sensor.driveway_line_crossing
+      entity_id:
+        - binary_sensor.driveway_line_crossing
+        - binary_sensor.front_door_line_crossing
       to: "on"
   action:
-    - service: notify.telegram_jon
-      data:
-        title: Driveway Motion
-        message: "Driveway line crossed"
-        data:
-          photo:
-            - url: !secret hik_driveway_pic
     - service: notify.living_room_tv
-      data:
-        message: "Driveway motion detected"
-#########################################
-- alias: "deck line crossing (only while alarm is not disarmed) - telegram"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.deck_line_crossing
-      to: "on"
-  condition:
-    - condition: template
-      value_template: "{{ not is_state('sensor.armed_status', 'disarmed') }}"
-  action:
+      data_template:
+        message: "{{ trigger.to_state.attributes.friendly_name }} detected"
     - service: notify.telegram_jon
-      data:
-        title: "Deck Motion"
-        message: "Line crossing from HASS"
+      data_template:
+        title: "{{ trigger.to_state.attributes.friendly_name }}"
+        message: "{{ trigger.to_state.attributes.friendly_name }}"
         data:
           photo:
-            - url: !secret hik_deck_pic
-#########################################
-- alias: "front door line crossing - telegram"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.front_door_line_crossing
-      to: "on"
-  action:
-    - service: notify.telegram_jon
-      data:
-        title: "Front door Motion"
-        message: "Line crossing from HASS"
-        data:
-          photo:
-            - url: !secret db_pic
-    - service: notify.living_room_tv
-      data:
-        message: "Movement detected: Front Door"
+            url: >
+              {% if trigger.entity_id == 'binary_sensor.driveway_line_crossing' %}
+                {{ states.sensor.hik_driveway_pic.state }}
+              {% elif trigger.entity_id == 'binary_sensor.front_door_line_crossing' %}
+                {{ states.sensor.db_pic.state }}
+              {% endif %}
 #########################################
 - alias: "front door line or doorbell, dark out, occupied, foyer and ext on"
   trigger:
@@ -148,8 +121,8 @@
   action:
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_deck_on
-# deck lights off (when no line crossing or person detection)
-- alias: "deck lights off (when no line crossing or person detection)"
+# deck lights off when person detection
+- alias: "deck lights off when no person detected for 10min"
   trigger:
     - platform: state
       entity_id: binary_sensor.deck_person
@@ -184,8 +157,8 @@
   action:
     - service: homeassistant.turn_on
       entity_id: light.mudroom_garage_lights
-# deck lights off (when no line crossing or person detection)
-- alias: "deck lights off (when no line crossing or person detection)"
+# garage lights off when no person detected for 15min
+- alias: "garage lights off when no person detected for 15min"
   trigger:
     - platform: state
       entity_id: binary_sensor.garage_motion
@@ -361,12 +334,20 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.sunset_run_once
 #########################################
-- alias: "bedtime, set HVAC fans on, turn off recirc pump, all lights, xmas lights, and main tv"
+- alias: "bedtime, set HVAC fans on, turn off recirc pump, all lights if no guests (only ext, lower, & main if guests), and main tv"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
       to: "on"
   action:
+    - service: scene.turn_on
+      data_template:
+        entity_id: >
+          {% if is_state('input_boolean.guests', 'on') %}
+            scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
+          {% else %}
+            scene.equipment_room_enclosure_device_001_ph_all_but_master
+          {% endif %}
     - service: climate.set_fan_mode
       data:
         entity_id:
@@ -376,8 +357,6 @@
         fan_mode: "on"
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_all_but_master
     - service: webostv.command
       data:
         entity_id: media_player.living_room_tv
@@ -633,7 +612,7 @@
   action:
     - service: script.video_daisy
 #########################################
-- alias: "fire active, unlock locks, send videos, lights on, hvac off, repeat notifications"
+- alias: "fire active, unlock locks, send videos, lights set to 25%, hvac off, repeat notifications"
   trigger:
     - platform: state
       entity_id: sensor.alarm_state
@@ -642,7 +621,7 @@
     - service: input_boolean.turn_on
       entity_id: input_boolean.alarm_notifier
     - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_all_on
+      entity_id: scene.equipment_room_enclosure_device_001_ph_fire
     - service: lock.unlock
       data:
         entity_id:
@@ -657,7 +636,7 @@
       to: "burglar_alarm"
   action:
     - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_all_on
+      entity_id: scene.equipment_room_enclosure_device_001_ph_burglar
     - service: script.alarm
 #########################################
 - alias: "turn off alarm notifications b/c user interaction"
@@ -1006,16 +985,16 @@
 - alias: "general notifications"
   trigger:
     - platform: state
-      entity_id: switch.dishwasher
-    - platform: state
-      entity_id: sensor.public_ip
+      entity_id:
+        - switch.dishwasher
+        - sensor.public_ip
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state
-      entity_id: binary_sensor.office_multi_tamper
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.kitchen_fridge_door_tamper
+      entity_id:
+        - binary_sensor.office_multi_tamper
+        - binary_sensor.kitchen_fridge_door_tamper
+        - binary_sensor.updater
       to: "on"
     - platform: state
       entity_id: sensor.potential_breaking_changes
@@ -1035,29 +1014,19 @@
       entity_id: sensor.elkm1
       to: "Disconnected"
     - platform: numeric_state
-      entity_id: sensor.keypad004
+      entity_id:
+        - sensor.keypad004
+        - sensor.master_entry_temperature
       above: "84"
       for:
         minutes: 15
     - platform: numeric_state
-      entity_id: sensor.keypad004
+      entity_id:
+        - sensor.keypad004
+        - sensor.master_entry_temperature
       below: "55"
       for:
         minutes: 15
-    - platform: numeric_state
-      entity_id: sensor.master_entry_temperature
-      above: "84"
-      for:
-        minutes: 15
-    - platform: numeric_state
-      entity_id: sensor.master_entry_temperature
-      below: "55"
-      for:
-        minutes: 15
-    - platform: state
-      entity_id: binary_sensor.updater
-      from: "off"
-      to: "on"
   action:
     - service: notify.telegram_jon
       data_template:
