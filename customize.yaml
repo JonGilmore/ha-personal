@@ -139,6 +139,14 @@ scene.equipment_room_enclosure_device_001_ph_masterbath_on:
   friendly_name: masterbath on
 scene.equipment_room_enclosure_device_001_phantom_all_off:
   friendly_name: phantom all off
+scene.equipment_room_enclosure_device_001_ph_burglar:
+  friendly_name: burglar scene
+scene.equipment_room_enclosure_device_001_ph_fire:
+  friendly_name: fire scene
+scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off:
+  friendly_name: main lower exterior off
+##################################
+# sleep number
 binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed:
   friendly_name: jon in bed?
 binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed:
