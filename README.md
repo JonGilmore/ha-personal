@@ -112,4 +112,8 @@ Here are some example automations
     -   Office PIR or kitchen fridge tamper
     -   Kitchen fridge, Elk alarm, or master bedroom temps are out of expected range
     -   If there is a Home Assistant update available
--   Daily check for important dates that are 2 weeks out (birthdays, anniversaries)
+    -   Daily check for important dates that are 2 weeks out (birthdays, anniversaries)
+-   If motion is detected in closets, pantry and bathrooms, turn on the lights
+-   Every evening (as long as it's summer), turn on the master bedroom fan, turn it off in the morning and disable dark mode theme
+-   Alert me on battery devices when they're under 10% remaining
+-   Guest mode disables certain things such as all lights except for master bed off at bed time.
