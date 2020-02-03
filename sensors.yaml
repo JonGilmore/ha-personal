@@ -193,6 +193,32 @@
         - person.laura
       friendly_name: Number of People Home
       value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
+    db_pic:
+      value_template: !secret db_pic
+    hik_driveway_pic:
+      value_template: !secret hik_driveway_pic
+    hik_deck_pic:
+      value_template: !secret hik_deck_pic
+    hik_deckstairs_pic:
+      value_template: !secret hik_deckstairs_pic
+    hik_daisy_pic:
+      value_template: !secret hik_daisy_pic
+    hik_garage_pic:
+      value_template: !secret hik_garage_pic
+    cam_driveway_vid:
+      value_template: !secret cam_driveway_vid
+    cam_deck_vid:
+      value_template: !secret cam_deck_vid
+    cam_deckstairs_vid:
+      value_template: !secret cam_deckstairs_vid
+    cam_daisy_vid:
+      value_template: !secret cam_daisy_vid
+    cam_garage_vid:
+      value_template: !secret cam_garage_vid
+    cam_kitchen_vid:
+      value_template: !secret cam_kitchen_vid
+    cam_doorbell_vid:
+      value_template: !secret cam_doorbell_vid
 
 # DARK SKY
 - platform: darksky
