@@ -84,7 +84,7 @@ alarm:
   sequence:
     - service: notify.telegram_jon
       data_template:
-        message: "Alarm active, do you want to disable this?"
+        message: "alarm active, do you want to disable this?"
         data:
           inline_keyboard:
             - "Yes:/turnoffnotification, No:/do_nothing"
@@ -95,7 +95,7 @@ alarm:
     - service: tts.google_say
       data:
         entity_id: media_player.office_googlehome, media_player.main_googlehome, media_player.basement_googlehome
-        message: "Alert!"
+        message: "alarm active! disable this on the keypad or on your phone!"
     - service: script.turn_on
       entity_id: script.send_videos
     - service: script.turn_on
