@@ -296,89 +296,63 @@
 
 # HVAC tracking
 - platform: history_stats
-  name: daily hvac on time
-  entity_id: binary_sensor.hvac_status
+  name: daily hvac heat on time
+  entity_id: binary_sensor.hvac_heat
   state: "on"
   type: time
   end: "{{ now() }}"
   duration:
     hours: 24
 - platform: history_stats
-  name: daily hvac duty cycle
-  entity_id: binary_sensor.hvac_status
+  name: daily hvac heat on count
+  entity_id: binary_sensor.hvac_heat
   state: "on"
-  type: ratio
+  type: count
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+
+- platform: history_stats
+  name: daily hvac ac on time
+  entity_id: binary_sensor.hvac_ac
+  state: "on"
+  type: time
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+- platform: history_stats
+  name: daily hvac ac on count
+  entity_id: binary_sensor.hvac_ac
+  state: "on"
+  type: count
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+
+- platform: history_stats
+  name: daily hvac on time
+  entity_id: binary_sensor.hvac
+  state: "on"
+  type: time
   end: "{{ now() }}"
   duration:
     hours: 24
 - platform: history_stats
   name: daily hvac on count
-  entity_id: binary_sensor.hvac_status
+  entity_id: binary_sensor.hvac
   state: "on"
   type: count
   end: "{{ now() }}"
   duration:
     hours: 24
-
 - platform: history_stats
-  name: weekly hvac on time since past monday
-  entity_id: binary_sensor.hvac_status
-  state: "on"
-  type: time
-  start: "{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}"
-  end: "{{ now() }}"
-- platform: history_stats
-  name: weekly hvac on time rolling
-  entity_id: binary_sensor.hvac_status
-  state: "on"
-  type: time
-  end: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
-  duration:
-    days: 7
-- platform: history_stats
-  name: weekly hvac duty cycle
-  entity_id: binary_sensor.hvac_status
+  name: daily hvac duty cycle
+  entity_id: binary_sensor.hvac
   state: "on"
   type: ratio
-  start: "{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}"
   end: "{{ now() }}"
-- platform: history_stats
-  name: weekly hvac on count
-  entity_id: binary_sensor.hvac_status
-  state: "on"
-  type: count
-  start: "{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}"
-  end: "{{ now() }}"
-
-- platform: history_stats
-  name: monthly hvac on time since 1st
-  entity_id: binary_sensor.hvac_status
-  state: "on"
-  type: time
-  start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0).replace(day=1) }}"
-  end: "{{ now() }}"
-- platform: history_stats
-  name: monthly hvac on time rolling
-  entity_id: binary_sensor.hvac_status
-  state: "on"
-  type: time
-  end: "{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}"
   duration:
-    days: 30
-- platform: history_stats
-  name: monthly hvac duty cycle
-  entity_id: binary_sensor.hvac_status
-  state: "on"
-  type: ratio
-  start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0).replace(day=1) }}"
-  end: "{{ now() }}"
-- platform: history_stats
-  name: monthly hvac on count
-  entity_id: binary_sensor.hvac_status
-  state: "on"
-  type: count
-  start: "{{ now().replace(hour=0).replace(minute=0).replace(second=0).replace(day=1) }}"
-  end: "{{ now() }}"
+    hours: 24
 
 # LOAD SENSORS
 - platform: template
@@ -436,4 +410,4 @@
     basement_tablet_battery:
       friendly_name: basement tablet battery
       unit_of_measurement: "%"
-      value_template: "{{ states.sensor.basement_tablet.attributes.batteryLevel }}"
+      value_template: "{{ states.binary_sensor.wallpanel.attributes.battery_level }}"

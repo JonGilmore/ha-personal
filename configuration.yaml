@@ -164,11 +164,10 @@ speedtestdotnet:
 webostv:
   - host: !secret lg_living_room
     name: Living Room TV
-    standby_connection: true
     turn_on_action:
-      service: persistent_notification.create
+      service: wake_on_lan.send_magic_packet
       data:
-        message: "Turn on action"
+        mac: "a8:23:fe:0c:92:af"
     customize:
       sources:
         - youtubetv

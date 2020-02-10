@@ -177,3 +177,5 @@ sensor.lauras_iphone_battery_level:
   battery_alert_disabled: true
 sensor.garage_thermostat_battery:
   battery_alert_disabled: true
+sensor.battery_state:
+  battery_alert_disabled: true
