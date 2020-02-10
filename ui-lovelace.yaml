@@ -83,6 +83,8 @@ views:
         entities:
           - cover.garage_momentary_single
           - cover.garage_momentary_double
+      - type: iframe
+        url: !secret hvac_graph
       - type: picture-glance
         camera_image: camera.driveway
         title: Exterior
