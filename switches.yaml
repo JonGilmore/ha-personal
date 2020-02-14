@@ -5,6 +5,7 @@
   lights_ct:
     - light.master_entry_lifx
     - light.sitting_room_lifx
+    - light.master_bath_toekick
 
 # fully kiosk switches
 - platform: command_line

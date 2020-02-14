@@ -155,6 +155,7 @@ all_lights:
     - switch.upstairs_hall_treads
     - switch.switch1
     - switch.switch2
+    - light.master_bath_toekick
 
 basement_lights:
   name: Basement Lights

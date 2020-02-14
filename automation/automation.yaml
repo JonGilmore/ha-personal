@@ -322,9 +322,6 @@
       entity_id: scene.10877
     - service: homeassistant.turn_off
       entity_id: input_boolean.master_blinds_run_once
-    - service: notify.telegram_jon
-      data_template:
-        message: "Master Bed changed status: {{ trigger.to_state.state }}"
 #########################################
 - alias: reset run-once variables - noon
   trigger:
@@ -988,6 +985,8 @@
       entity_id:
         - switch.dishwasher
         - sensor.public_ip
+        - sensor.potential_breaking_changes
+        - binary_sensor.rain_sensor
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state
@@ -996,10 +995,6 @@
         - binary_sensor.kitchen_fridge_door_tamper
         - binary_sensor.updater
       to: "on"
-    - platform: state
-      entity_id: sensor.potential_breaking_changes
-    - platform: state
-      entity_id: binary_sensor.rain_sensor
     - platform: numeric_state
       entity_id: sensor.kitchen_fridge_door_temperature_measurement
       above: "44"
@@ -1073,3 +1068,20 @@
         camera: "camera.front_door_live"
     - delay: "00:00:30"
     - service: browser_mod.close_popup
+#########################################
+- alias: "master bath occupancy toekick - on"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.master_bedroom_occupancy
+      to: "on"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: light.master_bath_toekick
+- alias: master bath occupancy toekick - off
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.master_bedroom_occupancy
+      to: "off"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: light.master_bath_toekick
