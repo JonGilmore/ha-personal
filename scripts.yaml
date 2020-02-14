@@ -175,3 +175,11 @@ popup_camera:
         entity_id: "{{ camera }}"
         deviceID:
           - "{{ deviceID }}"
+
+set_temperature:
+  sequence:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: "{{ entity_id }}"
+        temperature: "{{ temperature }}"
+        hvac_mode: "{{ mode }}"

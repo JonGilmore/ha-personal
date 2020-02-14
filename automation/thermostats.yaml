@@ -20,13 +20,11 @@
           entity_id: person.laura
           state: "home"
   action:
-    - service: climate.set_temperature
+    - service: script.set_temperature
       data:
-        entity_id:
-          - climate.main_thermostat
-          - climate.upstairs_thermostat
+        entity_id: climate.upstairs_thermostat, climate.main_thermostat
         temperature: 77
-        hvac_mode: cool
+        mode: cool
 # set the temperature ONLY if we're not on vacation AND one or more of us are home
 - alias: Thermostats - morning - heating
   trigger:
@@ -48,13 +46,11 @@
           entity_id: person.laura
           state: "home"
   action:
-    - service: climate.set_temperature
+    - service: script.set_temperature
       data:
-        entity_id:
-          - climate.main_thermostat
-          - climate.upstairs_thermostat
+        entity_id: climate.upstairs_thermostat, climate.main_thermostat
         temperature: 70
-        hvac_mode: heat
+        mode: heat
 #########################################
 # set the temperature back for work ONLY if we're not on vacation AND both people are not_home
 - alias: Thermostats - work - cooling
@@ -77,13 +73,11 @@
           entity_id: person.laura
           state: "not_home"
   action:
-    - service: climate.set_temperature
+    - service: script.set_temperature
       data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
+        entity_id: climate.upstairs_thermostat, climate.main_thermostat
         temperature: 78
-        hvac_mode: cool
+        mode: cool
 - alias: Thermostats - work - heating
   trigger:
     platform: time
@@ -104,13 +98,11 @@
           entity_id: person.laura
           state: "not_home"
   action:
-    - service: climate.set_temperature
+    - service: script.set_temperature
       data:
-        entity_id:
-          - climate.main_thermostat
-          - climate.upstairs_thermostat
+        entity_id: climate.upstairs_thermostat, climate.main_thermostat
         temperature: 67
-        hvac_mode: heat
+        mode: heat
 #########################################
 # (probably) getting home from work (or soon), make sure were not on vacation, and set the temps to normal
 - alias: Thermostats - home from work - cooling
@@ -125,13 +117,11 @@
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: climate.set_temperature
+    - service: script.set_temperature
       data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
+        entity_id: climate.upstairs_thermostat, climate.main_thermostat
         temperature: 77
-        hvac_mode: cool
+        mode: cool
 - alias: Thermostats - home from work - heating
   trigger:
     platform: time
@@ -144,13 +134,11 @@
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: climate.set_temperature
+    - service: script.set_temperature
       data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
+        entity_id: climate.upstairs_thermostat, climate.main_thermostat
         temperature: 71
-        hvac_mode: heat
+        mode: heat
 #########################################
 # when we start sleeping, and we're not on vacation, set the temps back
 - alias: Thermostats - bed - cooling
@@ -166,13 +154,11 @@
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: climate.set_temperature
+    - service: script.set_temperature
       data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
+        entity_id: climate.upstairs_thermostat, climate.main_thermostat
         temperature: 78
-        hvac_mode: cool
+        mode: cool
 - alias: Thermostats - bed - heating
   trigger:
     - platform: state
@@ -186,10 +172,8 @@
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: climate.set_temperature
+    - service: script.set_temperature
       data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
+        entity_id: climate.upstairs_thermostat, climate.main_thermostat
         temperature: 66
-        hvac_mode: heat
+        mode: heat
