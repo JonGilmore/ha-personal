@@ -20,11 +20,8 @@
           entity_id: person.laura
           state: "home"
   action:
-    - service: script.set_temperature
-      data:
-        entity_id: climate.upstairs_thermostat, climate.main_thermostat
-        temperature: 77
-        mode: cool
+    - service: scene.turn_on
+      entity_id: scene.cool_77_auto
 # set the temperature ONLY if we're not on vacation AND one or more of us are home
 - alias: Thermostats - morning - heating
   trigger:
@@ -46,11 +43,8 @@
           entity_id: person.laura
           state: "home"
   action:
-    - service: script.set_temperature
-      data:
-        entity_id: climate.upstairs_thermostat, climate.main_thermostat
-        temperature: 70
-        mode: heat
+    - service: scene.turn_on
+      entity_id: scene.heat_70_auto
 #########################################
 # set the temperature back for work ONLY if we're not on vacation AND both people are not_home
 - alias: Thermostats - work - cooling
@@ -73,11 +67,8 @@
           entity_id: person.laura
           state: "not_home"
   action:
-    - service: script.set_temperature
-      data:
-        entity_id: climate.upstairs_thermostat, climate.main_thermostat
-        temperature: 78
-        mode: cool
+    - service: scene.turn_on
+      entity_id: scene.cool_78_auto
 - alias: Thermostats - work - heating
   trigger:
     platform: time
@@ -98,11 +89,8 @@
           entity_id: person.laura
           state: "not_home"
   action:
-    - service: script.set_temperature
-      data:
-        entity_id: climate.upstairs_thermostat, climate.main_thermostat
-        temperature: 67
-        mode: heat
+    - service: scene.turn_on
+      entity_id: scene.heat_67_auto
 #########################################
 # (probably) getting home from work (or soon), make sure were not on vacation, and set the temps to normal
 - alias: Thermostats - home from work - cooling
@@ -117,11 +105,8 @@
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: script.set_temperature
-      data:
-        entity_id: climate.upstairs_thermostat, climate.main_thermostat
-        temperature: 77
-        mode: cool
+    - service: scene.turn_on
+      entity_id: scene.cool_77_auto
 - alias: Thermostats - home from work - heating
   trigger:
     platform: time
@@ -134,11 +119,8 @@
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: script.set_temperature
-      data:
-        entity_id: climate.upstairs_thermostat, climate.main_thermostat
-        temperature: 71
-        mode: heat
+    - service: scene.turn_on
+      entity_id: scene.heat_71_auto
 #########################################
 # when we start sleeping, and we're not on vacation, set the temps back
 - alias: Thermostats - bed - cooling
@@ -154,11 +136,8 @@
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: script.set_temperature
-      data:
-        entity_id: climate.upstairs_thermostat, climate.main_thermostat
-        temperature: 78
-        mode: cool
+    - service: scene.turn_on
+      entity_id: scene.cool_78_auto
 - alias: Thermostats - bed - heating
   trigger:
     - platform: state
@@ -172,8 +151,5 @@
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: script.set_temperature
-      data:
-        entity_id: climate.upstairs_thermostat, climate.main_thermostat
-        temperature: 66
-        mode: heat
+    - service: scene.turn_on
+      entity_id: scene.heat_66_auto
