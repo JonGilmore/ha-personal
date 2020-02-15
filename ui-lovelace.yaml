@@ -98,16 +98,15 @@ views:
             type: custom:multiple-entity-row
             name: Presence
             secondary_info: last-changed
-            primary:
-              entity: binary_sensor.anybody_away
+            entities:
+              - entity: binary_sensor.anybody_away
           - entity: binary_sensor.anybody_home
             type: custom:multiple-entity-row
             name: People
             hide_state: true
-            primary:
-              entity: person.jon
-            secondary:
-              entity: person.laura
+            entities:
+              - entity: person.jon
+              - entity: person.laura
       - type: horizontal-stack
         cards:
           - type: custom:decluttering-card
@@ -170,24 +169,21 @@ views:
             type: custom:multiple-entity-row
             name: Water Main
             secondary_info: last-changed
-            primary:
-              entity: switch.water_main_shut_off
-              name: Main
-              toggle: true
-            secondary:
-              entity: switch.equipment_room_recirculation_pump
-              name: Recirc
-              toggle: true
+            entities:
+              - entity: switch.water_main_shut_off
+                name: Main
+                toggle: true
+              - entity: switch.equipment_room_recirculation_pump
+                name: Recirc
+                toggle: true
           - entity: sensor.period_of_day
             type: custom:multiple-entity-row
             name: Period of Day
             secondary_info: last-changed
-            primary:
-              entity: binary_sensor.light_inside
-            secondary:
-              entity: binary_sensor.light_inside_master
-              name: master
-
+            entities:
+              - entity: binary_sensor.light_inside
+              - entity: binary_sensor.light_inside_master
+                name: master
       - type: custom:mini-graph-card
         name: Lux Sensors
         icon: mdi:brightness-6
