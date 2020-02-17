@@ -137,7 +137,7 @@
     light_inside_master:
       friendly_name: "light inside master?"
       device_class: light
-      value_template: "{{ states.sensor.sitting_room_lux.state | int > 40 }}"
+      value_template: "{{ states.sensor.sitting_room_lux.state | int > 30 }}"
     anybody_home:
       friendly_name: "Anybody Home"
       device_class: presence
@@ -183,6 +183,18 @@
         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "cooling"
         or states.climate.main_thermostat.attributes['hvac_action'] == "cooling"
         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "cooling" }}
+    all_sonos:
+      friendly_name: "all sonos media players"
+      value_template: >-
+        {{ (states.media_player.deck.state == "playing")
+        or (states.media_player.garage.state == "playing")
+        or (states.media_player.guest_bathroom.state == "playing")
+        or (states.media_player.gym.state == "playing")
+        or (states.media_player.kitchen.state == "playing")
+        or (states.media_player.laundry.state == "playing")
+        or (states.media_player.master.state == "playing")
+        or (states.media_player.portable.state == "playing")
+        or (states.media_player.workshop.state == "playing") }}
 
 - platform: car_wash
   weather: weather.dark_sky
