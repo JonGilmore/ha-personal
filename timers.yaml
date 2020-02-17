@@ -1,10 +1,8 @@
 ---
 front_door_motion_timer:
   duration: "00:10:00"
-deck_motion_timer:
-  duration: "00:10:00"
-deiveway_motion_timer:
-  duration: "00:10:00"
 daisy_cam_timer:
   icon: mdi:dog
   duration: "00:45:00"
+basement_stairs_timer:
+  duration: "00:00:10"

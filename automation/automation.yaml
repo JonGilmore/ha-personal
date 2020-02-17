@@ -70,8 +70,7 @@
     - service: homeassistant.turn_on
       entity_id: switch.exterior_foyer, switch.exterior_cans
     - service: timer.start
-      data:
-        entity_id: timer.front_door_motion_timer
+      entity_id: timer.front_door_motion_timer
 - alias: Turn off foyer and ext lights 10 minutes after trigger
   trigger:
     platform: event
@@ -818,8 +817,7 @@
       state: "off"
   action:
     - service: timer.start
-      data:
-        entity_id: timer.daisy_cam_timer
+      entity_id: timer.daisy_cam_timer
 - alias: daisy timer completed
   trigger:
     - platform: event
@@ -836,8 +834,7 @@
   action:
     - service: script.video_daisy
     - service: timer.start
-      data:
-        entity_id: timer.daisy_cam_timer
+      entity_id: timer.daisy_cam_timer
 #########################################
 - alias: enable motion lights 2hours before sunset, disable 2hour after sunrise
   trigger:
@@ -1089,3 +1086,24 @@
   action:
     - service: homeassistant.turn_off
       entity_id: light.master_bath_toekick
+#########################################
+- alias: "basement stairs motion - timer start"
+  trigger:
+    - platform: state
+      entity_id: sensor.basement_stairs_pir
+      to: "Violated"
+  action:
+    - service: timer.start
+      entity_id: timer.basement_stairs_timer
+- alias: "basement lights on after stairs motion"
+  trigger:
+    - platform: state
+      entity_id: sensor.bar_pir
+      to: "Violated"
+  condition:
+    - condition: state
+      entity_id: timer.basement_stairs_timer
+      state: "active"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: switch.basement_main
