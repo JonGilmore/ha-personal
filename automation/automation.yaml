@@ -212,7 +212,6 @@
         # - sensor.kitchen_pir
         - sensor.basement_pir
         - sensor.bar_pir
-        - sensor.storage_pir
       to: "Violated"
     - platform: state
       entity_id:
@@ -220,7 +219,6 @@
         # - sensor.kitchen_pir
         - sensor.basement_pir
         - sensor.bar_pir
-        - sensor.storage_pir
       to: "Normal"
       for:
         minutes: 10
@@ -244,8 +242,6 @@
           switch.basement_main
         {% elif trigger_entity == 'sensor.bar_pir' %}
           switch.basement_bar_cabinets
-        {% elif trigger_entity == 'sensor.storage_pir' %}
-          switch.basement_storage_lights
         {% endif %}
 #########################################
 - alias: "lauras office lights off"
@@ -1107,3 +1103,19 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.basement_main
+#########################################
+- alias: "storage motion lights"
+  trigger:
+    - platform: state
+      entity_id: sensor.storage_pir
+      to: "Violated"
+    - platform: state
+      entity_id: sensor.storage_pir
+      to: "Normal"
+      for:
+        minutes: 5
+  action:
+    service_template: >
+      {% if trigger.to_state.state == 'Violated' %}homeassistant.turn_on
+      {% else %}homeassistant.turn_off{% endif %}
+    entity_id: switch.basement_storage_lights
