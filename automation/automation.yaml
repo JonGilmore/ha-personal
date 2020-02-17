@@ -32,17 +32,15 @@
     - platform: event
       event_type: doorbird_front_door_doorbell
   condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.alarm_occupancy_status
-        state: "on"
-      - condition: state
-        entity_id: binary_sensor.light_inside
-        state: "off"
-      - condition: sun
-        after: sunset
-        after_offset: "-1:00:00"
+    - condition: state
+      entity_id: binary_sensor.alarm_occupancy_status
+      state: "on"
+    - condition: state
+      entity_id: binary_sensor.light_inside
+      state: "off"
+    - condition: sun
+      after: sunset
+      after_offset: "-1:00:00"
   action:
     - service: homeassistant.turn_on
       entity_id: switch.exterior_foyer, switch.exterior_cans
@@ -59,17 +57,15 @@
     - platform: event
       event_type: doorbird_front_door_doorbell
   condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.alarm_occupancy_status
-        state: "off"
-      - condition: state
-        entity_id: binary_sensor.light_inside
-        state: "off"
-      - condition: sun
-        after: sunset
-        after_offset: "-1:00:00"
+    - condition: state
+      entity_id: binary_sensor.alarm_occupancy_status
+      state: "off"
+    - condition: state
+      entity_id: binary_sensor.light_inside
+      state: "off"
+    - condition: sun
+      after: sunset
+      after_offset: "-1:00:00"
   action:
     - service: homeassistant.turn_on
       entity_id: switch.exterior_foyer, switch.exterior_cans
@@ -102,6 +98,22 @@
     - service: media_player.turn_off
       data:
         entity_id: media_player.main_googlehome
+#########################################
+- alias: doorbird sonos interrupt - master
+  trigger:
+    - platform: event
+      event_type: doorbird_front_door_doorbell
+  condition:
+    - condition: state
+      entity_id: media_player.master
+      state: "playing"
+  action:
+    - service: script.sonos_say
+      data:
+        sonos_entity: media_player.master
+        volume: 0.5
+        message: "doorbell rang!"
+        delay: "00:00:05"
 #########################################
 - alias: "deck person, dark out, occupied, deck lights on"
   trigger:
@@ -276,14 +288,12 @@
       entity_id: binary_sensor.master_entry_pir
       to: "on"
   condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: input_boolean.master_blinds_run_once
-        state: "off"
-      - condition: sun
-        after: sunset
-        after_offset: "-1:00:00"
+    - condition: state
+      entity_id: input_boolean.master_blinds_run_once
+      state: "off"
+    - condition: sun
+      after: sunset
+      after_offset: "-1:00:00"
   action:
     - service: scene.turn_on
       entity_id: scene.10877
@@ -308,15 +318,13 @@
       for:
         minutes: 45
   condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: input_boolean.master_blinds_run_once
-        state: "on"
-      - condition: time
-        after: "06:00:00"
-      - condition: time
-        before: "11:00:00"
+    - condition: state
+      entity_id: input_boolean.master_blinds_run_once
+      state: "on"
+    - condition: time
+      after: "06:00:00"
+    - condition: time
+      before: "11:00:00"
   action:
     - service: scene.turn_on
       entity_id: scene.10877
@@ -598,14 +606,12 @@
       entity_id: sensor.garage_door
       to: "Violated"
   condition:
-    condition: and
-    conditions:
-      - condition: template
-        value_template: "{{ not is_state('sensor.armed_status', 'disarmed') }}"
-      - condition: time
-        after: "09:30:00"
-      - condition: time
-        before: "14:00:00"
+    - condition: template
+      value_template: "{{ not is_state('sensor.armed_status', 'disarmed') }}"
+    - condition: time
+      after: "09:30:00"
+    - condition: time
+      before: "14:00:00"
   action:
     - service: script.video_daisy
 #########################################
@@ -821,14 +827,12 @@
       event_data:
         entity_id: timer.daisy_cam_timer
   condition:
-    - condition: and
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.alarm_occupancy_status
-          state: "off"
-        - condition: state
-          entity_id: binary_sensor.daisy_contact
-          state: "off"
+    - condition: state
+      entity_id: binary_sensor.alarm_occupancy_status
+      state: "off"
+    - condition: state
+      entity_id: binary_sensor.daisy_contact
+      state: "off"
   action:
     - service: script.video_daisy
     - service: timer.start
