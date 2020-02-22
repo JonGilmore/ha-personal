@@ -36,7 +36,8 @@
 - platform: doorbird
 - platform: ffmpeg
   name: Kitchen Camera
-  input: !secret kitchen_cam
+#   input: !secret kitchen_cam
+  input: !secret kitchenwyze_cam
 - platform: ffmpeg
   name: Patio
   input: !secret patio_cam

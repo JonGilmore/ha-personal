@@ -70,45 +70,46 @@
       friendly_name: "Basement Motions"
       device_class: motion
       value_template: >-
-        {{ (states.sensor.basement_pir.state == "Violated")
-        or (states.sensor.workshop_pir.state == "Violated")
-        or (states.sensor.basement_stairs_pir.state == "Violated")
-        or (states.sensor.storage_pir.state == "Violated")
-        or (states.sensor.bar_pir.state == "Violated") }}
+        {{ states.sensor.basement_pir.state == "Violated"
+        or states.sensor.workshop_pir.state == "Violated"
+        or states.sensor.basement_stairs_pir.state == "Violated"
+        or states.sensor.storage_pir.state == "Violated"
+        or states.binary_sensor.gym_occupancy.state == "on"
+        or states.sensor.bar_pir.state == "Violated" }}
     main_motions:
       friendly_name: "Main Motions"
       device_class: motion
       value_template: >-
-        {{ (states.sensor.foyer_pir.state == "Violated")
-        or (states.sensor.kitchen_pir.state == "Violated")
-        or (states.binary_sensor.office_multi_motion.state == "on") }}
+        {{ states.sensor.foyer_pir.state == "Violated"
+        or states.sensor.kitchen_pir.state == "Violated"
+        or states.binary_sensor.office_multi_motion.state == "on" }}
     garage_doors:
       friendly_name: "Garage Doors"
       device_class: garage_door
       value_template: >-
-        {{ (states.sensor.double_garage.state == "Violated")
-        or (states.sensor.single_garage.state == "Violated") }}
+        {{ states.sensor.double_garage.state == "Violated"
+        or states.sensor.single_garage.state == "Violated" }}
     house_doors:
       friendly_name: "House Doors"
       device_class: door
       value_template: >-
-        {{ (states.sensor.front_door.state == "Violated")
-        or (states.sensor.garage_door.state == "Violated")
-        or (states.sensor.basement_door.state == "Violated")
-        or (states.sensor.deck_door.state == "Violated") }}
+        {{ states.sensor.front_door.state == "Violated"
+        or states.sensor.garage_door.state == "Violated"
+        or states.sensor.basement_door.state == "Violated"
+        or states.sensor.deck_door.state == "Violated" }}
     moisture_sensors:
       friendly_name: "Moisture Sensors"
       device_class: moisture
       value_template: >-
-        {{ (states.sensor.water_heater_leak_sensor.state == "Violated")
-        or (states.sensor.bar_fridge_leak_sensor.state == "Violated")
-        or (states.sensor.laundry_leak_sensor.state == "Violated")
-        or (states.binary_sensor.powder_room_water.state == "on")
-        or (states.binary_sensor.basement_fridge_water.state == "on")
-        or (states.binary_sensor.kitchen_dishwasher_leak_water.state == "on")
-        or (states.binary_sensor.kitchen_fridge_leak_water.state == "on")
-        or (states.binary_sensor.kitchen_sink_leak_water.state == "on")
-        or (states.sensor.sump_leak_sensor.state == "Violated") }}
+        {{ states.sensor.water_heater_leak_sensor.state == "Violated"
+        or states.sensor.bar_fridge_leak_sensor.state == "Violated"
+        or states.sensor.laundry_leak_sensor.state == "Violated"
+        or states.binary_sensor.powder_room_water.state == "on"
+        or states.binary_sensor.basement_fridge_water.state == "on"
+        or states.binary_sensor.kitchen_dishwasher_leak_water.state == "on"
+        or states.binary_sensor.kitchen_fridge_leak_water.state == "on"
+        or states.binary_sensor.kitchen_sink_leak_water.state == "on"
+        or states.sensor.sump_leak_sensor.state == "Violated" }}
     vacation_status:
       friendly_name: "Vacation?"
       device_class: occupancy
@@ -186,15 +187,15 @@
     all_sonos:
       friendly_name: "all sonos media players"
       value_template: >-
-        {{ (states.media_player.deck.state == "playing")
-        or (states.media_player.garage.state == "playing")
-        or (states.media_player.guest_bathroom.state == "playing")
-        or (states.media_player.gym.state == "playing")
-        or (states.media_player.kitchen.state == "playing")
-        or (states.media_player.laundry.state == "playing")
-        or (states.media_player.master.state == "playing")
-        or (states.media_player.portable.state == "playing")
-        or (states.media_player.workshop.state == "playing") }}
+        {{ states.media_player.deck.state == "playing"
+        or states.media_player.garage.state == "playing"
+        or states.media_player.guest_bathroom.state == "playing"
+        or states.media_player.gym.state == "playing"
+        or states.media_player.kitchen.state == "playing"
+        or states.media_player.laundry.state == "playing"
+        or states.media_player.master.state == "playing"
+        or states.media_player.portable.state == "playing"
+        or states.media_player.workshop.state == "playing" }}
 
 - platform: car_wash
   weather: weather.dark_sky

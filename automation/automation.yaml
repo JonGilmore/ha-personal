@@ -317,9 +317,8 @@
       entity_id: input_boolean.master_blinds_run_once
       state: "on"
     - condition: time
-      after: "06:00:00"
-    - condition: time
       before: "11:00:00"
+      after: "06:00:00"
   action:
     - service: scene.turn_on
       entity_id: scene.10877
@@ -604,9 +603,8 @@
     - condition: template
       value_template: "{{ not is_state('sensor.armed_status', 'disarmed') }}"
     - condition: time
-      after: "09:30:00"
-    - condition: time
       before: "14:00:00"
+      after: "09:30:00"
   action:
     - service: script.video_daisy
 #########################################
@@ -1119,3 +1117,19 @@
       {% if trigger.to_state.state == 'Violated' %}homeassistant.turn_on
       {% else %}homeassistant.turn_off{% endif %}
     entity_id: switch.basement_storage_lights
+#########################################
+- alias: "gym motion lights"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.gym_occupancy
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.gym_occupancy
+      to: "off"
+      for:
+        minutes: 5
+  action:
+    service_template: >
+      {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
+      {% else %}homeassistant.turn_off{% endif %}
+    entity_id: light.gym_cans

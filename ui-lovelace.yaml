@@ -83,8 +83,6 @@ views:
         entities:
           - cover.garage_momentary_single
           - cover.garage_momentary_double
-      - type: iframe
-        url: !secret hvac_graph
       - type: picture-glance
         camera_image: camera.driveway
         title: Exterior
@@ -766,3 +764,22 @@ views:
           title: Battery Alert
           show_header_toggle: false
         group: group.battery_alert
+
+  ##########################################
+  # GRAPH TAB
+  ##########################################
+  - title: Battery Devices
+    id: battery_devices
+    icon: mdi:chart-areaspline
+    cards:
+      - type: iframe
+        url: !secret hvac_graph
+        aspect_ratio: 75%
+      - type: iframe
+        url: !secret pwr_graph
+      - type: iframe
+        url: https://video.dot.state.mn.us/video/image/metro/C908
+        aspect_ratio: 100%
+      # - type: picture-entity
+      #   image:
+      #     url: "https://video.dot.state.mn.us/video/image/metro/C908"
