@@ -5,7 +5,9 @@ esphome:
   board: esp01_1m
 
 wifi:
-  ssid: 'iot'
+  ssid: "iot"
+  fast_connect: true
+  reboot_timeout: 45min
   password: !secret iot_pw
 
 # Enable logging
