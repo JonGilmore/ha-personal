@@ -18,6 +18,21 @@ camera:
   - platform: local_file
     name: deck_stairs_history5
     file_path: /config/www/deck_stairs_image5.jpg
+  - platform: local_file
+    name: deck_stairs_history6
+    file_path: /config/www/deck_stairs_image6.jpg
+  - platform: local_file
+    name: deck_stairs_history7
+    file_path: /config/www/deck_stairs_image7.jpg
+  - platform: local_file
+    name: deck_stairs_history8
+    file_path: /config/www/deck_stairs_image8.jpg
+  - platform: local_file
+    name: deck_stairs_history9
+    file_path: /config/www/deck_stairs_image9.jpg
+  - platform: local_file
+    name: deck_stairs_history10
+    file_path: /config/www/deck_stairs_image10.jpg
 
 automation:
   - alias: create_history_deck_stairs
@@ -44,13 +59,53 @@ automation:
           filename: /config/www/deck_stairs_image4.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
+          entity_id: camera.deck_stairs_history6
           filename: /config/www/deck_stairs_image5.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_history7
+          filename: /config/www/deck_stairs_image6.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_history8
+          filename: /config/www/deck_stairs_image7.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_history9
+          filename: /config/www/deck_stairs_image8.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_history10
+          filename: /config/www/deck_stairs_image9.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_hist
+          filename: /config/www/deck_stairs_image10.jpg
         service: camera.snapshot
 
 script:
   setup_frigate_history_deck_stairs:
     sequence:
+      - data:
+          entity_id: camera.deck_stairs_hist
+          filename: /config/www/deck_stairs_image10.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_hist
+          filename: /config/www/deck_stairs_image9.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_hist
+          filename: /config/www/deck_stairs_image8.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_hist
+          filename: /config/www/deck_stairs_image7.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.deck_stairs_hist
+          filename: /config/www/deck_stairs_image6.jpg
+        service: camera.snapshot
       - data:
           entity_id: camera.deck_stairs_hist
           filename: /config/www/deck_stairs_image5.jpg

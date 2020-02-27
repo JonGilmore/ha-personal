@@ -18,6 +18,21 @@ camera:
   - platform: local_file
     name: driveway_history5
     file_path: /config/www/driveway_image5.jpg
+  - platform: local_file
+    name: driveway_history6
+    file_path: /config/www/driveway_image6.jpg
+  - platform: local_file
+    name: driveway_history7
+    file_path: /config/www/driveway_image7.jpg
+  - platform: local_file
+    name: driveway_history8
+    file_path: /config/www/driveway_image8.jpg
+  - platform: local_file
+    name: driveway_history9
+    file_path: /config/www/driveway_image9.jpg
+  - platform: local_file
+    name: driveway_history10
+    file_path: /config/www/driveway_image10.jpg
 
 automation:
   - alias: create_history_driveway
@@ -44,13 +59,53 @@ automation:
           filename: /config/www/driveway_image4.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.driveway_hist
+          entity_id: camera.driveway_history6
           filename: /config/www/driveway_image5.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_history7
+          filename: /config/www/driveway_image6.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_history8
+          filename: /config/www/driveway_image7.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_history9
+          filename: /config/www/driveway_image8.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_history10
+          filename: /config/www/driveway_image9.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_hist
+          filename: /config/www/driveway_image10.jpg
         service: camera.snapshot
 
 script:
   setup_frigate_history_driveway:
     sequence:
+      - data:
+          entity_id: camera.driveway_hist
+          filename: /config/www/driveway_image10.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_hist
+          filename: /config/www/driveway_image9.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_hist
+          filename: /config/www/driveway_image8.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_hist
+          filename: /config/www/driveway_image7.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.driveway_hist
+          filename: /config/www/driveway_image6.jpg
+        service: camera.snapshot
       - data:
           entity_id: camera.driveway_hist
           filename: /config/www/driveway_image5.jpg
