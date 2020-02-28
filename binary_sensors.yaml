@@ -35,32 +35,6 @@
     motion:
       delay: 30
 
-- platform: mqtt
-  name: "Deck Person"
-  state_topic: "frigate/deck/person"
-  device_class: moving
-  availability_topic: "frigate/available"
-- platform: mqtt
-  name: "Deck Stairs Person"
-  state_topic: "frigate/deck_stairs/person"
-  device_class: moving
-  availability_topic: "frigate/available"
-- platform: mqtt
-  name: "Driveway Person"
-  state_topic: "frigate/driveway/person"
-  device_class: moving
-  availability_topic: "frigate/available"
-- platform: mqtt
-  name: "Doorbell Person"
-  state_topic: "frigate/doorbell/person"
-  device_class: moving
-  availability_topic: "frigate/available"
-- platform: mqtt
-  name: "Garage Person"
-  state_topic: "frigate/garage/person"
-  device_class: moving
-  availability_topic: "frigate/available"
-
 - platform: template
   sensors:
     basement_tablet_motion:

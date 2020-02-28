@@ -43,6 +43,31 @@ decluttering_templates:
         service: script.turn_on
         service_data:
           entity_id: "[[entity_id]]"
+  cam_history:
+    card:
+      type: custom:swipe-card
+      start_card: 10
+      cards:
+        - type: picture-entity
+          entity: "camera.[[cam]]_history1"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history2"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history3"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history4"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history5"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history6"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history7"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history8"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history9"
+        - type: picture-entity
+          entity: "camera.[[cam]]_history10"
 
 # hide settings tabs from wife
 # custom_header:
@@ -193,19 +218,10 @@ views:
           - entity: sensor.sitting_room_lux
             name: Sitting Room Lux
             show_state: true
-      - type: "custom:swipe-card"
-        start_card: 5
-        cards:
-          - type: picture-entity
-            entity: camera.driveway_history1
-          - type: picture-entity
-            entity: camera.driveway_history2
-          - type: picture-entity
-            entity: camera.driveway_history3
-          - type: picture-entity
-            entity: camera.driveway_history4
-          - type: picture-entity
-            entity: camera.driveway_history5
+      - type: custom:decluttering-card
+        template: cam_history
+        variables:
+          - cam: driveway
 
   ##########################################
   # THERMOSTAT TAB
@@ -331,71 +347,26 @@ views:
           - sensor.kitchen_pir
           - scene.equipment_room_enclosure_device_001_ph_main_off
           - scene.equipment_room_enclosure_device_001_ph_main_on
-      - type: "custom:swipe-card"
-        start_card: 5
-        cards:
-          - type: picture-entity
-            entity: camera.driveway_history1
-          - type: picture-entity
-            entity: camera.driveway_history2
-          - type: picture-entity
-            entity: camera.driveway_history3
-          - type: picture-entity
-            entity: camera.driveway_history4
-          - type: picture-entity
-            entity: camera.driveway_history5
-      - type: "custom:swipe-card"
-        start_card: 5
-        cards:
-          - type: picture-entity
-            entity: camera.doorbell_history1
-          - type: picture-entity
-            entity: camera.doorbell_history2
-          - type: picture-entity
-            entity: camera.doorbell_history3
-          - type: picture-entity
-            entity: camera.doorbell_history4
-          - type: picture-entity
-            entity: camera.doorbell_history5
-      - type: "custom:swipe-card"
-        start_card: 5
-        cards:
-          - type: picture-entity
-            entity: camera.deck_history1
-          - type: picture-entity
-            entity: camera.deck_history2
-          - type: picture-entity
-            entity: camera.deck_history3
-          - type: picture-entity
-            entity: camera.deck_history4
-          - type: picture-entity
-            entity: camera.deck_history5
-      - type: "custom:swipe-card"
-        start_card: 5
-        cards:
-          - type: picture-entity
-            entity: camera.deck_stairs_history1
-          - type: picture-entity
-            entity: camera.deck_stairs_history2
-          - type: picture-entity
-            entity: camera.deck_stairs_history3
-          - type: picture-entity
-            entity: camera.deck_stairs_history4
-          - type: picture-entity
-            entity: camera.deck_stairs_history5
-      - type: "custom:swipe-card"
-        start_card: 5
-        cards:
-          - type: picture-entity
-            entity: camera.garage_history1
-          - type: picture-entity
-            entity: camera.garage_history2
-          - type: picture-entity
-            entity: camera.garage_history3
-          - type: picture-entity
-            entity: camera.garage_history4
-          - type: picture-entity
-            entity: camera.garage_history5
+      - type: custom:decluttering-card
+        template: cam_history
+        variables:
+          - cam: driveway
+      - type: custom:decluttering-card
+        template: cam_history
+        variables:
+          - cam: doorbell
+      - type: custom:decluttering-card
+        template: cam_history
+        variables:
+          - cam: deck_stairs
+      - type: custom:decluttering-card
+        template: cam_history
+        variables:
+          - cam: garage
+      - type: custom:decluttering-card
+        template: cam_history
+        variables:
+          - cam: kitchen
   ##########################################
   # MUSIC TAB
   ##########################################
