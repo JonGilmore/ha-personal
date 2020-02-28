@@ -13,7 +13,8 @@ jobs:
       - name: Getting your configuration from GitHub
         uses: actions/checkout@master
       - name: gitleaks-action
-        uses: eshork/gitleaks-action@v1.0.0
+        # uses: eshork/gitleaks-action@v1.0.0
+        uses: eshork/gitleaks-action@master
       # - name: Secret Scan
       #   uses: max/secret-scan@1.0.0
       - name: trufflehog-actions-scan
