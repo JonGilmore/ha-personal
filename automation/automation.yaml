@@ -114,7 +114,7 @@
         message: "doorbell rang!"
         delay: "00:00:05"
 #########################################
-- alias: "deck person, dark out, occupied, deck lights on"
+- alias: "deck person, dark out, deck lights on"
   trigger:
     - platform: state
       entity_id: binary_sensor.deck_person
@@ -123,9 +123,6 @@
       entity_id: binary_sensor.deck_stairs_person
       to: "on"
   condition:
-    - condition: state
-      entity_id: binary_sensor.anybody_home
-      state: "on"
     - condition: state
       entity_id: sensor.period_of_day
       state: "night"
@@ -140,20 +137,35 @@
       to: "off"
       for:
         minutes: 10
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: light.exterior_deck
-        state: "on"
-      - condition: state
-        entity_id: switch.exterior_posts
-        state: "on"
   action:
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_deck_off
 #########################################
-- alias: "garage person, dark out, garage lights on"
+- alias: "deck motion light - timer start"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.sunroom_pir
+      to: "on"
+  action:
+    - service: timer.start
+      entity_id: timer.deck_timer
+- alias: "deck lights on deck door opens"
+  trigger:
+    - platform: state
+      entity_id: sensor.deck_door
+      to: "Violated"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.light_inside
+      state: "off"
+    - condition: state
+      entity_id: timer.deck_timer
+      state: "active"
+  action:
+    - service: scene.turn_on
+      entity_id: scene.equipment_room_enclosure_device_001_ph_deck_on
+#########################################
+- alias: "garage person/motion, dark out, garage lights on"
   trigger:
     - platform: state
       entity_id: binary_sensor.garage_person
@@ -277,7 +289,7 @@
 #       entity_id: switch.switch1
 #########################################
 # Close master blinds if its dusk upon 1st motion on the entry only 1 time (after 1hr before sunset)
-- alias: Master Blinds at dusk
+- alias: master blinds at dusk
   trigger:
     - platform: state
       entity_id: binary_sensor.master_entry_pir
@@ -295,7 +307,7 @@
     - service: homeassistant.turn_on
       entity_id: input_boolean.master_blinds_run_once
 #########################################
-- alias: Close master blinds at night
+- alias: close master blinds at night
   trigger:
     - platform: sun
       event: sunset
@@ -1133,27 +1145,3 @@
       {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
       {% else %}homeassistant.turn_off{% endif %}
     entity_id: light.gym_cans
-#########################################
-- alias: "deck motion light - timer start"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.sunroom_pir
-      to: "on"
-  action:
-    - service: timer.start
-      entity_id: timer.deck_timer
-- alias: "deck lights on deck door opens"
-  trigger:
-    - platform: state
-      entity_id: sensor.deck_door
-      to: "Violated"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.light_inside
-      state: "off"
-    - condition: state
-      entity_id: timer.deck_timer
-      state: "active"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_deck_on
