@@ -438,14 +438,14 @@
     kitchen_detection_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["kitchen"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
-    stairs_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["stairs"]["fps"] }}'
+    deck_stairs_fps:
+      value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["fps"] }}'
       unit_of_measurement: "FPS"
-    stairs_skipped_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["stairs"]["skipped_fps"] }}'
+    deck_stairs_skipped_fps:
+      value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["skipped_fps"] }}'
       unit_of_measurement: "FPS"
-    stairs_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["stairs"]["detection_fps"] }}'
+    deck_stairs_detection_fps:
+      value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
     frigate_coral_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["coral"]["fps"] }}'
