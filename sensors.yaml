@@ -388,7 +388,7 @@
     - driveway
     - garage
     - kitchen
-    - stairs
+    - deck_stairs
     - coral
   value_template: "OK"
 - platform: template
