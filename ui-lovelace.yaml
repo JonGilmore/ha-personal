@@ -103,6 +103,14 @@ views:
           - lock.front_door_lock
           - lock.garage_door_lock
       - type: entities
+        title: COVID-19
+        show_header_toggle: false
+        entities:
+          - sensor.us_current
+          - sensor.us_recovered
+          - sensor.us_deaths
+          - sensor.us_confirmed
+      - type: entities
         title: Garage Doors
         show_header_toggle: false
         entities:
