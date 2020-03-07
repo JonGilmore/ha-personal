@@ -1,21 +1,7 @@
 ---
-# ########################################
-# # device_tracker stuff
-# - alias: "pi device_tracker"
-#   trigger:
-#     - platform: state
-#       entity_id: device_tracker.jon_pi
-#     - platform: state
-#       entity_id: device_tracker.laura_pi
-#     - platform: state
-#       entity_id: binary_sensor.jon_gilmore_s_pixel_3_presence
-#   action:
-#     - service: notify.telegram_jon
-#       data_template:
-#         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 ########################################
-# pizero, device_tracker stuff
-- alias: Jon Occupancy On
+# monitor device_tracker - https://github.com/andrewjfreyer/monitor
+- alias: Jon occupancy on
   trigger:
     - platform: numeric_state
       entity_id: sensor.jon_occupancy_confidence
@@ -26,7 +12,7 @@
         dev_id: jon_pi
         location_name: home
         source_type: bluetooth
-- alias: Jon Occupancy Off
+- alias: Jon occupancy off
   trigger:
     - platform: numeric_state
       entity_id: sensor.jon_occupancy_confidence
@@ -37,7 +23,7 @@
         dev_id: jon_pi
         location_name: not_home
         source_type: bluetooth
-- alias: Laura Occupancy On
+- alias: Laura occupancy on
   trigger:
     - platform: numeric_state
       entity_id: sensor.laura_occupancy_confidence
@@ -48,7 +34,7 @@
         dev_id: laura_pi
         location_name: home
         source_type: bluetooth
-- alias: Laura Occupancy Off
+- alias: Laura occupancy off
   trigger:
     - platform: numeric_state
       entity_id: sensor.laura_occupancy_confidence
@@ -60,7 +46,7 @@
         location_name: not_home
         source_type: bluetooth
 ########################################
-## HA restart - restart monitor - ha boot
+# HA restart - restart monitor - ha boot
 - alias: "Restart Monitor service on HA startup"
   initial_state: "on"
   trigger:
@@ -70,7 +56,6 @@
     - service: mqtt.publish
       data:
         topic: "monitor/scan/restart"
-    - service: speedtestdotnet.speedtest
 
 # ## Publish Message - Arrival Scan
 # - alias: Publish Message - Arrival Scan
@@ -94,13 +79,10 @@
 #     - service: mqtt.publish
 #       data:
 #         topic: "monitor/scan/arrive"
-## Publish Message - Departure Scan
+# Publish Message - Departure Scan
+# https://community.home-assistant.io/t/monitor-reliable-multi-user-distributed-bluetooth-occupancy-presence-detection/68505/1508?u=jon102034050
 - alias: Publish Message - Departure Scan
   trigger:
-    # - platform: state
-    #   entity_id: binary_sensor.house_doors
-    #   from: 'on'
-    #   to: 'off'
     - platform: state
       entity_id: sensor.front_door, sensor.garage_door, sensor.double_garage, sensor.single_garage
       from: "Violated"
@@ -115,11 +97,14 @@
         entity_id: device_tracker.laura_pi
         state: "home"
   action:
-    - delay: "00:00:15"
+    - service: mqtt.publish
+      data:
+        topic: "monitor/scan/arrive"
+    - delay: "00:00:10"
     - service: mqtt.publish
       data:
         topic: "monitor/scan/depart"
-    - delay: "00:30:00"
+    - delay: "00:00:30"
     - service: mqtt.publish
       data:
         topic: "monitor/scan/depart"

@@ -11,43 +11,43 @@
 
 # Presence Sensors
 - platform: mqtt
-  state_topic: "monitor/pizero1/jonspixelbt"
+  state_topic: "monitor/piz-presence-lr/jonspixelbt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Living Room Jon"
 - platform: mqtt
-  state_topic: "monitor/pizero2/jonspixelbt"
+  state_topic: "monitor/piz-presence-garage/jonspixelbt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Garage Jon"
 - platform: mqtt
-  state_topic: "monitor/pi-presence1/jonspixelbt"
+  state_topic: "monitor/pi-presence-theatre/jonspixelbt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Theatre Jon"
 - platform: mqtt
-  state_topic: "monitor/pi-ovpn1/jonspixelbt"
+  state_topic: "monitor/pi-presence-master/jonspixelbt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Master Jon"
 
 - platform: mqtt
-  state_topic: "monitor/pizero1/laurasiphonebt"
+  state_topic: "monitor/piz-presence-lr/laurasiphonebt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Living Room Laura"
 - platform: mqtt
-  state_topic: "monitor/pizero2/laurasiphonebt"
+  state_topic: "monitor/piz-presence-garage/laurasiphonebt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Garage Laura"
 - platform: mqtt
-  state_topic: "monitor/pi-presence1/laurasiphonebt"
+  state_topic: "monitor/pi-presence-theatre/laurasiphonebt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Theatre Laura"
 - platform: mqtt
-  state_topic: "monitor/pi-ovpn1/laurasiphonebt"
+  state_topic: "monitor/pi-presence-master/laurasiphonebt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Master Laura"
