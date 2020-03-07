@@ -156,6 +156,10 @@ group_set:
           {# ENTITIES #}
           {% set ns = namespace(entities =
                           (entities.split(',') if entities is string else entities or [])) %}
+          {# TYPES #}
+          {% for type in (types.split(',')     if types    is string else types or []) %}
+          {% set ns.entities = ns.entities + (expand(states[type]) | map(attribute="entity_id") | list) %}
+          {% endfor %}
           {# INCLUDE #}
           {% for group in (include.split(',')  if include  is string else include  or []) %}
           {% set ns.entities = ns.entities +               states.group[group|regex_replace('^.*\.')].attributes.entity_id  | list %}

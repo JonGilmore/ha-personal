@@ -1048,7 +1048,7 @@
           {% endfor %}
 #########################################
 # - alias: create group of groups (and exlude unwanted groups)
-# https://community.home-assistant.io/t/create-combinatoric-groups-including-and-excluding-entities-from-other-groups/121259
+# # https://community.home-assistant.io/t/create-combinatoric-groups-including-and-excluding-entities-from-other-groups/121259
 #   trigger:
 #     - platform: homeassistant
 #       event: start
@@ -1060,6 +1060,17 @@
 #           - group.kids_room
 #           - group.bedroom
 #         exclude: group.night_lights,group.decorations
+#########################################
+- alias: create "all" groups
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    - service: script.group_set
+      data_template:
+        object_id: all_locks
+        name: All Locks
+        types: "lock"
 #########################################
 - alias: Popup Camera
   trigger:
