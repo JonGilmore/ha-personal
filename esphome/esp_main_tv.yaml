@@ -3,7 +3,7 @@ esphome:
   name: esp_main_tv
   platform: ESP8266
   board: nodemcuv2
-  
+
   on_loop:
     then:
       - lambda: delay(5);

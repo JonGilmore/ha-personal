@@ -34,7 +34,7 @@ camera:
   - platform: local_file
     name: driveway_history10
     file_path: /config/www/driveway_image10.jpg
-  #deck stairs
+  # deck stairs
   - platform: mjpeg
     name: deck_stairs_hist
     mjpeg_url: !secret frigate_deck_stairs_cam
