@@ -4,6 +4,10 @@ esphome:
   platform: ESP8266
   board: nodemcuv2
 
+  on_loop:
+    then:
+      - lambda: delay(5);
+
 wifi:
   ssid: "iot"
   password: !secret iot_pw
