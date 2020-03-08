@@ -1034,6 +1034,15 @@
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 #########################################
+- alias: ups notifications
+  trigger:
+    - platform: event
+      event_type: nut.ups_event
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        message: "{{ trigger.event.data.notify_msg }}"
+#########################################
 - alias: important date (birthday & anniversary)
   trigger:
     - platform: time
