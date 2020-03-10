@@ -805,6 +805,10 @@
       to: "Normal"
       for:
         minutes: 15
+  condition:
+    - condition: state
+      entity_id: input_boolean.block_all_motion_lights
+      state: "off"
   action:
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_kitchen_off
