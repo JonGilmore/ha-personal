@@ -11,7 +11,7 @@
 
 # Presence Sensors
 - platform: mqtt
-  state_topic: "monitor/piz-presence-lr/jonspixelbt"
+  state_topic: "monitor/pi-lr/jonspixelbt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Living Room Jon"
@@ -32,7 +32,7 @@
   name: "Tracker Master Jon"
 
 - platform: mqtt
-  state_topic: "monitor/piz-presence-lr/laurasiphonebt"
+  state_topic: "monitor/pi-lr/laurasiphonebt"
   value_template: "{{ value_json.confidence }}"
   unit_of_measurement: "%"
   name: "Tracker Living Room Laura"

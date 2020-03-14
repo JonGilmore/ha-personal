@@ -705,6 +705,10 @@
       to: "off"
       for:
         minutes: 10
+  condition:
+    - condition: state
+      entity_id: input_boolean.master_override
+      state: "off"
   action:
     - service: homeassistant.turn_off
       entity_id: light.master_entry_lifx
@@ -757,6 +761,10 @@
   #   - condition: state
   #     entity_id: sensor.master_sitting_chair_occupied
   #     state: "unoccupied"
+  condition:
+    - condition: state
+      entity_id: input_boolean.master_override
+      state: "off"
   action:
     - service: homeassistant.turn_off
       entity_id: light.sitting_room_lifx
@@ -1113,9 +1121,25 @@
     - platform: state
       entity_id: binary_sensor.master_bedroom_occupancy
       to: "off"
+  condition:
+    - condition: state
+      entity_id: input_boolean.master_override
+      state: "off"
   action:
     - service: homeassistant.turn_off
       entity_id: light.master_bath_toekick
+#########################################
+- alias: "master override off"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.master_override
+      to: "off"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: 
+        - light.master_bath_toekick
+        - light.sitting_room_lifx
+        - light.master_entry_lifx
 #########################################
 - alias: "basement stairs motion - timer start"
   trigger:
