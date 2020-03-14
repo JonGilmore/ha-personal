@@ -6,6 +6,17 @@
     - light.master_entry_lifx
     - light.sitting_room_lifx
     - light.master_bath_toekick
+- platform: circadian_lighting
+  name: Gym
+  min_brightness: 5
+  lights_ct:
+    - light.gym_cans
+- platform: circadian_lighting
+  name: Office
+  min_brightness: 5
+  lights_ct:
+    - light.office_cans
+
 
 # fully kiosk switches
 - platform: command_line
