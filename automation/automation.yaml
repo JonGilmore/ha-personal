@@ -1136,7 +1136,7 @@
       to: "off"
   action:
     - service: homeassistant.turn_off
-      entity_id: 
+      entity_id:
         - light.master_bath_toekick
         - light.sitting_room_lifx
         - light.master_entry_lifx

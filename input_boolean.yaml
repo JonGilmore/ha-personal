@@ -16,4 +16,4 @@ party:
 alarm_notifier:
   name: Alarm Notifier
 master_override:
- name: Master Lights Override
+  name: Master Lights Override
