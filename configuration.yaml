@@ -188,3 +188,9 @@ device_tracker:
   - platform: mqtt
     devices:
       jon_st: "device_tracker/jon/state"
+
+lifx:
+  light:
+    - broadcast: 192.168.46.181
+    - broadcast: 192.168.46.182
+    - broadcast: 192.168.46.183

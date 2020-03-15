@@ -1,34 +1,34 @@
 ---
 - platform: hikvision
-  host: 192.168.45.233
+  host: 192.168.46.110
   username: !secret hik_usr
   password: !secret hik_pwd
   customize:
     motion:
       delay: 30
 - platform: hikvision
-  host: 192.168.45.231
+  host: 192.168.46.116
   username: !secret hik_usr
   password: !secret hik_pwd
   customize:
     motion:
       delay: 30
 - platform: hikvision
-  host: 192.168.45.230
+  host: 192.168.46.112
   username: !secret hik_usr
   password: !secret hik_pwd
   customize:
     motion:
       delay: 240
 - platform: hikvision
-  host: 192.168.45.237
+  host: 192.168.46.115
   username: !secret hik_usr
   password: !secret hik_pwd
   customize:
     motion:
       delay: 30
 - platform: hikvision
-  host: 192.168.45.238
+  host: 192.168.46.113
   username: !secret hik_usr
   password: !secret hik_pwd
   customize:
