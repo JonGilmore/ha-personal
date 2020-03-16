@@ -12,9 +12,53 @@ cloud:
         - media_player.living_room_tv
         - media_player.roku_gym_tv
         - media_player.roku_master_tv
+        - switch.basement_bar_cabinets
+        - switch.basement_bathroom_fan
+        - switch.basement_bathroom_shower
+        - switch.basement_fan
+        - switch.basement_main
+        - switch.basement_stair_treads
+        - switch.basement_stairs
+        - switch.basement_storage_lights
+        - switch.exterior_cans
+        - switch.exterior_foyer
+        - switch.exterior_light
+        - switch.exterior_lights
+        - switch.exterior_outlets
+        - switch.exterior_posts
+        - switch.exterior_uplights
+        - switch.great_room_cabinets
+        - switch.great_room_lamp
+        - switch.jack_and_jill_fan
+        - switch.jack_and_jill_light
+        - switch.jack_and_jill_lights
+        - switch.kitchen_cabinets
+        - switch.laundry_light
+        - switch.master_bedroom_entry
+        - switch.master_bedroom_fan
+        - switch.master_bedroom_lauras_lamp
+        - switch.master_bedroom_shower
+        - switch.master_bedroom_toilet_fan
+        - switch.master_closet
+        - switch.mudroom_kitchen_cans
+        - switch.mudroom_kitchen_pendants
+        - switch.mudroom_mudroom
+        - switch.office_lights
+        - switch.pantry
+        - switch.powder_room_fan
+        - switch.powder_room_hall_light
+        - switch.princess_light
+        - switch.princess_shower
+        - switch.princess_toilet_fan
+        - switch.pulte_planning_center_lauras_office
+        - switch.sunroom_sunroom_lamp
+        - switch.switch1
+        - switch.switch2
+        - switch.upstairs_hall_hall
+        - switch.upstairs_hall_main_stairs
+        - switch.upstairs_hall_treads
       include_domains:
         - light
-        - switch
         - fan
         - scene
         - camera
@@ -31,6 +75,8 @@ cloud:
         - climate
         - binary_sensor
         - vacuum
+        - alarm_control_panel
+        - switch
   alexa:
     filter:
       include_entities:
@@ -43,9 +89,53 @@ cloud:
         - media_player.living_room_tv
         - media_player.roku_gym_tv
         - media_player.roku_master_tv
+        - switch.basement_bar_cabinets
+        - switch.basement_bathroom_fan
+        - switch.basement_bathroom_shower
+        - switch.basement_fan
+        - switch.basement_main
+        - switch.basement_stair_treads
+        - switch.basement_stairs
+        - switch.basement_storage_lights
+        - switch.exterior_cans
+        - switch.exterior_foyer
+        - switch.exterior_light
+        - switch.exterior_lights
+        - switch.exterior_outlets
+        - switch.exterior_posts
+        - switch.exterior_uplights
+        - switch.great_room_cabinets
+        - switch.great_room_lamp
+        - switch.jack_and_jill_fan
+        - switch.jack_and_jill_light
+        - switch.jack_and_jill_lights
+        - switch.kitchen_cabinets
+        - switch.laundry_light
+        - switch.master_bedroom_entry
+        - switch.master_bedroom_fan
+        - switch.master_bedroom_lauras_lamp
+        - switch.master_bedroom_shower
+        - switch.master_bedroom_toilet_fan
+        - switch.master_closet
+        - switch.mudroom_kitchen_cans
+        - switch.mudroom_kitchen_pendants
+        - switch.mudroom_mudroom
+        - switch.office_lights
+        - switch.pantry
+        - switch.powder_room_fan
+        - switch.powder_room_hall_light
+        - switch.princess_light
+        - switch.princess_shower
+        - switch.princess_toilet_fan
+        - switch.pulte_planning_center_lauras_office
+        - switch.sunroom_sunroom_lamp
+        - switch.switch1
+        - switch.switch2
+        - switch.upstairs_hall_hall
+        - switch.upstairs_hall_main_stairs
+        - switch.upstairs_hall_treads
       include_domains:
         - light
-        - switch
         - fan
         - scene
       exclude_domains:
@@ -56,3 +146,10 @@ cloud:
         - media_player
         - climate
         - camera
+        - alarm_control_panel
+        - alert
+        - automation
+        - binary_sensor
+        - lock
+        - sensor
+        - switch
