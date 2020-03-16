@@ -177,3 +177,41 @@
 
 - platform: workday
   country: US
+
+- platform: bayesian
+  name: great room dark
+  prior: 0.5
+  probability_threshold: 0.84
+  observations:
+    - entity_id: sensor.dark_sky_cloud_coverage
+      prob_given_true: 0.75
+      platform: numeric_state
+      above: 90
+    - entity_id: sensor.main_tv_lux
+      prob_given_true: 0.90
+      platform: numeric_state
+      below: 110
+    # - entity_id: sensor.whole_house_luminance_sensor_main
+    #   prob_given_true: 0.95
+    #   platform: numeric_state
+    #   below: 100
+    # - entity_id: 'sensor.bathroom_luminance_sensor_main'
+    #   prob_given_true: 0.95
+    #   platform: numeric_state
+    #   below: 100
+    - entity_id: sensor.sun_elevation
+      prob_given_true: 0.6
+      platform: numeric_state
+      below: 20
+    - entity_id: sensor.sun_elevation
+      prob_given_true: 0.75
+      platform: numeric_state
+      below: 10
+    - entity_id: sensor.sun_elevation
+      prob_given_true: 0.85
+      platform: numeric_state
+      below: 5
+    - entity_id: sun.sun
+      prob_given_true: 1
+      platform: state
+      to_state: "below_horizon"

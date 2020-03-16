@@ -121,6 +121,10 @@
       entity_id: climate.garage_thermostat
       value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
       friendly_name: "Garage Temperature"
+    sun_elevation:
+      entity_id: sun.sun
+      value_template: '{{ states.sun.sun.attributes["elevation"] }}'
+      friendly_name: "sun elevation"
     garage_fridge_power:
       entity_id: switch.garage_fridge
       value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
