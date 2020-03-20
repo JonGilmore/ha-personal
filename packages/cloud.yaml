@@ -138,6 +138,7 @@ cloud:
         - light
         - fan
         - scene
+        - camera
       exclude_domains:
         - group
         - input_boolean
@@ -145,7 +146,6 @@ cloud:
         - cover
         - media_player
         - climate
-        - camera
         - alarm_control_panel
         - alert
         - automation
