@@ -11,7 +11,7 @@ exterior_lights:
     - switch.exterior_posts
     - switch.exterior_uplights
     - light.mudroom_garage_lights
-    - light.exterior_roof_outlet
+    - switch.exterior_light
 
 interior_lights:
   name: Interior Lights

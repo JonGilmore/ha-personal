@@ -1147,6 +1147,9 @@
     - platform: state
       entity_id: binary_sensor.master_bedroom_occupancy
       to: "on"
+    - platform: state
+      entity_id: binary_sensor.master_bedroom_occupancy
+      to: "off"
       for:
         minutes: 1
   action:
@@ -1187,15 +1190,15 @@
 - alias: "office desk, gym lights motion off"
   trigger:
     - platform: state
-      entity_id: binary_sensor.gym_occupancy
-      to: "off"
-      for:
-        minutes: 5
-    - platform: state
       entity_id: binary_sensor.office_occupancy_status
       to: "off"
       for:
         minutes: 2
+    - platform: state
+      entity_id: binary_sensor.gym_occupancy
+      to: "off"
+      for:
+        minutes: 5
   action:
     - service: homeassistant.turn_off
       data_template:

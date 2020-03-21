@@ -17,7 +17,6 @@
   lights_ct:
     - light.office_cans
 
-
 # fully kiosk switches
 - platform: command_line
   switches:
