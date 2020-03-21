@@ -150,7 +150,6 @@ group_set:
         object_id: "{{ object_id }}"
         name: "{{ name or object_id }}"
         icon: "{{ icon or '' }}"
-        visible: "{{ visible or True }}"
         all: "{{ all or False }}"
         entities: >-
           {# ENTITIES #}

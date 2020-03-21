@@ -221,21 +221,18 @@
     - platform: state
       entity_id:
         - sensor.foyer_pir
-        # - sensor.kitchen_pir
         - sensor.basement_pir
         - sensor.bar_pir
       to: "Violated"
     - platform: state
       entity_id:
         - sensor.foyer_pir
-        # - sensor.kitchen_pir
         - sensor.basement_pir
         - sensor.bar_pir
       to: "Normal"
       for:
         minutes: 10
   condition:
-    ## Ensure Motion Lights aren't disabled
     - condition: state
       entity_id: input_boolean.block_all_motion_lights
       state: "off"
@@ -248,8 +245,6 @@
         {% set trigger_entity = trigger.entity_id %}
         {% if trigger_entity == 'sensor.foyer_pir' %}
           switch.exterior_foyer
-        {% elif trigger_entity == 'sensor.kitchen_pir' %}
-          switch.kitchen_cabinets
         {% elif trigger_entity == 'sensor.basement_pir' %}
           switch.basement_main
         {% elif trigger_entity == 'sensor.bar_pir' %}
@@ -515,8 +510,7 @@
       data:
         name: aqua-fiesta
 ########################################
-# Turn on master fan at night (if AC is on)
-- alias: Turn on master fan at night
+- alias: Turn on master fan at night (if AC is on)
   trigger:
     - platform: time
       at: "20:00:00"
@@ -531,8 +525,7 @@
     - service: light.turn_on
       entity_id: light.master_bedroom_master_fan
 ########################################
-# Turn off master fan in the morning, enable normal theme
-- alias: Turn off master fan in the morning
+- alias: Turn off master fan in the morning, enable normal theme
   trigger:
     - platform: time
       at: "08:00:00"
@@ -870,7 +863,7 @@
   action:
     - service: homeassistant.turn_off
       entity_id: input_boolean.motion_lights
-# ########################################
+########################################
 - alias: kitchen motion light
   trigger:
     platform: state
@@ -1108,27 +1101,6 @@
     - delay: "00:00:30"
     - service: browser_mod.close_popup
 #########################################
-- alias: "master bath occupancy toekick - on"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.master_bedroom_occupancy
-      to: "on"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: light.master_bath_toekick
-- alias: master bath occupancy toekick - off
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.master_bedroom_occupancy
-      to: "off"
-  condition:
-    - condition: state
-      entity_id: input_boolean.master_override
-      state: "off"
-  action:
-    - service: homeassistant.turn_off
-      entity_id: light.master_bath_toekick
-#########################################
 - alias: "master override off"
   trigger:
     - platform: state
@@ -1162,7 +1134,7 @@
     - service: homeassistant.turn_on
       entity_id: switch.basement_main
 #########################################
-- alias: "storage motion lights"
+- alias: "storage, master toekick motion lights"
   trigger:
     - platform: state
       entity_id: sensor.storage_pir
@@ -1172,24 +1144,61 @@
       to: "Normal"
       for:
         minutes: 5
+    - platform: state
+      entity_id: binary_sensor.master_bedroom_occupancy
+      to: "on"
   action:
-    service_template: >
-      {% if trigger.to_state.state == 'Violated' %}homeassistant.turn_on
-      {% else %}homeassistant.turn_off{% endif %}
-    entity_id: switch.basement_storage_lights
+    - service_template: >
+        {% if trigger.to_state.state == 'Violated' %}homeassistant.turn_on
+        {% else %}homeassistant.turn_off{% endif %}
+      data_template:
+        entity_id: >
+          {% set trigger_entity = trigger.entity_id %}
+          {% if trigger_entity == 'sensor.storage_pir' %}
+            switch.basement_storage_lights
+          {% elif trigger_entity == 'binary_sensor.master_bedroom_occupancy' %}
+            light.master_bath_toekick
+          {% endif %}
 #########################################
-- alias: "gym motion lights"
+- alias: "office desk, gym lights motion on"
   trigger:
     - platform: state
-      entity_id: binary_sensor.gym_occupancy
+      entity_id: 
+        - binary_sensor.office_occupancy_status
+        - binary_sensor.gym_occupancy
       to: "on"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.light_inside
+      state: "off"
+  action:
+    - service: homeassistant.turn_on
+      data_template:
+        entity_id: >
+          {% set trigger_entity = trigger.entity_id %}
+          {% if trigger_entity == 'binary_sensor.office_occupancy_status' %}
+            switch.office_lights
+          {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
+            light.gym_cans
+          {% endif %}
+#########################################
+- alias: "office desk, gym lights motion off"
+  trigger:
     - platform: state
       entity_id: binary_sensor.gym_occupancy
       to: "off"
       for:
         minutes: 5
+    - platform: state
+      entity_id: binary_sensor.office_occupancy_status
+      to: "off"
   action:
-    service_template: >
-      {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
-      {% else %}homeassistant.turn_off{% endif %}
-    entity_id: light.gym_cans
+    - service: homeassistant.turn_off
+      data_template:
+        entity_id: >
+          {% set trigger_entity = trigger.entity_id %}
+          {% if trigger_entity == 'binary_sensor.office_occupancy_status' %}
+            switch.office_lights
+          {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
+            light.gym_cans
+          {% endif %}
