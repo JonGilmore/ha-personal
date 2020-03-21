@@ -1147,9 +1147,11 @@
     - platform: state
       entity_id: binary_sensor.master_bedroom_occupancy
       to: "on"
+      for:
+        minutes: 1
   action:
     - service_template: >
-        {% if trigger.to_state.state == 'Violated' %}homeassistant.turn_on
+        {% if trigger.to_state.state in ['Violated', 'on'] %}homeassistant.turn_on
         {% else %}homeassistant.turn_off{% endif %}
       data_template:
         entity_id: >
@@ -1192,6 +1194,8 @@
     - platform: state
       entity_id: binary_sensor.office_occupancy_status
       to: "off"
+      for:
+        minutes: 2
   action:
     - service: homeassistant.turn_off
       data_template:
