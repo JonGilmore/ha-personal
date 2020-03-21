@@ -1163,7 +1163,7 @@
 - alias: "office desk, gym lights motion on"
   trigger:
     - platform: state
-      entity_id: 
+      entity_id:
         - binary_sensor.office_occupancy_status
         - binary_sensor.gym_occupancy
       to: "on"

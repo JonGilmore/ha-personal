@@ -174,7 +174,7 @@
       friendly_name: "office occupancy"
       device_class: occupancy
       value_template: >-
-        {{ states.sensor.sonoff2_energy_apparentpower.state | int > 10 
+        {{ states.sensor.sonoff2_energy_apparentpower.state | int > 10
         or states.binary_sensor.office_multi_motion.state == "on"}}
 
 - platform: car_wash
