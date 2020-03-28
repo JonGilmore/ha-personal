@@ -264,3 +264,10 @@ christmasTrees:
   entities:
     - switch.switch1
     - switch.switch2
+
+garmin:
+  name: garmin
+  entities:
+    - switch.exterior_cans
+    - cover.garage_momentary_single
+    - scene.equipment_room_enclosure_device_001_ph_sunset1

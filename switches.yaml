@@ -9,11 +9,12 @@
 - platform: circadian_lighting
   name: Gym
   min_brightness: 5
+  max_brightness: 90
   lights_ct:
     - light.gym_cans
 - platform: circadian_lighting
   name: Office
-  min_brightness: 5
+  max_brightness: 90
   lights_ct:
     - light.office_cans
 
