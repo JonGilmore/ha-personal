@@ -964,7 +964,7 @@
     - condition: template
       value_template: >
         {% if states.automation.car_wash.last_triggered is not none %}
-          {% if as_timestamp(now()) | int   -  as_timestamp(states.automation.car_wash.attributes.last_triggered) | int > 86400 %} true {% else %} false
+          {% if as_timestamp(now()) | int - as_timestamp(states.automation.car_wash.attributes.last_triggered) | int > 86400 %} true {% else %} false
           {% endif %}
         {% else %}
         false
@@ -1169,7 +1169,7 @@
   trigger:
     - platform: state
       entity_id:
-        - binary_sensor.office_occupancy_status
+        - binary_sensor.office_occupancy
         - binary_sensor.gym_occupancy
       to: "on"
   condition:
@@ -1181,7 +1181,7 @@
       data_template:
         entity_id: >
           {% set trigger_entity = trigger.entity_id %}
-          {% if trigger_entity == 'binary_sensor.office_occupancy_status' %}
+          {% if trigger_entity == 'binary_sensor.office_occupancy' %}
             switch.office_lights
           {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
             light.gym_cans
@@ -1190,7 +1190,7 @@
 - alias: "office desk, gym lights motion off"
   trigger:
     - platform: state
-      entity_id: binary_sensor.office_occupancy_status
+      entity_id: binary_sensor.office_occupancy
       to: "off"
       for:
         minutes: 2
@@ -1204,7 +1204,7 @@
       data_template:
         entity_id: >
           {% set trigger_entity = trigger.entity_id %}
-          {% if trigger_entity == 'binary_sensor.office_occupancy_status' %}
+          {% if trigger_entity == 'binary_sensor.office_occupancy' %}
             switch.office_lights
           {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
             light.gym_cans

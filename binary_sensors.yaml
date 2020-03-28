@@ -170,12 +170,6 @@
         or states.media_player.master.state == "playing"
         or states.media_player.portable.state == "playing"
         or states.media_player.workshop.state == "playing" }}
-    office_occupancy_status:
-      friendly_name: "office occupancy"
-      device_class: occupancy
-      value_template: >-
-        {{ states.sensor.sonoff2_energy_apparentpower.state | int > 10
-        or states.binary_sensor.office_multi_motion.state == "on"}}
 
 - platform: car_wash
   weather: weather.dark_sky
@@ -221,3 +215,29 @@
       prob_given_true: 1
       platform: state
       to_state: "below_horizon"
+
+- platform: bayesian
+  name: office occupancy
+  prior: 0.5
+  probability_threshold: 0.86
+  observations:
+    - platform: "state"
+      entity_id: "person.jon"
+      prob_given_true: 0.99
+      prob_given_false: 0.6
+      to_state: "home"
+    - platform: "numeric_state"
+      entity_id: "sensor.office_desk"
+      prob_given_true: 0.90
+      prob_given_false: 0.3
+      below: 1.1
+    - platform: "numeric_state"
+      entity_id: "sensor.sonoff2_energy_apparentpower"
+      prob_given_true: 0.80
+      prob_given_false: 0.3
+      above: 25
+    - platform: "state"
+      entity_id: "binary_sensor.office_multi_motion"
+      prob_given_true: 0.95
+      prob_given_false: 0.3
+      to_state: "on"
