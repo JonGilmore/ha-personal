@@ -110,6 +110,10 @@ views:
           - sensor.us_recovered
           - sensor.us_deaths
           - sensor.us_confirmed
+          - sensor.covid_mn_death
+          - sensor.covid_mn_negative
+          - sensor.covid_mn_positive
+          - sensor.covid_mn_total
       - type: entities
         title: Garage Doors
         show_header_toggle: false

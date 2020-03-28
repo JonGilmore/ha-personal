@@ -503,3 +503,40 @@
       friendly_name: basement tablet battery
       unit_of_measurement: "%"
       value_template: "{{ states.binary_sensor.wallpanel.attributes.battery_level }}"
+
+- platform: rest
+  name: MN Covid Stats
+  resource: https://covidtracking.com/api/states?state=MN
+  json_attributes:
+    - positive
+    - negative
+    - pending
+    - hospitalized
+    - death
+    - total
+    - lastUpdateEt
+  value_template: "{{ value_json.state }}"
+  scan_interval: 1800
+- platform: template
+  sensors:
+    covid_mn_positive:
+      value_template: '{{ states.sensor.mn_covid_stats.attributes["positive"] }}'
+      friendly_name: covid mn positive
+    covid_mn_negative:
+      value_template: '{{ states.sensor.mn_covid_stats.attributes["negative"] }}'
+      friendly_name: covid mn negative
+    covid_mn_pending:
+      value_template: '{{ states.sensor.mn_covid_stats.attributes["pending"] }}'
+      friendly_name: covid mn pending
+    covid_mn_hospitalized:
+      value_template: '{{ states.sensor.mn_covid_stats.attributes["hospitalized"] }}'
+      friendly_name: covid mn hospitalized
+    covid_mn_death:
+      value_template: '{{ states.sensor.mn_covid_stats.attributes["death"] }}'
+      friendly_name: covid mn deaths
+    covid_mn_total:
+      value_template: '{{ states.sensor.mn_covid_stats.attributes["total"] }}'
+      friendly_name: covid mn total
+    covid_mn_lastupdateet:
+      value_template: '{{ states.sensor.mn_covid_stats.attributes["lastUpdateEt"] }}'
+      friendly_name: covid mn last_updated
