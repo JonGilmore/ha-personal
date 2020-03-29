@@ -954,25 +954,25 @@
           {% else %}not_home
           {% endif %}
 #########################################
-- alias: car wash
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.car_wash
-      to: "on"
-  condition:
-    # run once per 24hrs condition
-    - condition: template
-      value_template: >
-        {% if states.automation.car_wash.last_triggered is not none %}
-          {% if as_timestamp(now()) | int - as_timestamp(states.automation.car_wash.attributes.last_triggered) | int > 86400 %} true {% else %} false
-          {% endif %}
-        {% else %}
-        false
-        {% endif %}
-  action:
-    - service: notify.telegram_jon
-      data:
-        message: "OK to wash the car!"
+# - alias: car wash
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.car_wash
+#       to: "on"
+#   condition:
+#     # run once per 24hrs condition
+#     - condition: template
+#       value_template: >
+#         {% if states.automation.car_wash.last_triggered is not none %}
+#           {% if as_timestamp(now()) | int - as_timestamp(states.automation.car_wash.attributes.last_triggered) | int > 86400 %} true {% else %} false
+#           {% endif %}
+#         {% else %}
+#         false
+#         {% endif %}
+#   action:
+#     - service: notify.telegram_jon
+#       data:
+#         message: "OK to wash the car!"
 #########################################
 - alias: victorops notification - turn on light
   trigger:
@@ -997,7 +997,6 @@
       entity_id:
         - switch.dishwasher
         - sensor.public_ip
-        - sensor.potential_breaking_changes
         - binary_sensor.rain_sensor
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"

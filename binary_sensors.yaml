@@ -171,10 +171,6 @@
         or states.media_player.portable.state == "playing"
         or states.media_player.workshop.state == "playing" }}
 
-- platform: car_wash
-  weather: weather.dark_sky
-  days: 3
-
 - platform: workday
   country: US
 

@@ -175,8 +175,6 @@ webostv:
         - netflix
 
 mobile_app:
-breaking_changes:
-  scan_interval: 21600
 
 browser_mod:
   devices:
