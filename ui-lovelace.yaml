@@ -1,33 +1,33 @@
 ---
 title: !secret name
 resources:
-  - url: /community_plugin/mini-media-player/mini-media-player.js
+  - url: /hacsfiles/mini-media-player/mini-media-player.js
     type: module
-  - url: /community_plugin/lovelace-card-tools/card-tools.js
+  - url: /hacsfiles/lovelace-card-tools/card-tools.js
     type: js
-  - url: /community_plugin/button-card/button-card.js
+  - url: /hacsfiles/button-card/button-card.js
     type: module
-  - url: /community_plugin/group-card/group-card.js
+  - url: /hacsfiles/group-card/group-card.js
     type: js
-  - url: /community_plugin/decluttering-card/decluttering-card.js
+  - url: /hacsfiles/decluttering-card/decluttering-card.js
     type: module
-  - url: /community_plugin/bar-card/bar-card.js
+  - url: /hacsfiles/bar-card/bar-card.js
     type: js
-  - url: /community_plugin/mini-graph-card/mini-graph-card.js
+  - url: /hacsfiles/mini-graph-card/mini-graph-card.js
     type: module
-  - url: /community_plugin/text-divider-row/text-divider-row.js
+  - url: /hacsfiles/text-divider-row/text-divider-row.js
     type: module
-  - url: /community_plugin/simple-thermostat/simple-thermostat.js
+  - url: /hacsfiles/simple-thermostat/simple-thermostat.js
     type: module
-  - url: /community_plugin/search-card/search-card.js
+  - url: /hacsfiles/search-card/search-card.js
     type: module
-  - url: /community_plugin/swipe-card/swipe-card.js
+  - url: /hacsfiles/swipe-card/swipe-card.js
     type: module
-  - url: /community_plugin/lovelace-auto-entities/auto-entities.js
+  - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
     type: module
-  - url: /community_plugin/secondaryinfo-entity-row/secondaryinfo-entity-row.js
+  - url: /hacsfiles/secondaryinfo-entity-row/secondaryinfo-entity-row.js
     type: js
-  - url: /community_plugin/lovelace-multiple-entity-row/multiple-entity-row.js
+  - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
     type: module
   - url: /browser_mod.js
     type: module
@@ -660,10 +660,6 @@ views:
         title: Exterior
         entities:
           - scene.equipment_room_enclosure_device_001_ph_sunset1
-      - type: glance
-        title: Upgrades?
-        entities:
-          - sensor.potential_breaking_changes
       - type: entities
         title: Host Stats
         show_header_toggle: false
