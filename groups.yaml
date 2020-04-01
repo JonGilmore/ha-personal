@@ -270,4 +270,5 @@ garmin:
   entities:
     - switch.exterior_cans
     - cover.garage_momentary_single
-    - scene.equipment_room_enclosure_device_001_ph_sunset1
+    - cover.garage_momentary_double
+    - lock.front_door_lock
