@@ -33,17 +33,12 @@
   password: !secret hik_pwd
 
 ###################################
-- platform: doorbird
 - platform: ffmpeg
   name: Kitchen Camera
-#   input: !secret kitchen_cam
   input: !secret kitchenwyze_cam
 - platform: ffmpeg
   name: Patio
   input: !secret patio_cam
-# - platform: ffmpeg
-#   name: Wyze
-#   input: !secret wyze_cam
 
 ###################################
 # still image cameras
