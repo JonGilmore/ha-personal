@@ -398,7 +398,7 @@
 - platform: template
   sensors:
     deck_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deck"]["fps"] }}'
+      value_template: '{{ states.sensor.frigate_debug.attributes["deck"]["camera_fps"] }}'
       unit_of_measurement: "FPS"
     deck_skipped_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["deck"]["skipped_fps"] }}'
@@ -407,7 +407,7 @@
       value_template: '{{ states.sensor.frigate_debug.attributes["deck"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
     doorbell_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["doorbell"]["fps"] }}'
+      value_template: '{{ states.sensor.frigate_debug.attributes["doorbell"]["camera_fps"] }}'
       unit_of_measurement: "FPS"
     doorbell_skipped_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["doorbell"]["skipped_fps"] }}'
@@ -416,7 +416,7 @@
       value_template: '{{ states.sensor.frigate_debug.attributes["doorbell"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
     driveway_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["fps"] }}'
+      value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["camera_fps"] }}'
       unit_of_measurement: "FPS"
     driveway_skipped_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["skipped_fps"] }}'
@@ -425,7 +425,7 @@
       value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
     garage_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["fps"] }}'
+      value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["camera_fps"] }}'
       unit_of_measurement: "FPS"
     garage_skipped_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["skipped_fps"] }}'
@@ -434,7 +434,7 @@
       value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
     kitchen_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["kitchen"]["fps"] }}'
+      value_template: '{{ states.sensor.frigate_debug.attributes["kitchen"]["camera_fps"] }}'
       unit_of_measurement: "FPS"
     kitchen_skipped_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["kitchen"]["skipped_fps"] }}'
@@ -443,7 +443,7 @@
       value_template: '{{ states.sensor.frigate_debug.attributes["kitchen"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
     deck_stairs_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["fps"] }}'
+      value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["camera_fps"] }}'
       unit_of_measurement: "FPS"
     deck_stairs_skipped_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["skipped_fps"] }}'

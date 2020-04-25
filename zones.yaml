@@ -4,16 +4,19 @@
   longitude: !secret ha_longitude
   radius: 200
   icon: mdi:home
+
 - name: work-jon
   latitude: !secret work_jon_lat
   longitude: !secret work_jon_long
   radius: 200
   icon: mdi:briefcase
+
 - name: work-laura
   latitude: !secret work_laura_lat
   longitude: !secret work_laura_long
   radius: 200
   icon: mdi:school
+
 - name: cabin
   latitude: !secret cabin_lat
   longitude: !secret cabin_long

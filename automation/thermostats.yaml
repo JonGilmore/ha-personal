@@ -2,8 +2,8 @@
 # set the temperature ONLY if we're not on vacation AND one or more of us are home
 - alias: Thermostats - morning - cooling
   trigger:
-    platform: time
-    at: "04:30:00"
+    - platform: time
+      at: "04:30:00"
   condition:
     - condition: state
       entity_id: climate.main_thermostat
