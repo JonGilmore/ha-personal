@@ -1208,3 +1208,39 @@
           {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
             light.gym_cans
           {% endif %}
+#########################################
+- alias: laundry plants
+  trigger:
+    - platform: time
+      at: "07:30:00"
+    - platform: time
+      at: "19:30:00"
+  action:
+    - service_template: >
+        {% if now().hour <= 9 %}homeassistant.turn_on
+        {% else %}homeassistant.turn_off{% endif %}
+      entity_id: switch.sonoff1
+#########################################
+- alias: wfh turn off recirc pump
+  trigger:
+    - platform: time
+      at: "09:00:00"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: "on"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.equipment_room_recirculation_pump
+#########################################
+- alias: wfh turn on recirc pump (only when somebody is home)
+  trigger:
+    - platform: time
+      at: "16:30:00"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "on"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: switch.equipment_room_recirculation_pump
