@@ -1,0 +1,35 @@
+---
+garage_door_single:
+  name: single garage is open
+  entity_id: cover.garage_momentary_single
+  state: "open"
+  repeat:
+    - 5
+    - 30
+  can_acknowledge: true
+  skip_first: true
+  data:
+    inline_keyboard:
+      - "Yes:/closegarage_single, No:/do_nothing"
+    photo:
+      - url: !secret hik_garage_pic
+        caption: "Single garage open. Close?"
+  notifiers:
+    - telegram_jon
+garage_door_double:
+  name: double garage is open
+  entity_id: cover.garage_momentary_double
+  state: "open"
+  repeat:
+    - 5
+    - 30
+  can_acknowledge: true
+  skip_first: true
+  data:
+    inline_keyboard:
+      - "Yes:/closegarage_double, No:/do_nothing"
+    photo:
+      - url: !secret hik_garage_pic
+        caption: "Double garage open. Close?"
+  notifiers:
+    - telegram_jon
