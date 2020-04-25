@@ -157,25 +157,13 @@ sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_sleepnumber:
   friendly_name: Lauras Sleep Number
 ##################################
 # battery customizations
-sensor.life360_jon_battery:
-  battery_alert_disabled: true
-sensor.pixel_3_ariela_battery:
-  battery_alert_disabled: true
-sensor.pixel_3_ariela_battery_sensor:
-  battery_alert_disabled: true
-sensor.pixel_3_battery:
-  battery_alert_disabled: true
-sensor.pixel_3_battery_2:
-  battery_alert_disabled: true
-sensor.zw_002_multilevel_sensor_battery:
-  battery_alert_disabled: true
 sensor.jon_battery:
   battery_alert_disabled: true
 sensor.lauras_iphone_battery:
   battery_alert_disabled: true
-sensor.lauras_iphone_battery_level:
-  battery_alert_disabled: true
-sensor.garage_thermostat_battery:
-  battery_alert_disabled: true
 sensor.battery_state:
+  battery_alert_disabled: true
+sensor.basement_tablet_battery:
+  battery_alert_disabled: true
+sensor.lauras_iphone_battery_level:
   battery_alert_disabled: true

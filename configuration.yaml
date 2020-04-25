@@ -79,16 +79,6 @@ sleepiq:
   username: !secret sleep_usr
   password: !secret sleep_pwd
 
-doorbird:
-  devices:
-    - host: !secret db_ip
-      username: !secret db_usr
-      password: !secret db_pwd
-      token: !secret db_token
-      name: Front Door
-      events:
-        - doorbell
-
 lutron:
   host: !secret rr_ip
   username: !secret rr_usr
@@ -118,6 +108,7 @@ telegram_bot:
 ####################################################
 #                     Includes                     #
 ####################################################
+alert: !include alerts.yaml
 sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml
 climate: !include climate.yaml
