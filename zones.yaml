@@ -2,7 +2,7 @@
 - name: home
   latitude: !secret ha_latitude
   longitude: !secret ha_longitude
-  radius: 200
+  radius: 300
   icon: mdi:home
 
 - name: work-jon
@@ -20,5 +20,5 @@
 - name: cabin
   latitude: !secret cabin_lat
   longitude: !secret cabin_long
-  radius: 5000
+  radius: 6000
   icon: mdi:ferry
