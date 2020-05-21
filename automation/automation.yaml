@@ -1,6 +1,7 @@
 ---
 #########################################
 - alias: line crossing template - telegram & tv notify
+  description: "Blah blah blah"
   trigger:
     - platform: state
       entity_id:
@@ -1244,3 +1245,40 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.equipment_room_recirculation_pump
+#########################################
+- id: acknowledge garage single open
+  alias: telegram bot to acknowledge the garage single open
+  trigger: 
+    - platform: event
+      event_type: telegram_callback
+      event_data: 
+        command: /ack_garagesingle
+    - platform: event
+      event_type: telegram_callback
+      event_data: 
+        command: /ack_garagedouble
+  action:
+  - service: homeassistant.turn_off
+    data:  
+      entity_id: alert.garage_door_single
+#########################################
+- id: acknowledge garage double open
+  alias: telegram bot to acknowledge the garage double open
+  trigger: 
+    - platform: event
+      event_type: telegram_callback
+      event_data: 
+        command: /ack_garagedouble
+  action:
+    # - service: homeassistant.turn_off
+    #   data_template:
+    #     entity_id: >
+    #       {% set trigger_entity = trigger.event.data %}
+    #       {% if trigger_entity == '/ackgaragesingle' %}
+    #         alert.garage_door_single
+    #       {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
+    #         light.gym_cans
+    #       {% endif %}
+    - service: homeassistant.turn_off
+      data:  
+        entity_id: alert.garage_door_double

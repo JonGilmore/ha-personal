@@ -146,7 +146,6 @@ map:
 discovery:
   ignore:
     - axis
-    - igd
     - homekit
 
 speedtestdotnet:

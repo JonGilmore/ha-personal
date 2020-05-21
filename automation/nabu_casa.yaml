@@ -7,73 +7,34 @@
 #   - either person leaves: enable cloud
 #   - vacation started, enable cloud
 ####################################################
-- alias: "Sleeping, both home: nabucasa disconnect"
+- alias: "Sleeping start or sleeping end, both home: nabucasa disconnect"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
       to: "on"
-  condition:
-    - condition: state
-      entity_id: person.jon
-      state: "home"
-    - condition: state
-      entity_id: person.laura
-      state: "home"
-  action:
-    - service: cloud.remote_disconnect
-
-- alias: "Not sleeping, both people home: nabucasa disconnect"
-  trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
       to: "off"
   condition:
     - condition: state
-      entity_id: person.jon
-      state: "home"
-    - condition: state
-      entity_id: person.laura
-      state: "home"
+      entity_id: binary_sensor.anybody_away
+      state: "off"
   action:
     - service: cloud.remote_disconnect
 
-- alias: "Jons home (and Laura is home): nabucasa disconnect"
+- alias: "Everybody home: nabucasa disconnect"
   trigger:
     - platform: state
-      entity_id: person.jon
-      to: "home"
-  condition:
-    - condition: state
-      entity_id: person.laura
-      state: "home"
+      entity_id: binary_sensor.anybody_away
+      to: "off"
   action:
     - service: cloud.remote_disconnect
 
-- alias: "Lauras home (and Jon is home): nabucasa disconnect"
+- alias: "Anybody leaves or vacation on: nabucasa connect"
   trigger:
     - platform: state
-      entity_id: person.laura
-      to: "home"
-  condition:
-    - condition: state
-      entity_id: person.jon
-      state: "home"
-  action:
-    - service: cloud.remote_disconnect
-
-- alias: "Person leaves: nabucasa connect"
-  trigger:
-    - platform: state
-      entity_id: person.jon
-      to: "not_home"
-    - platform: state
-      entity_id: person.laura
-      to: "not_home"
-  action:
-    - service: cloud.remote_connect
-
-- alias: "Vacation on, enable nabucasa connect"
-  trigger:
+      entity_id: binary_sensor.anybody_away
+      to: "on"
     - platform: state
       entity_id: binary_sensor.vacation_status
       to: "on"

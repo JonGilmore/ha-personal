@@ -6,11 +6,12 @@ garage_door_single:
   repeat:
     - 5
     - 30
+    - 60
   can_acknowledge: true
   skip_first: true
   data:
     inline_keyboard:
-      - "Yes:/closegarage_single, No:/do_nothing"
+      - "Yes:/closegarage_single, Ignore:/ack_garagesingle"
     photo:
       - url: !secret hik_garage_pic
         caption: "Single garage open. Close?"
@@ -23,11 +24,12 @@ garage_door_double:
   repeat:
     - 5
     - 30
+    - 60
   can_acknowledge: true
   skip_first: true
   data:
     inline_keyboard:
-      - "Yes:/closegarage_double, No:/do_nothing"
+      - "Yes:/closegarage_double, Ignore:/ack_garagedouble"
     photo:
       - url: !secret hik_garage_pic
         caption: "Double garage open. Close?"

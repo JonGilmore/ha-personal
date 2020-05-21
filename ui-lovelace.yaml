@@ -12,7 +12,7 @@ resources:
   - url: /hacsfiles/decluttering-card/decluttering-card.js
     type: module
   - url: /hacsfiles/bar-card/bar-card.js
-    type: js
+    type: module
   - url: /hacsfiles/mini-graph-card/mini-graph-card.js
     type: module
   - url: /hacsfiles/text-divider-row/text-divider-row.js
