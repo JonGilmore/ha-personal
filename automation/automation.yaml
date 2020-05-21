@@ -1248,26 +1248,26 @@
 #########################################
 - id: acknowledge garage single open
   alias: telegram bot to acknowledge the garage single open
-  trigger: 
+  trigger:
     - platform: event
       event_type: telegram_callback
-      event_data: 
+      event_data:
         command: /ack_garagesingle
     - platform: event
       event_type: telegram_callback
-      event_data: 
+      event_data:
         command: /ack_garagedouble
   action:
-  - service: homeassistant.turn_off
-    data:  
-      entity_id: alert.garage_door_single
+    - service: homeassistant.turn_off
+      data:
+        entity_id: alert.garage_door_single
 #########################################
 - id: acknowledge garage double open
   alias: telegram bot to acknowledge the garage double open
-  trigger: 
+  trigger:
     - platform: event
       event_type: telegram_callback
-      event_data: 
+      event_data:
         command: /ack_garagedouble
   action:
     # - service: homeassistant.turn_off
@@ -1280,5 +1280,5 @@
     #         light.gym_cans
     #       {% endif %}
     - service: homeassistant.turn_off
-      data:  
+      data:
         entity_id: alert.garage_door_double
