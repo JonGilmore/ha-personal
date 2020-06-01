@@ -299,7 +299,7 @@
       after_offset: "-1:00:00"
   action:
     - service: scene.turn_on
-      entity_id: scene.10877
+      entity_id: scene.master_half
     - service: homeassistant.turn_on
       entity_id: input_boolean.master_blinds_run_once
 #########################################
@@ -309,7 +309,7 @@
       event: sunset
   action:
     - service: scene.turn_on
-      entity_id: scene.49347
+      entity_id: scene.master_closed
     - service: homeassistant.turn_on
       entity_id: input_boolean.master_blinds_run_once
 #########################################
@@ -329,7 +329,7 @@
       after: "06:00:00"
   action:
     - service: scene.turn_on
-      entity_id: scene.10877
+      entity_id: scene.master_half
     - service: homeassistant.turn_off
       entity_id: input_boolean.master_blinds_run_once
 #########################################
@@ -674,23 +674,23 @@
         entity_id: light.master_entry_lifx
         power: on
 ########################################
-- alias: master entry motion light - bed occupied
-  trigger:
-    platform: state
-    entity_id: binary_sensor.master_entry_pir
-    to: "on"
-  condition:
-    - condition: template
-      value_template: "{{ states.sensor.master_bed_people.state != 'nobody' }}"
-    - condition: state
-      entity_id: input_boolean.motion_lights
-      state: "on"
-  action:
-    - service: lifx.set_state
-      data:
-        entity_id: light.master_entry_lifx
-      data_template:
-        power: on
+# - alias: master entry motion light - bed occupied
+#   trigger:
+#     platform: state
+#     entity_id: binary_sensor.master_entry_pir
+#     to: "on"
+#   condition:
+#     - condition: template
+#       value_template: "{{ states.sensor.master_bed_people.state != 'nobody' }}"
+#     - condition: state
+#       entity_id: input_boolean.motion_lights
+#       state: "on"
+#   action:
+#     - service: lifx.set_state
+#       data:
+#         entity_id: light.master_entry_lifx
+#       data_template:
+#         power: on
 ########################################
 - alias: Master entry motion lights Off
   trigger:

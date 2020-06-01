@@ -89,9 +89,8 @@ lutron:
 #     username: !secret econet_user
 #     password: !secret econet_pwd
 
-scene:
-  platform: hunterdouglas_powerview
-  address: !secret powerview_ip
+hunterdouglas_powerview:
+  - host: !secret powerview_ip
 
 notify:
   - name: telegram_jon
