@@ -524,12 +524,14 @@
       state: "off"
   action:
     - service: light.turn_on
-      entity_id: light.master_bedroom_master_fan
+      data:
+        entity_id: light.master_bedroom_master_fan
+        brightness_pct: 50
 ########################################
 - alias: Turn off master fan in the morning, enable normal theme
   trigger:
     - platform: time
-      at: "08:00:00"
+      at: "09:00:00"
   action:
     - service: light.turn_off
       entity_id: light.master_bedroom_master_fan
@@ -1209,6 +1211,22 @@
           {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
             light.gym_cans
           {% endif %}
+#########################################
+- alias: "office speakers on/off with presence"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.office_occupancy
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.office_occupancy
+      to: "off"
+      for:
+        minutes: 20
+  action:
+    - service_template: >
+        {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
+        {% else %}homeassistant.turn_off{% endif %}
+      entity_id: switch.switch1
 #########################################
 - alias: laundry plants
   trigger:

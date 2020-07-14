@@ -1,7 +1,7 @@
 ---
 title: !secret name
 resources:
-  - url: /hacsfiles/mini-media-player/mini-media-player.js
+  - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
     type: module
   - url: /hacsfiles/lovelace-card-tools/card-tools.js
     type: js
@@ -13,11 +13,11 @@ resources:
     type: module
   - url: /hacsfiles/bar-card/bar-card.js
     type: module
-  - url: /hacsfiles/mini-graph-card/mini-graph-card.js
+  - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
     type: module
   - url: /hacsfiles/text-divider-row/text-divider-row.js
     type: module
-  - url: /hacsfiles/simple-thermostat/simple-thermostat.js
+  - url: /hacsfiles/mini-climate-card/mini-climate-card-bundle.js
     type: module
   - url: /hacsfiles/search-card/search-card.js
     type: module
@@ -242,22 +242,42 @@ views:
     id: climate
     icon: mdi:temperature-fahrenheit
     cards:
-      - type: "custom:simple-thermostat"
+      # - type: "custom:simple-thermostat"
+      #   entity: climate.basement_thermostat
+      #   step_size: 1
+      # - type: "custom:simple-thermostat"
+      #   entity: climate.main_thermostat
+      #   step_size: 1
+      #   sensors:
+      #     - entity: sensor.office_multi_relative_humidity_measurement
+      - type: custom:mini-climate
         entity: climate.basement_thermostat
-        step_size: 1
-      - type: "custom:simple-thermostat"
+        temperature:
+          unit: "°F"
+          round: 1
+      - type: custom:mini-climate
         entity: climate.main_thermostat
-        step_size: 1
-        sensors:
-          - entity: sensor.office_multi_relative_humidity_measurement
-      - type: "custom:simple-thermostat"
+        temperature:
+          unit: "°F"
+          round: 1
+      - type: custom:mini-climate
         entity: climate.upstairs_thermostat
-        step_size: 1
-        sensors:
-          - entity: sensor.master_entry_humidity
-      - type: "custom:simple-thermostat"
+        temperature:
+          unit: "°F"
+          round: 1
+      - type: custom:mini-climate
         entity: climate.garage_thermostat
-        step_size: 1
+        temperature:
+          unit: "°F"
+          round: 1
+      # - type: "custom:simple-thermostat"
+      #   entity: climate.upstairs_thermostat
+      #   step_size: 1
+      #   sensors:
+      #     - entity: sensor.master_entry_humidity
+      # - type: "custom:simple-thermostat"
+      #   entity: climate.garage_thermostat
+      #   step_size: 1
       - type: "custom:auto-entities"
         card:
           show_header_toggle: false
@@ -395,46 +415,218 @@ views:
         hide:
           power: true
           icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.garage
+              name: garage
+            - entity_id: media_player.guest_bathroom
+              name: guest bath
+            - entity_id: media_player.gym
+              name: gym
+            - entity_id: media_player.kitchen
+              name: kitchen
+            - entity_id: media_player.laundry
+              name: laundry
+            - entity_id: media_player.master
+              name: master
+            - entity_id: media_player.portable
+              name: portable
+            - entity_id: media_player.workshop
+              name: workshop
       - type: custom:mini-media-player
         entity: media_player.garage
         hide:
           power: true
-          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.deck
+              name: deck
+            - entity_id: media_player.guest_bathroom
+              name: guest bath
+            - entity_id: media_player.gym
+              name: gym
+            - entity_id: media_player.kitchen
+              name: kitchen
+            - entity_id: media_player.laundry
+              name: laundry
+            - entity_id: media_player.master
+              name: master
+            - entity_id: media_player.portable
+              name: portable
+            - entity_id: media_player.workshop
+              name: workshop
       - type: custom:mini-media-player
         entity: media_player.guest_bathroom
         hide:
           power: true
-          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.deck
+              name: deck
+            - entity_id: media_player.garage
+              name: garage
+            - entity_id: media_player.gym
+              name: gym
+            - entity_id: media_player.kitchen
+              name: kitchen
+            - entity_id: media_player.laundry
+              name: laundry
+            - entity_id: media_player.master
+              name: master
+            - entity_id: media_player.portable
+              name: portable
+            - entity_id: media_player.workshop
+              name: workshop
       - type: custom:mini-media-player
         entity: media_player.gym
         hide:
           power: true
-          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.deck
+              name: deck
+            - entity_id: media_player.garage
+              name: garage
+            - entity_id: media_player.guest_bathroom
+              name: guest bath
+            - entity_id: media_player.kitchen
+              name: kitchen
+            - entity_id: media_player.laundry
+              name: laundry
+            - entity_id: media_player.master
+              name: master
+            - entity_id: media_player.portable
+              name: portable
+            - entity_id: media_player.workshop
+              name: workshop
       - type: custom:mini-media-player
         entity: media_player.kitchen
         hide:
           power: true
-          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.deck
+              name: deck
+            - entity_id: media_player.garage
+              name: garage
+            - entity_id: media_player.guest_bathroom
+              name: guest bath
+            - entity_id: media_player.gym
+              name: gym
+            - entity_id: media_player.laundry
+              name: laundry
+            - entity_id: media_player.master
+              name: master
+            - entity_id: media_player.portable
+              name: portable
+            - entity_id: media_player.workshop
+              name: workshop
       - type: custom:mini-media-player
         entity: media_player.laundry
         hide:
           power: true
-          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.deck
+              name: deck
+            - entity_id: media_player.garage
+              name: garage
+            - entity_id: media_player.guest_bathroom
+              name: guest bath
+            - entity_id: media_player.gym
+              name: gym
+            - entity_id: media_player.kitchen
+              name: kitchen
+            - entity_id: media_player.master
+              name: master
+            - entity_id: media_player.portable
+              name: portable
+            - entity_id: media_player.workshop
+              name: workshop
       - type: custom:mini-media-player
         entity: media_player.master
         hide:
           power: true
-          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.deck
+              name: deck
+            - entity_id: media_player.garage
+              name: garage
+            - entity_id: media_player.guest_bathroom
+              name: guest bath
+            - entity_id: media_player.gym
+              name: gym
+            - entity_id: media_player.kitchen
+              name: kitchen
+            - entity_id: media_player.laundry
+              name: laundry
+            - entity_id: media_player.portable
+              name: portable
+            - entity_id: media_player.workshop
+              name: workshop
       - type: custom:mini-media-player
         entity: media_player.portable
         hide:
           power: true
-          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.deck
+              name: deck
+            - entity_id: media_player.garage
+              name: garage
+            - entity_id: media_player.guest_bathroom
+              name: guest bath
+            - entity_id: media_player.gym
+              name: gym
+            - entity_id: media_player.kitchen
+              name: kitchen
+            - entity_id: media_player.laundry
+              name: laundry
+            - entity_id: media_player.master
+              name: master
+            - entity_id: media_player.workshop
+              name: workshop
       - type: custom:mini-media-player
         entity: media_player.workshop
         hide:
           power: true
-          icon: true
+        speaker_group:
+          platform: sonos
+          show_group_count: true
+          entities:
+            - entity_id: media_player.deck
+              name: deck
+            - entity_id: media_player.garage
+              name: garage
+            - entity_id: media_player.guest_bathroom
+              name: guest bath
+            - entity_id: media_player.gym
+              name: gym
+            - entity_id: media_player.kitchen
+              name: kitchen
+            - entity_id: media_player.laundry
+              name: laundry
+            - entity_id: media_player.master
+              name: master
+            - entity_id: media_player.portable
+              name: portable
       - type: entities
         title: Google Home
         show_header_toggle: false
