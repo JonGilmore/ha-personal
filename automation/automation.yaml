@@ -1221,7 +1221,7 @@
       entity_id: binary_sensor.office_occupancy
       to: "off"
       for:
-        minutes: 20
+        minutes: 21
   action:
     - service_template: >
         {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
