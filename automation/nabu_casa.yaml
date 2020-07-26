@@ -1,20 +1,14 @@
 ---
 ####################################################
 # Different scenarios for cloud disconnect/reconnect
-#   - arm alarm night, all ppl are here: kill cloud
-#   - wake up, all ppl here, kill cloud
-#   - both ppl show home, kill cloud
-#   - either person leaves: enable cloud
-#   - vacation started, enable cloud
+#   - arm alarm night, all ppl home: kill cloud
+#   - wake up | either person leaves | vacation started: enable cloud
 ####################################################
-- alias: "Sleeping start or sleeping end, both home: nabucasa disconnect"
+- alias: "Sleeping start, all home: nabucasa disconnect"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
       to: "on"
-    - platform: state
-      entity_id: binary_sensor.sleep_status
-      to: "off"
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_away
@@ -22,15 +16,7 @@
   action:
     - service: cloud.remote_disconnect
 
-- alias: "Everybody home: nabucasa disconnect"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.anybody_away
-      to: "off"
-  action:
-    - service: cloud.remote_disconnect
-
-- alias: "Anybody leaves or vacation on: nabucasa connect"
+- alias: "Anybody leaves OR vacation on OR sleep off: nabucasa connect"
   trigger:
     - platform: state
       entity_id: binary_sensor.anybody_away
@@ -38,5 +24,8 @@
     - platform: state
       entity_id: binary_sensor.vacation_status
       to: "on"
+    - platform: state
+      entity_id: binary_sensor.sleep_status
+      to: "off"
   action:
     - service: cloud.remote_connect
