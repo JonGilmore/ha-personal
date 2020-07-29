@@ -399,10 +399,6 @@ views:
         template: cam_history
         variables:
           - cam: garage
-      - type: custom:decluttering-card
-        template: cam_history
-        variables:
-          - cam: kitchen
   ##########################################
   # MUSIC TAB
   ##########################################

@@ -2,32 +2,32 @@
 ###################################
 # mjpeg cameras
 - platform: mjpeg
-  mjpeg_url: http://192.168.46.112:80/Streaming/Channels/2/preview
+  mjpeg_url: http://192.168.45.112:80/Streaming/Channels/2/preview
   name: Deck
   username: admin
   password: !secret hik_pwd
 - platform: mjpeg
-  mjpeg_url: http://192.168.46.113:80/Streaming/Channels/2/preview
+  mjpeg_url: http://192.168.45.113:80/Streaming/Channels/2/preview
   name: Deck Stairs
   username: admin
   password: !secret hik_pwd
 - platform: mjpeg
-  mjpeg_url: http://192.168.46.116:80/Streaming/Channels/2/preview
+  mjpeg_url: http://192.168.45.116:80/Streaming/Channels/2/preview
   name: Front Door
   username: admin
   password: !secret hik_pwd
 - platform: mjpeg
-  mjpeg_url: http://192.168.46.110:80/Streaming/Channels/2/preview
+  mjpeg_url: http://192.168.45.110:80/Streaming/Channels/2/preview
   name: Driveway
   username: admin
   password: !secret hik_pwd
 - platform: mjpeg
-  mjpeg_url: http://192.168.46.111:80/Streaming/Channels/2/preview
+  mjpeg_url: http://192.168.45.111:80/Streaming/Channels/2/preview
   name: Daisy
   username: admin
   password: !secret hik_pwd
 - platform: mjpeg
-  mjpeg_url: http://192.168.46.115:80/Streaming/Channels/2/preview
+  mjpeg_url: http://192.168.45.115:80/Streaming/Channels/2/preview
   name: Garage
   username: admin
   password: !secret hik_pwd
