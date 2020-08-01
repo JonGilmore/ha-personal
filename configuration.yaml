@@ -132,7 +132,7 @@ conversation:
 logbook:
 frontend:
   themes: !include_dir_merge_named themes/
-
+stream:
 hacs:
   token: !secret hacs
 
@@ -171,11 +171,6 @@ browser_mod:
       name: wallpanel
     4ef21a5e-67e6ec16:
       name: chrome-mac
-
-device_tracker:
-  - platform: mqtt
-    devices:
-      jon_st: "device_tracker/jon/state"
 
 lifx:
   light:
