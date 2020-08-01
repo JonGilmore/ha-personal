@@ -231,6 +231,7 @@ upstairs_lights:
 all_fans:
   name: All Fans
   entities:
+    - switch.patio_fan
     - switch.basement_bathroom_fan
     - switch.basement_fan
     - switch.powder_room_fan

@@ -905,8 +905,14 @@
       at: "05:00:00"
     - platform: time
       at: "07:00:00"
+    - platform: state
+      entity_id: switch.patio_fan
+      to: "on"
+      for:
+        minutes: 60
   action:
-    - service: rest_command.patio_fan_off
+    - service: homeassistant.turn_off
+      entity_id: switch.patio_fan
 ########################################
 - alias: backyard party lights
   trigger:
