@@ -1,0 +1,10 @@
+---
+cameras:
+  - entity: camera.driveway
+  - entity: camera.front_door
+  - entity: camera.garage
+  - entity: camera.daisy
+  - entity: camera.deck
+  - entity: camera.deck_stairs
+  - entity: camera.doorbell_live
+  - entity: camera.kitchen_camera

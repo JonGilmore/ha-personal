@@ -18,6 +18,8 @@
 !scripts/**
 !images
 !images/**
+!dwains-theme
+!dwains-theme/**
 
 # Ignore folders.
 .storage

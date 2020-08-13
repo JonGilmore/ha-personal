@@ -7,3 +7,4 @@ cam_garage_vid: !secret cam_garage_vid
 cam_kitchen_vid: !secret cam_kitchen_vid
 cam_doorbell_vid: !secret cam_doorbell_vid
 unifi_portfwd: /bin/bash /config/scripts/unifi.sh portfwd {{ username }} {{ password }} {{ baseurl }} {{ name }} {{ enabled }} {{ dst_port }} {{ ip }} {{ fwd_port }} {{ proto }} {{ id }} {{ unifi_site }}
+cam_vid: /usr/bin/ffmpeg -i {{ clip }} -t 00:00:08 -c copy /share/output.mp4 -y

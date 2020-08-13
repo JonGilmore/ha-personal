@@ -156,6 +156,7 @@ all_lights:
     - switch.switch1
     - switch.switch2
     - light.master_bath_toekick
+    - switch.patio_fan
 
 basement_lights:
   name: Basement Lights
@@ -273,3 +274,88 @@ garmin:
     - cover.garage_momentary_single
     - cover.garage_momentary_double
     - lock.front_door_lock
+
+main_doors:
+  name: Main Doors
+  entities:
+    - sensor.front_door
+    - sensor.garage_door
+    - sensor.deck_door
+
+basement_door:
+  name: Basement Door
+  entities:
+    - sensor.basement_door
+
+garage_lights:
+  name: Garage Lights
+  entities:
+    - light.mudroom_garage_lights
+
+garage_doors:
+  name: Garage Doors
+  entities:
+    - cover.garage_momentary_single
+    - cover.garage_momentary_double
+    - sensor.garage_door
+
+exterior_doors:
+  name: Exterior Doors
+  entities:
+    - sensor.basement_door
+    - sensor.front_door
+    - sensor.garage_door
+    - sensor.deck_door
+    - cover.garage_momentary_single
+    - cover.garage_momentary_double
+
+main_motions:
+  name: Main Floor Motions
+  entities:
+    - sensor.foyer_pir
+    - sensor.kitchen_pir
+    - binary_sensor.office_multi_motion
+    - binary_sensor.mudroom_occupancy
+    - binary_sensor.laundry_occupancy
+    - binary_sensor.sunroom_pir
+
+upstairs_motions:
+  name: Upstairs Motions
+  entities:
+    - binary_sensor.master_bedroom_occupancy
+    - binary_sensor.master_entry_pir
+    - binary_sensor.sitting_room_pir
+
+basement_motions:
+  name: Basement Motions
+  entities:
+    - sensor.bar_pir
+    - sensor.basement_pir
+    - sensor.basement_stairs_pir
+    - sensor.storage_pir
+    - sensor.workshop_pir
+
+exterior_motions:
+  name: Exterior Motions
+  entities:
+    - binary_sensor.deck_person
+    - binary_sensor.deck_stairs_person
+    - binary_sensor.doorbell_person
+    - binary_sensor.driveway_person
+    - binary_sensor.garage_person
+
+main_windows:
+  name: Main Floor Windows
+  entities:
+    - sensor.dining_window_1
+    - sensor.dining_window_2
+    - sensor.office_window_1
+    - sensor.office_window_2
+
+basement_windows:
+  name: Basement Windows
+  entities:
+    - sensor.bsmt_window_1
+    - sensor.bsmt_window_2
+    - sensor.gym_window_1
+    - sensor.gym_window_2

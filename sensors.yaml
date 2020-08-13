@@ -219,8 +219,6 @@
       value_template: !secret cam_daisy_vid
     cam_garage_vid:
       value_template: !secret cam_garage_vid
-    cam_kitchen_vid:
-      value_template: !secret cam_kitchen_vid
     cam_doorbell_vid:
       value_template: !secret cam_doorbell_vid
 
@@ -391,7 +389,6 @@
     - doorbell
     - driveway
     - garage
-    - kitchen
     - deck_stairs
     - coral
   value_template: "OK"
@@ -432,15 +429,6 @@
       unit_of_measurement: "FPS"
     garage_detection_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["detection_fps"] }}'
-      unit_of_measurement: "FPS"
-    kitchen_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["kitchen"]["camera_fps"] }}'
-      unit_of_measurement: "FPS"
-    kitchen_skipped_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["kitchen"]["skipped_fps"] }}'
-      unit_of_measurement: "FPS"
-    kitchen_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["kitchen"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
     deck_stairs_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["camera_fps"] }}'

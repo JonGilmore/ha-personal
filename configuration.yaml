@@ -1,4 +1,3 @@
----
 homeassistant:
   name: !secret name
   latitude: !secret ha_latitude
@@ -8,8 +7,9 @@ homeassistant:
   time_zone: !secret ha_tz
   customize: !include customize.yaml
   whitelist_external_dirs:
-    - /tmp
-    - /config/www
+    - "/tmp"
+    - "/config/www"
+    - "/share"
   packages: !include_dir_named packages
 
 http:
@@ -130,15 +130,11 @@ history:
 sun:
 conversation:
 logbook:
-frontend:
-  themes: !include_dir_merge_named themes/
 stream:
 hacs:
   token: !secret hacs
 
 person:
-lovelace:
-  mode: yaml
 config:
 hassio:
 map:
@@ -177,3 +173,8 @@ lifx:
     - broadcast: 192.168.46.181
     - broadcast: 192.168.46.182
     - broadcast: 192.168.46.183
+
+folder_watcher:
+  - folder: /share
+    patterns:
+      - "*.mp4"

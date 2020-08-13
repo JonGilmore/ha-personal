@@ -1,0 +1,21 @@
+---
+- type: custom:decluttering-card
+  template: cam_history
+  variables:
+    - cam: driveway
+- type: custom:decluttering-card
+  template: cam_history
+  variables:
+    - cam: doorbell
+- type: custom:decluttering-card
+  template: cam_history
+  variables:
+    - cam: deck
+- type: custom:decluttering-card
+  template: cam_history
+  variables:
+    - cam: deck_stairs
+- type: custom:decluttering-card
+  template: cam_history
+  variables:
+    - cam: garage

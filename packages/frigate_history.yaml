@@ -764,8 +764,3 @@ binary_sensor:
     state_topic: "frigate/garage/person"
     device_class: moving
     availability_topic: "frigate/available"
-  - platform: mqtt
-    name: "Kitchen Person"
-    state_topic: "frigate/kitchen/person"
-    device_class: moving
-    availability_topic: "frigate/available"

@@ -1,0 +1,28 @@
+---
+- type: custom:layout-card
+  layout: horizontal
+  max_columns: 4
+  cards:
+    - type: entities
+      title: Toggles
+      show_header_toggle: false
+      entities:
+        - input_boolean.block_all_motion_lights
+        - input_boolean.motion_lights
+        - input_boolean.guests
+        - input_boolean.party
+    - type: custom:mini-graph-card
+      name: Internet
+      icon: mdi:server
+      entities:
+        - entity: sensor.speedtest_download
+          name: download
+          show_state: true
+        - entity: sensor.speedtest_ping
+          name: ping
+          show_state: true
+        - entity: sensor.speedtest_upload
+          name: upload
+          show_state: true
+    - type: custom:search-card
+      max_results: 10

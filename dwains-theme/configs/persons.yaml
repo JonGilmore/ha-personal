@@ -1,0 +1,8 @@
+---
+persons: 
+  - name: Jon
+    track: person.jon
+    picture_path: "jon.jpg"
+  - name: Laura
+    track: person.laura
+    picture_path: "laura.jpg"

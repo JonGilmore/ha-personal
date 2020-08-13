@@ -92,25 +92,56 @@
     - service: automation.turn_on
       entity_id: automation.person_motion_garage
 #########################################
+# - alias: "person motion doorbell"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.doorbell_person
+#       to: "on"
+#   condition:
+#     condition: or
+#     conditions:
+#       - condition: state
+#         entity_id: binary_sensor.sleep_status
+#         state: "on"
+#       - condition: state
+#         entity_id: person.jon
+#         state: "not_home"
+#   action:
+#     - service: script.video_doorbell
+#     - service: automation.turn_off
+#       entity_id: automation.person_motion_doorbell
+#     - delay:
+#         seconds: 15
+#     - service: automation.turn_on
+#       entity_id: automation.person_motion_doorbell
 - alias: "person motion doorbell"
   trigger:
-    - platform: state
-      entity_id: binary_sensor.doorbell_person
-      to: "on"
+    platform: event
+    event_type: folder_watcher
+    event_data:
+      event_type: created
   condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.sleep_status
-        state: "on"
-      - condition: state
-        entity_id: person.jon
-        state: "not_home"
+    - condition: template
+      value_template: "{{ trigger.event.data.path != '/share/output.mp4' }}"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.sleep_status
+          state: "on"
+        - condition: state
+          entity_id: person.jon
+          state: "not_home"
   action:
-    - service: script.video_doorbell
-    - service: automation.turn_off
-      entity_id: automation.person_motion_doorbell
-    - delay:
-        seconds: 15
-    - service: automation.turn_on
-      entity_id: automation.person_motion_doorbell
+    # trim the clip in case its really long, save to a static file
+    - service: shell_command.cam_vid
+      data_template:
+        clip: "{{ trigger.event.data.path }}"
+    - service: telegram_bot.send_video
+      data:
+        file: "/share/output.mp4"
+    # - service: automation.turn_off
+    #   entity_id: automation.person_motion_doorbell
+    # - delay:
+    #     seconds: 15
+    # - service: automation.turn_on
+    #   entity_id: automation.person_motion_doorbell

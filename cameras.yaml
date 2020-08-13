@@ -33,13 +33,9 @@
   password: !secret hik_pwd
 
 ###################################
-#- platform: ffmpeg
-#  name: Kitchen Camera
-#  input: !secret kitchenwyze_cam
-- platform: generic
+- platform: ffmpeg
   name: Kitchen Camera
-  still_image_url: local/wyze-logo.jpg
-  stream_source: !secret kitchenwyze_cam
+  input: !secret kitchenwyze_cam
 
 - platform: ffmpeg
   name: Patio
