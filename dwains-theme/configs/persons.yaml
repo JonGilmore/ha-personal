@@ -3,6 +3,11 @@ persons:
   - name: Jon
     track: person.jon
     picture_path: "jon.jpg"
+    show_map: false
+    page_entities:
+      entities:
+        - entity: scene.master_bedroom_jons_keypad_all_off
+        - entity: sensor.anniversary_jon_laura_anniversary
   - name: Laura
     track: person.laura
     picture_path: "laura.jpg"

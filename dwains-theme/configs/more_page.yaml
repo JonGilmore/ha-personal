@@ -8,3 +8,8 @@
 #       data:
 #         some_data: 'This is some data parsed.'
 #         some_other_data: 'and some other data.'
+more_page:
+  addons:
+    - name: Coronavirus
+      icon: fas:disease
+      path: 'dwains-theme/addons/more_page/coronavirus/page.yaml'
