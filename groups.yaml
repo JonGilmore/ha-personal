@@ -156,7 +156,7 @@ all_lights:
     - switch.switch1
     - switch.switch2
     - light.master_bath_toekick
-    - switch.patio_fan
+    - fan.patio_fan
 
 basement_lights:
   name: Basement Lights
@@ -232,7 +232,7 @@ upstairs_lights:
 all_fans:
   name: All Fans
   entities:
-    - switch.patio_fan
+    - fan.patio_fan
     - switch.basement_bathroom_fan
     - switch.basement_fan
     - switch.powder_room_fan
@@ -359,3 +359,29 @@ basement_windows:
     - sensor.bsmt_window_2
     - sensor.gym_window_1
     - sensor.gym_window_2
+
+main_floor_covers:
+  name: Main Floor Covers
+  entities:
+    - cover.office_1
+    - cover.dr1
+    - cover.lr
+    - cover.ppc
+    - cover.sunroom_1
+    - cover.sunroom_2
+    - cover.sunroom_3
+    - cover.sunroom_4
+    - cover.sunroom_5
+    - cover.sunroom_6
+    - cover.gr_1
+    - cover.gr_2
+    - cover.gr_3
+
+upstairs_covers:
+  name: Upstairs Covers
+  entities:
+    - cover.mb1
+    - cover.mb2
+    - cover.mb3
+    - cover.mb4
+    - cover.mb5

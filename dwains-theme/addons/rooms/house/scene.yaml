@@ -1,7 +1,6 @@
 ---
 - type: custom:layout-card
   layout: horizontal
-  min_columns: 2
   cards:
     - type: custom:auto-entities
       card:

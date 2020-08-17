@@ -486,7 +486,7 @@
     - service: timer.cancel
       entity_id: timer.daisy_cam_timer
 ########################################
-- alias: "turn on sunset lights at dark or sunset, set dark theme"
+- alias: "turn on sunset lights at dark or sunset"
   trigger:
     - platform: state
       entity_id: binary_sensor.light_inside
@@ -507,9 +507,6 @@
       entity_id: scene.equipment_room_enclosure_device_001_ph_sunset1
     - service: homeassistant.turn_on
       entity_id: input_boolean.sunset_run_once
-    - service: frontend.set_theme
-      data:
-        name: aqua-fiesta
 ########################################
 - alias: Turn on master fan at night (if AC is on)
   trigger:
@@ -528,16 +525,13 @@
         entity_id: light.master_bedroom_master_fan
         brightness_pct: 50
 ########################################
-- alias: Turn off master fan in the morning, enable normal theme
+- alias: Turn off master fan in the morning
   trigger:
     - platform: time
       at: "09:00:00"
   action:
     - service: light.turn_off
       entity_id: light.master_bedroom_master_fan
-    - service: frontend.set_theme
-      data:
-        name: google_light_theme
 #########################################
 - alias: "on vacation or armed away, check the front door lock"
   trigger:
@@ -906,13 +900,13 @@
     - platform: time
       at: "07:00:00"
     - platform: state
-      entity_id: switch.patio_fan
+      entity_id: fan.patio_fan
       to: "on"
       for:
         minutes: 60
   action:
     - service: homeassistant.turn_off
-      entity_id: switch.patio_fan
+      entity_id: fan.patio_fan
 ########################################
 - alias: backyard party lights
   trigger:

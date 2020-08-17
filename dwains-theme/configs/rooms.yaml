@@ -8,6 +8,7 @@ rooms:
     window: group.main_windows
     door: group.main_doors
     media_player: media_player.living_room_tv
+    cover: group.main_floor_covers
     addons:
       - name: Sonos
         icon: fal:speaker
@@ -36,6 +37,7 @@ rooms:
     climate: climate.upstairs_thermostat
     humidity: sensor.master_entry_humidity
     motion: group.upstairs_motions
+    cover: group.upstairs_covers
     addons:
       - name: Sonos
         icon: fal:speaker
@@ -91,7 +93,7 @@ rooms:
               name: Garage
     page_entities:
       entities:
-        - entity: switch.patio_fan
+        - entity: fan.patio_fan
   - name: Locks
     icon: mdi:door-closed-lock
     addons:
