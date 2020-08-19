@@ -166,7 +166,7 @@ browser_mod:
   devices:
     37a201ed-e63fb778:
       name: wallpanel
-    4ef21a5e-67e6ec16:
+    49d6a277-0090e2cd:
       name: chrome-mac
 
 lifx:
@@ -179,3 +179,17 @@ folder_watcher:
   - folder: /share
     patterns:
       - "*.mp4"
+
+sonos:
+  media_player:
+    hosts:
+      - 192.168.46.140
+      - 192.168.46.141
+      - 192.168.46.142
+      - 192.168.46.143
+      - 192.168.46.144
+      - 192.168.46.145
+      - 192.168.46.146
+      - 192.168.46.147
+      - 192.168.46.148
+      - 192.168.46.149

@@ -2,6 +2,5 @@
 scenes:
   - entity: scene.equipment_room_enclosure_device_001_ph_all_off
     icon: mdi:lightbulb-outline
-    background: 'linear-gradient( 135deg, #FEB692 10%, #EA5455 100%)'
   - entity: scene.equipment_room_enclosure_device_001_ph_all_on
     icon: mdi:lightbulb-on

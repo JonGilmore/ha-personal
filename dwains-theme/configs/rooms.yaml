@@ -97,9 +97,10 @@ rooms:
   - name: Locks
     icon: mdi:door-closed-lock
     addons:
-      - name: Locks
-        icon: mdi:door-closed-lock
-        path: /dwains-theme/addons/rooms/house/locks.yaml
+      - name: Lock History
+        path: "dwains-theme/addons/rooms/house/lock_history/page.yaml"
+        data:
+          entity: lock.front_door_lock
   - name: Camera History
     icon: mdi:camera
     addons:
@@ -112,8 +113,8 @@ rooms:
       - name: Scene
         icon: mdi:movie-outline
         path: /dwains-theme/addons/rooms/house/scene.yaml
-  - name: Settings
-    icon: mdi:wrench
+  - name: Miscellaneous
+    icon: mdi:atom
     addons:
       - name: Settings
         icon: mdi:wrench
@@ -121,6 +122,3 @@ rooms:
       - name: Anniversaries
         icon: mdi:calendar
         path: /dwains-theme/addons/rooms/house/anniversaries.yaml
-      - name: Locks
-        icon: mdi:door-closed-lock
-        path: /dwains-theme/addons/rooms/house/locks.yaml

@@ -48,3 +48,36 @@ decluttering_templates:
           entity: "camera.[[cam]]_history9"
         - type: picture-entity
           entity: "camera.[[cam]]_history10"
+  lock:
+    card:
+      type: custom:button-card
+      entity: lock.[[lock]]
+      icon: mdi:lock
+      name: "[[name]]"
+      show_state: true
+      show_last_changed: true
+      tap_action:
+        action: more-info
+      double_tap_action:
+        action: toggle
+      styles:
+        # grid:
+        #   - grid-template-columns: 30% 70%
+        # img_cell:
+        #   - width: 60px
+        #   - height: 60px
+        name:
+          - font-size: 15px
+          - color: var(--dwains-theme-names)
+        state:
+          - font-size: 13px
+          - color: var(--dwains-theme-grey)
+        label:
+          - font-size: 12px
+          - color: var(--dwains-theme-grey)
+      state:
+        - value: "locked"
+          icon: mdi:lock-outline
+        - value: "unlocked"
+          color: red
+          icon: mdi:lock-open-variant-outline

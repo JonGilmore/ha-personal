@@ -2,10 +2,11 @@
 ###################################
 # mjpeg cameras
 - platform: mjpeg
-  mjpeg_url: http://192.168.45.112:80/Streaming/Channels/2/preview
+  mjpeg_url: http://192.168.45.112:80/cgi-bin/mjpg/video.cgi?camera=1&subtype=1
   name: Deck
   username: admin
   password: !secret hik_pwd
+  authentication: digest
 - platform: mjpeg
   mjpeg_url: http://192.168.45.113:80/Streaming/Channels/2/preview
   name: Deck Stairs

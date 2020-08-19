@@ -1,0 +1,30 @@
+# dwains_theme
+
+- type: custom:layout-card
+  layout: horizontal
+  cards:
+    - type: custom:decluttering-card
+      template: lock
+      variables:
+        - lock: "front_door_lock"
+        - name: "Front Door"
+    - type: custom:decluttering-card
+      template: lock
+      variables:
+        - lock: "garage_door_lock"
+        - name: "Garage Door"
+- type: custom:dwains-flexbox-card
+  items_classes: 'col-xs-12 col-sm-6 col-sm-6'
+  cards:
+    - type: custom:logbook-card
+      entity: {{ (data | fromjson)['entity'] }}
+      max_items: 10
+      state_map:
+        - label: Unlocked
+          value: on
+        - label: Locked
+          value: off
+      title: "Lock History"
+      show:
+        end_date: false
+        start_date: true
