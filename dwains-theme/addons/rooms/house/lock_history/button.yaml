@@ -1,0 +1,18 @@
+# dwains_theme
+
+type: custom:logbook-card
+entity: {{ (data | fromjson)['entity'] }}
+max_items: 10
+state_map:
+  - label: Unlocked
+    value: on
+  - label: Locked
+    value: off
+title: {{ (data | fromjson)['nane'] }}
+collapse: 3
+show:
+  end_date: false
+  start_date: true
+tap_action:
+  action: navigate
+  navigation_path: {{ navigation_path }}

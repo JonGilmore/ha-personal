@@ -170,6 +170,14 @@
         or states.media_player.master.state == "playing"
         or states.media_player.portable.state == "playing"
         or states.media_player.workshop.state == "playing" }}
+    jons_phone_charging:
+      value_template: "{{ states('sensor.pixel_3_battery_state') is in ['charging', 'full', 'not_charging'] }}"
+      friendly_name: "Jons Phone Charging"
+      device_class: plug
+    lauras_phone_charging:
+      value_template: "{{ states('sensor.lauras_iphone_battery_state') is in ['charging', 'full', 'not_charging'] }}"
+      friendly_name: "Lauras Phone Charging"
+      device_class: plug
 
 - platform: workday
   country: US

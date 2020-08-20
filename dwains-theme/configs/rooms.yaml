@@ -23,6 +23,11 @@ rooms:
               name: Laundry
             - entity: media_player.portable
               name: Portable
+      - name: Lock History
+        path: "dwains-theme/addons/rooms/house/lock_history/page.yaml"
+        button_path: "dwains-theme/addons/rooms/house/lock_history/button.yaml"
+        data:
+          entity: lock.front_door_lock
     more_entities:
       entities:
         - entity: lock.front_door_lock
@@ -106,19 +111,19 @@ rooms:
     addons:
       - name: History
         icon: mdi:camera
-        path: /dwains-theme/addons/rooms/house/camera_history.yaml
+        path: "dwains-theme/addons/rooms/house/camera_history.yaml"
   - name: Scene
     icon: mdi:movie-outline
     addons:
       - name: Scene
         icon: mdi:movie-outline
-        path: /dwains-theme/addons/rooms/house/scene.yaml
+        path: "dwains-theme/addons/rooms/house/scene.yaml"
   - name: Miscellaneous
     icon: mdi:atom
     addons:
       - name: Settings
         icon: mdi:wrench
-        path: /dwains-theme/addons/rooms/house/settings.yaml
+        path: "dwains-theme/addons/rooms/house/settings.yaml"
       - name: Anniversaries
         icon: mdi:calendar
-        path: /dwains-theme/addons/rooms/house/anniversaries.yaml
+        path: "dwains-theme/addons/rooms/house/anniversaries.yaml"
