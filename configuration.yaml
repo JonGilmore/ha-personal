@@ -123,6 +123,7 @@ rest_command: !include rest_commands.yaml
 input_boolean: !include input_boolean.yaml
 timer: !include timers.yaml
 zone: !include zones.yaml
+fan: !include fans.yaml
 
 logger:
   default: error
