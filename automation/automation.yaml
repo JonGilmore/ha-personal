@@ -422,18 +422,6 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
 #########################################
-- alias: "Vacation Mode: while on vacation, turn off all lights at 23:30"
-  trigger:
-    - platform: time
-      at: "23:30:00"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.vacation_status
-      state: "on"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
-#########################################
 - alias: "Home Mode: return home, turn the HVAC fans off & the recirculation pump on, stop daisy cam timer"
   trigger:
     - platform: state

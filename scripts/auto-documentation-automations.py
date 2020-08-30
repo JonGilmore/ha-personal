@@ -1,37 +1,16 @@
 #!/usr/bin/env python3
 
-#  _   _ ____  ____    _  _____ _____   ____  _____    _    ____  __  __ _____
-# | | | |  _ \|  _ \  / \|_   _| ____| |  _ \| ____|  / \  |  _ \|  \/  | ____|
-# | | | | |_) | | | |/ _ \ | | |  _|   | |_) |  _|   / _ \ | | | | |\/| |  _|
-# | |_| |  __/| |_| / ___ \| | | |___  |  _ <| |___ / ___ \| |_| | |  | | |___
-#  \___/|_|   |____/_/   \_\_| |_____| |_| \_\_____/_/   \_\____/|_|  |_|_____|
-#
-# - from github.com/basnijholt/home-assistant-config
-
-# Run this script from the main repo root!
-# It updates the table of devices and the list of automations.
-# This code relies on the way I have structeded my files and named my automations.
-
-# XXX: note that "security-%EF%B8%8F" is the anchor...
+# credit: https://github.com/basnijholt
+# description: run this script to auto-generate documentation for automations from your HA config
 
 import functools
 import re
 import subprocess
 from contextlib import suppress
 from pathlib import Path
-
 import yaml
 
-from _readme_tables import html_table
-
 URL = "https://github.com/jongilmore/ha-personal/blob/{commit_hash}/{fname}"
-
-
-# @functools.lru_cache()
-# def git_revision_hash():
-#     """Get the git hash to save with data to ensure reproducibility."""
-#     git_output = subprocess.check_output(["git", "rev-parse", "HEAD"])
-#     return git_output.decode("utf-8").replace("\n", "")
 
 
 @functools.lru_cache()
@@ -80,7 +59,6 @@ def title_and_summary(automation):
 
 def automations_as_dict(fname):
     with fname.open() as f:
-        # return yaml.safe_load(f)
         return yaml.load(f, Loader=yaml.BaseLoader)
 
 
@@ -129,7 +107,7 @@ def get_dependencies(automation):
 
     text = "\n".join(deps)
     if deps:
-        text = "  *which uses:*\n" + text + "\n"
+        text = f"\n*which uses:*\n{text}\n"
     return text
 
 
@@ -140,12 +118,12 @@ def toc_entry(automations):
 
 def get_header(fname, automation):
     title, _ = title_and_summary(automation)
-    return f"## [{title}]({permalink(fname)})"
+    return f"\n## [{title}]({permalink(fname)})"
 
 
 def get_automation_line(fname, automation):
     _, summary = title_and_summary(automation)
-    return f"### [{summary}]({permalink_automation(fname, automation)})"
+    return f"\n### [{summary}]({permalink_automation(fname, automation)})"
 
 
 def slugify(s):
@@ -200,27 +178,17 @@ def remove_text(content, start, end):
 #         "Work": "💼",
 #     }[title]
 
-
-def modify_lines(to_insert, lines, tag):
-    MARKDOWN_COMMENT = "<!-- {} -->"
-    start = MARKDOWN_COMMENT.format(f"start-{tag}")
-    end = MARKDOWN_COMMENT.format(f"end-{tag}")
-    new_lines = remove_text(lines, start, end)
-    i = next((i for (i, line) in enumerate(new_lines) if start in line)) + 1
-    return new_lines[:i] + [s + "\n" for s in to_insert] + new_lines[i:]
-
-
 automation_files = sorted(list(Path("automation/").glob("*yaml")))
 text = []
 
 # Create TOC
-toc_title = "Automations - Table of Content"
+toc_title = "Automations - Table of Contents\n"
 text.append(f"# {toc_title}")
 total_automations = 0
 for fname in automation_files:
     automations = automations_as_dict(fname)
     total_automations += len(automations)
-    text.append(toc_entry(automations))
+    text.append(f"{toc_entry(automations)}\n")
 text.append("\n")
 text.append(f"⚠️ Total number of automations: **{total_automations}** ⚠️\n")
 back_to_toc = f"[^ toc](#{slugify(toc_title)})"
@@ -240,8 +208,5 @@ for fname in automation_files:
 with open("automations.md") as f:
     lines = f.readlines()
 
-lines = modify_lines(text, lines, "automations")
-lines = modify_lines(html_table.split("\n"), lines, "table")
-
 with open("automations.md", "w") as f:
-    f.write("".join(lines))
+    f.write("".join(text))
