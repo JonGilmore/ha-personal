@@ -4,7 +4,7 @@
 #   - arm alarm night, all ppl home: kill cloud
 #   - wake up | either person leaves | vacation started: enable cloud
 ####################################################
-- alias: "Sleeping start, all home: nabucasa disconnect"
+- alias: "Nabu Casa: sleep starting, all home, nabu casa disconnect"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -16,7 +16,7 @@
   action:
     - service: cloud.remote_disconnect
 
-- alias: "Anybody leaves OR vacation on OR sleep off: nabucasa connect"
+- alias: "Nabu Casa: anybody leaves OR vacation on OR sleep off, nabu casa connect"
   trigger:
     - platform: state
       entity_id: binary_sensor.anybody_away

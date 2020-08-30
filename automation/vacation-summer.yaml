@@ -1,7 +1,6 @@
 ---
 #########################################
-# on vacation, summer (main tstat isn't heating), set temperatures back, set water heater to vacation, & turn off recirculation pump
-- alias: "on vacation, summer (main tstat isn't heating), set temperatures back, set water heater to vacation, & turn off recirculation pump"
+- alias: "Vacation Mode: summer (main tstat isn't heating), set temperatures back, set water heater to vacation, & turn off recirculation pump"
   trigger:
     - platform: state
       entity_id: binary_sensor.vacation_status
@@ -29,8 +28,7 @@
         title: "Ran vacation (summer) mode: on!"
         message: "set back temps, turned off recirc pump, set vacation mode on water heater"
 #########################################
-# return from vacation (summer), open the main water valve, remove the rheem water heater vacation hold, set temps back
-- alias: "return from vacation (summer)"
+- alias: "Vacation Mode: return from vacation (summer), open the main water valve, remove the rheem water heater vacation hold, set temps back"
   trigger:
     - platform: state
       entity_id: binary_sensor.vacation_status

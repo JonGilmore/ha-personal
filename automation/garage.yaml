@@ -1,6 +1,6 @@
 ---
 #########################################
-- alias: "Garage open - close - single"
+- alias: "Garage: single is open - close"
   trigger:
     platform: event
     event_type: telegram_callback
@@ -15,7 +15,7 @@
     - service: scene.turn_on
       entity_id: scene.task_002
 #########################################
-- alias: "Garage open - close - double"
+- alias: "Garage: double is open - close"
   trigger:
     platform: event
     event_type: telegram_callback
@@ -30,7 +30,7 @@
     - service: scene.turn_on
       entity_id: scene.task_001
 #########################################
-- alias: "Garage open for 10min notify & kill heat if it is on"
+- alias: "Garage: either door is open for 10min, notify & kill heat if it is on"
   trigger:
     - platform: state
       entity_id: sensor.single_garage

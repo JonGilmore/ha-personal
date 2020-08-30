@@ -1,6 +1,6 @@
 ---
 #########################################
-- alias: away - enable wireguard portfwd
+- alias: "Port Forward: enable wireguard port forward if anybody leaves"
   trigger:
     - platform: state
       entity_id: binary_sensor.anybody_home
@@ -19,7 +19,7 @@
         proto: !secret wireguard_proto
         id: !secret wireguard_id
         unifi_site: !secret unifi_site
-- alias: home - disable wireguard portfwd
+- alias: "Port Forward: disable wireguard port forward when we get home"
   trigger:
     - platform: state
       entity_id: binary_sensor.anybody_home
@@ -39,7 +39,7 @@
         id: !secret wireguard_id
         unifi_site: !secret unifi_site
 #########################################
-- alias: NAS port fwd for backup - enable
+- alias: "Port Forward: enable NAS port forward for nightly backup at 1:58am"
   trigger:
     platform: time
     at: "1:58:00"
@@ -57,7 +57,7 @@
         proto: !secret nas_proto
         id: !secret nas_id
         unifi_site: !secret unifi_site
-- alias: NAS port fwd for backup - disable
+- alias: "Port Forward: disable NAS port forward for backup"
   trigger:
     platform: time
     at: "2:58:00"

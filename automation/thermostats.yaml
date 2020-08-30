@@ -1,6 +1,5 @@
 ---
-# set the temperature ONLY if we're not on vacation AND one or more of us are home
-- alias: Thermostats - morning - cooling
+- alias: "HVAC: set cooling temps in the morning (if were not on vacation and somebody is home"
   trigger:
     - platform: time
       at: "04:30:00"
@@ -22,8 +21,7 @@
   action:
     - service: scene.turn_on
       entity_id: scene.cool_77_auto
-# set the temperature ONLY if we're not on vacation AND one or more of us are home
-- alias: Thermostats - morning - heating
+- alias: "HVAC: set heating temps in the morning (if we're not on vacation and somebody is home)"
   trigger:
     platform: time
     at: "04:30:00"
@@ -47,7 +45,7 @@
       entity_id: scene.heat_70_auto
 #########################################
 # set the temperature back for work ONLY if we're not on vacation AND both people are not_home
-- alias: Thermostats - work - cooling
+- alias: "HVAC: set back cooling temps at 8am only if were not on vacation and nobody is home"
   trigger:
     platform: time
     at: "08:00:00"
@@ -69,7 +67,7 @@
   action:
     - service: scene.turn_on
       entity_id: scene.cool_78_auto
-- alias: Thermostats - work - heating
+- alias: "HVAC: set back heating temps at 8am only if were not on vacation and nobody is home"
   trigger:
     platform: time
     at: "08:00:00"
@@ -93,7 +91,7 @@
       entity_id: scene.heat_67_auto
 #########################################
 # (probably) getting home from work (or soon), make sure were not on vacation, and set the temps to normal
-- alias: Thermostats - home from work - cooling
+- alias: "HVAC: home from work (4pm), set cooling temps to normal (only when were not on vacation)"
   trigger:
     platform: time
     at: "16:00:00"
@@ -107,7 +105,7 @@
   action:
     - service: scene.turn_on
       entity_id: scene.cool_77_auto
-- alias: Thermostats - home from work - heating
+- alias: "HVAC: home from work (4pm), set heating temps to normal (only when were not on vacation)"
   trigger:
     platform: time
     at: "16:00:00"
@@ -123,7 +121,7 @@
       entity_id: scene.heat_71_auto
 #########################################
 # when we start sleeping, and we're not on vacation, set the temps back
-- alias: Thermostats - bed - cooling
+- alias: "HVAC: when we start sleeping set the thermostats back (for cooling)"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -138,7 +136,7 @@
   action:
     - service: scene.turn_on
       entity_id: scene.cool_78_auto
-- alias: Thermostats - bed - heating
+- alias: "HVAC: when we start sleeping set the thermostats back (for heating)"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
