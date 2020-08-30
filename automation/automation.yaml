@@ -781,7 +781,7 @@
   action:
     - service: homeassistant.turn_on
       entity_id: input_boolean.motion_lights
-- alias: disable motion lights 2hours sunrise
+- alias: "Automatic Lighting: disable motion lights 2hours sunrise"
   trigger:
     - platform: sun
       event: sunrise
@@ -958,7 +958,7 @@
           {{state.name}}
           {% endfor %}
 #########################################
-- alias: create "all" groups
+- alias: "Utility: create all groups"
   trigger:
     - platform: homeassistant
       event: start

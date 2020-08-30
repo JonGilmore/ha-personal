@@ -108,22 +108,22 @@ telegram_bot:
 ####################################################
 #                     Includes                     #
 ####################################################
-alert: !include alerts.yaml
-sensor: !include sensors.yaml
-binary_sensor: !include binary_sensors.yaml
-climate: !include climate.yaml
+alert: !include includes/alerts.yaml
 automation: !include_dir_merge_list automation
-group: !include groups.yaml
-script: !include scripts.yaml
-shell_command: !include shell_commands.yaml
-switch: !include switches.yaml
-cover: !include covers.yaml
-camera: !include cameras.yaml
-rest_command: !include rest_commands.yaml
-input_boolean: !include input_boolean.yaml
-timer: !include timers.yaml
-zone: !include zones.yaml
-fan: !include fans.yaml
+binary_sensor: !include includes/binary_sensors.yaml
+camera: !include includes/cameras.yaml
+climate: !include includes/climate.yaml
+cover: !include includes/covers.yaml
+fan: !include includes/fans.yaml
+group: !include includes/groups.yaml
+input_boolean: !include includes/input_booleans.yaml
+rest_command: !include includes/rest_commands.yaml
+script: !include includes/scripts.yaml
+sensor: !include includes/sensors.yaml
+shell_command: !include includes/shell_commands.yaml
+switch: !include includes/switches.yaml
+timer: !include includes/timers.yaml
+zone: !include includes/zones.yaml
 
 logger:
   default: error

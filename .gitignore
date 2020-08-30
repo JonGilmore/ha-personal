@@ -20,7 +20,8 @@
 !images/**
 !dwains-theme
 !dwains-theme/**
-!includes/**
+!includes
+!includes/*.yaml
 
 # Ignore folders.
 .storage
