@@ -1,6 +1,6 @@
 ---
 #########################################
-- alias: "Person Detection: if nobody is home or were sleeping, send a video of the deck"
+- alias: "Person Detection: if nobody is home or were sleeping & send a video of the deck"
   trigger:
     - platform: state
       entity_id: binary_sensor.deck_person
@@ -23,7 +23,7 @@
     - service: automation.turn_on
       entity_id: automation.person_motion_deck
 #########################################
-- alias: "Person Detection: if nobody is home or were sleeping, send a video of the deckstairs"
+- alias: "Person Detection: if nobody is home or were sleeping & send a video of the deckstairs"
   trigger:
     - platform: state
       entity_id: binary_sensor.deck_stairs_person
@@ -46,7 +46,7 @@
     - service: automation.turn_on
       entity_id: automation.person_motion_deckstairs
 #########################################
-- alias: "Person Detection: if nobody is home or were sleeping, send a video of the driveway"
+- alias: "Person Detection: if nobody is home or were sleeping & send a video of the driveway"
   trigger:
     - platform: state
       entity_id: binary_sensor.driveway_person
@@ -69,7 +69,7 @@
     - service: automation.turn_on
       entity_id: automation.person_motion_driveway
 #########################################
-- alias: "Person Detection: if nobody is home or were sleeping, send a video of the garage"
+- alias: "Person Detection: if nobody is home or were sleeping & send a video of the garage"
   trigger:
     - platform: state
       entity_id: binary_sensor.garage_person
@@ -91,7 +91,7 @@
         seconds: 45
     - service: automation.turn_on
       entity_id: automation.person_motion_garage
-- alias: "Person Detection: if nobody is home or were sleeping, send a video of the doorbell"
+- alias: "Person Detection: if nobody is home or were sleeping & send a video of the doorbell"
   trigger:
     platform: event
     event_type: folder_watcher

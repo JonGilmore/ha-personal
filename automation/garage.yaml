@@ -30,7 +30,7 @@
     - service: scene.turn_on
       entity_id: scene.task_001
 #########################################
-- alias: "Garage: either door is open for 10min, notify & kill heat if it is on"
+- alias: "Garage: either door is open for 10min & notify & kill heat if it is on"
   trigger:
     - platform: state
       entity_id: sensor.single_garage

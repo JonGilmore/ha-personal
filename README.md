@@ -6,6 +6,10 @@ Here's an overview of my Home Assistant configuration as well as the devices tha
 
 ![Lovelace](https://raw.githubusercontent.com/JonGilmore/ha-personal/master/images/lovelace0.png)
 
+## Automations
+
+[Automated automation documentation](automations.md)
+
 ## Devices/Hardware
 
 Hardware

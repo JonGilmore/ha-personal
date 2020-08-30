@@ -91,7 +91,7 @@
       entity_id: scene.heat_67_auto
 #########################################
 # (probably) getting home from work (or soon), make sure were not on vacation, and set the temps to normal
-- alias: "HVAC: home from work (4pm), set cooling temps to normal (only when were not on vacation)"
+- alias: "HVAC: home from work (4pm) & set cooling temps to normal (only when were not on vacation)"
   trigger:
     platform: time
     at: "16:00:00"
@@ -105,7 +105,7 @@
   action:
     - service: scene.turn_on
       entity_id: scene.cool_77_auto
-- alias: "HVAC: home from work (4pm), set heating temps to normal (only when were not on vacation)"
+- alias: "HVAC: home from work (4pm) & set heating temps to normal (only when were not on vacation)"
   trigger:
     platform: time
     at: "16:00:00"

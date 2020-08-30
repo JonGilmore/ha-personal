@@ -25,7 +25,7 @@
                 {{ states.sensor.db_pic.state }}
               {% endif %}
 #########################################
-- alias: "Security: front door line crossing or doorbell rang, dark out, house occupied, foyer and exterior lights on"
+- alias: "Security: front door line crossing or doorbell rang & dark out & house occupied & foyer and exterior lights on"
   trigger:
     - platform: state
       entity_id: binary_sensor.front_door_line_crossing
@@ -50,7 +50,7 @@
         deviceID: "wallpanel"
         camera: "camera.front_door_live"
 #########################################
-- alias: "Security: front door line crossing or doorbell rang, dark out, house unoccupied, foyer and exterior lights on for 10 min"
+- alias: "Security: front door line crossing or doorbell rang & dark out & house unoccupied & foyer and exterior lights on for 10 min"
   trigger:
     - platform: state
       entity_id: binary_sensor.front_door_line_crossing
@@ -84,7 +84,7 @@
         entity_id:
           - switch.exterior_foyer
 #########################################
-- alias: "Security: doorbell rang, play google home video"
+- alias: "Security: doorbell rang & play google home video"
   trigger:
     - platform: event
       event_type: doorbird_front_door_doorbell
@@ -99,7 +99,7 @@
       data:
         entity_id: media_player.main_googlehome
 #########################################
-- alias: "Security: doorbell rang, interrupt sonos master"
+- alias: "Security: doorbell rang & interrupt sonos master"
   trigger:
     - platform: event
       event_type: doorbird_front_door_doorbell
@@ -115,7 +115,7 @@
         message: "doorbell rang!"
         delay: "00:00:05"
 #########################################
-- alias: "Automatic Lighting: deck person, dark out, deck lights on"
+- alias: "Automatic Lighting: deck person & dark out & deck lights on"
   trigger:
     - platform: state
       entity_id: binary_sensor.deck_person
@@ -165,7 +165,7 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_deck_on
 #########################################
-- alias: "Automatic Lighting: garage person/motion detected, dark out, garage lights on"
+- alias: "Automatic Lighting: garage person/motion detected & dark out & garage lights on"
   trigger:
     - platform: state
       entity_id: binary_sensor.garage_person
@@ -195,7 +195,7 @@
     - service: homeassistant.turn_off
       entity_id: light.mudroom_garage_lights
 #########################################
-- alias: "Automatic Lighting: wake up (only between Oct-May), turn on some lights"
+- alias: "Automatic Lighting: wake up (only between Oct-May) & turn on some lights"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -215,7 +215,7 @@
     - service: homeassistant.turn_on
       entity_id: switch.upstairs_hall_treads, switch.great_room_lamp
 #########################################
-- alias: "Automatic Lighting: motion light template for foyer, basement, and bar"
+- alias: "Automatic Lighting: motion light template for foyer & basement & and bar"
   trigger:
     - platform: state
       entity_id:
@@ -251,7 +251,7 @@
         {% endif %}
 #########################################
 # Close master blinds if its dusk upon 1st motion on the entry only 1 time (after 1hr before sunset)
-- alias: "Blinds: master blinds at dusk, only runs once (and after 1hr before sunset)"
+- alias: "Blinds: master blinds at dusk & only runs once (and after 1hr before sunset)"
   trigger:
     - platform: state
       entity_id: binary_sensor.master_entry_pir
@@ -307,7 +307,7 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.sunset_run_once
 #########################################
-- alias: "Night Mode: start sleeping, set HVAC fans on, turn off recirculation pump, all lights off if no guests (only exterior, lower, & main if guests), and main tv off"
+- alias: "Night Mode: start sleeping & set HVAC fans on & turn off recirculation pump & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -335,7 +335,7 @@
         entity_id: media_player.living_room_tv
         command: "system/turnOff"
 #########################################
-- alias: "Night Mode: start sleeping, check the garage doors"
+- alias: "Night Mode: start sleeping & check the garage doors"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -376,7 +376,7 @@
         message: "Locking {{ states.sensor.doors_unlocked.state }}"
     - service: script.lock_doors
 #########################################
-- alias: "Wake Up State: done sleeping, HVAC fan off, recirculation pump on"
+- alias: "Wake Up State: done sleeping & HVAC fan off & recirculation pump on"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -392,7 +392,7 @@
     - service: homeassistant.turn_on
       entity_id: switch.equipment_room_recirculation_pump
 #########################################
-- alias: "Away Mode: turn the HVAC fans on, recirculation pump and tvs off"
+- alias: "Away Mode: turn the HVAC fans on & recirculation pump and tvs off"
   trigger:
     - platform: state
       entity_id: binary_sensor.alarm_occupancy_status
@@ -409,7 +409,7 @@
       entity_id: switch.equipment_room_recirculation_pump
     - service: script.tvs_off
 #########################################
-- alias: "Away Mode: away during the day, turn lights off"
+- alias: "Away Mode: away during the day & turn lights off"
   trigger:
     - platform: state
       entity_id: binary_sensor.alarm_occupancy_status
@@ -422,7 +422,7 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
 #########################################
-- alias: "Home Mode: return home, turn the HVAC fans off & the recirculation pump on, stop daisy cam timer"
+- alias: "Home Mode: return home & turn the HVAC fans off & the recirculation pump on & stop daisy cam timer"
   trigger:
     - platform: state
       entity_id: binary_sensor.alarm_occupancy_status
@@ -507,7 +507,7 @@
     - service: lock.lock
       entity_id: lock.front_door_lock
 #########################################
-- alias: "HVAC: winter indoor humidity check, see if its below the high threshold"
+- alias: "HVAC: winter indoor humidity check & see if its below the high threshold"
   trigger:
     - platform: time
       at: "10:00:00"
@@ -520,7 +520,7 @@
         title: "Humidity Warning!"
         message: "Humidity in the house is too high: {{ states.sensor.house_humidity.state }}"
 #########################################
-- alias: "HVAC: winter indoor humidity check, see if its above the low threshold"
+- alias: "HVAC: winter indoor humidity check & see if its above the low threshold"
   trigger:
     - platform: time
       at: "10:01:00"
@@ -533,7 +533,7 @@
         title: "Humidity Warning!"
         message: "Humidity in the house is too low: {{ states.sensor.house_humidity.state }}"
 #########################################
-- alias: "Moisture: if there is a water leak, notify, close the water valve, turn off recirculation pump"
+- alias: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
   trigger:
     - platform: state
       entity_id: binary_sensor.moisture_sensors
@@ -563,7 +563,7 @@
   action:
     - service: script.video_daisy
 #########################################
-- alias: "Alarm: fire active, unlock locks, send videos, lights set to 25%, hvac off, repeat notifications"
+- alias: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
   trigger:
     - platform: state
       entity_id: sensor.alarm_state
@@ -580,7 +580,7 @@
           - lock.front_door_lock
     - service: script.alarm
 #########################################
-- alias: "Alarm: burglar active, lights on, send videos, repeat notifications"
+- alias: "Alarm: burglar active & lights on & send videos & repeat notifications"
   trigger:
     - platform: state
       entity_id: sensor.alarm_state
@@ -761,7 +761,7 @@
     - service: timer.start
       entity_id: timer.daisy_cam_timer
 #########################################
-- alias: "Automatic Lighting: enable motion lights 2hours before sunset, disable 2hour after sunrise"
+- alias: "Automatic Lighting: enable motion lights 2hours before sunset & disable 2hour after sunrise"
   trigger:
     - platform: sun
       event: sunset
@@ -993,7 +993,7 @@
     - service: homeassistant.turn_on
       entity_id: switch.basement_main
 #########################################
-- alias: "Automatic Lighting: storage, master toekick motion lights"
+- alias: "Automatic Lighting: storage & master toekick motion lights"
   trigger:
     - platform: state
       entity_id: sensor.storage_pir
@@ -1024,7 +1024,7 @@
             light.master_bath_toekick
           {% endif %}
 #########################################
-- alias: "Automatic Lighting: office desk, gym lights motion on"
+- alias: "Automatic Lighting: office desk & gym lights motion on"
   trigger:
     - platform: state
       entity_id:
@@ -1046,7 +1046,7 @@
             light.gym_cans
           {% endif %}
 #########################################
-- alias: "Automatic Lighting: office desk, gym lights motion off"
+- alias: "Automatic Lighting: office desk & gym lights motion off"
   trigger:
     - platform: state
       entity_id: binary_sensor.office_occupancy
