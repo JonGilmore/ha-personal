@@ -1,5 +1,5 @@
 ---
-garage_door_single:
+garage_door_single: 
   name: single garage is open
   entity_id: cover.garage_momentary_single
   state: "open"
