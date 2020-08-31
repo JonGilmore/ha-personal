@@ -78,7 +78,7 @@ def get_dependencies(automation):
     for input_entity in sorted(inputs):
         with suppress(ValueError):
             url = permalink_entity(input_entity, None)
-            s = f"  - [{input_entity}]({url})"
+            s = f"-   [{input_entity}]({url})"
             deps.append(s)
 
     for domain, yaml_file in [
@@ -102,7 +102,7 @@ def get_dependencies(automation):
         for entity in sorted(entities):
             with suppress(ValueError):
                 url = permalink_entity(entity, yaml_file)
-                s = f"  - [{entity}]({url})"
+                s = f"-   [{entity}]({url})"
                 deps.append(s)
 
     text = "\n".join(deps)
@@ -113,7 +113,7 @@ def get_dependencies(automation):
 
 def toc_entry(automations):
     title, _ = title_and_summary(automations[0])
-    return f"1. [{title}](#{slugify(title)}) ({len(automations)} automations)"
+    return f"1.  [{title}](#{slugify(title)}) ({len(automations)} automations)"
 
 
 def get_header(fname, automation):
