@@ -987,6 +987,3 @@ views:
       - type: iframe
         url: https://video.dot.state.mn.us/video/image/metro/C908
         aspect_ratio: 100%
-      # - type: picture-entity
-      #   image:
-      #     url: "https://video.dot.state.mn.us/video/image/metro/C908"

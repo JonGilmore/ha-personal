@@ -1,8 +1,9 @@
+---
 - platform: mqtt
   name: "Portable Fan"
   state_topic: "stat/portablefan/POWER1"
   command_topic: "cmnd/portablefan/POWER1"
-  oscillation_state_topic: "stat/portablefan/POWER2" 
+  oscillation_state_topic: "stat/portablefan/POWER2"
   oscillation_command_topic: "cmnd/portablefan/POWER2"
   speed_state_topic: "stat/portablefan/speed"
   speed_command_topic: "cmnd/portablefan/TuyaSend4"

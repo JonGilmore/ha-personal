@@ -1,0 +1,8 @@
+---
+- repo: local
+  hooks:
+    - id: yamllint
+      name: yamllint
+      entry: yamllint -c .github/yamllint.cfg .
+      language: python
+      types: [file, yaml]

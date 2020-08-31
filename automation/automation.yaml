@@ -621,7 +621,7 @@
     - service: lifx.set_state
       data:
         entity_id: light.master_entry_lifx
-        power: on
+        power: true
 ########################################
 - alias: "Automatic Lighting: master entry motion lights Off"
   trigger:
@@ -1139,14 +1139,14 @@
   condition:
     condition: or
     conditions:
-        - condition: state
-          entity_id: light.master_bedroom_fixture
-          state: "on"
-        - condition: state
-          entity_id: switch.master_bedroom_toilet_fan
-          state: "on"
+      - condition: state
+        entity_id: light.master_bedroom_fixture
+        state: "on"
+      - condition: state
+        entity_id: switch.master_bedroom_toilet_fan
+        state: "on"
   action:
     - service: homeassistant.turn_off
-      entity_id: 
+      entity_id:
         - light.master_bedroom_fixture
         - switch.master_bedroom_toilet_fan

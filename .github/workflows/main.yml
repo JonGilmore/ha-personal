@@ -28,15 +28,15 @@ jobs:
         uses: "docker://pipelinecomponents/remark-lint:latest"
         with:
           args: "remark --no-stdout --color --frail --use preset-lint-recommended ."
-  yamllint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Getting your configuration from GitHub
-        uses: actions/checkout@master
-      - name: Running YAMLlint
-        uses: "docker://pipelinecomponents/yamllint:latest"
-        with:
-          args: yamllint -c ./.github/yamllint.cfg .
+  # yamllint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Getting your configuration from GitHub
+  #       uses: actions/checkout@master
+  #     - name: Running YAMLlint
+  #       uses: "docker://pipelinecomponents/yamllint:latest"
+  #       with:
+  #         args: yamllint -c ./.github/yamllint.cfg .
   # ha_check:
   #   runs-on: ubuntu-latest
   #   steps:
