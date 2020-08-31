@@ -1,7 +1,7 @@
 ---
 garage_door_single:
   name: single garage is open
-  entity_id: cover.garage_momentary_single 
+  entity_id: cover.garage_momentary_single
   state: "open"
   repeat:
     - 5
