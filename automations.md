@@ -281,11 +281,11 @@
 
 ### [Acknowledge garage single open](https://github.com/jongilmore/ha-personal/blob/252688a65726727cd4d9b2da48aab0da0513a520/automation/automation.yaml#L1112)
 *which uses:*
-  - [alert.garage_door_single](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/alerts.yaml#L2)
+  - [alert.garage_door_single](https://github.com/jongilmore/ha-personal/blob/88bda05d4f160c4a33b89966bb8e33c55d41438d/includes/alerts.yaml#L2)
 
 ### [Acknowledge garage double open](https://github.com/jongilmore/ha-personal/blob/252688a65726727cd4d9b2da48aab0da0513a520/automation/automation.yaml#L1123)
 *which uses:*
-  - [alert.garage_door_double](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/alerts.yaml#L20)
+  - [alert.garage_door_double](https://github.com/jongilmore/ha-personal/blob/88bda05d4f160c4a33b89966bb8e33c55d41438d/includes/alerts.yaml#L20)
 
 ### [Toilet off when bathroom off](https://github.com/jongilmore/ha-personal/blob/252688a65726727cd4d9b2da48aab0da0513a520/automation/automation.yaml#L1134)[^ toc](#automations---table-of-contents)
 
