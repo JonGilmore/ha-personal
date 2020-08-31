@@ -661,7 +661,7 @@
     - service: homeassistant.turn_on
       entity_id: light.sitting_room_lifx
 ########################################
-- alias: "Automatic Lighting: sitting motion light off"
+- alias: "Automatic Lighting: sitting motion light off when master override is off"
   trigger:
     - platform: state
       entity_id: binary_sensor.sitting_room_pir

@@ -188,7 +188,7 @@
 *which uses:*
 -   [sensor.master_bed_people](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/sensors.yaml#L298)
 
-### [Sitting motion light off](https://github.com/jongilmore/ha-personal/blob/252688a65726727cd4d9b2da48aab0da0513a520/automation/automation.yaml#L664)
+### [Sitting motion light off when master override is off](https://github.com/jongilmore/ha-personal/blob/252688a65726727cd4d9b2da48aab0da0513a520/automation/automation.yaml#L664)
 *which uses:*
 -   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/input_booleans.yaml#L18)
 -   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/input_booleans.yaml#L18)
