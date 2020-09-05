@@ -9,6 +9,9 @@ rooms:
     door: group.main_doors
     media_player: media_player.living_room_tv
     cover: group.main_floor_covers
+    vacuum: 
+      entity: vacuum.main_dwayne
+      # camera: camera.rockrobo_map
     addons:
       - name: Sonos
         icon: fal:speaker

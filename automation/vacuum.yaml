@@ -1,0 +1,30 @@
+---
+#########################################
+- alias: "Vacuum: start cleaning action"
+  trigger:
+    - platform: state
+      entity_id:
+        - input_boolean.kitchen_zone
+        - input_boolean.foyer_zone
+      to: "on"
+  action:
+    - service: script.vacuum_zones
+      data_template:
+        zone_ids: >
+          {% set trigger_entity = trigger.entity_id %}
+          {% if trigger_entity == 'input_boolean.kitchen_zone' %}
+            kitchen
+          {% elif trigger_entity == 'input_boolean.foyer_zone' %}
+            foyer
+          {% endif %}
+#########################################
+- alias: "Vacuum: back to dock, turn off zone booleans"
+  trigger:
+    - platform: state
+      entity_id: vacuum.main_dwayne
+      to: "docked"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: 
+        - input_boolean.kitchen_zone
+        - input_boolean.foyer_zone

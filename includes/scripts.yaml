@@ -207,3 +207,14 @@ sonos_say:
     - service: sonos.restore
       data_template:
         entity_id: "{{ sonos_entity }}"
+
+vacuum_zones:
+  sequence:
+    - service: vacuum.send_command
+      data_template:
+        entity_id: "vacuum.main_dwayne"
+        command: "zoned_cleanup"
+        params:
+          "zone_ids":
+            - "{%- if states('input_boolean.kitchen_zone') == 'on' %}kitchen{% endif %}"
+            - "{%- if states('input_boolean.foyer_zone') == 'on' %}foyer{% endif %}"

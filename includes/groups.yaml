@@ -244,6 +244,7 @@ all_fans:
     - switch.master_bedroom_fan
     - light.master_bedroom_master_fan
     - switch.master_bedroom_toilet_fan
+    - fan.portable_fan
 
 sunset:
   name: Sunset Lights

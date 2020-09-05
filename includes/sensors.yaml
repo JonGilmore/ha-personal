@@ -419,7 +419,7 @@
 
 - platform: rest
   name: MN Covid Stats
-  resource: https://covidtracking.com/api/states?state=MN
+  resource: https://api.covidtracking.com/v1/states/MN/current.json
   json_attributes:
     - positive
     - negative
