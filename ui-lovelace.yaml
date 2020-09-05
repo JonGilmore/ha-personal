@@ -96,40 +96,77 @@ views:
     id: home
     icon: mdi:home
     cards:
-      - id: alarmPanel
-        type: alarm-panel
-        entity: alarm_control_panel.area001
-        name: !secret name
-        states:
-          - arm_home
-          - arm_away
-          - arm_night
+      - type: picture
+        image: mdi:cloud
+        tap_action: 
+          action: navigate
+          navigation_path: /lovelace/12/
       - type: weather-forecast
         entity: weather.dark_sky
-      - type: entities
-        title: Locks
-        show_header_toggle: false
-        entities:
-          - lock.front_door_lock
-          - lock.garage_door_lock
-      - type: entities
-        title: COVID-19
-        show_header_toggle: false
-        entities:
-          - sensor.us_current
-          - sensor.us_recovered
-          - sensor.us_deaths
-          - sensor.us_confirmed
-          - sensor.covid_mn_death
-          - sensor.covid_mn_negative
-          - sensor.covid_mn_positive
-          - sensor.covid_mn_total
-      - type: entities
-        title: Garage Doors
-        show_header_toggle: false
-        entities:
-          - cover.garage_momentary_single
-          - cover.garage_momentary_double
+      - type: vertical-stack
+        cards:
+          - type: entities
+            show_name: false
+            show_header_toggle: false
+            entities:
+              - entity: binary_sensor.garage_doors
+                type: custom:multiple-entity-row
+                name: Garage
+                show_state: false
+                entities:
+                  - entity: cover.garage_momentary_single
+                    tap_action:
+                      action: toggle
+                  - entity: cover.garage_momentary_double
+                    tap_action:
+                      action: toggle
+          - type: horizontal-stack
+            cards:
+              - entity: lock.garage_door_lock
+                type: "custom:button-card"
+                name: garage lock
+                tap_action:
+                  action: call-service
+                  service: >-
+                    [[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]
+                  service_data:
+                    entity_id: entity
+              - entity: lock.front_door_lock
+                type: "custom:button-card"
+                name: front lock
+                tap_action:
+                  action: call-service
+                  service: >-
+                    [[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]
+                  service_data:
+                    entity_id: entity
+          - type: horizontal-stack
+            cards:
+              - type: custom:decluttering-card
+                template: cam_small
+                variables:
+                  - icon: mdi:oil
+                  - entity_id: script.video_driveway
+              - type: custom:decluttering-card
+                template: cam_small
+                variables:
+                  - icon: mdi:dog-side
+                  - entity_id: script.video_daisy
+              - type: custom:decluttering-card
+                template: cam_small
+                variables:
+                  - icon: mdi:chair-school
+                  - entity_id: script.video_deck
+              - type: custom:decluttering-card
+                template: cam_small
+                variables:
+                  - icon: mdi:car
+                  - entity_id: script.video_garage
+              - type: custom:decluttering-card
+                template: cam_small
+                variables:
+                  - icon: mdi:knife
+                  - entity_id: script.video_kitchen
       - type: picture-glance
         camera_image: camera.driveway
         title: Exterior
@@ -152,33 +189,6 @@ views:
             entities:
               - entity: person.jon
               - entity: person.laura
-      - type: horizontal-stack
-        cards:
-          - type: custom:decluttering-card
-            template: cam_small
-            variables:
-              - icon: mdi:oil
-              - entity_id: script.video_driveway
-          - type: custom:decluttering-card
-            template: cam_small
-            variables:
-              - icon: mdi:dog-side
-              - entity_id: script.video_daisy
-          - type: custom:decluttering-card
-            template: cam_small
-            variables:
-              - icon: mdi:chair-school
-              - entity_id: script.video_deck
-          - type: custom:decluttering-card
-            template: cam_small
-            variables:
-              - icon: mdi:car
-              - entity_id: script.video_garage
-          - type: custom:decluttering-card
-            template: cam_small
-            variables:
-              - icon: mdi:knife
-              - entity_id: script.video_kitchen
       - type: custom:auto-entities
         show_empty: false
         card:
@@ -918,6 +928,18 @@ views:
       #     - device_tracker.jon_pi
       #     - device_tracker.laura_pi
       - type: entities
+        title: COVID-19
+        show_header_toggle: false
+        entities:
+          - sensor.us_current
+          - sensor.us_recovered
+          - sensor.us_deaths
+          - sensor.us_confirmed
+          - sensor.covid_mn_death
+          - sensor.covid_mn_negative
+          - sensor.covid_mn_positive
+          - sensor.covid_mn_total
+      - type: entities
         title: Master Bed
         show_header_toggle: false
         entities:
@@ -987,3 +1009,17 @@ views:
       - type: iframe
         url: https://video.dot.state.mn.us/video/image/metro/C908
         aspect_ratio: 100%
+
+  - title: Alarm
+    hidden: true
+    id: alarm
+    icon: mdi:cloud
+    cards:
+      - id: alarmPanel
+        type: alarm-panel
+        entity: alarm_control_panel.area001
+        name: !secret name
+        states:
+          - arm_home
+          - arm_away
+          - arm_night
