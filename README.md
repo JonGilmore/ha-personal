@@ -72,6 +72,7 @@ Hardware
     -   [Sonos Amp](https://amzn.to/2RNeAx2)
 -   Random Hardware:
     -   [Bond](https://amzn.to/3b5aVlS)
+    -   [Roborock](https://www.amazon.com/gp/product/B07YC624VV)
 
 ## Automations
 
