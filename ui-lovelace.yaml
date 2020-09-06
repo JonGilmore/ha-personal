@@ -81,6 +81,7 @@ decluttering_templates:
 
 # hide settings tabs from wife
 # custom_header:
+#   compact_mode: true
 #   hide_help: true
 #   exceptions:
 #     - conditions:
@@ -98,7 +99,7 @@ views:
     cards:
       - type: picture
         image: mdi:cloud
-        tap_action: 
+        tap_action:
           action: navigate
           navigation_path: /lovelace/12/
       - type: weather-forecast
@@ -1010,10 +1011,12 @@ views:
         url: https://video.dot.state.mn.us/video/image/metro/C908
         aspect_ratio: 100%
 
+  ##########################################
+  # ALARM PAGE
+  ##########################################
   - title: Alarm
-    hidden: true
     id: alarm
-    icon: mdi:cloud
+    visible: false
     cards:
       - id: alarmPanel
         type: alarm-panel

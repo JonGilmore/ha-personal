@@ -1,27 +1,27 @@
 ---
 #########################################
-- alias: "Person Detection: if nobody is home or were sleeping & send a video of the deck"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.deck_person
-      to: "on"
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.sleep_status
-        state: "on"
-      - condition: state
-        entity_id: person.jon
-        state: "not_home"
-  action:
-    - service: script.video_deck
-    - service: automation.turn_off
-      entity_id: automation.person_motion_deck
-    - delay:
-        seconds: 15
-    - service: automation.turn_on
-      entity_id: automation.person_motion_deck
+# - alias: "Person Detection: if nobody is home or were sleeping & send a video of the deck"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.deck_person
+#       to: "on"
+#   condition:
+#     condition: or
+#     conditions:
+#       - condition: state
+#         entity_id: binary_sensor.sleep_status
+#         state: "on"
+#       - condition: state
+#         entity_id: person.jon
+#         state: "not_home"
+#   action:
+#     - service: script.video_deck
+#     - service: automation.turn_off
+#       entity_id: automation.person_motion_deck
+#     - delay:
+#         seconds: 15
+#     - service: automation.turn_on
+#       entity_id: automation.person_motion_deck
 #########################################
 - alias: "Person Detection: if nobody is home or were sleeping & send a video of the deckstairs"
   trigger:
@@ -46,28 +46,28 @@
     - service: automation.turn_on
       entity_id: automation.person_motion_deckstairs
 #########################################
-- alias: "Person Detection: if nobody is home or were sleeping & send a video of the driveway"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.driveway_person
-      to: "on"
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.sleep_status
-        state: "on"
-      - condition: state
-        entity_id: person.jon
-        state: "not_home"
-  action:
-    - service: script.video_driveway
-    - service: automation.turn_off
-      entity_id: automation.person_motion_driveway
-    - delay:
-        seconds: 15
-    - service: automation.turn_on
-      entity_id: automation.person_motion_driveway
+# - alias: "Person Detection: if nobody is home or were sleeping & send a video of the driveway"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.driveway_person
+#       to: "on"
+#   condition:
+#     condition: or
+#     conditions:
+#       - condition: state
+#         entity_id: binary_sensor.sleep_status
+#         state: "on"
+#       - condition: state
+#         entity_id: person.jon
+#         state: "not_home"
+#   action:
+#     - service: script.video_driveway
+#     - service: automation.turn_off
+#       entity_id: automation.person_motion_driveway
+#     - delay:
+#         seconds: 15
+#     - service: automation.turn_on
+#       entity_id: automation.person_motion_driveway
 #########################################
 - alias: "Person Detection: if nobody is home or were sleeping & send a video of the garage"
   trigger:
@@ -91,6 +91,7 @@
         seconds: 45
     - service: automation.turn_on
       entity_id: automation.person_motion_garage
+#########################################
 - alias: "Person Detection: if nobody is home or were sleeping & send a video of the doorbell"
   trigger:
     platform: event
