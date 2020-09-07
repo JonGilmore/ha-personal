@@ -1,106 +1,19 @@
 ---
 #########################################
-# - alias: "Person Detection: if nobody is home or were sleeping & send a video of the deck"
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.deck_person
-#       to: "on"
-#   condition:
-#     condition: or
-#     conditions:
-#       - condition: state
-#         entity_id: binary_sensor.sleep_status
-#         state: "on"
-#       - condition: state
-#         entity_id: person.jon
-#         state: "not_home"
-#   action:
-#     - service: script.video_deck
-#     - service: automation.turn_off
-#       entity_id: automation.person_motion_deck
-#     - delay:
-#         seconds: 15
-#     - service: automation.turn_on
-#       entity_id: automation.person_motion_deck
-#########################################
-- alias: "Person Detection: if nobody is home or were sleeping & send a video of the deckstairs"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.deck_stairs_person
-      to: "on"
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.sleep_status
-        state: "on"
-      - condition: state
-        entity_id: person.jon
-        state: "not_home"
-  action:
-    - service: script.video_deckstairs
-    - service: automation.turn_off
-      entity_id: automation.person_motion_deckstairs
-    - delay:
-        seconds: 15
-    - service: automation.turn_on
-      entity_id: automation.person_motion_deckstairs
-#########################################
-# - alias: "Person Detection: if nobody is home or were sleeping & send a video of the driveway"
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.driveway_person
-#       to: "on"
-#   condition:
-#     condition: or
-#     conditions:
-#       - condition: state
-#         entity_id: binary_sensor.sleep_status
-#         state: "on"
-#       - condition: state
-#         entity_id: person.jon
-#         state: "not_home"
-#   action:
-#     - service: script.video_driveway
-#     - service: automation.turn_off
-#       entity_id: automation.person_motion_driveway
-#     - delay:
-#         seconds: 15
-#     - service: automation.turn_on
-#       entity_id: automation.person_motion_driveway
-#########################################
-- alias: "Person Detection: if nobody is home or were sleeping & send a video of the garage"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.garage_person
-      to: "on"
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: binary_sensor.sleep_status
-        state: "on"
-      - condition: state
-        entity_id: person.jon
-        state: "not_home"
-  action:
-    - service: script.video_garage
-    - service: automation.turn_off
-      entity_id: automation.person_motion_garage
-    - delay:
-        seconds: 45
-    - service: automation.turn_on
-      entity_id: automation.person_motion_garage
-#########################################
-- alias: "Person Detection: if nobody is home or were sleeping & send a video of the doorbell"
+- alias: "Person Detection: doorbell person detected"
+  description: "Person Detection: if nobody is home or were sleeping & send a video of the doorbell"
   trigger:
     platform: event
     event_type: folder_watcher
     event_data:
       event_type: created
   condition:
-    - condition: template
-      value_template: "{{ trigger.event.data.path != '/share/output.mp4' }}"
+    - condition: template # filename doesnt start with /share/trimmed-*
+      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
+    - condition: template # filename starts with /share/doorbell-*
+      value_template: "{{ trigger.event.data.path.startswith('/share/doorbell-') }}"
+    - condition: template # only notify once every 5 minutes at most
+      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_doorbell_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
     - condition: or
       conditions:
         - condition: state
@@ -111,9 +24,133 @@
           state: "not_home"
   action:
     # trim the clip in case its really long, save to a static file
-    - service: shell_command.cam_vid
+    - service: shell_command.cam_vid_doorbell
       data_template:
         clip: "{{ trigger.event.data.path }}"
     - service: telegram_bot.send_video
       data:
-        file: "/share/output.mp4"
+        file: "/share/trimmed-doorbell.mp4"
+#########################################
+- alias: "Person Detection: driveway person detected"
+  description: "Person Detection: if nobody is home or were sleeping & send a video of the driveway"
+  trigger:
+    platform: event
+    event_type: folder_watcher
+    event_data:
+      event_type: created
+  condition:
+    - condition: template # filename doesnt start with /share/trimmed-*
+      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
+    - condition: template # filename starts with /share/driveway-*
+      value_template: "{{ trigger.event.data.path.startswith('/share/driveway-') }}"
+    - condition: template # only notify once every 5 minutes at most
+      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_driveway_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.sleep_status
+          state: "on"
+        - condition: state
+          entity_id: person.jon
+          state: "not_home"
+  action:
+    # trim the clip in case its really long, save to a static file
+    - service: shell_command.cam_vid_driveway
+      data_template:
+        clip: "{{ trigger.event.data.path }}"
+    - service: telegram_bot.send_video
+      data:
+        file: "/share/trimmed-driveway.mp4"
+#########################################
+- alias: "Person Detection: deck person detected"
+  description: "Person Detection: if nobody is home or were sleeping & send a video of the deck"
+  trigger:
+    platform: event
+    event_type: folder_watcher
+    event_data:
+      event_type: created
+  condition:
+    - condition: template # filename doesnt start with /share/trimmed-*
+      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
+    - condition: template # filename starts with /share/deck-*
+      value_template: "{{ trigger.event.data.path.startswith('/share/deck-') }}"
+    - condition: template # only notify once every 5 minutes at most
+      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_deck_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.sleep_status
+          state: "on"
+        - condition: state
+          entity_id: person.jon
+          state: "not_home"
+  action:
+    # trim the clip in case its really long, save to a static file
+    - service: shell_command.cam_vid_deck
+      data_template:
+        clip: "{{ trigger.event.data.path }}"
+    - service: telegram_bot.send_video
+      data:
+        file: "/share/trimmed-deck.mp4"
+#########################################
+- alias: "Person Detection: deckstairs person detected"
+  description: "Person Detection: if nobody is home or were sleeping & send a video of the deckstairs"
+  trigger:
+    platform: event
+    event_type: folder_watcher
+    event_data:
+      event_type: created
+  condition:
+    - condition: template # filename doesnt start with /share/trimmed-*
+      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
+    - condition: template # filename starts with /share/deckstairs-*
+      value_template: "{{ trigger.event.data.path.startswith('/share/deckstairs-') }}"
+    - condition: template # only notify once every 5 minutes at most
+      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_deckstairs_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.sleep_status
+          state: "on"
+        - condition: state
+          entity_id: person.jon
+          state: "not_home"
+  action:
+    # trim the clip in case its really long, save to a static file
+    - service: shell_command.cam_vid_deckstairs
+      data_template:
+        clip: "{{ trigger.event.data.path }}"
+    - service: telegram_bot.send_video
+      data:
+        file: "/share/trimmed-deckstairs.mp4"
+#########################################
+- alias: "Person Detection: garage person detected"
+  description: "Person Detection: if nobody is home or were sleeping & send a video of the garage"
+  trigger:
+    platform: event
+    event_type: folder_watcher
+    event_data:
+      event_type: created
+  condition:
+    - condition: template # filename doesnt start with /share/trimmed-*
+      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
+    - condition: template # filename starts with /share/garage-*
+      value_template: "{{ trigger.event.data.path.startswith('/share/garage-') }}"
+    - condition: template # only notify once every 5 minutes at most
+      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_garage_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.sleep_status
+          state: "on"
+        - condition: state
+          entity_id: person.jon
+          state: "not_home"
+  action:
+    # trim the clip in case its really long, save to a static file
+    - service: shell_command.cam_vid_garage
+      data_template:
+        clip: "{{ trigger.event.data.path }}"
+    - service: telegram_bot.send_video
+      data:
+        file: "/share/trimmed-garage.mp4"

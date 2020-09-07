@@ -73,6 +73,7 @@ Hardware
 -   Random Hardware:
     -   [Bond](https://amzn.to/3b5aVlS)
     -   [Roborock](https://www.amazon.com/gp/product/B07YC624VV)
+    -   [Geek Aire Portable Fan (running Tasmota!)](https://www.amazon.com/Geek-Aire-Circulator-Oscillating-Velocity/dp/B07MX4ZNRY)
 
 ## Automations
 

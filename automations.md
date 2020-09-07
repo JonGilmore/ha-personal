@@ -2,14 +2,14 @@
 1.  [Security](#security) (70 automations)
 1.  [Garage](#garage) (3 automations)
 1.  [Nabu Casa](#nabu-casa) (2 automations)
-1.  [Person Detection](#person-detection) (3 automations)
+1.  [Person Detection](#person-detection) (5 automations)
 1.  [Port Forward](#port-forward) (4 automations)
 1.  [HVAC](#hvac) (8 automations)
 1.  [Vacation Mode](#vacation-mode) (5 automations)
 1.  [Vacuum](#vacuum) (2 automations)
 1.  [Christmas](#christmas) (6 automations)
 
-⚠️ Total number of automations: **103** ⚠️
+⚠️ Total number of automations: **105** ⚠️
 
 ## [Security](https://github.com/jongilmore/ha-personal/blob/8d36503b069a74defd9a238ff99695c5c1b3de32/automation/automation.yaml)
 ### [Line crossing template - telegram & tv notify](https://github.com/jongilmore/ha-personal/blob/8d36503b069a74defd9a238ff99695c5c1b3de32/automation/automation.yaml#L3)
@@ -311,21 +311,41 @@
 -   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L87)
 [^ toc](#automations---table-of-contents)
 
-## [Person Detection](https://github.com/jongilmore/ha-personal/blob/e5682a2a002d6257ef65a9d0deb08b9857c861ad/automation/person.yaml)
-### [If nobody is home or were sleeping & send a video of the deckstairs](https://github.com/jongilmore/ha-personal/blob/e5682a2a002d6257ef65a9d0deb08b9857c861ad/automation/person.yaml#L26)
-*which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L103)
--   [script.video_deckstairs](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/scripts.yaml#L37)
+## [Person Detection](https://github.com/jongilmore/ha-personal/blob/194ec04f0e8b5345268e9d5b2c3e9e693c98c19a/automation/person.yaml)
+### [Doorbell person detected](https://github.com/jongilmore/ha-personal/blob/194ec04f0e8b5345268e9d5b2c3e9e693c98c19a/automation/person.yaml#L3)
+  Person Detection: if nobody is home or were sleeping & send a video of the doorbell
 
-### [If nobody is home or were sleeping & send a video of the garage](https://github.com/jongilmore/ha-personal/blob/e5682a2a002d6257ef65a9d0deb08b9857c861ad/automation/person.yaml#L72)
 *which uses:*
 -   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L103)
--   [script.video_garage](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/scripts.yaml#L48)
+-   [shell_command.cam_vid_doorbell](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/shell_commands.yaml#L10)
 
-### [If nobody is home or were sleeping & send a video of the doorbell](https://github.com/jongilmore/ha-personal/blob/e5682a2a002d6257ef65a9d0deb08b9857c861ad/automation/person.yaml#L95)
+### [Driveway person detected](https://github.com/jongilmore/ha-personal/blob/194ec04f0e8b5345268e9d5b2c3e9e693c98c19a/automation/person.yaml#L34)
+  Person Detection: if nobody is home or were sleeping & send a video of the driveway
+
 *which uses:*
 -   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L103)
--   [shell_command.cam_vid](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/shell_commands.yaml#L10)
+-   [shell_command.cam_vid_driveway](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/shell_commands.yaml#L11)
+
+### [Deck person detected](https://github.com/jongilmore/ha-personal/blob/194ec04f0e8b5345268e9d5b2c3e9e693c98c19a/automation/person.yaml#L65)
+  Person Detection: if nobody is home or were sleeping & send a video of the deck
+
+*which uses:*
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L103)
+-   [shell_command.cam_vid_deck](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/shell_commands.yaml#L12)
+
+### [Deckstairs person detected](https://github.com/jongilmore/ha-personal/blob/194ec04f0e8b5345268e9d5b2c3e9e693c98c19a/automation/person.yaml#L96)
+  Person Detection: if nobody is home or were sleeping & send a video of the deckstairs
+
+*which uses:*
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L103)
+-   [shell_command.cam_vid_deckstairs](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/shell_commands.yaml#L13)
+
+### [Garage person detected](https://github.com/jongilmore/ha-personal/blob/194ec04f0e8b5345268e9d5b2c3e9e693c98c19a/automation/person.yaml#L127)
+  Person Detection: if nobody is home or were sleeping & send a video of the garage
+
+*which uses:*
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L103)
+-   [shell_command.cam_vid_garage](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/shell_commands.yaml#L14)
 [^ toc](#automations---table-of-contents)
 
 ## [Port Forward](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml)
