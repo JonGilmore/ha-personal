@@ -1,7 +1,7 @@
 ---
 #########################################
 - alias: "Person Detection: doorbell person detected"
-  description: "Person Detection: if nobody is home or were sleeping & send a video of the doorbell"
+  description: "If nobody is home or were sleeping - send a video of the doorbell"
   trigger:
     platform: event
     event_type: folder_watcher
@@ -32,7 +32,7 @@
         file: "/share/trimmed-doorbell.mp4"
 #########################################
 - alias: "Person Detection: driveway person detected"
-  description: "Person Detection: if nobody is home or were sleeping & send a video of the driveway"
+  description: "If nobody is home or were sleeping - send a video of the driveway"
   trigger:
     platform: event
     event_type: folder_watcher
@@ -63,7 +63,7 @@
         file: "/share/trimmed-driveway.mp4"
 #########################################
 - alias: "Person Detection: deck person detected"
-  description: "Person Detection: if nobody is home or were sleeping & send a video of the deck"
+  description: "If nobody is home or were sleeping - send a video of the deck"
   trigger:
     platform: event
     event_type: folder_watcher
@@ -94,7 +94,7 @@
         file: "/share/trimmed-deck.mp4"
 #########################################
 - alias: "Person Detection: deckstairs person detected"
-  description: "Person Detection: if nobody is home or were sleeping & send a video of the deckstairs"
+  description: "If nobody is home or were sleeping - send a video of the deckstairs"
   trigger:
     platform: event
     event_type: folder_watcher
@@ -125,7 +125,7 @@
         file: "/share/trimmed-deckstairs.mp4"
 #########################################
 - alias: "Person Detection: garage person detected"
-  description: "Person Detection: if nobody is home or were sleeping & send a video of the garage"
+  description: "If nobody is home or were sleeping - send a video of the garage"
   trigger:
     platform: event
     event_type: folder_watcher
