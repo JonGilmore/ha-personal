@@ -34,40 +34,40 @@ camera:
   - platform: local_file
     name: driveway_history10
     file_path: /config/www/driveway_image10.jpg
-  # deck stairs
+  # deckstairs
   - platform: mjpeg
-    name: deck_stairs_hist
-    mjpeg_url: !secret frigate_deck_stairs_cam
+    name: deckstairs_hist
+    mjpeg_url: !secret frigate_deckstairs_cam
   - platform: local_file
-    name: deck_stairs_history1
-    file_path: /config/www/deck_stairs_image1.jpg
+    name: deckstairs_history1
+    file_path: /config/www/deckstairs_image1.jpg
   - platform: local_file
-    name: deck_stairs_history2
-    file_path: /config/www/deck_stairs_image2.jpg
+    name: deckstairs_history2
+    file_path: /config/www/deckstairs_image2.jpg
   - platform: local_file
-    name: deck_stairs_history3
-    file_path: /config/www/deck_stairs_image3.jpg
+    name: deckstairs_history3
+    file_path: /config/www/deckstairs_image3.jpg
   - platform: local_file
-    name: deck_stairs_history4
-    file_path: /config/www/deck_stairs_image4.jpg
+    name: deckstairs_history4
+    file_path: /config/www/deckstairs_image4.jpg
   - platform: local_file
-    name: deck_stairs_history5
-    file_path: /config/www/deck_stairs_image5.jpg
+    name: deckstairs_history5
+    file_path: /config/www/deckstairs_image5.jpg
   - platform: local_file
-    name: deck_stairs_history6
-    file_path: /config/www/deck_stairs_image6.jpg
+    name: deckstairs_history6
+    file_path: /config/www/deckstairs_image6.jpg
   - platform: local_file
-    name: deck_stairs_history7
-    file_path: /config/www/deck_stairs_image7.jpg
+    name: deckstairs_history7
+    file_path: /config/www/deckstairs_image7.jpg
   - platform: local_file
-    name: deck_stairs_history8
-    file_path: /config/www/deck_stairs_image8.jpg
+    name: deckstairs_history8
+    file_path: /config/www/deckstairs_image8.jpg
   - platform: local_file
-    name: deck_stairs_history9
-    file_path: /config/www/deck_stairs_image9.jpg
+    name: deckstairs_history9
+    file_path: /config/www/deckstairs_image9.jpg
   - platform: local_file
-    name: deck_stairs_history10
-    file_path: /config/www/deck_stairs_image10.jpg
+    name: deckstairs_history10
+    file_path: /config/www/deckstairs_image10.jpg
   # deck
   - platform: mjpeg
     name: deck_hist
@@ -253,52 +253,52 @@ automation:
           entity_id: camera.driveway_hist
           filename: /config/www/driveway_image10.jpg
         service: camera.snapshot
-  - alias: create_history_deck_stairs
+  - alias: create_history_deckstairs
     trigger:
-      - entity_id: binary_sensor.deck_stairs_person
+      - entity_id: binary_sensor.deckstairs_person
         from: "off"
         platform: state
         to: "on"
     action:
       - data:
-          entity_id: camera.deck_stairs_history2
-          filename: /config/www/deck_stairs_image1.jpg
+          entity_id: camera.deckstairs_history2
+          filename: /config/www/deckstairs_image1.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_history3
-          filename: /config/www/deck_stairs_image2.jpg
+          entity_id: camera.deckstairs_history3
+          filename: /config/www/deckstairs_image2.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_history4
-          filename: /config/www/deck_stairs_image3.jpg
+          entity_id: camera.deckstairs_history4
+          filename: /config/www/deckstairs_image3.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_history5
-          filename: /config/www/deck_stairs_image4.jpg
+          entity_id: camera.deckstairs_history5
+          filename: /config/www/deckstairs_image4.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_history6
-          filename: /config/www/deck_stairs_image5.jpg
+          entity_id: camera.deckstairs_history6
+          filename: /config/www/deckstairs_image5.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_history7
-          filename: /config/www/deck_stairs_image6.jpg
+          entity_id: camera.deckstairs_history7
+          filename: /config/www/deckstairs_image6.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_history8
-          filename: /config/www/deck_stairs_image7.jpg
+          entity_id: camera.deckstairs_history8
+          filename: /config/www/deckstairs_image7.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_history9
-          filename: /config/www/deck_stairs_image8.jpg
+          entity_id: camera.deckstairs_history9
+          filename: /config/www/deckstairs_image8.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_history10
-          filename: /config/www/deck_stairs_image9.jpg
+          entity_id: camera.deckstairs_history10
+          filename: /config/www/deckstairs_image9.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image10.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image10.jpg
         service: camera.snapshot
   - alias: create_history_deck
     trigger:
@@ -532,46 +532,46 @@ script:
           entity_id: camera.driveway_hist
           filename: /config/www/driveway_image1.jpg
         service: camera.snapshot
-      # deck stairs
+      # deckstairs
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image10.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image10.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image9.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image9.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image8.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image8.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image7.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image7.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image6.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image6.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image5.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image5.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image4.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image4.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image3.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image3.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image2.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image2.jpg
         service: camera.snapshot
       - data:
-          entity_id: camera.deck_stairs_hist
-          filename: /config/www/deck_stairs_image1.jpg
+          entity_id: camera.deckstairs_hist
+          filename: /config/www/deckstairs_image1.jpg
         service: camera.snapshot
       # deck
       - data:
@@ -745,8 +745,8 @@ binary_sensor:
     device_class: moving
     availability_topic: "frigate/available"
   - platform: mqtt
-    name: "Deck Stairs Person"
-    state_topic: "frigate/deck_stairs/person"
+    name: "DeckStairs Person"
+    state_topic: "frigate/deckstairs/person"
     device_class: moving
     availability_topic: "frigate/available"
   - platform: mqtt

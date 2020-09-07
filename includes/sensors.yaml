@@ -314,7 +314,7 @@
     - doorbell
     - driveway
     - garage
-    - deck_stairs
+    - deckstairs
     - coral
   value_template: "OK"
 - platform: template
@@ -355,14 +355,14 @@
     garage_detection_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
-    deck_stairs_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["camera_fps"] }}'
+    deckstairs_fps:
+      value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["camera_fps"] }}'
       unit_of_measurement: "FPS"
-    deck_stairs_skipped_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["skipped_fps"] }}'
+    deckstairs_skipped_fps:
+      value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["skipped_fps"] }}'
       unit_of_measurement: "FPS"
-    deck_stairs_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deck_stairs"]["detection_fps"] }}'
+    deckstairs_detection_fps:
+      value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
     frigate_coral_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["coral"]["fps"] }}'

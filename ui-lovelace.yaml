@@ -384,8 +384,8 @@ views:
         entities:
           - switch.exterior_posts
       - type: picture-glance
-        camera_image: camera.deck_stairs
-        title: Deck Stairs
+        camera_image: camera.deckstairs
+        title: DeckStairs
         entities:
           - switch.exterior_posts
       - type: picture-glance
@@ -415,7 +415,7 @@ views:
       - type: custom:decluttering-card
         template: cam_history
         variables:
-          - cam: deck_stairs
+          - cam: deckstairs
       - type: custom:decluttering-card
         template: cam_history
         variables:

@@ -14,7 +14,7 @@
 - type: custom:decluttering-card
   template: cam_history
   variables:
-    - cam: deck_stairs
+    - cam: deckstairs
 - type: custom:decluttering-card
   template: cam_history
   variables:

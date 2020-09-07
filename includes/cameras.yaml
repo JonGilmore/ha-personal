@@ -9,7 +9,7 @@
   authentication: digest
 - platform: mjpeg
   mjpeg_url: http://192.168.45.113:80/Streaming/Channels/2/preview
-  name: Deck Stairs
+  name: DeckStairs
   username: admin
   password: !secret hik_pwd
 - platform: mjpeg
@@ -56,6 +56,6 @@
 - name: Garage Last Person
   platform: mqtt
   topic: frigate/garage/person/snapshot
-- name: Deck Stairs Last Person
+- name: DeckStairs Last Person
   platform: mqtt
-  topic: frigate/deck_stairs/person/snapshot
+  topic: frigate/deckstairs/person/snapshot

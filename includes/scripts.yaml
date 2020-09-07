@@ -35,7 +35,7 @@ video_deck:
       data_template:
         file: "/tmp/deck.mp4"
 video_deckstairs:
-  alias: "deck stairs video"
+  alias: "deckstairs video"
   sequence:
     - service: shell_command.cam_deckstairs_vid
       data:

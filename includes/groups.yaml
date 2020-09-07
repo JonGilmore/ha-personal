@@ -340,7 +340,7 @@ exterior_motions:
   name: Exterior Motions
   entities:
     - binary_sensor.deck_person
-    - binary_sensor.deck_stairs_person
+    - binary_sensor.deckstairs_person
     - binary_sensor.doorbell_person
     - binary_sensor.driveway_person
     - binary_sensor.garage_person

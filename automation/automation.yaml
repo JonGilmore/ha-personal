@@ -121,7 +121,7 @@
       entity_id: binary_sensor.deck_person
       to: "on"
     - platform: state
-      entity_id: binary_sensor.deck_stairs_person
+      entity_id: binary_sensor.deckstairs_person
       to: "on"
   condition:
     - condition: state
