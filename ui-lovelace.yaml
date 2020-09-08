@@ -80,14 +80,20 @@ decluttering_templates:
           entity: "camera.[[cam]]_history10"
 
 # hide settings tabs from wife
-# custom_header:
-#   compact_mode: true
-#   hide_help: true
-#   exceptions:
-#     - conditions:
-#         user: !secret wife
-#       config:
-#         hide_tabs: 9 to 10
+custom_header:
+  compact_mode: true
+  exceptions:
+    - conditions:
+        user_agent: Mobile
+      config:
+        compact_mode: false
+        hide_tabs: "6,7,10,11"
+        chevrons: false
+        split_mode: true
+    - conditions:
+        user: !secret wife
+      config:
+        hide_tabs: "9 to 10"
 
 views:
   ##########################################
@@ -97,11 +103,16 @@ views:
     id: home
     icon: mdi:home
     cards:
-      - type: picture
-        image: mdi:cloud
-        tap_action:
-          action: navigate
-          navigation_path: /lovelace/12/
+      - type: entities
+        show_name: false
+        show_header_toggle: false
+        entities:
+          - entity: alarm_control_panel.area001
+            type: custom:multiple-entity-row
+            name: Alarm
+            show_state: false
+            entities:
+              - entity: alarm_control_panel.area001
       - type: weather-forecast
         entity: weather.dark_sky
       - type: vertical-stack
@@ -163,11 +174,6 @@ views:
                 variables:
                   - icon: mdi:car
                   - entity_id: script.video_garage
-              - type: custom:decluttering-card
-                template: cam_small
-                variables:
-                  - icon: mdi:knife
-                  - entity_id: script.video_kitchen
       - type: picture-glance
         camera_image: camera.driveway
         title: Exterior
@@ -241,6 +247,7 @@ views:
                 name: light main?
               - entity: binary_sensor.light_inside_master
                 name: light second?
+          - entity: input_select.vacuum_room
       - type: custom:mini-graph-card
         name: Lux Sensors
         icon: mdi:brightness-6
@@ -251,10 +258,6 @@ views:
           - entity: sensor.sitting_room_lux
             name: Sitting Room Lux
             show_state: true
-      - type: custom:decluttering-card
-        template: cam_history
-        variables:
-          - cam: driveway
 
   ##########################################
   # THERMOSTAT TAB

@@ -17,7 +17,3 @@ alarm_notifier:
   name: Alarm Notifier
 master_override:
   name: Master Lights Override
-kitchen_zone:
-  name: Kitchen Zone
-foyer_zone:
-  name: Foyer Zone

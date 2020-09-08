@@ -1,0 +1,9 @@
+---
+vacuum_room:
+  name: "Choose a room to clean"
+  options:
+    - Select Input
+    - kitchen
+    - foyer
+  initial: Select Input
+  icon: mdi:robot-vacuum

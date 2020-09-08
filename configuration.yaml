@@ -117,6 +117,7 @@ cover: !include includes/covers.yaml
 fan: !include includes/fans.yaml
 group: !include includes/groups.yaml
 input_boolean: !include includes/input_booleans.yaml
+input_select: !include includes/input_selects.yaml
 rest_command: !include includes/rest_commands.yaml
 script: !include includes/scripts.yaml
 sensor: !include includes/sensors.yaml

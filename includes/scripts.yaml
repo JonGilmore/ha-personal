@@ -208,13 +208,20 @@ sonos_say:
       data_template:
         entity_id: "{{ sonos_entity }}"
 
-vacuum_zones:
+vacuum_kitchen:
   sequence:
     - service: vacuum.send_command
-      data_template:
+      data:
         entity_id: "vacuum.main_dwayne"
         command: "zoned_cleanup"
         params:
-          "zone_ids":
-            - "{%- if states('input_boolean.kitchen_zone') == 'on' %}kitchen{% endif %}"
-            - "{%- if states('input_boolean.foyer_zone') == 'on' %}foyer{% endif %}"
+          "zone_ids": ["kitchen"]
+
+vacuum_foyer:
+  sequence:
+    - service: vacuum.send_command
+      data:
+        entity_id: "vacuum.main_dwayne"
+        command: "zoned_cleanup"
+        params:
+          "zone_ids": ["foyer"]
