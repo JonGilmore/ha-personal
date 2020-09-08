@@ -57,14 +57,24 @@ cloud:
         - switch.upstairs_hall_hall
         - switch.upstairs_hall_main_stairs
         - switch.upstairs_hall_treads
+        - script.vacuum_foyer
+        - script.vacuum_kitchen
+        - camera.daisy
+        - camera.deck
+        - camera.deckstairs
+        - camera.doorbell_live
+        - camera.driveway
+        - camera.front_door
+        - camera.garage
+        - camera.kitchen_camera
       include_domains:
         - light
         - fan
         - scene
-        - camera
       exclude_domains:
         - alert
         - automation
+        - camera
         - lock
         - group
         - input_boolean
@@ -134,11 +144,22 @@ cloud:
         - switch.upstairs_hall_hall
         - switch.upstairs_hall_main_stairs
         - switch.upstairs_hall_treads
+        - script.vacuum_foyer
+        - script.vacuum_kitchen
+        - script.vacuum_foyer
+        - script.vacuum_kitchen
+        - camera.daisy
+        - camera.deck
+        - camera.deckstairs
+        - camera.doorbell_live
+        - camera.driveway
+        - camera.front_door
+        - camera.garage
+        - camera.kitchen_camera
       include_domains:
         - light
         - fan
         - scene
-        - camera
       exclude_domains:
         - group
         - input_boolean
@@ -153,3 +174,4 @@ cloud:
         - lock
         - sensor
         - switch
+        - camera

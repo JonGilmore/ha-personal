@@ -6,10 +6,10 @@
 1.  [Port Forward](#port-forward) (4 automations)
 1.  [HVAC](#hvac) (8 automations)
 1.  [Vacation Mode](#vacation-mode) (5 automations)
-1.  [Vacuum](#vacuum) (2 automations)
+1.  [Vacuum](#vacuum) (1 automations)
 1.  [Christmas](#christmas) (6 automations)
 
-⚠️ Total number of automations: **105** ⚠️
+⚠️ Total number of automations: **104** ⚠️
 
 ## [Security](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml)
 ### [Line crossing template - telegram & tv notify](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L3)
@@ -427,20 +427,11 @@
 [^ toc](#automations---table-of-contents)
 
 ## [Vacuum](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/automation/vacuum.yaml)
-### [Start cleaning action](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/automation/vacuum.yaml#L3)
+### [Start cleaning kitchen](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/automation/vacuum.yaml#L3)
 *which uses:*
--   [input_boolean.foyer_zone](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L22)
--   [input_boolean.kitchen_zone](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L20)
--   [input_boolean.foyer_zone](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L22)
--   [input_boolean.kitchen_zone](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L20)
--   [script.vacuum_zones](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L211)
-
-### [Back to dock, turn off zone booleans](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/automation/vacuum.yaml#L21)
-*which uses:*
--   [input_boolean.foyer_zone](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L22)
--   [input_boolean.kitchen_zone](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L20)
--   [input_boolean.foyer_zone](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L22)
--   [input_boolean.kitchen_zone](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L20)
+-   [input_select.vacuum_room](https://github.com/jongilmore/ha-personal/blob//includes/input_selects.yaml#L2)
+-   [script.vacuum_foyer](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L220)
+-   [script.vacuum_kitchen](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L211)
 [^ toc](#automations---table-of-contents)
 
 ## [Christmas](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/xmas.yaml)
