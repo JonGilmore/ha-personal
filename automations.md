@@ -23,7 +23,7 @@
 *which uses:*
 -   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L91)
 -   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L108)
--   [script.popup_camera](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L173)
+-   [script.popup_camera](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L173)
 
 ### [Front door line crossing or doorbell rang & dark out & house unoccupied & foyer and exterior lights on for 10 min](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L53)
 *which uses:*
@@ -38,7 +38,7 @@
 ### [Doorbell rang & play google home video](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L87)
 ### [Doorbell rang & interrupt sonos master](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L102)
 *which uses:*
--   [script.sonos_say](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L190)
+-   [script.sonos_say](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L190)
 
 ### [Deck person & dark out & deck lights on](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L118)
 *which uses:*
@@ -66,35 +66,35 @@
 
 ### [Motion light template for foyer & basement & and bar](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L218)
 *which uses:*
--   [input_boolean.block_all_motion_lights](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L2)
--   [input_boolean.block_all_motion_lights](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L2)
+-   [input_boolean.block_all_motion_lights](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L2)
+-   [input_boolean.block_all_motion_lights](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L2)
 
 ### [Master blinds at dusk & only runs once (and after 1hr before sunset)](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L254)
 *which uses:*
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L6)
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L6)
 
 ### [Close master blinds at sunset](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L272)
 *which uses:*
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L6)
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L6)
 
 ### [Open master blinds in the morning (after 45min of unoccupied bed)](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L282)
 *which uses:*
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L6)
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L6)
 -   [sensor.master_bed_people](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/sensors.yaml#L298)
 
 ### [Reset run-once variables - noon](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L302)
 *which uses:*
--   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L8)
--   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L8)
+-   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L8)
+-   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L8)
 
 ### [Start sleeping & set HVAC fans on & turn off recirculation pump & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L310)
 *which uses:*
--   [input_boolean.guests](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L12)
+-   [input_boolean.guests](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L12)
 -   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L103)
--   [input_boolean.guests](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L12)
+-   [input_boolean.guests](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L12)
 
 ### [Start sleeping & check the garage doors](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L338)
 *which uses:*
@@ -103,7 +103,7 @@
 ### [Check the door locks](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L358)
 *which uses:*
 -   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L103)
--   [script.lock_doors](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L115)
+-   [script.lock_doors](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L115)
 -   [sensor.doors_unlocked](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/sensors.yaml#L95)
 -   [sensor.doors_unlocked_number](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/sensors.yaml#L107)
 
@@ -114,7 +114,7 @@
 ### [Turn the HVAC fans on & recirculation pump and tvs off](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L395)
 *which uses:*
 -   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L91)
--   [script.tvs_off](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L133)
+-   [script.tvs_off](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L133)
 
 ### [Away during the day & turn lights off](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L412)
 *which uses:*
@@ -128,9 +128,9 @@
 
 ### [Turn on sunset lights at dark or sunset](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L443)
 *which uses:*
--   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L8)
+-   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L8)
 -   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L108)
--   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L8)
+-   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L8)
 
 ### [Turn on master fan at night (if AC is on)](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L465)
 *which uses:*
@@ -156,25 +156,25 @@
 
 ### [Dog walker here between 9:30-2pm (while the alarm is not disarmed)](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L552)
 *which uses:*
--   [script.video_daisy](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L15)
+-   [script.video_daisy](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L15)
 -   [sensor.armed_status](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/sensors.yaml#L15)
 
 ### [Fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L566)
 *which uses:*
--   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L16)
--   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L16)
--   [script.alarm](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L82)
+-   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L16)
+-   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L16)
+-   [script.alarm](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L82)
 -   [sensor.alarm_state](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/sensors.yaml#L23)
 
 ### [Burglar active & lights on & send videos & repeat notifications](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L583)
 *which uses:*
--   [script.alarm](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L82)
+-   [script.alarm](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L82)
 -   [sensor.alarm_state](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/sensors.yaml#L23)
 
 ### [Turn off alarm notifications because of user interaction](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L593)
 *which uses:*
--   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L16)
--   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L16)
+-   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L16)
+-   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L16)
 
 ### [Master entry motion light when master bed is unoccupied](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L608)
 *which uses:*
@@ -182,8 +182,8 @@
 
 ### [Master entry motion lights Off](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L626)
 *which uses:*
--   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L18)
--   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L18)
+-   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L18)
+-   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L18)
 
 ### [Sitting motion light when master bed is unoccupied](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L648)
 *which uses:*
@@ -191,8 +191,8 @@
 
 ### [Sitting motion light off when master override is off](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L664)
 *which uses:*
--   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L18)
--   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L18)
+-   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L18)
+-   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L18)
 
 ### [Sitting light off when bed occupied (& chair unoccupied)](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L679)
 *which uses:*
@@ -206,8 +206,8 @@
 
 ### [Kitchen lights off with no motion for 15 minutes](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L716)
 *which uses:*
--   [input_boolean.block_all_motion_lights](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L2)
--   [input_boolean.block_all_motion_lights](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L2)
+-   [input_boolean.block_all_motion_lights](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L2)
+-   [input_boolean.block_all_motion_lights](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L2)
 
 ### [Daisy cam photo every 45 minutes when armed away and kennel closed](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L731)
 *which uses:*
@@ -218,7 +218,7 @@
 ### [Daisy timer completed](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L746)
 *which uses:*
 -   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L91)
--   [script.video_daisy](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L15)
+-   [script.video_daisy](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L15)
 -   [timer.daisy_cam_timer](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/timers.yaml#L4)
 
 ### [Enable motion lights 2hours before sunset & disable 2hour after sunrise](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L764)
@@ -234,8 +234,8 @@
 ### [Patio fan off](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L809)
 ### [Backyard party lights](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L828)
 *which uses:*
--   [input_boolean.party](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L14)
--   [input_boolean.party](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/includes/input_booleans.yaml#L14)
+-   [input_boolean.party](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L14)
+-   [input_boolean.party](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_booleans.yaml#L14)
 
 ### [Elk Alarm trouble notification](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L843)
 *which uses:*
@@ -254,11 +254,11 @@
 ### [Important date (birthday & anniversary)](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L936)
 ### [Create all groups](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L949)
 *which uses:*
--   [script.group_set](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L145)
+-   [script.group_set](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L145)
 
 ### [Popup camera](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L960)
 *which uses:*
--   [script.popup_camera](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L173)
+-   [script.popup_camera](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L173)
 
 ### [Basement stairs motion - timer start](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/automation/automation.yaml#L975)
 *which uses:*
@@ -426,12 +426,12 @@
 -   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L87)
 [^ toc](#automations---table-of-contents)
 
-## [Vacuum](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/automation/vacuum.yaml)
-### [Start cleaning kitchen](https://github.com/jongilmore/ha-personal/blob/7428ea05827e7f54b1e7acc298127c394b0ceb42/automation/vacuum.yaml#L3)
+## [Vacuum](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/automation/vacuum.yaml)
+### [Start cleaning kitchen](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/automation/vacuum.yaml#L3)
 *which uses:*
--   [input_select.vacuum_room](https://github.com/jongilmore/ha-personal/blob//includes/input_selects.yaml#L2)
--   [script.vacuum_foyer](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L220)
--   [script.vacuum_kitchen](https://github.com/jongilmore/ha-personal/blob/caf8ff54b351627df560d807b53d3de5774b3b48/includes/scripts.yaml#L211)
+-   [input_select.vacuum_room](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/input_selects.yaml#L2)
+-   [script.vacuum_foyer](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L220)
+-   [script.vacuum_kitchen](https://github.com/jongilmore/ha-personal/blob/457227223f47e4147c3971be5e39872195e28fc5/includes/scripts.yaml#L211)
 [^ toc](#automations---table-of-contents)
 
 ## [Christmas](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/xmas.yaml)

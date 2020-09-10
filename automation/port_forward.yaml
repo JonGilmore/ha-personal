@@ -3,8 +3,8 @@
 - alias: "Port Forward: enable wireguard port forward if anybody leaves"
   trigger:
     - platform: state
-      entity_id: binary_sensor.anybody_home
-      to: "off"
+      entity_id: binary_sensor.anybody_away
+      to: "on"
   action:
     - service: shell_command.unifi_portfwd
       data:
@@ -12,7 +12,7 @@
         password: !secret unifi_pwd
         baseurl: !secret unifi_ip
         name: !secret wireguard_name
-        enabled: 'true'
+        enabled: "true"
         dst_port: !secret wireguard_port
         ip: !secret hass_ip
         fwd_port: !secret wireguard_port
@@ -22,8 +22,8 @@
 - alias: "Port Forward: disable wireguard port forward when we get home"
   trigger:
     - platform: state
-      entity_id: binary_sensor.anybody_home
-      to: "on"
+      entity_id: binary_sensor.anybody_away
+      to: "off"
   action:
     - service: shell_command.unifi_portfwd
       data:
@@ -31,7 +31,7 @@
         password: !secret unifi_pwd
         baseurl: !secret unifi_ip
         name: !secret wireguard_name
-        enabled: 'false'
+        enabled: "false"
         dst_port: !secret wireguard_port
         ip: !secret hass_ip
         fwd_port: !secret wireguard_port
@@ -50,7 +50,7 @@
         password: !secret unifi_pwd
         baseurl: !secret unifi_ip
         name: !secret nas_name
-        enabled: 'true'
+        enabled: "true"
         dst_port: !secret nas_port_ext
         ip: !secret nas_ip
         fwd_port: !secret nas_port_int
@@ -68,7 +68,7 @@
         password: !secret unifi_pwd
         baseurl: !secret unifi_ip
         name: !secret nas_name
-        enabled: 'false'
+        enabled: "false"
         dst_port: !secret nas_port_ext
         ip: !secret nas_ip
         fwd_port: !secret nas_port_int
