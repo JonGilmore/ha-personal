@@ -351,12 +351,12 @@
 ## [Port Forward](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml)
 ### [Enable wireguard port forward if anybody leaves](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml#L3)
 *which uses:*
--   [binary_sensor.anybody_home](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L116)
+-   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L130)
 -   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/c09af895b64b4601483b10cfa342ca1d1095de4d/includes/shell_commands.yaml#L9)
 
 ### [Disable wireguard port forward when we get home](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml#L22)
 *which uses:*
--   [binary_sensor.anybody_home](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L116)
+-   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L130)
 -   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/c09af895b64b4601483b10cfa342ca1d1095de4d/includes/shell_commands.yaml#L9)
 
 ### [Enable NAS port forward for nightly backup at 1:58am](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml#L42)
