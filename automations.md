@@ -348,22 +348,22 @@
 -   [shell_command.cam_vid_garage](https://github.com/jongilmore/ha-personal/blob/c09af895b64b4601483b10cfa342ca1d1095de4d/includes/shell_commands.yaml#L14)
 [^ toc](#automations---table-of-contents)
 
-## [Port Forward](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml)
-### [Enable wireguard port forward if anybody leaves](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml#L3)
+## [Port Forward](https://github.com/jongilmore/ha-personal/blob/786760bdb384fe1bc8a7451007bb674a1fceeaac/automation/port_forward.yaml)
+### [Enable wireguard port forward if anybody leaves](https://github.com/jongilmore/ha-personal/blob/786760bdb384fe1bc8a7451007bb674a1fceeaac/automation/port_forward.yaml#L3)
 *which uses:*
 -   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L130)
 -   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/c09af895b64b4601483b10cfa342ca1d1095de4d/includes/shell_commands.yaml#L9)
 
-### [Disable wireguard port forward when we get home](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml#L22)
+### [Disable wireguard port forward when we get home](https://github.com/jongilmore/ha-personal/blob/786760bdb384fe1bc8a7451007bb674a1fceeaac/automation/port_forward.yaml#L22)
 *which uses:*
 -   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/c8f40c8ff8e83d157eb65131439490e63e37420e/includes/binary_sensors.yaml#L130)
 -   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/c09af895b64b4601483b10cfa342ca1d1095de4d/includes/shell_commands.yaml#L9)
 
-### [Enable NAS port forward for nightly backup at 1:58am](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml#L42)
+### [Enable NAS port forward for nightly backup at 1:58am](https://github.com/jongilmore/ha-personal/blob/786760bdb384fe1bc8a7451007bb674a1fceeaac/automation/port_forward.yaml#L42)
 *which uses:*
 -   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/c09af895b64b4601483b10cfa342ca1d1095de4d/includes/shell_commands.yaml#L9)
 
-### [Disable NAS port forward for backup](https://github.com/jongilmore/ha-personal/blob/ba6e4c875c64b433f2cf6f58a4e1db335b9a9c58/automation/port_forward.yaml#L60)
+### [Disable NAS port forward for backup](https://github.com/jongilmore/ha-personal/blob/786760bdb384fe1bc8a7451007bb674a1fceeaac/automation/port_forward.yaml#L60)
 *which uses:*
 -   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/c09af895b64b4601483b10cfa342ca1d1095de4d/includes/shell_commands.yaml#L9)
 [^ toc](#automations---table-of-contents)
