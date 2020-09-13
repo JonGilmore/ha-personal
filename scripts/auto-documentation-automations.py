@@ -136,20 +136,6 @@ def get_description(automation):
     desc = automation["description"]
     return "\n  " + desc + "\n"
 
-
-def remove_text(content, start, end):
-    do_append = True
-    new = []
-    for line in content:
-        if end in line:
-            do_append = not do_append
-        if do_append:
-            new.append(line)
-        if start in line:
-            do_append = not do_append
-    return new
-
-
 # def get_emoji(title):
 #     return {
 #         "Alarm clock": "⏰",
@@ -205,8 +191,5 @@ for fname in automation_files:
     text.append("\n")
 
 # Modify automations.md
-with open("automations.md") as f:
-    lines = f.readlines()
-
 with open("automations.md", "w") as f:
     f.write("".join(text))
