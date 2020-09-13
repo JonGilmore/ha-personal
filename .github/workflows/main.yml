@@ -28,6 +28,22 @@ jobs:
         uses: "docker://pipelinecomponents/remark-lint:latest"
         with:
           args: "remark --no-stdout --color --frail --use preset-lint-recommended ."
+
+  generate_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting your configuration from GitHub
+        uses: actions/checkout@v2.1.0
+      - run: |
+          python3 scripts/auto-documentation-automations.py
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add automations.md
+          git commit -m "[bot]updated automations"
+          git push
+
   # yamllint:
   #   runs-on: ubuntu-latest
   #   steps:

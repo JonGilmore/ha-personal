@@ -1,7 +1,7 @@
 ---
 #########################################
 - alias: "Security: line crossing template - telegram & tv notify"
-  description: "Blah blah blah"
+  description: "When something crosses a line on the driveway or porch, notify via telegram and LG TV"
   trigger:
     - platform: state
       entity_id:
