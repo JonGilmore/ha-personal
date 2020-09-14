@@ -90,11 +90,11 @@ alarm:
             - "Yes:/turnoffnotification, No:/do_nothing"
     - service: media_player.volume_set
       data:
-        entity_id: media_player.office_googlehome, media_player.main_googlehome, media_player.basement_googlehome
+        entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
         volume_level: "0.90"
     - service: tts.google_say
       data:
-        entity_id: media_player.office_googlehome, media_player.main_googlehome, media_player.basement_googlehome
+        entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
         message: "alarm active! disable this on the keypad or on your phone!"
     - service: script.turn_on
       entity_id: script.send_videos

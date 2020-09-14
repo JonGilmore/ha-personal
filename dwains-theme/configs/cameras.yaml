@@ -6,5 +6,5 @@ cameras:
   - entity: camera.daisy
   - entity: camera.deck
   - entity: camera.deckstairs
-  - entity: camera.doorbell_live
+  - entity: camera.front_door_live
   - entity: camera.kitchen_camera

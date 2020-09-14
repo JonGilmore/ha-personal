@@ -62,7 +62,7 @@ cloud:
         - camera.daisy
         - camera.deck
         - camera.deckstairs
-        - camera.doorbell_live
+        - camera.front_door_live
         - camera.driveway
         - camera.front_door
         - camera.garage
@@ -151,7 +151,7 @@ cloud:
         - camera.daisy
         - camera.deck
         - camera.deckstairs
-        - camera.doorbell_live
+        - camera.front_door_live
         - camera.driveway
         - camera.front_door
         - camera.garage

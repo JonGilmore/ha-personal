@@ -392,7 +392,7 @@ views:
         entities:
           - switch.exterior_posts
       - type: picture-glance
-        camera_image: camera.doorbell_live
+        camera_image: camera.front_door_live
         title: Doorbell
         entities:
           - scene.equipment_room_enclosure_device_001_ph_sunset1
@@ -653,7 +653,7 @@ views:
         entities:
           - media_player.basement_googlehome
           - media_player.office_googlehome
-          - media_player.main_googlehome
+          - media_player.main_display
   ##########################################
   # TV TAB
   ##########################################

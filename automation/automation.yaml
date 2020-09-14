@@ -87,19 +87,20 @@
           - switch.exterior_foyer
 #########################################
 - alias: "Security: doorbell rang - play google home video"
+  description: "Play the front door video stream on the Google Home for 30 seconds"
   trigger:
     - platform: event
       event_type: doorbird_front_door_doorbell
   action:
     - service: media_player.play_media
       data_template:
-        entity_id: media_player.main_googlehome
-        media_content_id: "http://192.168.45.249:8123/api/camera_proxy_stream/camera.front_door_live?token={{ states.camera.front_door_live.attributes.access_token }}"
+        entity_id: media_player.main_display
+        media_content_id: "https://ha.gilmore.cloud:8123/api/camera_proxy_stream/camera.front_door_live?token={{ states.camera.front_door_live.attributes.access_token }}"
         media_content_type: image/jpg
     - delay: "00:00:30"
     - service: media_player.turn_off
       data:
-        entity_id: media_player.main_googlehome
+        entity_id: media_player.main_display
 #########################################
 - alias: "Security: doorbell rang - interrupt sonos master"
   trigger:
