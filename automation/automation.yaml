@@ -25,7 +25,8 @@
                 {{ states.sensor.db_pic.state }}
               {% endif %}
 #########################################
-- alias: "Security: front door line crossing or doorbell rang & dark out & house occupied & foyer and exterior lights on"
+- alias: "Security: front door line crossing or doorbell rang - occupied"
+  description: "When its dark out & house occupied - foyer and exterior lights on"
   trigger:
     - platform: state
       entity_id: binary_sensor.front_door_line_crossing
@@ -50,7 +51,8 @@
         deviceID: "wallpanel"
         camera: "camera.front_door_live"
 #########################################
-- alias: "Security: front door line crossing or doorbell rang & dark out & house unoccupied & foyer and exterior lights on for 10 min"
+- alias: "Security: front door line crossing or doorbell rang - unoccupied"
+  description: "When its dark out & house unoccupied - foyer and exterior lights on for 10 min"
   trigger:
     - platform: state
       entity_id: binary_sensor.front_door_line_crossing
@@ -84,7 +86,7 @@
         entity_id:
           - switch.exterior_foyer
 #########################################
-- alias: "Security: doorbell rang & play google home video"
+- alias: "Security: doorbell rang - play google home video"
   trigger:
     - platform: event
       event_type: doorbird_front_door_doorbell
@@ -99,7 +101,7 @@
       data:
         entity_id: media_player.main_googlehome
 #########################################
-- alias: "Security: doorbell rang & interrupt sonos master"
+- alias: "Security: doorbell rang - interrupt sonos master"
   trigger:
     - platform: event
       event_type: doorbird_front_door_doorbell
@@ -115,7 +117,7 @@
         message: "doorbell rang!"
         delay: "00:00:05"
 #########################################
-- alias: "Automatic Lighting: deck person & dark out & deck lights on"
+- alias: "Automatic Lighting: deck person & dark out - turn deck lights on"
   trigger:
     - platform: state
       entity_id: binary_sensor.deck_person
@@ -149,7 +151,8 @@
   action:
     - service: timer.start
       entity_id: timer.deck_timer
-- alias: "Automatic Lighting: deck lights on when deck door opens (and the timer is running) - shows direction of travel"
+- alias: "Automatic Lighting: deck lights on when deck door opens (and the timer is running)"
+  description: "Trigger shows direction of travel"
   trigger:
     - platform: state
       entity_id: sensor.deck_door
@@ -165,7 +168,7 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_deck_on
 #########################################
-- alias: "Automatic Lighting: garage person/motion detected & dark out & garage lights on"
+- alias: "Automatic Lighting: garage person/motion detected & dark out - garage lights on"
   trigger:
     - platform: state
       entity_id: binary_sensor.garage_person
