@@ -13,49 +13,39 @@
 - platform: template
   sensors:
     armed_status:
-      entity_id: alarm_control_panel.area001
       value_template: '{{ states.alarm_control_panel.area001.attributes["armed_status"] }}'
       friendly_name: "House Armed Status"
     arm_up_state:
-      entity_id: alarm_control_panel.area001
       value_template: '{{ states.alarm_control_panel.area001.attributes["arm_up_state"] }}'
       friendly_name: "House Arm Up State"
     alarm_state:
-      entity_id: alarm_control_panel.area001
       value_template: '{{ states.alarm_control_panel.area001.attributes["alarm_state"] }}'
       friendly_name: "House Alarm State"
     alarm_trouble:
-      entity_id: sensor.elkm1
       value_template: '{{ states.sensor.elkm1.attributes["system_trouble_status"] }}'
       friendly_name: "Alarm Trouble"
     garage_double_state:
-      entity_id: sensor.double_garage
       value_template: >-
         {% if states.sensor.double_garage.state == 'Normal' %}closed
         {% elif states.sensor.double_garage.state == 'Violated' %}open
         {% else %}unknown{% endif %}
       friendly_name: "Garage Double State"
     garage_single_state:
-      entity_id: sensor.single_garage
       value_template: >-
         {% if states.sensor.single_garage.state == 'Normal' %}closed
         {% elif states.sensor.single_garage.state == 'Violated' %}open
         {% else %}unknown{% endif %}
       friendly_name: "Garage Single State"
     garage_temperature:
-      entity_id: climate.garage_thermostat
       value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
       friendly_name: "Garage Temperature"
     sun_elevation:
-      entity_id: sun.sun
       value_template: '{{ states.sun.sun.attributes["elevation"] }}'
       friendly_name: "sun elevation"
     garage_fridge_power:
-      entity_id: switch.garage_fridge
       value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
       friendly_name: "Garage Fridge Power"
     garage_fridge_energy:
-      entity_id: switch.garage_fridge
       value_template: '{{ states.switch.garage_fridge.attributes["today_energy_kwh"] }}'
       friendly_name: "Garage Fridge Energy"
     sensor_count:
@@ -70,56 +60,31 @@
           {%- endfor -%}
         {%- endfor -%}
     lights_on_number:
-      entity_id: sensor.time
       friendly_name: Lights On
       unit_of_measurement: "On"
       value_template: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
     doors_locked:
-      entity_id:
-        - lock.front_door_lock
-        - lock.garage_door_lock
       friendly_name: Doors Locked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='name')| list|join(', ') }}"
     doors_locked_entities:
-      entity_id:
-        - lock.front_door_lock
-        - lock.garage_door_lock
       friendly_name: Doors Locked Entities
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='entity_id')| list|join(', ') }}"
     doors_locked_number:
-      entity_id:
-        - lock.front_door_lock
-        - lock.garage_door_lock
       friendly_name: Number of Doors Locked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|length }}"
     doors_unlocked:
-      entity_id:
-        - lock.front_door_lock
-        - lock.garage_door_lock
       friendly_name: Doors Unlocked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
     doors_unlocked_entities:
-      entity_id:
-        - lock.front_door_lock
-        - lock.garage_door_lock
       friendly_name: Doors Unlocked Entities
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='entity_id')| list|join(', ') }}"
     doors_unlocked_number:
-      entity_id:
-        - lock.front_door_lock
-        - lock.garage_door_lock
       friendly_name: Number of Doors Unlocked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|length }}"
     people_home:
-      entity_id:
-        - person.jon
-        - person.laura
       friendly_name: People Home
       value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|map(attribute='name')| list|join(', ') }}"
     people_home_number:
-      entity_id:
-        - person.jon
-        - person.laura
       friendly_name: Number of People Home
       value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
     db_pic:
@@ -408,14 +373,6 @@
 #     - battery.runtime
 #     - ups.load
 #     - ups.status
-
-# fully kiosk sensors
-- platform: template
-  sensors:
-    basement_tablet_battery:
-      friendly_name: basement tablet battery
-      unit_of_measurement: "%"
-      value_template: "{{ states.binary_sensor.wallpanel.attributes.battery_level }}"
 
 - platform: rest
   name: MN Covid Stats

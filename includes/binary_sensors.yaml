@@ -28,11 +28,27 @@
     motion:
       delay: 30
 
+- platform: mqtt
+  name: "basement tablet screen"
+  payload_on: "screenOn"
+  payload_off: "screenOff"
+  state_topic: "fully/event/+/37a201ed-62e53cb1"
+  value_template: "{{value_json.event}}"
+
+- platform: mqtt
+  name: "basement tablet motion"
+  state_topic: "fully/event/onMotion/37a201ed-62e53cb1"
+  value_template: >
+    {% if value_json.type == 'visual' %}
+      {{'ON'}}
+    {% else %}
+      {{states('binary_sensor.alarm_tablet_motion') | upper}}
+    {% endif %}
+  off_delay: 5
+  device_class: motion
+
 - platform: template
   sensors:
-    basement_tablet_motion:
-      friendly_name: basement tablet motion
-      value_template: "{{ states.binary_sensor.wallpanel.attributes.motion }}"
     basement_motions:
       friendly_name: "Basement Motions"
       device_class: motion
@@ -163,14 +179,6 @@
         or states.media_player.master.state == "playing"
         or states.media_player.portable.state == "playing"
         or states.media_player.workshop.state == "playing" }}
-    jons_phone_charging:
-      value_template: "{{ states('sensor.pixel_3_battery_state') is in ['charging', 'full', 'not_charging'] }}"
-      friendly_name: "Jons Phone Charging"
-      device_class: plug
-    lauras_phone_charging:
-      value_template: "{{ states('sensor.lauras_iphone_battery_state') is in ['charging', 'full', 'not_charging'] }}"
-      friendly_name: "Lauras Phone Charging"
-      device_class: plug
 
 - platform: workday
   country: US

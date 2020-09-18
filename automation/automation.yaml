@@ -865,22 +865,22 @@
       data:
         message: "doorbell rang"
 #########################################
-- alias: "Work: victorops notification - turn on light"
-  trigger:
-    - platform: template
-      value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel_3_ariela_notification_grabber_sensor.attributes['packageName'] }}"
-  condition:
-    - condition: template
-      value_template: "{{ not is_state('sensor.period_of_day', 'day') }}"
-    - condition: state
-      entity_id: person.jon
-      state: "home"
-  action:
-    - service: notify.telegram_jon
-      data:
-        message: "ALERT! Work page"
-    - service: homeassistant.turn_on
-      entity_id: light.master_bedroom_jons_lamp
+# - alias: "Work: victorops notification - turn on light"
+#   trigger:
+#     - platform: template
+#       value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel_3_ariela_notification_grabber_sensor.attributes['packageName'] }}"
+#   condition:
+#     - condition: template
+#       value_template: "{{ not is_state('sensor.period_of_day', 'day') }}"
+#     - condition: state
+#       entity_id: person.jon
+#       state: "home"
+#   action:
+#     - service: notify.telegram_jon
+#       data:
+#         message: "ALERT! Work page"
+#     - service: homeassistant.turn_on
+#       entity_id: light.master_bedroom_jons_lamp
 #########################################
 - alias: "Utility: general notifications"
   trigger:

@@ -18,7 +18,7 @@
   lights_ct:
     - light.office_cans
 
-# fully kiosk & bond switch
+# fully kiosk
 - platform: command_line
   switches:
     basement_tablet_screen:

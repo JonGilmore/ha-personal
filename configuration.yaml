@@ -7,7 +7,7 @@ homeassistant:
   unit_system: imperial
   time_zone: !secret ha_tz
   customize: !include customize.yaml
-  whitelist_external_dirs:
+  allowlist_external_dirs:
     - "/tmp"
     - "/config/www"
     - "/share"
