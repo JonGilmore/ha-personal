@@ -298,7 +298,6 @@ garage_doors:
   entities:
     - cover.garage_momentary_single
     - cover.garage_momentary_double
-    - sensor.garage_door
 
 exterior_doors:
   name: Exterior Doors
