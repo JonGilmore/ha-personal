@@ -144,28 +144,18 @@
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_deck_off
 #########################################
-- alias: "Automatic Lighting: deck motion light - timer start"
+- alias: "Automatic Lighting: deck lights on when deck door opens"
   trigger:
     - platform: state
       entity_id: binary_sensor.sunroom_pir
       to: "on"
   action:
-    - service: timer.start
-      entity_id: timer.deck_timer
-- alias: "Automatic Lighting: deck lights on when deck door opens (and the timer is running)"
-  description: "Trigger shows direction of travel"
-  trigger:
-    - platform: state
-      entity_id: sensor.deck_door
-      to: "Violated"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.light_inside
-      state: "off"
-    - condition: state
-      entity_id: timer.deck_timer
-      state: "active"
-  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id: sensor.deck_door
+          to: "Violated"
+      timeout: 15
+      continue_on_timeout: false
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_deck_on
 #########################################
@@ -976,24 +966,18 @@
     - delay: "00:00:30"
     - service: browser_mod.close_popup
 #########################################
-- alias: "Automatic Lighting: basement stairs motion - timer start"
+- alias: "Automatic Lighting: basement lights on after stairs motion"
   trigger:
     - platform: state
       entity_id: sensor.basement_stairs_pir
       to: "Violated"
   action:
-    - service: timer.start
-      entity_id: timer.basement_stairs_timer
-- alias: "Automatic Lighting: basement lights on after stairs motion"
-  trigger:
-    - platform: state
-      entity_id: sensor.bar_pir
-      to: "Violated"
-  condition:
-    - condition: state
-      entity_id: timer.basement_stairs_timer
-      state: "active"
-  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id: sensor.bar_pir
+          to: "Violated"
+      timeout: 10
+      continue_on_timeout: false
     - service: homeassistant.turn_on
       entity_id: switch.basement_main
 #########################################
