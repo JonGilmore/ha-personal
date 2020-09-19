@@ -4,8 +4,7 @@ garage_door_single:
   entity_id: cover.garage_momentary_single
   state: "open"
   repeat:
-    - 5
-    - 30
+    - 20
     - 60
   can_acknowledge: true
   skip_first: true
@@ -22,8 +21,7 @@ garage_door_double:
   entity_id: cover.garage_momentary_double
   state: "open"
   repeat:
-    - 5
-    - 30
+    - 20
     - 60
   can_acknowledge: true
   skip_first: true
