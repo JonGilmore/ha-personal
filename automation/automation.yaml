@@ -149,6 +149,10 @@
     - platform: state
       entity_id: binary_sensor.sunroom_pir
       to: "on"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.light_inside
+      state: "off"
   action:
     - wait_for_trigger:
         - platform: state
