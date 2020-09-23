@@ -225,3 +225,28 @@ vacuum_foyer:
         command: "zoned_cleanup"
         params:
           "zone_ids": ["foyer"]
+
+window_status:
+  sequence:
+    - service: tts.google_say
+      entity_id: media_player.kitchen
+      data_template:
+        message: |
+          {% set open_doors = states | selectattr('entity_id', 'in', state_attr('group.windows','entity_id')) | selectattr('state','in',['on','open','Violated']) | map(attribute='name') | list %}
+          {% set open_windows = '\n'.join(open_doors) %}
+          The following windows are open:
+          {{ open_windows }}
+        cache: false
+
+jon_meeting:
+  sequence:
+    - service: tts.google_say
+      entity_id: media_player.kitchen
+      data_template:
+        message: |
+          {% if is_state("binary_sensor.jons_webcam", "on") -%}
+            Jon is probably in a meeting right now.
+          {%- else -%}
+            Jon doesn't appear to be in a meeting right now
+          {%- endif %}
+        cache: false

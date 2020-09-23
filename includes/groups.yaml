@@ -344,6 +344,18 @@ exterior_motions:
     - binary_sensor.driveway_person
     - binary_sensor.garage_person
 
+windows:
+  name: All Windows
+  entities:
+    - sensor.dining_window_1
+    - sensor.dining_window_2
+    - sensor.office_window_1
+    - sensor.office_window_2
+    - sensor.bsmt_window_1
+    - sensor.bsmt_window_2
+    - sensor.gym_window_1
+    - sensor.gym_window_2
+
 main_windows:
   name: Main Floor Windows
   entities:

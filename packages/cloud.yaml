@@ -59,6 +59,8 @@ cloud:
         - switch.upstairs_hall_treads
         - script.vacuum_foyer
         - script.vacuum_kitchen
+        - script.window_status
+        - script.jon_meeting
         - camera.daisy
         - camera.deck
         - camera.deckstairs
@@ -146,8 +148,8 @@ cloud:
         - switch.upstairs_hall_treads
         - script.vacuum_foyer
         - script.vacuum_kitchen
-        - script.vacuum_foyer
-        - script.vacuum_kitchen
+        - script.window_status
+        - script.jon_meeting
         - camera.daisy
         - camera.deck
         - camera.deckstairs
