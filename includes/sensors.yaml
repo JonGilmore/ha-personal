@@ -15,42 +15,52 @@
     armed_status:
       value_template: '{{ states.alarm_control_panel.area001.attributes["armed_status"] }}'
       friendly_name: "House Armed Status"
+      unique_id: armed_status
     arm_up_state:
       value_template: '{{ states.alarm_control_panel.area001.attributes["arm_up_state"] }}'
       friendly_name: "House Arm Up State"
+      unique_id: arm_up_state
     alarm_state:
       value_template: '{{ states.alarm_control_panel.area001.attributes["alarm_state"] }}'
       friendly_name: "House Alarm State"
+      unique_id: alarm_state
     alarm_trouble:
       value_template: '{{ states.sensor.elkm1.attributes["system_trouble_status"] }}'
       friendly_name: "Alarm Trouble"
+      unique_id: alarm_trouble
     garage_double_state:
       value_template: >-
         {% if states.sensor.double_garage.state == 'Normal' %}closed
         {% elif states.sensor.double_garage.state == 'Violated' %}open
         {% else %}unknown{% endif %}
       friendly_name: "Garage Double State"
+      unique_id: garage_double_state
     garage_single_state:
       value_template: >-
         {% if states.sensor.single_garage.state == 'Normal' %}closed
         {% elif states.sensor.single_garage.state == 'Violated' %}open
         {% else %}unknown{% endif %}
       friendly_name: "Garage Single State"
+      unique_id: garage_single_state
     garage_temperature:
       value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
       friendly_name: "Garage Temperature"
       device_class: temperature
+      unique_id: garage_temperature
     sun_elevation:
       value_template: '{{ states.sun.sun.attributes["elevation"] }}'
       friendly_name: "sun elevation"
+      unique_id: sun_elevation
     garage_fridge_power:
       value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
       friendly_name: "Garage Fridge Power"
       device_class: power
+      unique_id: garage_fridge_power
     garage_fridge_energy:
       value_template: '{{ states.switch.garage_fridge.attributes["today_energy_kwh"] }}'
       friendly_name: "Garage Fridge Energy"
       device_class: power
+      unique_id: garage_fridge_energy
     sensor_count:
       friendly_name: "Number of Sensors"
       value_template: >
@@ -62,34 +72,44 @@
             {% endif %}
           {%- endfor -%}
         {%- endfor -%}
+      unique_id: sensor_count
     lights_on_number:
       friendly_name: Lights On
       unit_of_measurement: "On"
       value_template: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
+      unique_id: lights_on_number
     doors_locked:
       friendly_name: Doors Locked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='name')| list|join(', ') }}"
+      unique_id: doors_locked
     doors_locked_entities:
       friendly_name: Doors Locked Entities
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='entity_id')| list|join(', ') }}"
+      unique_id: doors_locked_entities
     doors_locked_number:
       friendly_name: Number of Doors Locked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|length }}"
+      unique_id: doors_locked_number
     doors_unlocked:
       friendly_name: Doors Unlocked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
+      unique_id: doors_unlocked
     doors_unlocked_entities:
       friendly_name: Doors Unlocked Entities
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='entity_id')| list|join(', ') }}"
+      unique_id: doors_unlocked_entities
     doors_unlocked_number:
       friendly_name: Number of Doors Unlocked
       value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|length }}"
+      unique_id: doors_unlocked_number
     people_home:
       friendly_name: People Home
       value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|map(attribute='name')| list|join(', ') }}"
+      unique_id: people_home
     people_home_number:
       friendly_name: Number of People Home
       value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
+      unique_id: people_home_number
     db_pic:
       value_template: !secret db_pic
     hik_driveway_pic:
