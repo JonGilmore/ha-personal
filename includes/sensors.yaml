@@ -39,15 +39,18 @@
     garage_temperature:
       value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
       friendly_name: "Garage Temperature"
+      device_class: temperature
     sun_elevation:
       value_template: '{{ states.sun.sun.attributes["elevation"] }}'
       friendly_name: "sun elevation"
     garage_fridge_power:
       value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
       friendly_name: "Garage Fridge Power"
+      device_class: power
     garage_fridge_energy:
       value_template: '{{ states.switch.garage_fridge.attributes["today_energy_kwh"] }}'
       friendly_name: "Garage Fridge Energy"
+      device_class: power
     sensor_count:
       friendly_name: "Number of Sensors"
       value_template: >
@@ -176,6 +179,7 @@
         {% elif states.sensor.dark_sky_temperature.state | int <  20 %}45
         {% else %} 55 {% endif %}
       friendly_name: "Target Humidity - Max"
+      device_class: humidity
     target_humidity_min_winter:
       value_template: >-
         {% if   states.sensor.dark_sky_temperature.state | int < -20 %}15
@@ -185,6 +189,7 @@
         {% elif states.sensor.dark_sky_temperature.state | int <  20 %}35
         {% else %} 40 {% endif %}
       friendly_name: "Target Humidity - Min"
+      device_class: humidity
 
 # HVAC tracking
 - platform: history_stats
