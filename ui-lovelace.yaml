@@ -314,6 +314,7 @@ views:
             - entity_id: "/^sensor.*temperature.*/"
           exclude:
             - entity_id: "/dark_sky/"
+            - entity_id: "/synology/"
             - state: "unavailable"
         show_empty: false
       - type: "custom:auto-entities"
