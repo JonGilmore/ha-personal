@@ -251,3 +251,12 @@
       prob_given_true: 0.95
       prob_given_false: 0.3
       to_state: "on"
+
+# rtl_433 sensors
+- platform: mqtt
+  name: Nursery Acurite Battery
+  state_topic: "rtl_433/Acurite-Tower/4303"
+  payload_on: "0"
+  payload_off: "1"
+  device_class: battery
+  value_template: "{{ value_json.battery_ok }}"

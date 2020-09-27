@@ -435,3 +435,26 @@
     covid_mn_lastupdateet:
       value_template: '{{ states.sensor.mn_covid_stats.attributes["lastUpdateEt"] }}'
       friendly_name: covid mn last_updated
+
+# rtl_433 sensors
+- platform: mqtt
+  name: Nursery Temperature
+  state_topic: "rtl_433/Acurite-Tower/4303"
+  unit_of_measurement: "°F"
+  value_template: "{{ value_json.temperature_F }}"
+- platform: mqtt
+  name: Nursery Humidity
+  state_topic: "rtl_433/Acurite-Tower/4303"
+  unit_of_measurement: "%"
+  value_template: "{{ value_json.humidity }}"
+
+# rtl_915 sensors
+- platform: mqtt
+  name: Water Meter
+  state_topic: "rtl_915/SCM_"
+  value_template: "{{ value_json.Consumption }}"
+- platform: mqtt
+  name: Gas Meter
+  state_topic: "rtl_915/ERT-SCM/48150945"
+  unit_of_measurement: "M3"
+  value_template: "{{ value_json.consumption_data }}"
