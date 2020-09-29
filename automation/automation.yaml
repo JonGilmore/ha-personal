@@ -1142,3 +1142,15 @@
       entity_id:
         - light.master_bedroom_fixture
         - switch.master_bedroom_toilet_fan
+#########################################
+- alias: "Automatic Lighting: fishtank lights"
+  trigger:
+    - platform: time
+      at: "07:30:00"
+    - platform: time
+      at: "22:00:00"
+  action:
+    - service_template: >
+        {% if states.switch.switch2.state == 'on' %}homeassistant.turn_off
+        {% else %}homeassistant.turn_off{% endif %}
+      entity_id: switch.switch2

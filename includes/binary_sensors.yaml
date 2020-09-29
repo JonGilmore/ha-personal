@@ -260,3 +260,10 @@
   payload_off: "1"
   device_class: battery
   value_template: "{{ value_json.battery_ok }}"
+- platform: mqtt
+  name: Gym Acurite Battery
+  state_topic: "rtl_433/Acurite-Tower/14641"
+  payload_on: "0"
+  payload_off: "1"
+  device_class: battery
+  value_template: "{{ value_json.battery_ok }}"

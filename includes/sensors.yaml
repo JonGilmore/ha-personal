@@ -447,6 +447,16 @@
   state_topic: "rtl_433/Acurite-Tower/4303"
   unit_of_measurement: "%"
   value_template: "{{ value_json.humidity }}"
+- platform: mqtt
+  name: Gym Temperature
+  state_topic: "rtl_433/Acurite-Tower/14641"
+  unit_of_measurement: "°F"
+  value_template: "{{ value_json.temperature_F }}"
+- platform: mqtt
+  name: Gym Humidity
+  state_topic: "rtl_433/Acurite-Tower/14641"
+  unit_of_measurement: "%"
+  value_template: "{{ value_json.humidity }}"
 
 # rtl_915 sensors
 - platform: mqtt
