@@ -1151,6 +1151,6 @@
       at: "22:00:00"
   action:
     - service_template: >
-        {% if states.switch.switch2.state == 'on' %}homeassistant.turn_off
+        {% if now().strftime("%H") | int > 20 %}homeassistant.turn_off
         {% else %}homeassistant.turn_on{% endif %}
       entity_id: switch.switch2

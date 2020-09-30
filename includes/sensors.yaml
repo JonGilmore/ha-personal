@@ -462,6 +462,7 @@
 - platform: mqtt
   name: Water Meter
   state_topic: "rtl_915/SCM_"
+  unit_of_measurement: "Gallons"
   value_template: "{{ value_json.Consumption }}"
 - platform: mqtt
   name: Gas Meter
