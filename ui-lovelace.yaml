@@ -756,11 +756,11 @@ views:
           - binary_sensor.kitchen_fridge_leak_water
           - binary_sensor.basement_fridge_water
   ##########################################
-  # ENERGY TAB
+  # ENERGY/CONSUMPTION TAB
   ##########################################
-  - title: Energy
-    id: energy
-    icon: mdi:power-plug
+  - title: Consumption
+    id: consumption
+    icon: mdi:chart-timeline-variant
     cards:
       - type: "custom:auto-entities"
         card:
@@ -772,7 +772,27 @@ views:
         filter:
           include:
             - entity_id: "/^(sensor.*power|sensor.*energy).*/"
+          exclude:
+            - state: "unavailable"
         show_empty: false
+      - type: custom:mini-graph-card
+        name: Gas Usage
+        icon: mdi:gas-station
+        hours_to_show: 168
+        points_per_hour: .25
+        entities:
+          - entity: sensor.gas_meter
+            name: Gas Usage
+            show_state: true
+      - type: custom:mini-graph-card
+        name: Water Consumption
+        icon: mdi:water-pump
+        hours_to_show: 168
+        points_per_hour: .25
+        entities:
+          - entity: sensor.water_meter
+            name: Water Consumption
+            show_state: true
   ##########################################
   # SCENES TAB
   ##########################################

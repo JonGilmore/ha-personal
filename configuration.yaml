@@ -200,3 +200,9 @@ sonos:
 cast:
   media_player:
     - host: 192.168.46.45
+
+device_tracker:
+  - platform: ping
+    count: 30
+    hosts:
+      pixel3: 192.168.45.100
