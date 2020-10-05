@@ -460,6 +460,15 @@
     - service: homeassistant.turn_on
       entity_id: input_boolean.sunset_run_once
 ########################################
+- alias: "Night Mode: turn on sunset2 lights at ten min after sunset"
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "00:10:00"
+  action:
+    - service: scene.turn_on
+      entity_id: scene.equipment_room_enclosure_device_001_ph_sunset2
+########################################
 - alias: "Fans: turn on master fan at night (if AC is on)"
   trigger:
     - platform: time
