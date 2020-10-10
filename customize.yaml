@@ -167,3 +167,7 @@ sensor.basement_tablet_battery:
   battery_alert_disabled: true
 sensor.lauras_iphone_battery_level:
   battery_alert_disabled: true
+sensor.j_dt_battery_remaining:
+  battery_alert_disabled: true
+sensor.j_dt_battery_level:
+  battery_alert_disabled: true

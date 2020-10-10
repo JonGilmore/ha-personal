@@ -303,7 +303,7 @@
     - deck
     - doorbell
     - driveway
-    - garage
+    # - garage
     - deckstairs
     - coral
   value_template: "OK"
@@ -336,15 +336,15 @@
     driveway_detection_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
-    garage_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["camera_fps"] }}'
-      unit_of_measurement: "FPS"
-    garage_skipped_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["skipped_fps"] }}'
-      unit_of_measurement: "FPS"
-    garage_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["detection_fps"] }}'
-      unit_of_measurement: "FPS"
+    # garage_fps:
+    #   value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["camera_fps"] }}'
+    #   unit_of_measurement: "FPS"
+    # garage_skipped_fps:
+    #   value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["skipped_fps"] }}'
+    #   unit_of_measurement: "FPS"
+    # garage_detection_fps:
+    #   value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["detection_fps"] }}'
+    #   unit_of_measurement: "FPS"
     deckstairs_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["camera_fps"] }}'
       unit_of_measurement: "FPS"

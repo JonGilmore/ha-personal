@@ -24,8 +24,10 @@ tts:
     service_name: google_say
 recorder:
   db_url: !secret url_db
-  purge_keep_days: 32
-  purge_interval: 32
+  purge_keep_days: 21
+  exclude:
+    entity_globs:
+      - sensor.dark_sky*
 
 system_health:
 circadian_lighting:

@@ -79,22 +79,6 @@ decluttering_templates:
         - type: picture-entity
           entity: "camera.[[cam]]_history10"
 
-# hide settings tabs from wife
-custom_header:
-  compact_mode: true
-  exceptions:
-    - conditions:
-        user_agent: Mobile
-      config:
-        compact_mode: false
-        hide_tabs: "6,7,10,11"
-        chevrons: false
-        split_mode: true
-    - conditions:
-        user: !secret wife
-      config:
-        hide_tabs: "9 to 10"
-
 views:
   ##########################################
   # HOME TAB
