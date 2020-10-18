@@ -722,11 +722,11 @@
       entity_id: sensor.kitchen_pir
       to: "Normal"
       for:
-        minutes: 30
-  # condition:
-  #   - condition: state
-  #     entity_id: input_boolean.block_all_motion_lights
-  #     state: "off"
+        minutes: 15
+  condition:
+    - condition: state
+      entity_id: input_boolean.block_all_motion_lights
+      state: "off"
   action:
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_kitchen_off
@@ -781,7 +781,7 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.motion_lights
 # #########################################
-- alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
+- alias: "Automatic Lighting: turn off lights between 10pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
   trigger:
     - platform: state
       entity_id: binary_sensor.all_motions
@@ -790,7 +790,7 @@
         minutes: 20
   condition:
     - condition: time
-      after: "23:00:00"
+      after: "22:00:00"
       before: "04:00:00"
   action:
     - service: scene.turn_on
