@@ -1,46 +1,68 @@
 ---
-- alias: "Location Awareness: leave home & single garage open"
-  description: "Leave `home` zone with the single garage open, send a photo notification & prompt to close"
-  trigger:
-    - platform: state
-      entity_id: cover.garage_momentary_single
-      to: "open"
-  action:
-    - wait_for_trigger:
-        - platform: state
-          entity_id: person.jon
-          from: "home"
-      timeout: 1800
-      continue_on_timeout: false
-    - service: notify.telegram_jon
-      data_template:
-        message: "placeholder"
-        data:
-          inline_keyboard:
-            - "Yes:/closegarage_single, No:/do_nothing"
-          photo:
-            - url: !secret hik_garage_pic
-              caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
+# - alias: "Location Awareness: leave home & single garage open"
+#   description: "Leave `home` zone with the single garage open, send a photo notification & prompt to close"
+#   trigger:
+#     - platform: state
+#       entity_id: cover.garage_momentary_single
+#       to: "open"
+#   action:
+#     - wait_for_trigger:
+#         - platform: state
+#           entity_id: person.jon
+#           from: "home"
+#       timeout: 1800
+#       continue_on_timeout: false
+#     - service: notify.telegram_jon
+#       data_template:
+#         message: "placeholder"
+#         data:
+#           inline_keyboard:
+#             - "Yes:/closegarage_single, No:/do_nothing"
+#           photo:
+#             - url: !secret hik_garage_pic
+#               caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
 #########################################
-- alias: "Location Awareness: leave home & double garage open"
-  description: "Leave `home` zone with the double garage open, send a photo notification & prompt to close"
-  trigger:
-    - platform: state
-      entity_id: cover.garage_momentary_double
-      to: "open"
-  action:
-    - wait_for_trigger:
-        - platform: state
-          entity_id: person.jon
-          from: "home"
-      timeout: 1800
-      continue_on_timeout: false
-    - service: notify.telegram_jon
-      data_template:
-        message: "placeholder"
-        data:
-          inline_keyboard:
-            - "Yes:/closegarage_double, No:/do_nothing"
-          photo:
-            - url: !secret hik_garage_pic
-              caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
+# - alias: "Location Awareness: leave home & double garage open"
+#   description: "Leave `home` zone with the double garage open, send a photo notification & prompt to close"
+#   trigger:
+#     - platform: state
+#       entity_id: cover.garage_momentary_double
+#       to: "open"
+#   action:
+#     - wait_for_trigger:
+#         - platform: state
+#           entity_id: person.jon
+#           from: "home"
+#       timeout: 1800
+#       continue_on_timeout: false
+#     - service: notify.telegram_jon
+#       data_template:
+#         message: "placeholder"
+#         data:
+#           inline_keyboard:
+#             - "Yes:/closegarage_double, No:/do_nothing"
+#           photo:
+#             - url: !secret hik_garage_pic
+#               caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
+#########################################
+# - alias: "Location Awareness: turn on/off recirculation pump based on presence"
+#   description: "WIP: If Jon/Laura is home, make sure recirculation pump is on"
+#   trigger:
+#     - platform: state
+#       entity_id:
+#         - binary_sensor.anybody_away
+#         - binary_sensor.anybody_home
+#   action:
+#     - service_template: >
+#         {% if trigger.to_state.state == 'off' %}homeassistant.turn_on
+#         {% else %}homeassistant.turn_off{% endif %}
+#       data_template:
+#         entity_id: >
+#           {% set trigger_entity = trigger.entity_id %}
+#           {% if trigger_entity == 'sensor.storage_pir' %}
+#             switch.basement_storage_lights
+#           {% elif trigger_entity == 'binary_sensor.master_bedroom_occupancy' %}
+#             light.master_bath_toekick
+#           {% endif %}
+#     # - service: homeassistant.turn_off
+#     #   entity_id: switch.equipment_room_recirculation_pump

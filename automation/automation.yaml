@@ -305,7 +305,7 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.sunset_run_once
 #########################################
-- alias: "Night Mode: start sleeping & set HVAC fans on & turn off recirculation pump & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off"
+- alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -326,8 +326,6 @@
           - climate.main_thermostat
           - climate.upstairs_thermostat
         fan_mode: "on"
-    - service: homeassistant.turn_off
-      entity_id: switch.equipment_room_recirculation_pump
     - service: webostv.command
       data:
         entity_id: media_player.living_room_tv
@@ -652,15 +650,13 @@
 # - sitting light off when bed occupied (& chair unoccupied)
 # - sitting light off when chair unoccupied (& bed occupied)
 ########################################
-- alias: "Automatic Lighting: sitting motion light when master bed is unoccupied"
+# - alias: "Automatic Lighting: sitting motion light when master bed is unoccupied"
+- alias: "Automatic Lighting: sitting motion light"
   trigger:
     platform: state
     entity_id: binary_sensor.sitting_room_pir
     to: "on"
   condition:
-    - condition: state
-      entity_id: sensor.master_bed_people
-      state: "nobody"
     - condition: state
       entity_id: input_boolean.motion_lights
       state: "on"
@@ -674,7 +670,7 @@
       entity_id: binary_sensor.sitting_room_pir
       to: "off"
       for:
-        minutes: 10
+        minutes: 15
   condition:
     - condition: state
       entity_id: input_boolean.master_override
@@ -683,23 +679,23 @@
     - service: homeassistant.turn_off
       entity_id: light.sitting_room_lifx
 ########################################
-- alias: "Automatic Lighting: sitting light off when bed occupied (& chair unoccupied)"
-  trigger:
-    - platform: state
-      entity_id: sensor.master_bed_people
-      from: "nobody"
-      to: "one"
-    - platform: state
-      entity_id: sensor.master_bed_people
-      from: "nobody"
-      to: "both"
-  condition:
-    - condition: state
-      entity_id: sensor.master_sitting_chair_occupied
-      state: "unoccupied"
-  action:
-    - service: homeassistant.turn_off
-      entity_id: light.sitting_room_lifx
+# - alias: "Automatic Lighting: sitting light off when bed occupied (& chair unoccupied)"
+#   trigger:
+#     - platform: state
+#       entity_id: sensor.master_bed_people
+#       from: "nobody"
+#       to: "one"
+#     - platform: state
+#       entity_id: sensor.master_bed_people
+#       from: "nobody"
+#       to: "both"
+#   condition:
+#     - condition: state
+#       entity_id: sensor.master_sitting_chair_occupied
+#       state: "unoccupied"
+#   action:
+#     - service: homeassistant.turn_off
+#       entity_id: light.sitting_room_lifx
 ########################################
 - alias: "Automatic Lighting: sitting light off when chair unoccupied (& bed occupied)"
   trigger:
@@ -720,53 +716,53 @@
     - service: homeassistant.turn_off
       entity_id: light.sitting_room_lifx
 ########################################
-- alias: "Automatic Lighting: kitchen lights off with no motion for 15 minutes"
+- alias: "Automatic Lighting: kitchen lights off with no motion for 30 minutes"
   trigger:
     - platform: state
       entity_id: sensor.kitchen_pir
       to: "Normal"
       for:
-        minutes: 15
-  condition:
-    - condition: state
-      entity_id: input_boolean.block_all_motion_lights
-      state: "off"
+        minutes: 30
+  # condition:
+  #   - condition: state
+  #     entity_id: input_boolean.block_all_motion_lights
+  #     state: "off"
   action:
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_kitchen_off
 ########################################
-- alias: "Daisy: daisy cam photo every 45 minutes when armed away and kennel closed"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.alarm_occupancy_status
-      to: "off"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.daisy_contact
-      state: "off"
-    - condition: state
-      entity_id: binary_sensor.vacation_status
-      state: "off"
-  action:
-    - service: timer.start
-      entity_id: timer.daisy_cam_timer
-- alias: "Daisy: daisy timer completed"
-  trigger:
-    - platform: event
-      event_type: timer.finished
-      event_data:
-        entity_id: timer.daisy_cam_timer
-  condition:
-    - condition: state
-      entity_id: binary_sensor.alarm_occupancy_status
-      state: "off"
-    - condition: state
-      entity_id: binary_sensor.daisy_contact
-      state: "off"
-  action:
-    - service: script.video_daisy
-    - service: timer.start
-      entity_id: timer.daisy_cam_timer
+# - alias: "Daisy: daisy cam photo every 45 minutes when armed away and kennel closed"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.alarm_occupancy_status
+#       to: "off"
+#   condition:
+#     - condition: state
+#       entity_id: binary_sensor.daisy_contact
+#       state: "off"
+#     - condition: state
+#       entity_id: binary_sensor.vacation_status
+#       state: "off"
+#   action:
+#     - service: timer.start
+#       entity_id: timer.daisy_cam_timer
+# - alias: "Daisy: daisy timer completed"
+#   trigger:
+#     - platform: event
+#       event_type: timer.finished
+#       event_data:
+#         entity_id: timer.daisy_cam_timer
+#   condition:
+#     - condition: state
+#       entity_id: binary_sensor.alarm_occupancy_status
+#       state: "off"
+#     - condition: state
+#       entity_id: binary_sensor.daisy_contact
+#       state: "off"
+#   action:
+#     - service: script.video_daisy
+#     - service: timer.start
+#       entity_id: timer.daisy_cam_timer
 #########################################
 - alias: "Automatic Lighting: enable motion lights 2hours before sunset & disable 2hour after sunrise"
   trigger:
@@ -784,16 +780,33 @@
   action:
     - service: homeassistant.turn_off
       entity_id: input_boolean.motion_lights
+# #########################################
+- alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.all_motions
+      state: "off"
+      for:
+        minutes: 20
+  condition:
+    - condition: time
+      after: "23:00:00"
+      before: "04:00:00"
+  action:
+    - service: scene.turn_on
+      entity_id: scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
 ########################################
 - alias: "Automatic Lighting: kitchen motion light"
   trigger:
     platform: state
-    entity_id: binary_sensor.living_room_multi_motion
+    entity_id: sensor.kitchen_pir
     to: "Violated"
   condition:
     - condition: state
       entity_id: binary_sensor.light_inside
       state: "off"
+      for:
+        minutes: 2
     - condition: state
       entity_id: input_boolean.motion_lights
       state: "on"
@@ -808,7 +821,7 @@
       from: "on"
       to: "off"
       for:
-        minutes: 30
+        minutes: 20
   action:
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_basement_off

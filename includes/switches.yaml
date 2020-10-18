@@ -6,6 +6,7 @@
     - light.master_entry_lifx
     - light.sitting_room_lifx
     - light.master_bath_toekick
+    - light.master_bedroom_jons_lamp
 - platform: circadian_lighting
   name: Gym
   min_brightness: 5

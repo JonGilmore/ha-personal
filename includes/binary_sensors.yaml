@@ -65,7 +65,24 @@
       value_template: >-
         {{ states.sensor.foyer_pir.state == "Violated"
         or states.sensor.kitchen_pir.state == "Violated"
+        or states.binary_sensor.office_multi_motion.state == "on"
+        or states.binary_sensor.sunroom_pir.state == "on"
         or states.binary_sensor.office_multi_motion.state == "on" }}
+    all_motions:
+      friendly_name: "All Motions"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.basement_pir.state == "Violated"
+        or states.sensor.workshop_pir.state == "Violated"
+        or states.sensor.basement_stairs_pir.state == "Violated"
+        or states.sensor.storage_pir.state == "Violated"
+        or states.binary_sensor.gym_occupancy.state == "on"
+        or states.sensor.bar_pir.state == "Violated" 
+        or states.sensor.foyer_pir.state == "Violated"
+        or states.sensor.kitchen_pir.state == "Violated"
+        or states.binary_sensor.office_multi_motion.state == "on"
+        or states.binary_sensor.garage_motion.state == "on"
+        or states.binary_sensor.sunroom_pir.state == "on" }}
     garage_doors:
       friendly_name: "Garage Doors"
       device_class: garage_door
