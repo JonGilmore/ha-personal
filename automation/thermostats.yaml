@@ -42,7 +42,7 @@
           state: "home"
   action:
     - service: scene.turn_on
-      entity_id: scene.heat_70_auto
+      entity_id: scene.heat_72_auto
 #########################################
 # set the temperature back for work ONLY if we're not on vacation AND both people are not_home
 - alias: "HVAC: set back cooling temps at 8am only if were not on vacation and nobody is home"
@@ -118,7 +118,7 @@
       state: "off"
   action:
     - service: scene.turn_on
-      entity_id: scene.heat_71_auto
+      entity_id: scene.heat_72_auto
 #########################################
 # when we start sleeping, and we're not on vacation, set the temps back
 - alias: "HVAC: when we start sleeping set the thermostats back (for cooling)"
@@ -150,4 +150,4 @@
       state: "off"
   action:
     - service: scene.turn_on
-      entity_id: scene.heat_66_auto
+      entity_id: scene.heat_70_auto

@@ -38,7 +38,7 @@ cloud:
         - switch.master_bedroom_fan
         - switch.master_bedroom_lauras_lamp
         - switch.master_bedroom_shower
-        - switch.master_bedroom_toilet_fan
+        - switch.master_toilet_toilet_fan
         - switch.master_closet
         - switch.mudroom_kitchen_cans
         - switch.mudroom_kitchen_pendants
@@ -127,7 +127,7 @@ cloud:
         - switch.master_bedroom_fan
         - switch.master_bedroom_lauras_lamp
         - switch.master_bedroom_shower
-        - switch.master_bedroom_toilet_fan
+        - switch.master_toilet_toilet_fan
         - switch.master_closet
         - switch.mudroom_kitchen_cans
         - switch.mudroom_kitchen_pendants

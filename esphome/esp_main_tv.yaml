@@ -15,7 +15,7 @@ wifi:
   reboot_timeout: 45min
   power_save_mode: none
   # manual_ip:
-  #   static_ip: 192.168.45.210
+  #   static_ip: 192.168.45.80
   #   gateway: 192.168.45.1
   #   subnet: 255.255.255.0
 
@@ -33,7 +33,7 @@ ota:
 sensor:
   - platform: adc
     pin: A0
-    name: "lux"
+    name: "main_tv_lux"
     unit_of_measurement: lux
     filters:
       - lambda: |-

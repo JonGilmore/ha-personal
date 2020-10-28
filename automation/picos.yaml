@@ -1,0 +1,48 @@
+- alias: "Lutron Pico: Lauras lamp on"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: pico_on
+        action: single
+        full_id: master_bedroom_pico_on
+  action:
+    - service: lifx.set_state
+      data:
+        entity_id: light.lauras_lamp_lifx
+        power: true
+- alias: "Lutron Pico: Jons lamp on"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: pico_medium
+        action: single
+        full_id: master_bedroom_pico_medium
+  action:
+    - service: lifx.set_state
+      data:
+        entity_id: light.jons_lamp_lifx
+        power: true
+- alias: "Lutron Pico: Lauras lamp off"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: pico_low
+        action: single
+        full_id: master_bedroom_pico_low
+  action:
+    - service: homeassistant.turn_off
+      entity_id: light.lauras_lamp_lifx
+- alias: "Lutron Pico: Jons lamp off"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: pico_off
+        action: single
+        full_id: master_bedroom_pico_off
+  action:
+    - service: homeassistant.turn_off
+      entity_id: light.jons_lamp_lifx

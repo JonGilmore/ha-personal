@@ -1,0 +1,87 @@
+- alias: "Lutron Scene: Master lamps on"
+  description: "LED is off & the scene is triggered - turn on the lamps and enable the LED"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: sitting_keypad_lamps
+        action: single
+        full_id: master_bedroom_sitting_keypad_lamps
+  condition:
+    - condition: state
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+      state: "off"
+  action:
+    - service: lifx.set_state
+      data:
+        entity_id:
+          - light.lauras_lamp_lifx
+          - light.jons_lamp_lifx
+        power: true
+    - delay: "00:00:02"
+    - service: homeassistant.turn_on
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+- alias: "Lutron Scene: Master lamps off"
+  description: "LED is on & the scene is triggered - turn off the lamps and disable the LED"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: sitting_keypad_lamps
+        action: single
+        full_id: master_bedroom_sitting_keypad_lamps
+  condition:
+    - condition: state
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+      state: "on"
+  action:
+    - service: homeassistant.turn_off
+      entity_id:
+        - light.lauras_lamp_lifx
+        - light.jons_lamp_lifx
+    - delay: "00:00:02"
+    - service: homeassistant.turn_off
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+- alias: "Lutron Scene: Either master lamp on"
+  description: "Either master lamp is turned on - enable the scene LED"
+  trigger:
+    - platform: state
+      entity_id:
+        - light.lauras_lamp_lifx
+        - light.jons_lamp_lifx
+      to: "on"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+- alias: "Lutron Scene: Both master lamps off - jon"
+  description: "Both master lamps off, turn off the scene LED"
+  trigger:
+    - platform: state
+      entity_id: light.jons_lamp_lifx
+      to: "off"
+  condition:
+    - condition: state
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+      state: "on"
+    - condition: state
+      entity_id: light.lauras_lamp_lifx
+      state: "off"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+- alias: "Lutron Scene: Both master lamps off - laura"
+  description: "Both master lamps off, turn off the scene LED"
+  trigger:
+    - platform: state
+      entity_id: light.lauras_lamp_lifx
+      to: "off"
+  condition:
+    - condition: state
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+      state: "on"
+    - condition: state
+      entity_id: light.jons_lamp_lifx
+      state: "off"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.master_bedroom_sitting_keypad_lamps_led

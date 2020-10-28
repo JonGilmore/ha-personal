@@ -39,6 +39,8 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-state-switch/state-switch.js
     type: module
+  - url: /hacsfiles/lovelace-battery-entity-row/battery-entity-row.js
+    type: module
 
 decluttering_templates:
   cam_small:

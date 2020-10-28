@@ -15,9 +15,9 @@ switch.laundry_light:
   friendly_name: Laundry
 switch.master_bedroom_entry:
   friendly_name: Master Entry
-light.master_bedroom_jons_lamp:
+light.jons_lamp_lifx:
   friendly_name: Jons Lamp
-switch.master_bedroom_lauras_lamp:
+light.lauras_lamp_lifx:
   friendly_name: Lauras Lamp
 light.master_bedroom_sitting_cans:
   friendly_name: Master Sitting Cans
@@ -35,8 +35,10 @@ switch.exterior_posts:
   friendly_name: Deck Posts
 light.master_bedroom_fixtures:
   friendly_name: Master Bath Fixture
-light.master_bedroom_fixture:
+light.master_toilet_fixture:
   friendly_name: Master Toilet
+switch.master_toilet_toilet_fan:
+  friendly_name: Master Toilet Fan
 light.master_bedroom_master_cans:
   friendly_name: Master Cans
 light.master_bedroom_master_fan:
@@ -85,6 +87,8 @@ sensor.dark_sky_temperature:
   friendly_name: Current Temperature
 sensor.dark_sky_daily_summary:
   friendly_name: Daily Summary
+light.loft_lamp:
+  friendly_name: Loft Lamp
 ##################################
 # lutron scenes
 scene.equipment_room_enclosure_device_001_ph_all_but_master:

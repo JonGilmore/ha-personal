@@ -45,6 +45,12 @@
 #             - url: !secret hik_garage_pic
 #               caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
 #########################################
+# logic with recirc pump
+#   - if either of us are home, make sure its on
+#   - if we're both away, turn it off
+#   - turn it off at night when we go to bed
+#   - turn it back on when the MBR PIRs detect movement & its off (this will handle nighttime feedings)
+#   - if its night, and MBR PIRs dont detect movement for 30 min, turn it off
 # - alias: "Location Awareness: turn on/off recirculation pump based on presence"
 #   description: "WIP: If Jon/Laura is home, make sure recirculation pump is on"
 #   trigger:

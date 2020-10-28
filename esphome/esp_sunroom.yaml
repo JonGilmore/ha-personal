@@ -35,12 +35,12 @@ sensor:
     model: DHT22
     pin: D7
     temperature:
-      name: "temperature"
+      name: "Sunroom Temperature"
     humidity:
-      name: "humidity"
+      name: "Sunroom Humidity"
 
 binary_sensor:
   - platform: gpio
     pin: D5
-    name: "PIR"
+    name: "Sunroom PIR"
     device_class: motion

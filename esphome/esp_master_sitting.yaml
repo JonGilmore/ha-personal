@@ -33,7 +33,7 @@ ota:
 sensor:
   - platform: adc
     pin: A0
-    name: "lux"
+    name: "Sitting Room Lux"
     unit_of_measurement: lux
     filters:
       - lambda: |-
@@ -42,5 +42,5 @@ sensor:
 binary_sensor:
   - platform: gpio
     pin: D5
-    name: "PIR"
+    name: "Sitting Room PIR"
     device_class: motion

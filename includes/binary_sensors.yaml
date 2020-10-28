@@ -65,7 +65,6 @@
       value_template: >-
         {{ states.sensor.foyer_pir.state == "Violated"
         or states.sensor.kitchen_pir.state == "Violated"
-        or states.binary_sensor.office_multi_motion.state == "on"
         or states.binary_sensor.sunroom_pir.state == "on"
         or states.binary_sensor.office_multi_motion.state == "on" }}
     all_motions:
@@ -77,12 +76,21 @@
         or states.sensor.basement_stairs_pir.state == "Violated"
         or states.sensor.storage_pir.state == "Violated"
         or states.binary_sensor.gym_occupancy.state == "on"
-        or states.sensor.bar_pir.state == "Violated" 
+        or states.sensor.bar_pir.state == "Violated"
         or states.sensor.foyer_pir.state == "Violated"
         or states.sensor.kitchen_pir.state == "Violated"
         or states.binary_sensor.office_multi_motion.state == "on"
         or states.binary_sensor.garage_motion.state == "on"
-        or states.binary_sensor.sunroom_pir.state == "on" }}
+        or states.binary_sensor.sitting_room_pir.state == "on"
+        or states.binary_sensor.master_entry_pir.state == "on"
+        or states.binary_sensor.sunroom_pir.state == "on"
+        or states.binary_sensor.master_toilet_occupancy.state == "on"
+        or states.binary_sensor.evelyns_room_occupancy.state == "on"
+        or states.binary_sensor.basement_occupancy.state == "on"
+        or states.binary_sensor.laundry_occupancy.state == "on"
+        or states.binary_sensor.master_bedroom_occupancy.state == "on"
+        or states.binary_sensor.mudroom_occupancy.state == "on"
+        or states.binary_sensor.powder_room_hall_occupancy.state == "on" }}
     garage_doors:
       friendly_name: "Garage Doors"
       device_class: garage_door
@@ -201,6 +209,12 @@
       value_template: >-
         {{ states.binary_sensor.macbook_pro_hd_pro_webcam_c920_camera.state == "on"
         or states.binary_sensor.macbook_pro_facetime_hd_camera_built_in.state == "on" }}
+    evelyns_room_occupied:
+      device_class: occupancy
+      friendly_name: "Evelyns Room Occupied"
+      value_template: >-
+        {{ states.binary_sensor.evelyns_room_occupancy.state == "on"
+        or states.binary_sensor.office_multi_motion.state == "on" }}
 
 - platform: workday
   country: US
@@ -284,3 +298,10 @@
   payload_off: "1"
   device_class: battery
   value_template: "{{ value_json.battery_ok }}"
+- platform: mqtt
+  state_topic: "rtl_433/Kerui-Security/843225"
+  device_class: motion
+  name: Kerui PIR
+  value_template: "{{ value_json.state }}"
+  payload_on: "motion"
+  off_delay: 10

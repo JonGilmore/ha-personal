@@ -26,7 +26,7 @@ interior_lights:
     - switch.basement_storage_lights
     - light.basement_theater
     - light.basement_theater_front_lamp
-    - light.basement_theater_rear_lamp
+    - light.evelyns_room_lamp
     - light.craftroom_cans
     - light.craftroom_craftroom_fan
     - light.dining_room_cans
@@ -44,17 +44,18 @@ interior_lights:
     - light.kitchen_table
     - switch.laundry_light
     - light.loft_cans
+    - light.loft_lamp
     - switch.master_bedroom_entry
     - switch.master_bedroom_fan
-    - light.master_bedroom_fixture
+    - light.master_toilet_fixture
     - light.master_bedroom_fixtures
-    - light.master_bedroom_jons_lamp
+    - light.jons_lamp_lifx
     - switch.master_bedroom_lauras_lamp
     - light.master_bedroom_master_cans
     - light.master_bedroom_master_fan
     - switch.master_bedroom_shower
     - light.master_bedroom_sitting_cans
-    - switch.master_bedroom_toilet_fan
+    - switch.master_toilet_toilet_fan
     - light.master_bedroom_tub
     - switch.mudroom_kitchen_cans
     - switch.mudroom_kitchen_pendants
@@ -93,7 +94,7 @@ all_lights:
     - switch.basement_storage_lights
     - light.basement_theater
     - light.basement_theater_front_lamp
-    - light.basement_theater_rear_lamp
+    - light.evelyns_room_lamp
     - light.craftroom_cans
     - light.craftroom_craftroom_fan
     - light.dining_room_cans
@@ -119,17 +120,21 @@ all_lights:
     - light.kitchen_table
     - switch.laundry_light
     - light.loft_cans
+    - light.loft_lamp
     - switch.master_bedroom_entry
     - switch.master_bedroom_fan
-    - light.master_bedroom_fixture
+    - light.master_toilet_fixture
     - light.master_bedroom_fixtures
-    - light.master_bedroom_jons_lamp
+    - light.sitting_room_lifx
+    - light.master_entry_lifx
+    - light.lauras_lamp_lifx
+    - light.jons_lamp_lifx
     - switch.master_bedroom_lauras_lamp
     - light.master_bedroom_master_cans
     - light.master_bedroom_master_fan
     - switch.master_bedroom_shower
     - light.master_bedroom_sitting_cans
-    - switch.master_bedroom_toilet_fan
+    - switch.master_toilet_toilet_fan
     - light.master_bedroom_tub
     - light.mudroom_garage_lights
     - switch.mudroom_kitchen_cans
@@ -170,7 +175,6 @@ basement_lights:
     - switch.basement_storage_lights
     - light.basement_theater
     - light.basement_theater_front_lamp
-    - light.basement_theater_rear_lamp
     - light.gym_cans
     - light.nook_cans
 
@@ -208,10 +212,10 @@ upstairs_lights:
     - switch.jack_and_jill_light
     - switch.jack_and_jill_lights
     - light.loft_cans
+    - light.loft_lamp
     - switch.master_bedroom_entry
-    - light.master_bedroom_fixture
+    - light.master_toilet_fixture
     - light.master_bedroom_fixtures
-    - light.master_bedroom_jons_lamp
     - switch.master_bedroom_lauras_lamp
     - light.master_bedroom_master_cans
     - switch.master_bedroom_shower
@@ -225,9 +229,11 @@ upstairs_lights:
     - switch.upstairs_hall_main_stairs
     - switch.upstairs_hall_treads
     - switch.master_closet
+    - light.evelyns_room_lamp
     - light.sitting_room_lifx
     - light.master_entry_lifx
     - light.lauras_lamp_lifx
+    - light.jons_lamp_lifx
 
 all_fans:
   name: All Fans
@@ -243,7 +249,7 @@ all_fans:
     - light.craftroom_craftroom_fan
     - switch.master_bedroom_fan
     - light.master_bedroom_master_fan
-    - switch.master_bedroom_toilet_fan
+    - switch.master_toilet_toilet_fan
     - fan.portable_fan
 
 sunset:

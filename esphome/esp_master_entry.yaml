@@ -35,12 +35,12 @@ sensor:
     model: DHT22
     pin: D7
     temperature:
-      name: "temperature"
+      name: "Master Entry Temperature"
     humidity:
-      name: "humidity"
+      name: "Master Entry Humidity"
 
 binary_sensor:
   - platform: gpio
     pin: D5
-    name: "PIR"
+    name: "Master Entry PIR"
     device_class: motion
