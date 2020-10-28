@@ -213,29 +213,57 @@
     - service: homeassistant.turn_on
       entity_id: switch.upstairs_hall_treads, switch.great_room_lamp
 #########################################
-- alias: "Automatic Lighting: motion light template for foyer & basement & and bar"
+- alias: "Automatic Lighting: motion light template"
+  description: "template for foyer & basement & bar & master toilet & evelyns lamp & storage & master toekick & office desk & gym"
   trigger:
     - platform: state
       entity_id:
         - sensor.foyer_pir
         - sensor.basement_pir
         - sensor.bar_pir
+        - sensor.storage_pir
       to: "Violated"
+    - platform: state
+      entity_id:
+        - binary_sensor.master_toilet_occupancy
+        - binary_sensor.evelyns_room_occupied
+        - binary_sensor.master_bedroom_occupancy
+        - binary_sensor.office_occupancy
+        - binary_sensor.gym_occupancy
+      to: "on"
     - platform: state
       entity_id:
         - sensor.foyer_pir
         - sensor.basement_pir
         - sensor.bar_pir
+        - sensor.storage_pir
       to: "Normal"
       for:
         minutes: 10
+    - platform: state
+      entity_id:
+        - binary_sensor.master_toilet_occupancy
+        - binary_sensor.master_bedroom_occupancy
+        - binary_sensor.gym_occupancy
+        - binary_sensor.office_occupancy
+      to: "off"
+      for:
+        minutes: 4
+    - platform: state
+      entity_id: binary_sensor.evelyns_room_occupied
+      to: "off"
+      for:
+        minutes: 30
   condition:
     - condition: state
       entity_id: input_boolean.block_all_motion_lights
       state: "off"
+    # - condition: state
+    #   entity_id: binary_sensor.light_inside
+    #   state: "off"
   action:
     service_template: >
-      {% if trigger.to_state.state == 'Violated' %}homeassistant.turn_on
+      {% if trigger.to_state.state in ['Violated', 'on'] %}homeassistant.turn_on
       {% else %}homeassistant.turn_off{% endif %}
     data_template:
       entity_id: >
@@ -246,6 +274,18 @@
           switch.basement_main
         {% elif trigger_entity == 'sensor.bar_pir' %}
           switch.basement_bar_cabinets
+        {% elif trigger_entity == 'binary_sensor.master_toilet_occupancy' %}
+          light.master_toilet_fixture
+        {% elif trigger_entity == 'binary_sensor.master_toilet_occupancy' %}
+          light.evelyns_room_lamp
+        {% elif trigger_entity == 'sensor.storage_pir' %}
+          switch.basement_storage_lights
+        {% elif trigger_entity == 'binary_sensor.master_bedroom_occupancy' %}
+          light.master_bath_toekick
+        {% elif trigger_entity == 'binary_sensor.office_occupancy' %}
+          switch.office_lights
+        {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
+          light.gym_cans
         {% endif %}
 #########################################
 # Close master blinds if its dusk upon 1st motion on the entry only 1 time (after 1hr before sunset)
@@ -1031,82 +1071,6 @@
     - service: homeassistant.turn_on
       entity_id: switch.basement_main
 #########################################
-- alias: "Automatic Lighting: storage & master toekick motion lights"
-  trigger:
-    - platform: state
-      entity_id: sensor.storage_pir
-      to: "Violated"
-    - platform: state
-      entity_id: sensor.storage_pir
-      to: "Normal"
-      for:
-        minutes: 5
-    - platform: state
-      entity_id: binary_sensor.master_bedroom_occupancy
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.master_bedroom_occupancy
-      to: "off"
-      for:
-        minutes: 1
-  action:
-    - service_template: >
-        {% if trigger.to_state.state in ['Violated', 'on'] %}homeassistant.turn_on
-        {% else %}homeassistant.turn_off{% endif %}
-      data_template:
-        entity_id: >
-          {% set trigger_entity = trigger.entity_id %}
-          {% if trigger_entity == 'sensor.storage_pir' %}
-            switch.basement_storage_lights
-          {% elif trigger_entity == 'binary_sensor.master_bedroom_occupancy' %}
-            light.master_bath_toekick
-          {% endif %}
-#########################################
-- alias: "Automatic Lighting: office desk & gym lights motion on"
-  trigger:
-    - platform: state
-      entity_id:
-        - binary_sensor.office_occupancy
-        - binary_sensor.gym_occupancy
-      to: "on"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.light_inside
-      state: "off"
-  action:
-    - service: homeassistant.turn_on
-      data_template:
-        entity_id: >
-          {% set trigger_entity = trigger.entity_id %}
-          {% if trigger_entity == 'binary_sensor.office_occupancy' %}
-            switch.office_lights
-          {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
-            light.gym_cans
-          {% endif %}
-#########################################
-- alias: "Automatic Lighting: office desk & gym lights motion off"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.office_occupancy
-      to: "off"
-      for:
-        minutes: 2
-    - platform: state
-      entity_id: binary_sensor.gym_occupancy
-      to: "off"
-      for:
-        minutes: 5
-  action:
-    - service: homeassistant.turn_off
-      data_template:
-        entity_id: >
-          {% set trigger_entity = trigger.entity_id %}
-          {% if trigger_entity == 'binary_sensor.office_occupancy' %}
-            switch.office_lights
-          {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
-            light.gym_cans
-          {% endif %}
-#########################################
 - alias: "Presence: office speakers on/off with presence"
   trigger:
     - platform: state
@@ -1200,64 +1164,3 @@
         {% if now().strftime("%H") | int > 20 %}homeassistant.turn_off
         {% else %}homeassistant.turn_on{% endif %}
       entity_id: switch.switch2
-########################################
-- alias: "Automatic Lighting: evelyns room lamp on"
-  trigger:
-    platform: state
-    entity_id: binary_sensor.evelyns_room_occupied
-    to: "on"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: light.evelyns_room_lamp
-########################################
-- alias: "Automatic Lighting: evelyns room lamp off"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.evelyns_room_occupied
-      to: "off"
-      for:
-        minutes: 40
-  action:
-    - service: homeassistant.turn_off
-      entity_id: light.evelyns_room_lamp
-########################################
-- alias: "Automatic Lighting: master toilet on"
-  trigger:
-    platform: state
-    entity_id: binary_sensor.master_toilet_occupancy
-    to: "on"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: light.master_toilet_fixture
-########################################
-- alias: "Automatic Lighting: master toilet off"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.master_toilet_occupancy
-      to: "off"
-      for:
-        minutes: 4
-  action:
-    - service: homeassistant.turn_off
-      entity_id: light.master_toilet_fixture
-
-########################################
-- alias: "Automatic Lighting: temp on"
-  trigger:
-    platform: state
-    entity_id: binary_sensor.kerui_pir
-    to: "on"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: switch.great_room_cabinets
-########################################
-- alias: "Automatic Lighting: temp off"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.kerui_pir
-      to: "off"
-      for:
-        minutes: 1
-  action:
-    - service: homeassistant.turn_off
-      entity_id: switch.great_room_cabinets
