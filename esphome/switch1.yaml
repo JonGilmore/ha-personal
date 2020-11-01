@@ -23,6 +23,6 @@ ota:
 
 switch:
   - platform: gpio
-    name: "Switch1"
+    name: "Office Speakers"
     pin: GPIO12
     id: relay

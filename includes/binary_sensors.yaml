@@ -58,6 +58,7 @@
         or states.sensor.basement_stairs_pir.state == "Violated"
         or states.sensor.storage_pir.state == "Violated"
         or states.binary_sensor.gym_occupancy.state == "on"
+        or states.binary_sensor.basement_occupancy.state == "on"
         or states.sensor.bar_pir.state == "Violated" }}
     main_motions:
       friendly_name: "Main Motions"
@@ -66,7 +67,22 @@
         {{ states.sensor.foyer_pir.state == "Violated"
         or states.sensor.kitchen_pir.state == "Violated"
         or states.binary_sensor.sunroom_pir.state == "on"
+        or states.binary_sensor.powder_room_hall_occupancy.state == "on"
+        or states.binary_sensor.mudroom_occupancy.state == "on"
+        or states.binary_sensor.laundry_occupancy.state == "on"
         or states.binary_sensor.office_multi_motion.state == "on" }}
+    upstairs_motions:
+      friendly_name: "Upstairs Motions"
+      device_class: motion
+      value_template: >-
+        {{ states.binary_sensor.sitting_room_pir.state == "on"
+        or states.binary_sensor.master_entry_pir.state == "on"
+        or states.binary_sensor.master_toilet_occupancy.state == "on"
+        or states.binary_sensor.evelyns_room_occupancy.state == "on"
+        or states.binary_sensor.master_bedroom_occupancy.state == "on"
+        or states.binary_sensor.loft_multi_motion.state == "on"
+        or states.binary_sensor.kerui_pir.state == "on"
+        or states.binary_sensor.evelyn_multi_motion.state == "on" }}
     all_motions:
       friendly_name: "All Motions"
       device_class: motion
@@ -90,6 +106,9 @@
         or states.binary_sensor.laundry_occupancy.state == "on"
         or states.binary_sensor.master_bedroom_occupancy.state == "on"
         or states.binary_sensor.mudroom_occupancy.state == "on"
+        or states.binary_sensor.evelyn_multi_motion.state == "on"
+        or states.binary_sensor.loft_multi_motion.state == "on"
+        or states.binary_sensor.kerui_pir.state == "on"
         or states.binary_sensor.powder_room_hall_occupancy.state == "on" }}
     garage_doors:
       friendly_name: "Garage Doors"
@@ -214,7 +233,7 @@
       friendly_name: "Evelyns Room Occupied"
       value_template: >-
         {{ states.binary_sensor.evelyns_room_occupancy.state == "on"
-        or states.binary_sensor.office_multi_motion.state == "on" }}
+        or states.binary_sensor.evelyn_multi_motion.state == "on" }}
 
 - platform: workday
   country: US
