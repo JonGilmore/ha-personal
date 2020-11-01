@@ -1034,3 +1034,41 @@ views:
           - arm_home
           - arm_away
           - arm_night
+
+  ##########################################
+  # PIR PAGE
+  ##########################################
+  - title: PIR
+    id: pir
+    icon: mdi:motion-sensor
+    cards:
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Main PIRs
+        filter:
+          include:
+            - group: group.main_motions
+        sort:
+          method: name
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Basement PIRs
+        filter:
+          include:
+            - group: group.basement_motions
+        sort:
+          method: name
+      - type: custom:auto-entities
+        show_empty: false
+        card:
+          type: entities
+          title: Upstairs PIRs
+        filter:
+          include:
+            - group: group.upstairs_motions
+        sort:
+          method: name
