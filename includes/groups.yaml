@@ -324,22 +324,30 @@ main_motions:
     - binary_sensor.mudroom_occupancy
     - binary_sensor.laundry_occupancy
     - binary_sensor.sunroom_pir
+    - binary_sensor.powder_room_hall_occupancy
 
 upstairs_motions:
   name: Upstairs Motions
   entities:
-    - binary_sensor.master_bedroom_occupancy
-    - binary_sensor.master_entry_pir
     - binary_sensor.sitting_room_pir
+    - binary_sensor.master_entry_pir
+    - binary_sensor.master_toilet_occupancy
+    - binary_sensor.evelyns_room_occupancy
+    - binary_sensor.master_bedroom_occupancy
+    - binary_sensor.loft_multi_motion
+    - binary_sensor.kerui_pir
+    - binary_sensor.evelyn_multi_motion
 
 basement_motions:
   name: Basement Motions
   entities:
-    - sensor.bar_pir
     - sensor.basement_pir
+    - sensor.workshop_pir
     - sensor.basement_stairs_pir
     - sensor.storage_pir
-    - sensor.workshop_pir
+    - binary_sensor.gym_occupancy
+    - binary_sensor.basement_occupancy
+    - sensor.bar_pir
 
 exterior_motions:
   name: Exterior Motions
