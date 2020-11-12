@@ -7,6 +7,12 @@
         id: sitting_keypad_lamps
         action: single
         full_id: master_bedroom_sitting_keypad_lamps
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: jons_keypad_lamps
+        action: single
+        full_id: master_bedroom_jons_keypad_lamps
   condition:
     - condition: state
       entity_id: switch.master_bedroom_sitting_keypad_lamps_led
@@ -18,9 +24,11 @@
           - light.lauras_lamp_lifx
           - light.jons_lamp_lifx
         power: true
-    - delay: "00:00:02"
+    - delay: "00:00:03"
     - service: homeassistant.turn_on
-      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+      entity_id:
+        - switch.master_bedroom_sitting_keypad_lamps_led
+        - switch.master_bedroom_jons_keypad_lamps_led
 - alias: "Lutron Scene: Master lamps off"
   description: "LED is on & the scene is triggered - turn off the lamps and disable the LED"
   trigger:
@@ -30,6 +38,12 @@
         id: sitting_keypad_lamps
         action: single
         full_id: master_bedroom_sitting_keypad_lamps
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: jons_keypad_lamps
+        action: single
+        full_id: master_bedroom_jons_keypad_lamps
   condition:
     - condition: state
       entity_id: switch.master_bedroom_sitting_keypad_lamps_led
@@ -39,9 +53,10 @@
       entity_id:
         - light.lauras_lamp_lifx
         - light.jons_lamp_lifx
-    - delay: "00:00:02"
     - service: homeassistant.turn_off
-      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+      entity_id:
+        - switch.master_bedroom_sitting_keypad_lamps_led
+        - switch.master_bedroom_jons_keypad_lamps_led
 - alias: "Lutron Scene: Either master lamp on"
   description: "Either master lamp is turned on - enable the scene LED"
   trigger:
@@ -51,8 +66,11 @@
         - light.jons_lamp_lifx
       to: "on"
   action:
+    - delay: "00:00:03"
     - service: homeassistant.turn_on
-      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+      entity_id:
+        - switch.master_bedroom_sitting_keypad_lamps_led
+        - switch.master_bedroom_jons_keypad_lamps_led
 - alias: "Lutron Scene: Both master lamps off - jon"
   description: "Both master lamps off, turn off the scene LED"
   trigger:
@@ -61,14 +79,13 @@
       to: "off"
   condition:
     - condition: state
-      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
-      state: "on"
-    - condition: state
       entity_id: light.lauras_lamp_lifx
       state: "off"
   action:
     - service: homeassistant.turn_off
-      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
+      entity_id:
+        - switch.master_bedroom_sitting_keypad_lamps_led
+        - switch.master_bedroom_jons_keypad_lamps_led
 - alias: "Lutron Scene: Both master lamps off - laura"
   description: "Both master lamps off, turn off the scene LED"
   trigger:
@@ -77,35 +94,96 @@
       to: "off"
   condition:
     - condition: state
-      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
-      state: "on"
-    - condition: state
       entity_id: light.jons_lamp_lifx
       state: "off"
   action:
     - service: homeassistant.turn_off
-      entity_id: switch.master_bedroom_sitting_keypad_lamps_led
-#####
-# - alias: "Lutron Scene: All off or upstairs off pressed, turn off lamps"
-#   trigger:
-#     - platform: state
-#       entity_id:
-#         - switch.basement_keypad_all_off_led
-#         - switch.equipment_room_enclosure_device_001_ph_all_off_led
-#         - switch.equipment_room_keypad_all_off_led
-#         - switch.exterior_keypad_all_off_led
-#         - switch.exterior_patio_keypad_all_off_led
-#         - switch.great_room_great_room_keypad_all_off_led
-#         - switch.master_bedroom_jons_keypad_all_off_led
-#         - switch.master_bedroom_sitting_keypad_all_off_led
-#         - switch.mudroom_mudroom_keypad_all_off_led
-#         - switch.equipment_room_keypad_upstairs_off_led
-#         - switch.exterior_keypad_upstairs_off_led
-#         - switch.great_room_great_room_keypad_upstairs_off_led
-#         - switch.master_bedroom_jons_keypad_upstairs_led
-#       to: "on"
-#   action:
-#     - service: homeassistant.turn_off
-#       entity_id:
-#         - light.lauras_lamp_lifx
-#         - light.jons_lamp_lifx
+      entity_id:
+        - switch.master_bedroom_sitting_keypad_lamps_led
+        - switch.master_bedroom_jons_keypad_lamps_led
+########################################
+- alias: "Lutron Scene: Master lamps off from scene activation"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: keypad_all_off
+        action: single
+        full_id: basement_keypad_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: enclosure_device_001_ph_second_off
+        action: single
+        full_id: equipment_room_enclosure_device_001_ph_second_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: enclosure_device_001_ph_all_off
+        action: single
+        full_id: equipment_room_enclosure_device_001_ph_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: keypad_all_off
+        action: single
+        full_id: equipment_room_keypad_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: keypad_all_off
+        action: single
+        full_id: exterior_keypad_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: keypad_all_off
+        action: single
+        full_id: exterior_patio_keypad_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: great_room_keypad_all_off
+        action: single
+        full_id: great_room_great_room_keypad_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: jons_keypad_all_off
+        action: single
+        full_id: master_bedroom_jons_keypad_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: sitting_keypad_all_off
+        action: single
+        full_id: master_bedroom_sitting_keypad_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: mudroom_keypad_all_off
+        action: single
+        full_id: mudroom_mudroom_keypad_all_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: keypad_upstairs_off
+        action: single
+        full_id: equipment_room_keypad_upstairs_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: keypad_upstairs_off
+        action: single
+        full_id: exterior_keypad_upstairs_off
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: great_room_keypad_upstairs_off
+        action: single
+        full_id: great_room_great_room_keypad_upstairs_off
+  action:
+    - service: homeassistant.turn_off
+      entity_id:
+        - light.lauras_lamp_lifx
+        - light.jons_lamp_lifx

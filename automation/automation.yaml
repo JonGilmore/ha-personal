@@ -520,7 +520,7 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.sunset_run_once
 #########################################
-- alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off"
+- alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
@@ -545,7 +545,9 @@
       data:
         entity_id: media_player.living_room_tv
         command: "system/turnOff"
-#########################################
+    - service: homeassistant.turn_off
+      entity_id: switch.equipment_room_recirculation_pump
+  #########################################
 - alias: "Night Mode: start sleeping & check the garage doors"
   trigger:
     - platform: state
