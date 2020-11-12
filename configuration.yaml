@@ -136,7 +136,7 @@ history:
 sun:
 conversation:
 logbook:
-stream:
+# stream:
 hacs:
   token: !secret hacs
 

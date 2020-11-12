@@ -12,7 +12,7 @@ garage_door_single:
     inline_keyboard:
       - "Yes:/closegarage_single, Ignore:/ack_garagesingle"
     photo:
-      - url: !secret hik_garage_pic
+      - url: !secret camera_garage_pic
         caption: "Single garage open. Close?"
   notifiers:
     - telegram_jon
@@ -29,7 +29,7 @@ garage_door_double:
     inline_keyboard:
       - "Yes:/closegarage_double, Ignore:/ack_garagedouble"
     photo:
-      - url: !secret hik_garage_pic
+      - url: !secret camera_garage_pic
         caption: "Double garage open. Close?"
   notifiers:
     - telegram_jon

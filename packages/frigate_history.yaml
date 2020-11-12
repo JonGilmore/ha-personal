@@ -620,25 +620,25 @@ binary_sensor:
   - platform: mqtt
     name: "Deck Person"
     state_topic: "frigate/deck/person"
-    device_class: moving
+    device_class: motion
     availability_topic: "frigate/available"
   - platform: mqtt
     name: "DeckStairs Person"
     state_topic: "frigate/deckstairs/person"
-    device_class: moving
+    device_class: motion
     availability_topic: "frigate/available"
   - platform: mqtt
     name: "Driveway Person"
     state_topic: "frigate/driveway/person"
-    device_class: moving
+    device_class: motion
     availability_topic: "frigate/available"
   - platform: mqtt
     name: "Doorbell Person"
     state_topic: "frigate/doorbell/person"
-    device_class: moving
+    device_class: motion
     availability_topic: "frigate/available"
   - platform: mqtt
     name: "Garage Person"
     state_topic: "frigate/garage/person"
-    device_class: moving
+    device_class: motion
     availability_topic: "frigate/available"

@@ -19,7 +19,7 @@
           inline_keyboard:
             - "Yes:/closegarage_single, No:/do_nothing"
           photo:
-            - url: !secret hik_garage_pic
+            - url: !secret camera_garage_pic
               caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
 #########################################
 # - alias: "Location Awareness: leave home & double garage open"
@@ -42,7 +42,7 @@
 #           inline_keyboard:
 #             - "Yes:/closegarage_double, No:/do_nothing"
 #           photo:
-#             - url: !secret hik_garage_pic
+#             - url: !secret camera_garage_pic
 #               caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
 #########################################
 # logic with recirc pump
