@@ -905,37 +905,9 @@ views:
         title: Host Stats
         show_header_toggle: false
         entities:
-          - sensor.nuc_uptime
           - sensor.disk_use_percent
-          - sensor.processor_use
           - sensor.memory_use_percent
           - sensor.cpu_temperature
-      # - type: entities
-      #   title: Unifi Stats
-      #   show_header_toggle: false
-      #   entities:
-      #     - sensor.unifi_gateway_alerts
-      #     - sensor.unifi_gateway_firmware_upgradable
-      #     - sensor.unifi_gateway_lan
-      #     - sensor.unifi_gateway_vpn
-      #     - sensor.unifi_gateway_wan
-      #     - sensor.unifi_gateway_wlan
-      #     - sensor.unifi_gateway_www
-      # - type: custom:bar-card
-      #   entities:
-      #     - sensor.tracker_garage_jon
-      #     - sensor.tracker_living_room_jon
-      #     - sensor.tracker_theatre_jon
-      #     - sensor.tracker_master_jon
-      #     - sensor.jon_occupancy_confidence
-      #     - sensor.tracker_garage_laura
-      #     - sensor.tracker_living_room_laura
-      #     - sensor.tracker_theatre_laura
-      #     - sensor.tracker_master_laura
-      #     - sensor.laura_occupancy_confidence
-      #     - sensor.house_occupancy_confidence
-      #     - device_tracker.jon_pi
-      #     - device_tracker.laura_pi
       - type: entities
         title: COVID-19
         show_header_toggle: false
@@ -980,6 +952,55 @@ views:
             show_state: true
       - type: custom:search-card
         max_results: 10
+
+  ##########################################
+  # MOBILE TAB
+  ##########################################
+  - title: Mobile
+    id: mobile
+    icon: mdi:phone
+    cards:
+      - type: "custom:auto-entities"
+        card:
+          show_header_toggle: false
+          title: Pixel
+          type: entities
+        sort:
+          method: state
+        filter:
+          include:
+            - entity_id: "/^.*jons_iphone_.*/"
+          exclude:
+            - state: "Unavailable"
+        show_empty: false
+      - type: "custom:auto-entities"
+        card:
+          show_header_toggle: false
+          title: iPhone
+          type: entities
+        sort:
+          method: state
+        filter:
+          include:
+            - entity_id: "/^.*lauras_iphone_.*/"
+          exclude:
+            - state: "Unknown"
+        show_empty: false
+      - type: custom:stack-in-card
+        title: My Stack In Card
+        mode: vertical
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: button
+                entity: sun.sun
+              - type: button
+                entity: sun.sun
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - sun.sun
 
   ##########################################
   # BATTERY TAB

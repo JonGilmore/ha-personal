@@ -1,6 +1,0 @@
----
-scenes:
-  - entity: scene.equipment_room_enclosure_device_001_ph_all_off
-    icon: mdi:lightbulb-outline
-  - entity: scene.equipment_room_enclosure_device_001_ph_all_on
-    icon: mdi:lightbulb-on

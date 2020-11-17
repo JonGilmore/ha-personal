@@ -120,8 +120,8 @@
       value_template: !secret hik_deckstairs_pic
     hik_daisy_pic:
       value_template: !secret hik_daisy_pic
-    hik_garage_pic:
-      value_template: !secret hik_garage_pic
+    camera_garage_pic:
+      value_template: !secret camera_garage_pic
     cam_driveway_vid:
       value_template: !secret cam_driveway_vid
     cam_deck_vid:
@@ -274,11 +274,6 @@
 # LOAD SENSORS
 - platform: template
   sensors:
-    master_sitting_chair_occupied:
-      value_template: >-
-        {% if states.sensor.master_sitting_chair.state | int < -1000000 %}occupied
-        {% else %} unoccupied {% endif %}
-      friendly_name: "Master Sitting Chair Occupied"
     master_bed_occupied:
       value_template: >-
         {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
@@ -303,9 +298,9 @@
     - deck
     - doorbell
     - driveway
-    # - garage
     - deckstairs
-    - coral
+    - detection_fps
+    - detectors
   value_template: "OK"
 - platform: template
   sensors:
@@ -336,15 +331,6 @@
     driveway_detection_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
-    # garage_fps:
-    #   value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["camera_fps"] }}'
-    #   unit_of_measurement: "FPS"
-    # garage_skipped_fps:
-    #   value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["skipped_fps"] }}'
-    #   unit_of_measurement: "FPS"
-    # garage_detection_fps:
-    #   value_template: '{{ states.sensor.frigate_debug.attributes["garage"]["detection_fps"] }}'
-    #   unit_of_measurement: "FPS"
     deckstairs_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["camera_fps"] }}'
       unit_of_measurement: "FPS"
@@ -354,11 +340,11 @@
     deckstairs_detection_fps:
       value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["detection_fps"] }}'
       unit_of_measurement: "FPS"
-    frigate_coral_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["coral"]["fps"] }}'
+    frigate_detection_fps:
+      value_template: '{{ states.sensor.frigate_debug.attributes["detection_fps"]["fps"] }}'
       unit_of_measurement: "FPS"
-    frigate_coral_inference:
-      value_template: '{{ states.sensor.frigate_debug.attributes["coral"]["inference_speed"] }}'
+    frigate_detectors_inference:
+      value_template: '{{ states.sensor.frigate_debug.attributes["detectors"]["inference_speed"] }}'
       unit_of_measurement: "ms"
 
 - platform: version
@@ -469,3 +455,137 @@
   state_topic: "rtl_915/ERT-SCM/48150945"
   unit_of_measurement: "M3"
   value_template: "{{ value_json.consumption_data }}"
+
+- platform: time_date
+  display_options:
+    - "time"
+    - "date"
+    - "date_time"
+    - "date_time_iso"
+    - "time_date"
+    - "time_utc"
+    - "beat"
+
+- platform: template
+  sensors:
+    # WEATHER TEMPLATES
+    current_temperature:
+      friendly_name: Current Temperature
+      value_template: >-
+        {{ states('sensor.dark_sky_temperature') | round | int }}°
+    current_feels:
+      friendly_name: Current Feels Like
+      value_template: >-
+        feels like {{ states('sensor.dark_sky_apparent_temperature') | round | int }}°
+    cloud_cover:
+      friendly_name: Cloud Cover
+      value_template: >-
+        current cloud cover is {{ states('sensor.dark_sky_cloud_coverage') | round | int }}%
+    nearest_storm:
+      friendly_name: Nearest Storm
+      value_template: >-
+        nearest storm is {{ states('sensor.dark_sky_nearest_storm_distance') }} mi. away
+    forecast_summary:
+      friendly_name: Forecast
+      value_template: >-
+        {{ states('sensor.dark_sky_minutely_summary') }}
+    current_humidity:
+      friendly_name: Current Humidity
+      value_template: >-
+        {{ states('sensor.dark_sky_humidity') | round | int }}%
+    daily_high:
+      friendly_name: Today's High
+      value_template: >-
+        {{ states('sensor.dark_sky_daily_high_temperature_0d') | round | int }}°
+    daily_low:
+      friendly_name: Today's Low
+      value_template: >-
+        {{ states('sensor.dark_sky_daily_low_temperature_0d') | round | int }}°
+    precipitation:
+      friendly_name: Precipitation Detected
+      value_template: >-
+        {{ states('sensor.dark_sky_precip') | regex_replace(find='unknown', replace='none', ignorecase=true) }} detected
+    precipitation_amount:
+      friendly_name: Precipitation Amount
+      value_template: >-
+        {{ states('sensor.dark_sky_precip_intensity') | round(2, 'ceil') }} in. per hour
+    precipitation_prob:
+      friendly_name: Precipitation Probability
+      value_template: >-
+        probability: {{ states('sensor.dark_sky_precip_probability') | round | int }}%
+    sunrise_today:
+      friendly_name: "Sunrise Today"
+      value_template: "{% set state = states('sensor.dark_sky_sunrise_0d') %}
+        {{ strptime(state, '%Y-%m-%d %H:%M:%S')
+        .replace(tzinfo=utcnow().tzinfo).astimezone(now().tzinfo) .strftime('%I:%M %p') }}"
+    sunrise_tomorrow:
+      friendly_name: "Sunrise Tomorrow"
+      value_template: "{% set state = states('sensor.dark_sky_sunrise_1d') %}
+        {{ strptime(state, '%Y-%m-%d %H:%M:%S')
+        .replace(tzinfo=utcnow().tzinfo).astimezone(now().tzinfo) .strftime('%I:%M %p') }}"
+    sunset_today:
+      friendly_name: "Sunset Today"
+      value_template: "{% set state = states('sensor.dark_sky_sunset_0d') %}
+        {{ strptime(state, '%Y-%m-%d %H:%M:%S')
+        .replace(tzinfo=utcnow().tzinfo).astimezone(now().tzinfo) .strftime('%I:%M %p') }}"
+    sunset_tomorrow:
+      friendly_name: "Sunset Tomorrow"
+      value_template: "{% set state = states('sensor.dark_sky_sunset_1d') %}
+        {{ strptime(state, '%Y-%m-%d %H:%M:%S')
+        .replace(tzinfo=utcnow().tzinfo).astimezone(now().tzinfo) .strftime('%I:%M %p') }}"
+    # AIR QUALITY TEMPLATES
+    today_aqi:
+      entity_id: sensor.u_s_air_quality_index
+      friendly_name: "Today's AQI"
+      value_template: >-
+        {{ states('sensor.u_s_air_quality_index') }}
+    today_allergy:
+      entity_id: sensor.allergy_index_today
+      friendly_name: "Today's Allergy Index"
+      value_template: >-
+        {{ states('sensor.allergy_index_today') }}
+    allergy_trend:
+      friendly_name: "Allergy Trend"
+      value_template: >-
+        {{ state_attr('sensor.allergy_index_forecasted_average', 'trend') }}
+    allergy_level:
+      friendly_name: "Allergy Level"
+      value_template: >-
+        {{ state_attr('sensor.allergy_index_today', 'rating') }}
+    current_uv:
+      entity_id: sensor.current_uv_index
+      friendly_name: "Current UV Index"
+      value_template: >-
+        {{ states('sensor.current_uv_index') | round (1, 'common') }}
+
+    # TIME AND DATE TEMPLATES
+    today_text:
+      entity_id: sensor.date
+      friendly_name: "Today is"
+      value_template: "{{ now().strftime('%A / %B %d') }}"
+    today_clock:
+      entity_id: sensor.time
+      friendly_name: "Today is"
+      value_template: "{{ now().strftime('%A / %B %d / %I:%M %p') }}"
+    clock:
+      entity_id: sensor.time
+      friendly_name: "Time is"
+      value_template: "{{ now().strftime('%I:%M %p') }}"
+
+    #THERMOSTAT TEMPLATES
+    main_status:
+      friendly_name: Main Floor Status
+      value_template: >-
+        {{ state_attr('climate.main_floor', 'current_temperature') | round | int }}° / {{ state_attr('climate.main_floor', 'current_humidity') | round | int }}% humidity
+    upstairs_status:
+      friendly_name: Upstairs Status
+      value_template: >-
+        {{ state_attr('climate.upstairs', 'current_temperature') | round | int }}° / {{ state_attr('climate.upstairs', 'current_humidity') | round | int }}% humidity
+    familyroom_temperature:
+      friendly_name: Family Room Temperature
+      value_template: >-
+        {{ states('sensor.family_room_temperature') | round | int }}°
+    diningroom_temperature:
+      friendly_name: Dining Room Temperature
+      value_template: >-
+        {{ states('sensor.dining_room_temperature') | round | int }}°
