@@ -32,6 +32,9 @@
   name: Deck
   input: rtsp://localhost:554/proxyStream-3
 - platform: ffmpeg
+  name: Garage
+  input: rtsp://localhost:554/proxyStream-6
+- platform: ffmpeg
   name: Kitchen Camera
   input: rtsp://localhost:554/proxyStream-8
 - platform: ffmpeg

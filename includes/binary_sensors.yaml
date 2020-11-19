@@ -110,6 +110,111 @@
         or states.binary_sensor.loft_multi_motion.state == "on"
         or states.binary_sensor.kerui_pir.state == "on"
         or states.binary_sensor.powder_room_hall_occupancy.state == "on" }}
+    basement_pir:
+      friendly_name: "basement pir"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.basement_pir.state == "Violated" }}
+    workshop_pir:
+      friendly_name: "workshop pir"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.workshop_pir.state == "Violated" }}
+    basement_stairs_pir:
+      friendly_name: "basement stairs pir"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.basement_stairs_pir.state == "Violated" }}
+    storage_pir:
+      friendly_name: "storage pir"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.storage_pir.state == "Violated" }}
+    bar_pir:
+      friendly_name: "bar pir"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.bar_pir.state == "Violated" }}
+    foyer_pir:
+      friendly_name: "foyer pir"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.foyer_pir.state == "Violated" }}
+    kitchen_pir:
+      friendly_name: "kitchen pir"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.kitchen_pir.state == "Violated" }}
+    double_garage:
+      friendly_name: "double garage"
+      device_class: garage_door
+      value_template: >-
+        {{ states.sensor.double_garage.state == "Violated" }}
+    single_garage:
+      friendly_name: "single garage"
+      device_class: garage_door
+      value_template: >-
+        {{ states.sensor.single_garage.state == "Violated" }}
+    front_door:
+      friendly_name: "front door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.front_door.state == "Violated" }}
+    garage_door:
+      friendly_name: "garage door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.garage_door.state == "Violated" }}
+    basement_door:
+      friendly_name: "patio door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.basement_door.state == "Violated" }}
+    deck_door:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.deck_door.state == "Violated" }}
+    dining_window_1:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.dining_window_1.state == "Violated" }}
+    dining_window_2:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.dining_window_2.state == "Violated" }}
+    office_window_1:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.office_window_1.state == "Violated" }}
+    office_window_2:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.office_window_2.state == "Violated" }}
+    bsmt_window_1:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.bsmt_window_1.state == "Violated" }}
+    bsmt_window_2:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.bsmt_window_2.state == "Violated" }}
+    gym_window_1:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.gym_window_1.state == "Violated" }}
+    gym_window_2:
+      friendly_name: "deck door"
+      device_class: door
+      value_template: >-
+        {{ states.sensor.gym_window_2.state == "Violated" }}
     garage_doors:
       friendly_name: "Garage Doors"
       device_class: garage_door

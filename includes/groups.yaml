@@ -285,14 +285,14 @@ garmin:
 main_doors:
   name: Main Doors
   entities:
-    - sensor.front_door
-    - sensor.garage_door
-    - sensor.deck_door
+    - binary_sensor.front_door
+    - binary_sensor.garage_door
+    - binary_sensor.deck_door
 
 basement_door:
   name: Basement Door
   entities:
-    - sensor.basement_door
+    - binary_sensor.basement_door
 
 garage_lights:
   name: Garage Lights
@@ -308,18 +308,18 @@ garage_doors:
 exterior_doors:
   name: Exterior Doors
   entities:
-    - sensor.basement_door
-    - sensor.front_door
-    - sensor.garage_door
-    - sensor.deck_door
+    - binary_sensor.basement_door
+    - binary_sensor.front_door
+    - binary_sensor.garage_door
+    - binary_sensor.deck_door
     - cover.garage_momentary_single
     - cover.garage_momentary_double
 
 main_motions:
   name: Main Floor Motions
   entities:
-    - sensor.foyer_pir
-    - sensor.kitchen_pir
+    - binary_sensor.foyer_pir
+    - binary_sensor.kitchen_pir
     - binary_sensor.office_multi_motion
     - binary_sensor.mudroom_occupancy
     - binary_sensor.laundry_occupancy
@@ -341,13 +341,13 @@ upstairs_motions:
 basement_motions:
   name: Basement Motions
   entities:
-    - sensor.basement_pir
-    - sensor.workshop_pir
-    - sensor.basement_stairs_pir
-    - sensor.storage_pir
+    - binary_sensor.basement_pir
+    - binary_sensor.workshop_pir
+    - binary_sensor.basement_stairs_pir
+    - binary_sensor.storage_pir
     - binary_sensor.gym_occupancy
     - binary_sensor.basement_occupancy
-    - sensor.bar_pir
+    - binary_sensor.bar_pir
 
 exterior_motions:
   name: Exterior Motions
@@ -361,30 +361,30 @@ exterior_motions:
 windows:
   name: All Windows
   entities:
-    - sensor.dining_window_1
-    - sensor.dining_window_2
-    - sensor.office_window_1
-    - sensor.office_window_2
-    - sensor.bsmt_window_1
-    - sensor.bsmt_window_2
-    - sensor.gym_window_1
-    - sensor.gym_window_2
+    - binary_sensor.dining_window_1
+    - binary_sensor.dining_window_2
+    - binary_sensor.office_window_1
+    - binary_sensor.office_window_2
+    - binary_sensor.bsmt_window_1
+    - binary_sensor.bsmt_window_2
+    - binary_sensor.gym_window_1
+    - binary_sensor.gym_window_2
 
 main_windows:
   name: Main Floor Windows
   entities:
-    - sensor.dining_window_1
-    - sensor.dining_window_2
-    - sensor.office_window_1
-    - sensor.office_window_2
+    - binary_sensor.dining_window_1
+    - binary_sensor.dining_window_2
+    - binary_sensor.office_window_1
+    - binary_sensor.office_window_2
 
 basement_windows:
   name: Basement Windows
   entities:
-    - sensor.bsmt_window_1
-    - sensor.bsmt_window_2
-    - sensor.gym_window_1
-    - sensor.gym_window_2
+    - binary_sensor.bsmt_window_1
+    - binary_sensor.bsmt_window_2
+    - binary_sensor.gym_window_1
+    - binary_sensor.gym_window_2
 
 main_floor_covers:
   name: Main Floor Covers

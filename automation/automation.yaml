@@ -1072,3 +1072,64 @@
     - service: homeassistant.turn_off
       data:
         entity_id: alert.garage_door_double
+#########################################
+- alias: "iOS Actions: lights off"
+  description: "all lights off from iOS widget"
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        actionID: DAEA5C23-4FDC-4FB4-BD8C-B41CA84E1442
+        actionName: Lights off
+        sourceDeviceID: jons_iphone
+        sourceDeviceName: Jon’s iPhone
+        sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
+        triggerSource: widget
+  action:
+    - service: scene.turn_on
+      entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
+#########################################
+- alias: "iOS Actions: toggle garage - single"
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        actionID: 842DDAC7-8FD2-41E5-90FB-1377F9D7DAB1
+        actionName: Single Garage
+        sourceDeviceID: jons_iphone
+        sourceDeviceName: Jon’s iPhone
+        sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
+        triggerSource: widget
+  action:
+    - service: homeassistant.toggle
+      entity_id: cover.garage_momentary_single
+#########################################
+- alias: "iOS Actions: toggle garage - double"
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        actionID: EBE2C81C-31A8-41FE-A252-6AADB39339B2
+        actionName: Double Garage
+        sourceDeviceID: jons_iphone
+        sourceDeviceName: Jon’s iPhone
+        sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
+        triggerSource: widget
+  action:
+    - service: homeassistant.toggle
+      entity_id: cover.garage_momentary_double
+#########################################
+- alias: "iOS Actions: unlock front door"
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        actionID: 73EEB9C6-6A5C-4489-B2F5-1F1F36511CC7
+        actionName: Unlock Front
+        sourceDeviceID: jons_iphone
+        sourceDeviceName: Jon’s iPhone
+        sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
+        triggerSource: widget
+  action:
+    - service: lock.unlock
+      entity_id: lock.front_door_lock

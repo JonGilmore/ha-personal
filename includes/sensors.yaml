@@ -168,6 +168,8 @@
     - apparent_temperature_high
     - apparent_temperature_low
     - precip_intensity_max
+    - sunrise_time
+    - sunset_time
 
 # # # DARKNESS SENSORS
 - platform: template
