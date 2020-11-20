@@ -10,6 +10,7 @@
 #         some_other_data: 'and some other data.'
 more_page:
   addons:
-    - name: Coronavirus
-      icon: fas:disease
-      path: 'dwains-dashboard/addons/more_page/coronavirus/page.yaml'
+    - name: Settings
+      main_menu: "true"
+      icon: mdi:wrench
+      path: "dwains-dashboard/addons/more_page/settings/page.yaml"
