@@ -59,6 +59,7 @@
         or states.sensor.storage_pir.state == "Violated"
         or states.binary_sensor.gym_occupancy.state == "on"
         or states.binary_sensor.basement_occupancy.state == "on"
+        or states.binary_sensor.basement_multi_motion.state == "on"
         or states.sensor.bar_pir.state == "Violated" }}
     main_motions:
       friendly_name: "Main Motions"
@@ -109,6 +110,7 @@
         or states.binary_sensor.evelyn_multi_motion.state == "on"
         or states.binary_sensor.loft_multi_motion.state == "on"
         or states.binary_sensor.kerui_pir.state == "on"
+        or states.binary_sensor.basement_multi_motion.state == "on"
         or states.binary_sensor.powder_room_hall_occupancy.state == "on" }}
     basement_pir:
       friendly_name: "basement pir"

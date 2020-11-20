@@ -348,6 +348,7 @@ basement_motions:
     - binary_sensor.gym_occupancy
     - binary_sensor.basement_occupancy
     - binary_sensor.bar_pir
+    - binary_sensor.basement_multi_motion
 
 exterior_motions:
   name: Exterior Motions
