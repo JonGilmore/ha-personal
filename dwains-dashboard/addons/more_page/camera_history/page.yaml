@@ -1,0 +1,275 @@
+# dwains_theme
+- type: grid
+  columns: 2
+  square: false
+  cards:
+    - type: "custom:swipe-card"
+      start_card: 10
+      cards:
+        - entity: camera.driveway_history1
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history2
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history3
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history4
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history5
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history6
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history7
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history8
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history9
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.driveway_history10
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+    - type: "custom:swipe-card"
+      start_card: 10
+      cards:
+        - entity: camera.doorbell_history1
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history2
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history3
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history4
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history5
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history6
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history7
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history8
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history9
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.doorbell_history10
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+    - type: "custom:swipe-card"
+      start_card: 10
+      cards:
+        - entity: camera.deck_history1
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history2
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history3
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history4
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history5
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history6
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history7
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history8
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history9
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deck_history10
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+    - type: "custom:swipe-card"
+      start_card: 10
+      cards:
+        - entity: camera.deckstairs_history1
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history2
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history3
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history4
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history5
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history6
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history7
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history8
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history9
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.deckstairs_history10
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+    - type: "custom:swipe-card"
+      start_card: 10
+      cards:
+        - entity: camera.garage_history1
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history2
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history3
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history4
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history5
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history6
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history7
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history8
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history9
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+        - entity: camera.garage_history10
+          type: picture-entity
+          tap_action: none
+          show_name: false
+          show_state: false
+# - type: markdown
+#   content: >
+#     This is a more page addon. It can also parse some data from the global more_page addons config.
+#     Don't believe it? Here it is: {{ (data | fromjson)['some_data'] }}<br>
+#     {{ (data | fromjson)['some_other_data'] }}

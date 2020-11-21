@@ -1,16 +1,14 @@
 # https://dwainscheeren.github.io/lovelace-dwains-theme/configuration/more_page.html
-
-# more_page:
-#   addons:
-#     - name: Hello more page
-#       icon: mdi:chart-bar
-#       path: 'dwains-theme/addons/more_page/hello-more-page/page.yaml'
-#       data:
-#         some_data: 'This is some data parsed.'
-#         some_other_data: 'and some other data.'
 more_page:
   addons:
     - name: Settings
       main_menu: "true"
       icon: mdi:wrench
       path: "dwains-dashboard/addons/more_page/settings/page.yaml"
+    - name: History
+      main_menu: "true"
+      icon: mdi:history
+      path: "dwains-dashboard/addons/more_page/camera_history/page.yaml"
+      data:
+        some_data: 'This is some data parsed.'
+        some_other_data: 'and some other data.'
