@@ -73,19 +73,19 @@
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees are toggled"
 #########################################
-- alias: "Christmas: turn off when laura gets in bed (only in december)"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed
-      from: "off"
-      to: "on"
-  condition:
-    - condition: template
-      value_template: '{{ now().strftime("%m")|int == 12 }}'
-    - condition: time
-      after: "17:00:00"
-    - condition: time
-      before: "23:59:59"
-  action:
-    - service: homeassistant.turn_off
-      entity_id: group.christmasTrees
+# - alias: "Christmas: turn off when laura gets in bed (only in december)"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed
+#       from: "off"
+#       to: "on"
+#   condition:
+#     - condition: template
+#       value_template: '{{ now().strftime("%m")|int == 12 }}'
+#     - condition: time
+#       after: "17:00:00"
+#     - condition: time
+#       before: "23:59:59"
+#   action:
+#     - service: homeassistant.turn_off
+#       entity_id: group.christmasTrees

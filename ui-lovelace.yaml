@@ -920,15 +920,15 @@ views:
           - sensor.covid_mn_negative
           - sensor.covid_mn_positive
           - sensor.covid_mn_total
-      - type: entities
-        title: Master Bed
-        show_header_toggle: false
-        entities:
-          - binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed
-          - binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed
-          - type: divider
-          - sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_sleepnumber
-          - sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_sleepnumber
+      # - type: entities
+      #   title: Master Bed
+      #   show_header_toggle: false
+      #   entities:
+      #     - binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed
+      #     - binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed
+      #     - type: divider
+      #     - sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_sleepnumber
+      #     - sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_sleepnumber
       - type: entities
         title: Toggles
         show_header_toggle: false

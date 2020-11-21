@@ -274,22 +274,22 @@
     hours: 24
 
 # LOAD SENSORS
-- platform: template
-  sensors:
-    master_bed_occupied:
-      value_template: >-
-        {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
-        or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}occupied
-        {% else %} unoccupied {% endif %}
-      friendly_name: "Master Bed Occupied"
-    master_bed_people:
-      value_template: >-
-        {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
-        and (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}both
-        {% elif (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
-        or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}one
-        {% else %} nobody {% endif %}
-      friendly_name: "Master Bed People"
+# - platform: template
+#   sensors:
+#     master_bed_occupied:
+#       value_template: >-
+#         {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
+#         or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}occupied
+#         {% else %} unoccupied {% endif %}
+#       friendly_name: "Master Bed Occupied"
+#     master_bed_people:
+#       value_template: >-
+#         {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
+#         and (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}both
+#         {% elif (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
+#         or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}one
+#         {% else %} nobody {% endif %}
+#       friendly_name: "Master Bed People"
 
 # Frigate sensors
 - platform: rest

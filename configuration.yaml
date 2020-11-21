@@ -79,9 +79,9 @@ elkm1:
 #   host: !secret os_host
 #   password: !secret os_passwd
 
-sleepiq:
-  username: !secret sleep_usr
-  password: !secret sleep_pwd
+# sleepiq:
+#   username: !secret sleep_usr
+#   password: !secret sleep_pwd
 
 lutron:
   host: !secret rr_ip

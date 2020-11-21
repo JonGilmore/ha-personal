@@ -151,14 +151,14 @@ scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off:
   friendly_name: main lower exterior off
 ##################################
 # sleep number
-binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed:
-  friendly_name: jon in bed?
-binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed:
-  friendly_name: laura in bed?
-sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_sleepnumber:
-  friendly_name: Jons Sleep Number
-sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_sleepnumber:
-  friendly_name: Lauras Sleep Number
+# binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed:
+#   friendly_name: jon in bed?
+# binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed:
+#   friendly_name: laura in bed?
+# sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_sleepnumber:
+#   friendly_name: Jons Sleep Number
+# sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_sleepnumber:
+#   friendly_name: Lauras Sleep Number
 ##################################
 # battery customizations
 sensor.jon_battery:
