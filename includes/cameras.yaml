@@ -8,6 +8,12 @@
 #   password: !secret hik_pwd
 #   authentication: digest
 - platform: mjpeg
+  mjpeg_url: http://192.168.45.115/cgi-bin/mjpg/video.cgi?channel=1&subtype=1
+  name: Garage
+  username: admin
+  password: !secret hik_pwd
+  authentication: digest
+- platform: mjpeg
   mjpeg_url: http://192.168.45.113:80/Streaming/Channels/2/preview
   name: DeckStairs
   username: admin
@@ -31,9 +37,6 @@
 - platform: ffmpeg
   name: Deck
   input: rtsp://localhost:554/proxyStream-3
-- platform: ffmpeg
-  name: Garage
-  input: rtsp://localhost:554/proxyStream-6
 - platform: ffmpeg
   name: Kitchen Camera
   input: rtsp://localhost:554/proxyStream-8
