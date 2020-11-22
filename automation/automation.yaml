@@ -589,7 +589,7 @@
         message: "Locking {{ states.sensor.doors_unlocked.state }}"
     - service: script.lock_doors
 #########################################
-- alias: "Wake Up State: done sleeping & HVAC fan off & recirculation pump on"
+- alias: "Wake Mode: done sleeping & HVAC fan off & recirculation pump on"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status

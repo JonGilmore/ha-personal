@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
-# credit: https://github.com/basnijholt
+#  _   _ ____  ____    _  _____ _____   ____  _____    _    ____  __  __ _____
+# | | | |  _ \|  _ \  / \|_   _| ____| |  _ \| ____|  / \  |  _ \|  \/  | ____|
+# | | | | |_) | | | |/ _ \ | | |  _|   | |_) |  _|   / _ \ | | | | |\/| |  _|
+# | |_| |  __/| |_| / ___ \| | | |___  |  _ <| |___ / ___ \| |_| | |  | | |___
+#  \___/|_|   |____/_/   \_\_| |_____| |_| \_\_____/_/   \_\____/|_|  |_|_____|
+#
+# - CREDIT: github.com/basnijholt/home-assistant-config
 # description: run this script to auto-generate documentation for automations from your HA config
 
 import functools
@@ -8,6 +14,7 @@ import re
 import subprocess
 from contextlib import suppress
 from pathlib import Path
+from collections import Counter
 import yaml
 
 URL = "https://github.com/jongilmore/ha-personal/blob/{commit_hash}/{fname}"
@@ -54,6 +61,8 @@ def title_and_summary(automation):
     # emoji = get_emoji(title.strip())
     # title = f"{title} {emoji}"
     summary = summary[0].upper() + summary[1:]
+
+    # print(title)
     return title, summary
 
 
@@ -136,6 +145,7 @@ def get_description(automation):
     desc = automation["description"]
     return "\n  " + desc + "\n"
 
+
 # def get_emoji(title):
 #     return {
 #         "Alarm clock": "⏰",
@@ -171,10 +181,21 @@ text = []
 toc_title = "Automations - Table of Contents\n"
 text.append(f"# {toc_title}")
 total_automations = 0
+types = []
+
 for fname in automation_files:
     automations = automations_as_dict(fname)
     total_automations += len(automations)
-    text.append(f"{toc_entry(automations)}\n")
+
+    for automation in automations:
+        type, _ = title_and_summary(automation)
+        types.append(type)
+
+types = tuple(zip(Counter(types).keys(), Counter(types).values()))
+
+for entry in types:
+    text.append(f"1.  [{entry[0]}](#{slugify(entry[0])}) ({entry[1]} automations)\n")
+
 text.append("\n")
 text.append(f"⚠️ Total number of automations: **{total_automations}** ⚠️\n")
 back_to_toc = f"[^ toc](#{slugify(toc_title)})"
