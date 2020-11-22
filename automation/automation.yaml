@@ -1100,6 +1100,15 @@
         sourceDeviceName: Jon’s iPhone
         sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
         triggerSource: widget
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        actionID: 532EF4B0-E0F8-490D-B4C4-C4006A3469E0
+        actionName: Single Garage
+        sourceDeviceID: lauras_iphone
+        sourceDeviceName: Lauras iPhone
+        sourceDevicePermanentID: E40B31D8-8192-4C4A-AFAC-AD5ECC0F9BD8
+        triggerSource: widget
   action:
     - service: homeassistant.toggle
       entity_id: cover.garage_momentary_single
@@ -1129,6 +1138,15 @@
         sourceDeviceID: jons_iphone
         sourceDeviceName: Jon’s iPhone
         sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
+        triggerSource: widget
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        actionID: 07C1C12C-F623-49CA-942A-2299B7B2EA0F
+        actionName: Unlock Front
+        sourceDeviceID: lauras_iphone
+        sourceDeviceName: Lauras iPhone
+        sourceDevicePermanentID: E40B31D8-8192-4C4A-AFAC-AD5ECC0F9BD8
         triggerSource: widget
   action:
     - service: lock.unlock

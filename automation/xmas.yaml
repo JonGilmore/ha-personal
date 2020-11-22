@@ -49,7 +49,7 @@
     - service: homeassistant.turn_off
       entity_id: group.christmasLights
 #########################################
-- alias: "Christmans: lights off/on with geolocation presence (only in Dec)"
+- alias: "Christmas: lights off/on with geolocation presence (only in Dec)"
   trigger:
     - platform: state
       entity_id: person.laura
