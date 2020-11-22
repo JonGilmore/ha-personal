@@ -99,6 +99,7 @@ def get_dependencies(automation):
         ("fan", "includes/fans.yaml"),
         ("group", "includes/groups.yaml"),
         ("input_boolean", "includes/input_booleans.yaml"),
+        ("input_select", "includes/input_selects.yaml"),
         ("rest_command", "includes/rest_commands.yaml"),
         ("script", "includes/scripts.yaml"),
         ("sensor", "includes/sensors.yaml"),
@@ -198,7 +199,7 @@ for entry in types:
 
 text.append("\n")
 text.append(f"⚠️ Total number of automations: **{total_automations}** ⚠️\n")
-back_to_toc = f"[^ toc](#{slugify(toc_title)})"
+back_to_toc = f"\n[^ toc](#{slugify(toc_title)})"
 
 # List automations
 for fname in automation_files:
