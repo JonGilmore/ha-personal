@@ -972,7 +972,7 @@
       data_template:
         message: "{{ trigger.event.data.notify_msg }}"
 #########################################
-- alias: "Notifications: important date (birthday & anniversary)"
+- alias: "Notification: important date (birthday & anniversary)"
   trigger:
     - platform: time
       at: "07:00:00"
