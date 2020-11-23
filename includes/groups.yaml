@@ -80,6 +80,7 @@ interior_lights:
     - switch.upstairs_hall_treads
     - switch.switch1
     - switch.switch2
+    - light.master_bath_toekick
 
 all_lights:
   name: All Lights
@@ -234,6 +235,7 @@ upstairs_lights:
     - light.master_entry_lifx
     - light.lauras_lamp_lifx
     - light.jons_lamp_lifx
+    - light.master_bath_toekick
 
 all_fans:
   name: All Fans

@@ -118,6 +118,8 @@ def get_dependencies(automation):
     text = "\n".join(deps)
     if deps:
         text = f"\n*which uses:*\n{text}\n"
+    else:
+        text = f"\n*which uses:*\n\n-   Entity not defined in YAML\n"
     return text
 
 
@@ -204,6 +206,7 @@ back_to_toc = f"\n[^ toc](#{slugify(toc_title)})"
 # List automations
 for fname in automation_files:
     automations = automations_as_dict(fname)
+    # this is fucked, doesnt work for automations that arent split into their own files
     text.append(get_header(fname, automations[0]))
     for automation in automations:
         text.append(get_automation_line(fname, automation))

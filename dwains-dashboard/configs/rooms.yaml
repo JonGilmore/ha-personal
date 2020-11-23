@@ -109,12 +109,6 @@ rooms:
         path: "dwains-dashboard/addons/rooms/house/lock_history/page.yaml"
         data:
           entity: lock.front_door_lock
-  - name: Camera History
-    icon: mdi:camera
-    addons:
-      - name: History
-        icon: mdi:camera
-        path: "dwains-dashboard/addons/rooms/house/camera_history.yaml"
   - name: Scene
     icon: mdi:movie-outline
     addons:
