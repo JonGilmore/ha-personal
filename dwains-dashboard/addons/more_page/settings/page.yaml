@@ -24,3 +24,123 @@
         - entity: sensor.speedtest_upload
           name: upload
           show_state: true
+- type: button
+  tap_action:
+    action: url
+    url_path: "/dwains-dashboard/room_miscellaneous_addon_anniversaries"
+- type: vertical-stack
+  cards:
+    - type: entities
+      show_name: false
+      show_header_toggle: false
+      entities:
+        - entity: binary_sensor.garage_doors
+          type: custom:multiple-entity-row
+          name: Garage
+          show_state: false
+          entities:
+            - entity: cover.garage_momentary_single
+              tap_action:
+                action: toggle
+            - entity: cover.garage_momentary_double
+              tap_action:
+                action: toggle
+    - type: horizontal-stack
+      cards:
+        - entity: lock.garage_door_lock
+          type: "custom:button-card"
+          name: garage lock
+          tap_action:
+            action: call-service
+            service: >-
+              [[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]
+            service_data:
+              entity_id: entity
+        - entity: lock.front_door_lock
+          type: "custom:button-card"
+          name: front lock
+          tap_action:
+            action: call-service
+            service: >-
+              [[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]
+            service_data:
+              entity_id: entity
+- type: entities
+  title: Presence
+  show_header_toggle: false
+  entities:
+    - entity: binary_sensor.anybody_home
+      type: custom:multiple-entity-row
+      name: Presence
+      secondary_info: last-changed
+      entities:
+        - entity: binary_sensor.anybody_away
+    - entity: binary_sensor.anybody_home
+      type: custom:multiple-entity-row
+      name: People
+      hide_state: true
+      entities:
+        - entity: person.jon
+        - entity: person.laura
+- type: custom:auto-entities
+  show_empty: false
+  card:
+    type: entities
+    title: Lights On
+  filter:
+    include:
+      - group: group.all_lights
+        state: "on"
+  sort:
+    method: name
+- type: "custom:auto-entities"
+  card:
+    show_header_toggle: false
+    title: Important Dates
+    type: entities
+  sort:
+    method: state
+    numeric: true
+  filter:
+    include:
+      - entity_id: "/(birthday|anniversary)/"
+        state: < 45
+        options:
+          type: "custom:secondaryinfo-entity-row"
+          secondary_info: "[[ {entity}.attributes.date ]]  ([[ {entity}.attributes.years_at_next_anniversary ]] yrs)"
+  show_empty: true
+- type: entities
+  title: Equipment
+  show_header_toggle: false
+  entities:
+    - entity: switch.water_main_shut_off
+      type: custom:multiple-entity-row
+      name: Water Main
+      secondary_info: last-changed
+      entities:
+        - entity: switch.water_main_shut_off
+          name: Main
+          toggle: true
+        - entity: switch.equipment_room_recirculation_pump
+          name: Recirc
+          toggle: true
+    - entity: sensor.period_of_day
+      type: custom:multiple-entity-row
+      name: Period of Day
+      secondary_info: last-changed
+      entities:
+        - entity: binary_sensor.light_inside
+          name: light main?
+        - entity: binary_sensor.light_inside_master
+          name: light second?
+    - entity: input_select.vacuum_room
+- type: custom:mini-graph-card
+  name: Lux Sensors
+  icon: mdi:brightness-6
+  entities:
+    - entity: sensor.main_tv_lux
+      name: Main TV Lux
+      show_state: true
+    - entity: sensor.sitting_room_lux
+      name: Sitting Room Lux
+      show_state: true

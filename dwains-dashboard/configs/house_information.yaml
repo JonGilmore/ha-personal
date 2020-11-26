@@ -3,3 +3,4 @@ house_information:
   favorites:
     - entity: scene.equipment_room_enclosure_device_001_ph_all_off
     - entity: scene.equipment_room_enclosure_device_001_ph_all_on
+    - entity: scene.equipment_room_enclosure_device_001_ph_cleaners_on

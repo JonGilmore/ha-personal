@@ -9,9 +9,8 @@ rooms:
     door: group.main_doors
     media_player: media_player.living_room_tv
     cover: group.main_floor_covers
-    vacuum: 
+    vacuum:
       entity: vacuum.main_dwayne
-      # camera: camera.rockrobo_map
     addons:
       - name: Sonos
         icon: fal:speaker
@@ -45,6 +44,7 @@ rooms:
     climate: climate.upstairs_thermostat
     humidity: sensor.master_entry_humidity
     motion: group.upstairs_motions
+    media_player: media_player.roku_master_tv
     cover: group.upstairs_covers
     addons:
       - name: Sonos
@@ -66,6 +66,7 @@ rooms:
     motion: group.basement_motions
     window: group.basement_windows
     door: group.basement_door
+    media_player: media_player.roku_gym_tv
     addons:
       - name: Sonos
         icon: fal:speaker
@@ -102,25 +103,15 @@ rooms:
     page_entities:
       entities:
         - entity: fan.patio_fan
-  - name: Locks
-    icon: mdi:door-closed-lock
-    addons:
-      - name: Lock History
-        path: "dwains-dashboard/addons/rooms/house/lock_history/page.yaml"
-        data:
-          entity: lock.front_door_lock
-  - name: Scene
-    icon: mdi:movie-outline
-    addons:
-      - name: Scene
-        icon: mdi:movie-outline
-        path: "dwains-dashboard/addons/rooms/house/scene.yaml"
   - name: Miscellaneous
     icon: mdi:atom
     addons:
       - name: Settings
         icon: mdi:wrench
-        path: "dwains-dashboard/addons/rooms/house/settings.yaml"
+        path: "dwains-dashboard/addons/more_page/settings/page.yaml"
       - name: Anniversaries
         icon: mdi:calendar
         path: "dwains-dashboard/addons/rooms/house/anniversaries.yaml"
+      - name: Temperatures
+        icon: mdi:temperature-fahrenheit
+        path: "dwains-dashboard/addons/more_page/temperatures/page.yaml"

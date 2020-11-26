@@ -5,10 +5,14 @@ more_page:
       main_menu: "true"
       icon: mdi:wrench
       path: "dwains-dashboard/addons/more_page/settings/page.yaml"
+    - name: Scenes
+      main_menu: "true"
+      icon: mdi:movie-outline
+      path: "dwains-dashboard/addons/rooms/house/scene.yaml"
     - name: History
       main_menu: "true"
       icon: mdi:history
       path: "dwains-dashboard/addons/more_page/camera_history/page.yaml"
       data:
-        some_data: 'This is some data parsed.'
-        some_other_data: 'and some other data.'
+        some_data: "This is some data parsed."
+        some_other_data: "and some other data."
