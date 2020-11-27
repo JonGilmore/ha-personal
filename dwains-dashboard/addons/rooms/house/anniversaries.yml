@@ -1,0 +1,17 @@
+---
+- type: "custom:auto-entities"
+  card:
+    show_header_toggle: false
+    title: Important Dates
+    type: entities
+  sort:
+    method: state
+    numeric: true
+  filter:
+    include:
+      - entity_id: "/(birthday|anniversary)/"
+        state: < 75
+        options:
+          type: "custom:secondaryinfo-entity-row"
+          secondary_info: "[[ {entity}.attributes.date ]]  ([[ {entity}.attributes.years_at_next_anniversary ]] yrs)"
+  show_empty: true

@@ -111,7 +111,7 @@ rooms:
         path: "dwains-dashboard/addons/more_page/settings/page.yaml"
       - name: Anniversaries
         icon: mdi:calendar
-        path: "dwains-dashboard/addons/rooms/house/anniversaries.yaml"
+        path: "dwains-dashboard/addons/rooms/house/anniversaries.yml"
       - name: Temperatures
         icon: mdi:temperature-fahrenheit
         path: "dwains-dashboard/addons/more_page/temperatures/page.yaml"
