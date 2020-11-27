@@ -32,6 +32,10 @@ recorder:
 system_health:
 circadian_lighting:
   min_colortemp: 2700
+  max_colortemp: 5200
+  sunrise_offset: 01:00:00
+  interval: 420
+  # sunset_offset: 
 
 influxdb:
   host: localhost
@@ -79,9 +83,9 @@ elkm1:
 #   host: !secret os_host
 #   password: !secret os_passwd
 
-# sleepiq:
-#   username: !secret sleep_usr
-#   password: !secret sleep_pwd
+sleepiq:
+  username: !secret sleep_usr
+  password: !secret sleep_pwd
 
 lutron:
   host: !secret rr_ip
