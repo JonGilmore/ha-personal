@@ -267,13 +267,13 @@ christmasLights:
   entities:
     - switch.exterior_light
     - switch.exterior_outlets
-    - switch.switch1
+    - switch.sunroom_xmas_tree
     - switch.switch2
 
 christmasTrees:
   name: Christmas Trees
   entities:
-    - switch.switch1
+    - switch.sunroom_xmas_tree
     - switch.switch2
 
 garmin:

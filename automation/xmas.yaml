@@ -1,23 +1,25 @@
 ---
 #########################################
-- alias: "Christmas: roof lights on (only in december)"
+- alias: "Christmas: roof lights on (only when xmas boolean on)"
   trigger:
     - platform: time
       at: "17:00:00"
   condition:
-    - condition: template
-      value_template: '{{ now().strftime("%m")|int == 12 }}'
+    - condition: state
+      entity_id: binary_sensor.christmas_season
+      state: "on"
   action:
     - service: homeassistant.turn_on
       entity_id: switch.exterior_light
 #########################################
-- alias: "Christmas: trees on (only in december) if occupied"
+- alias: "Christmas: trees on (only when xmas boolean on) if occupied"
   trigger:
     - platform: time
       at: "17:00:00"
   condition:
-    - condition: template
-      value_template: '{{ now().strftime("%m")|int == 12 }}'
+    - condition: state
+      entity_id: binary_sensor.christmas_season
+      state: "on"
     - condition: state
       entity_id: person.laura
       state: "home"
@@ -25,26 +27,28 @@
     - service: homeassistant.turn_on
       entity_id: group.christmasTrees
 #########################################
-- alias: "Christmas: turn off at 11pm (only in december)"
+- alias: "Christmas: turn off at 11pm (only when xmas boolean on)"
   trigger:
     platform: time
     at: "23:00:00"
   condition:
-    - condition: template
-      value_template: '{{ now().strftime("%m")|int == 12 }}'
+    - condition: state
+      entity_id: binary_sensor.christmas_season
+      state: "on"
   action:
     - service: homeassistant.turn_off
       entity_id: group.christmasLights
 #########################################
-- alias: "Christmas: turn off when sleeping starts (only in december)"
+- alias: "Christmas: turn off when sleeping starts (only when xmas boolean on)"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
       from: "off"
       to: "on"
   condition:
-    - condition: template
-      value_template: '{{ now().strftime("%m")|int == 12 }}'
+    - condition: state
+      entity_id: binary_sensor.christmas_season
+      state: "on"
   action:
     - service: homeassistant.turn_off
       entity_id: group.christmasLights
@@ -58,8 +62,9 @@
       entity_id: person.laura
       to: "not_home"
   condition:
-    - condition: template
-      value_template: '{{ now().strftime("%m")|int == 12 }}'
+    - condition: state
+      entity_id: binary_sensor.christmas_season
+      state: "on"
     - condition: time
       after: "17:00:00"
     - condition: time
@@ -73,19 +78,20 @@
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees are toggled"
 #########################################
-# - alias: "Christmas: turn off when laura gets in bed (only in december)"
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed
-#       from: "off"
-#       to: "on"
-#   condition:
-#     - condition: template
-#       value_template: '{{ now().strftime("%m")|int == 12 }}'
-#     - condition: time
-#       after: "17:00:00"
-#     - condition: time
-#       before: "23:59:59"
-#   action:
-#     - service: homeassistant.turn_off
-#       entity_id: group.christmasTrees
+- alias: "Christmas: turn off when laura gets in bed (only when xmas boolean on)"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed
+      from: "off"
+      to: "on"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.christmas_season
+      state: "on"
+    - condition: time
+      after: "17:00:00"
+    - condition: time
+      before: "23:59:59"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: group.christmasTrees

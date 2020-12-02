@@ -341,6 +341,14 @@
       value_template: >-
         {{ states.binary_sensor.evelyns_room_occupancy.state == "on"
         or states.binary_sensor.evelyn_multi_motion.state == "on" }}
+    christmas_season:
+      value_template: >
+        {% set today = states('sensor.date').split('-') %}
+        {% set month = today[1]|int %}
+        {% set day = today[2]|int %}
+        {{ month == 11 and day >= 23
+        or month == 12
+        or month == 1 and day <= 6 }}
 
 - platform: workday
   country: US
