@@ -120,12 +120,11 @@
 #########################################
 - alias: "Automatic Lighting: deck person & dark out - turn deck lights on"
   trigger:
-    - platform: state
-      entity_id: binary_sensor.deck_person
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.deckstairs_person
-      to: "on"
+    - platform: numeric_state
+      entity_id: 
+        - sensor.deck_person
+        - sensor.deckstairs_person
+      above: 0
   condition:
     - condition: state
       entity_id: sensor.period_of_day
@@ -155,9 +154,9 @@
 #########################################
 - alias: "Automatic Lighting: garage person/motion detected & dark out - garage lights on"
   trigger:
-    - platform: state
-      entity_id: binary_sensor.garage_person
-      to: "on"
+    - platform: numeric_state
+      entity_id: sensor.garage_person
+      above: 0
     - platform: state
       entity_id: binary_sensor.garage_motion
       to: "on"
@@ -217,7 +216,7 @@
     - platform: state
       entity_id:
         - binary_sensor.master_toilet_occupancy
-        - binary_sensor.evelyns_room_occupied
+        # - binary_sensor.evelyns_room_occupied
         - binary_sensor.master_bedroom_occupancy
         - binary_sensor.office_occupancy
         - binary_sensor.gym_occupancy
@@ -338,11 +337,14 @@
       for:
         minutes: 15
     - platform: state
-      entity_id:
-        - binary_sensor.basement_motions
-        - binary_sensor.deck_person
+      entity_id: binary_sensor.basement_motions
       from: "on"
       to: "off"
+      for:
+        minutes: 15
+    - platform: state
+      entity_id: sensor.deck_person
+      to: "0"
       for:
         minutes: 15
   # condition:
@@ -361,7 +363,7 @@
             scene.equipment_room_enclosure_device_001_ph_kitchen_off
           {% elif trigger_entity == 'binary_sensor.basement_motions' %}
             scene.equipment_room_enclosure_device_001_ph_basement_off
-          {% elif trigger_entity == 'binary_sensor.deck_person' %}
+          {% elif trigger_entity == 'sensor.deck_person' %}
             scene.equipment_room_enclosure_device_001_ph_deck_off
           {% endif %}
 ########################################
@@ -933,12 +935,12 @@
       to: "on"
     - platform: numeric_state
       entity_id: sensor.kitchen_fridge_door_temperature_measurement
-      above: "44"
+      above: 44
       for:
         minutes: 20
     - platform: numeric_state
       entity_id: sensor.kitchen_fridge_door_temperature_measurement
-      below: "30"
+      below: 30
       for:
         minutes: 20
     - platform: state
@@ -948,14 +950,14 @@
       entity_id:
         - sensor.keypad004
         - sensor.master_entry_temperature
-      above: "84"
+      above: 84
       for:
         minutes: 15
     - platform: numeric_state
       entity_id:
         - sensor.keypad004
         - sensor.master_entry_temperature
-      below: "55"
+      below: 55
       for:
         minutes: 15
   action:
@@ -1079,8 +1081,8 @@
     - platform: event
       event_type: ios.action_fired
       event_data:
-        actionID: DAEA5C23-4FDC-4FB4-BD8C-B41CA84E1442
-        actionName: Lights off
+        actionID: 29FB1363-11EA-4769-A3F9-EA64C93FF17A
+        actionName: All Off
         sourceDeviceID: jons_iphone
         sourceDeviceName: Jon’s iPhone
         sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
@@ -1094,8 +1096,8 @@
     - platform: event
       event_type: ios.action_fired
       event_data:
-        actionID: 842DDAC7-8FD2-41E5-90FB-1377F9D7DAB1
-        actionName: Single Garage
+        actionID: 4ACC41D1-FDFE-4C4C-9198-C80B02E658A6
+        actionName: Single
         sourceDeviceID: jons_iphone
         sourceDeviceName: Jon’s iPhone
         sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
@@ -1118,8 +1120,8 @@
     - platform: event
       event_type: ios.action_fired
       event_data:
-        actionID: EBE2C81C-31A8-41FE-A252-6AADB39339B2
-        actionName: Double Garage
+        actionID: 0F5702C6-2109-41E0-B3B8-5A775E009813
+        actionName: Double
         sourceDeviceID: jons_iphone
         sourceDeviceName: Jon’s iPhone
         sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
@@ -1133,7 +1135,7 @@
     - platform: event
       event_type: ios.action_fired
       event_data:
-        actionID: 73EEB9C6-6A5C-4489-B2F5-1F1F36511CC7
+        actionID: 99745D88-445D-431E-8101-140E007BE22D
         actionName: Unlock Front
         sourceDeviceID: jons_iphone
         sourceDeviceName: Jon’s iPhone

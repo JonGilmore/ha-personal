@@ -174,10 +174,9 @@ camera:
 automation:
   - alias: create_history_driveway
     trigger:
-      - entity_id: binary_sensor.driveway_person
-        from: "off"
+      - entity_id: sensor.driveway_person
+        from: "0"
         platform: state
-        to: "on"
     action:
       - data:
           entity_id: camera.driveway_history2
@@ -221,10 +220,9 @@ automation:
         service: camera.snapshot
   - alias: create_history_deckstairs
     trigger:
-      - entity_id: binary_sensor.deckstairs_person
-        from: "off"
+      - entity_id: sensor.deckstairs_person
+        from: "0"
         platform: state
-        to: "on"
     action:
       - data:
           entity_id: camera.deckstairs_history2
@@ -268,10 +266,9 @@ automation:
         service: camera.snapshot
   - alias: create_history_deck
     trigger:
-      - entity_id: binary_sensor.deck_person
-        from: "off"
+      - entity_id: sensor.deck_person
+        from: "0"
         platform: state
-        to: "on"
     action:
       - data:
           entity_id: camera.deck_history2
@@ -315,10 +312,9 @@ automation:
         service: camera.snapshot
   - alias: create_history_doorbell
     trigger:
-      - entity_id: binary_sensor.doorbell_person
-        from: "off"
+      - entity_id: sensor.doorbell_person
+        from: "0"
         platform: state
-        to: "on"
     action:
       - data:
           entity_id: camera.doorbell_history2
@@ -362,10 +358,9 @@ automation:
         service: camera.snapshot
   - alias: create_history_garage
     trigger:
-      - entity_id: binary_sensor.garage_person
-        from: "off"
+      - entity_id: sensor.garage_person
+        from: "0"
         platform: state
-        to: "on"
     action:
       - data:
           entity_id: camera.garage_history2
@@ -615,30 +610,3 @@ script:
           entity_id: camera.garage_hist
           filename: /config/www/garage_image1.jpg
         service: camera.snapshot
-
-binary_sensor:
-  - platform: mqtt
-    name: "Deck Person"
-    state_topic: "frigate/deck/person"
-    device_class: motion
-    availability_topic: "frigate/available"
-  - platform: mqtt
-    name: "DeckStairs Person"
-    state_topic: "frigate/deckstairs/person"
-    device_class: motion
-    availability_topic: "frigate/available"
-  - platform: mqtt
-    name: "Driveway Person"
-    state_topic: "frigate/driveway/person"
-    device_class: motion
-    availability_topic: "frigate/available"
-  - platform: mqtt
-    name: "Doorbell Person"
-    state_topic: "frigate/doorbell/person"
-    device_class: motion
-    availability_topic: "frigate/available"
-  - platform: mqtt
-    name: "Garage Person"
-    state_topic: "frigate/garage/person"
-    device_class: motion
-    availability_topic: "frigate/available"

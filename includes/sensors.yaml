@@ -291,64 +291,6 @@
 #         {% else %} nobody {% endif %}
 #       friendly_name: "Master Bed People"
 
-# Frigate sensors
-- platform: rest
-  name: Frigate Debug
-  resource: http://localhost:5000/debug/stats
-  scan_interval: 60
-  json_attributes:
-    - deck
-    - doorbell
-    - driveway
-    - deckstairs
-    - detection_fps
-    - detectors
-  value_template: "OK"
-- platform: template
-  sensors:
-    deck_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deck"]["camera_fps"] }}'
-      unit_of_measurement: "FPS"
-    deck_skipped_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deck"]["skipped_fps"] }}'
-      unit_of_measurement: "FPS"
-    deck_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deck"]["detection_fps"] }}'
-      unit_of_measurement: "FPS"
-    doorbell_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["doorbell"]["camera_fps"] }}'
-      unit_of_measurement: "FPS"
-    doorbell_skipped_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["doorbell"]["skipped_fps"] }}'
-      unit_of_measurement: "FPS"
-    doorbell_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["doorbell"]["detection_fps"] }}'
-      unit_of_measurement: "FPS"
-    driveway_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["camera_fps"] }}'
-      unit_of_measurement: "FPS"
-    driveway_skipped_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["skipped_fps"] }}'
-      unit_of_measurement: "FPS"
-    driveway_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["driveway"]["detection_fps"] }}'
-      unit_of_measurement: "FPS"
-    deckstairs_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["camera_fps"] }}'
-      unit_of_measurement: "FPS"
-    deckstairs_skipped_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["skipped_fps"] }}'
-      unit_of_measurement: "FPS"
-    deckstairs_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["deckstairs"]["detection_fps"] }}'
-      unit_of_measurement: "FPS"
-    frigate_detection_fps:
-      value_template: '{{ states.sensor.frigate_debug.attributes["detection_fps"]["fps"] }}'
-      unit_of_measurement: "FPS"
-    frigate_detectors_inference:
-      value_template: '{{ states.sensor.frigate_debug.attributes["detectors"]["inference_speed"] }}'
-      unit_of_measurement: "ms"
-
 - platform: version
   name: HA Version
   scan_interval: 86400
@@ -467,6 +409,7 @@
     - "time_date"
     - "time_utc"
     - "beat"
+- platform: season
 
 - platform: template
   sensors:
