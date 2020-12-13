@@ -1,0 +1,38 @@
+- alias: "Rhasspy: lights"
+  description: "Testing rhasspy local voice processing"
+  trigger:
+    - platform: event
+      event_type: rhasspy_ChangeLightState
+      # event_data:
+      #   name: "lamp"
+      #   state: on
+      #   _text: "turn on the living room lamp"
+      #   _raw_text: "turn on the living room lamp"
+  action:
+    - service: system_log.write
+      data_template:
+        message: "{{trigger.event.data.name}}"
+        level: error
+    - service_template: >
+        {% if trigger.event.data.state == 'on' %}homeassistant.turn_on
+        {% else %}homeassistant.turn_off{% endif %}
+      data_template:
+        entity_id: >
+          {% set trigger_entity = trigger.event.data.name %}
+          {% if trigger_entity == 'office' %}
+            light.office_cans
+          {% endif %}
+
+- alias: "Rhasspy: scenes"
+  description: "Testing rhasspy local voice processing"
+  trigger:
+    - platform: event
+      event_type: rhasspy_RunScene
+  action:
+    - service: scene.turn_on
+      data_template:
+        entity_id: >
+          {% set trigger_entity = trigger.event.data.name %}
+          {% if trigger_entity == 'sunset' %}
+            scene.equipment_room_enclosure_device_001_ph_sunset1
+          {% endif %}

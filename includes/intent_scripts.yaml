@@ -1,0 +1,7 @@
+  ChangeLightState:  # Intent type
+    speech:
+      text: We have {{ states.sensor.temperature }} degrees
+    action:
+      service: notify.notify
+      data:
+        message: Hello from an intent!

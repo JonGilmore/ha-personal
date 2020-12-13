@@ -12,6 +12,8 @@ homeassistant:
     - "/config/www"
     - "/share"
   packages: !include_dir_named packages
+  media_dirs:
+    local: /media
 
 http:
   base_url: !secret hass_url
@@ -83,15 +85,15 @@ elkm1:
 #   host: !secret os_host
 #   password: !secret os_passwd
 
-sleepiq:
-  username: !secret sleep_usr
-  password: !secret sleep_pwd
+# sleepiq:
+#   username: !secret sleep_usr
+#   password: !secret sleep_pwd
 
-nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
-  project_id: !secret nest_project_id
-  subscriber_id: !secret nest_subscriber_id
+# nest:
+#   client_id: !secret nest_client_id
+#   client_secret: !secret nest_client_secret
+#   project_id: !secret nest_project_id
+#   subscriber_id: !secret nest_subscriber_id
 
 lutron:
   host: !secret rr_ip
@@ -131,6 +133,7 @@ fan: !include includes/fans.yaml
 group: !include includes/groups.yaml
 input_boolean: !include includes/input_booleans.yaml
 input_select: !include includes/input_selects.yaml
+intent_script: !include includes/intent_scripts.yaml
 rest_command: !include includes/rest_commands.yaml
 script: !include includes/scripts.yaml
 sensor: !include includes/sensors.yaml
@@ -209,13 +212,64 @@ sonos:
       - 192.168.45.147
       - 192.168.45.148
       - 192.168.45.149
+media_source:
 
 cast:
   media_player:
     - host: 192.168.45.45
 
-device_tracker:
-  - platform: ping
-    count: 30
-    hosts:
-      pixel3: 192.168.45.100
+# localtuya:
+#   - host: !secret sylvania1_ip
+#     device_id: !secret sylvania1_devid
+#     local_key: !secret sylvania1_local_key
+#     friendly_name: sylvania1
+#     protocol_version: "3.3"
+#     entities:
+#       - platform: light
+#         friendly_name: sylvania1
+#         id: 20
+#         color_mode: 21
+#         brightness: 22
+#         color_temp: 23
+#         color: 24
+#         brightness_lower: 10
+#         brightness_upper: 1000
+#         color_temp_min_kelvin: 2700
+#         color_temp_max_kelvin: 6500
+#         scene: 25
+#   - host: !secret sylvania2_ip
+#     device_id: !secret sylvania2_devid
+#     local_key: !secret sylvania2_local_key
+#     friendly_name: sylvania2
+#     protocol_version: "3.3"
+#     entities:
+#       - platform: light
+#         friendly_name: sylvania2
+#         id: 20
+#         color_mode: 21
+#         brightness: 22
+#         color_temp: 23
+#         color: 24
+#         brightness_lower: 10
+#         brightness_upper: 1000
+#         color_temp_min_kelvin: 2700
+#         color_temp_max_kelvin: 6500
+#         scene: 25
+#   - host: !secret sylvania3_ip
+#     device_id: !secret sylvania3_devid
+#     local_key: !secret sylvania3_local_key
+#     friendly_name: sylvania3
+#     protocol_version: "3.3"
+#     entities:
+#       - platform: light
+#         friendly_name: sylvania3
+#         id: 20
+#         color_mode: 21
+#         brightness: 22
+#         color_temp: 23
+#         color: 24
+#         brightness_lower: 10
+#         brightness_upper: 1000
+#         color_temp_min_kelvin: 2700
+#         color_temp_max_kelvin: 6500
+#         scene: 25
