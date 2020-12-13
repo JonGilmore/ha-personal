@@ -112,6 +112,31 @@
         or states.binary_sensor.kerui_pir.state == "on"
         or states.binary_sensor.basement_multi_motion.state == "on"
         or states.binary_sensor.powder_room_hall_occupancy.state == "on" }}
+    deck_person:
+      friendly_name: "deck_person"
+      device_class: motion
+      value_template: >-
+          {{ states('sensor.deck_person')|float > 0 }}
+    deckstairs_person:
+      friendly_name: "deckstairs_person"
+      device_class: motion
+      value_template: >-
+          {{ states('sensor.deckstairs_person')|float > 0 }}
+    doorbell_person:
+      friendly_name: "doorbell_person"
+      device_class: motion
+      value_template: >-
+          {{ states('sensor.doorbell_person')|float > 0 }}
+    driveway_person:
+      friendly_name: "driveway_person"
+      device_class: motion
+      value_template: >-
+          {{ states('sensor.driveway_person')|float > 0 }}
+    garage_person:
+      friendly_name: "garage_person"
+      device_class: motion
+      value_template: >-
+          {{ states('sensor.garage_person')|float > 0 }}
     basement_pir:
       friendly_name: "basement pir"
       device_class: motion
