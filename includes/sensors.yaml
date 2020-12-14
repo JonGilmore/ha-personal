@@ -134,6 +134,8 @@
       value_template: !secret cam_garage_vid
     cam_doorbell_vid:
       value_template: !secret cam_doorbell_vid
+    cam_kitchen_vid:
+      value_template: !secret cam_kitchen_vid
 
 # DARK SKY
 - platform: darksky

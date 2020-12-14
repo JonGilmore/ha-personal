@@ -170,6 +170,40 @@ camera:
   - platform: local_file
     name: garage_history10
     file_path: /config/www/garage_image10.jpg
+  # kitchen
+  - platform: mjpeg
+    name: kitchen_hist
+    mjpeg_url: !secret frigate_kitchen_cam
+  - platform: local_file
+    name: kitchen_history1
+    file_path: /config/www/kitchen_image1.jpg
+  - platform: local_file
+    name: kitchen_history2
+    file_path: /config/www/kitchen_image2.jpg
+  - platform: local_file
+    name: kitchen_history3
+    file_path: /config/www/kitchen_image3.jpg
+  - platform: local_file
+    name: kitchen_history4
+    file_path: /config/www/kitchen_image4.jpg
+  - platform: local_file
+    name: kitchen_history5
+    file_path: /config/www/kitchen_image5.jpg
+  - platform: local_file
+    name: kitchen_history6
+    file_path: /config/www/kitchen_image6.jpg
+  - platform: local_file
+    name: kitchen_history7
+    file_path: /config/www/kitchen_image7.jpg
+  - platform: local_file
+    name: kitchen_history8
+    file_path: /config/www/kitchen_image8.jpg
+  - platform: local_file
+    name: kitchen_history9
+    file_path: /config/www/kitchen_image9.jpg
+  - platform: local_file
+    name: kitchen_history10
+    file_path: /config/www/kitchen_image10.jpg
 
 automation:
   - alias: create_history_driveway
@@ -402,6 +436,52 @@ automation:
           entity_id: camera.garage_hist
           filename: /config/www/garage_image10.jpg
         service: camera.snapshot
+  - alias: create_history_kitchen
+    trigger:
+      - entity_id: sensor.kitchen_person
+        from: "0"
+        platform: state
+    action:
+      - data:
+          entity_id: camera.kitchen_history2
+          filename: /config/www/kitchen_image1.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_history3
+          filename: /config/www/kitchen_image2.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_history4
+          filename: /config/www/kitchen_image3.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_history5
+          filename: /config/www/kitchen_image4.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_history6
+          filename: /config/www/kitchen_image5.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_history7
+          filename: /config/www/kitchen_image6.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_history8
+          filename: /config/www/kitchen_image7.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_history9
+          filename: /config/www/kitchen_image8.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_history10
+          filename: /config/www/kitchen_image9.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image10.jpg
+        service: camera.snapshot
 
 script:
   setup_frigate_history:
@@ -609,4 +689,45 @@ script:
       - data:
           entity_id: camera.garage_hist
           filename: /config/www/garage_image1.jpg
+        service: camera.snapshot
+      # kitchen
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image10.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image9.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image8.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image7.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image6.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image5.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image4.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image3.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image2.jpg
+        service: camera.snapshot
+      - data:
+          entity_id: camera.kitchen_hist
+          filename: /config/www/kitchen_image1.jpg
         service: camera.snapshot

@@ -154,3 +154,34 @@
     - service: telegram_bot.send_video
       data:
         file: "/share/trimmed-garage.mp4"
+#########################################
+- alias: "Person Detection: kitchen person detected"
+  description: "If nobody is home - send a video of the kitchen"
+  trigger:
+    platform: event
+    event_type: folder_watcher
+    event_data:
+      event_type: created
+  condition:
+    - condition: template # filename doesnt start with /share/trimmed-*
+      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
+    - condition: template # filename starts with /share/kitchen-*
+      value_template: "{{ trigger.event.data.path.startswith('/share/kitchen-') }}"
+    - condition: template # only notify once every 5 minutes at most
+      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_kitchen_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.sleep_status
+          state: "on"
+        - condition: state
+          entity_id: person.jon
+          state: "not_home"
+  action:
+    # trim the clip in case its really long, save to a static file
+    - service: shell_command.cam_vid_kitchen
+      data_template:
+        clip: "{{ trigger.event.data.path }}"
+    - service: telegram_bot.send_video
+      data:
+        file: "/share/trimmed-kitchen.mp4"
