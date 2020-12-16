@@ -121,7 +121,7 @@
 - alias: "Automatic Lighting: deck person & dark out - turn deck lights on"
   trigger:
     - platform: numeric_state
-      entity_id: 
+      entity_id:
         - sensor.deck_person
         - sensor.deckstairs_person
       above: 0
@@ -220,7 +220,7 @@
         - binary_sensor.master_bedroom_occupancy
         - binary_sensor.office_occupancy
         - binary_sensor.gym_occupancy
-        - binary_sensor.loft_multi_motion
+        # - binary_sensor.loft_multi_motion
       to: "on"
     - platform: state
       entity_id:
@@ -238,7 +238,7 @@
         - binary_sensor.master_bedroom_occupancy
         - binary_sensor.gym_occupancy
         - binary_sensor.office_occupancy
-        - binary_sensor.loft_multi_motion
+        # - binary_sensor.loft_multi_motion
       to: "off"
       for:
         minutes: 4
@@ -960,6 +960,11 @@
       below: 55
       for:
         minutes: 15
+    - platform: state
+      entity_id:
+        - sensor.washer
+        - sensor.dryer
+      to: "off"
   action:
     - service: notify.telegram_jon
       data_template:
