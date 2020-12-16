@@ -89,11 +89,11 @@ elkm1:
 #   username: !secret sleep_usr
 #   password: !secret sleep_pwd
 
-# nest:
-#   client_id: !secret nest_client_id
-#   client_secret: !secret nest_client_secret
-#   project_id: !secret nest_project_id
-#   subscriber_id: !secret nest_subscriber_id
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+  project_id: !secret nest_project_id
+  subscriber_id: !secret nest_subscriber_id
 
 lutron:
   host: !secret rr_ip

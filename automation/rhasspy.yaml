@@ -1,3 +1,4 @@
+---
 - alias: "Rhasspy: lights"
   description: "Testing rhasspy local voice processing"
   trigger:
@@ -29,10 +30,17 @@
     - platform: event
       event_type: rhasspy_RunScene
   action:
-    - service: scene.turn_on
+    - service: homeassistant.toggle
       data_template:
         entity_id: >
           {% set trigger_entity = trigger.event.data.name %}
-          {% if trigger_entity == 'sunset' %}
-            scene.equipment_room_enclosure_device_001_ph_sunset1
+          {% if trigger_entity == 'office' %}
+            light.office_cans
           {% endif %}
+    # - service: scene.turn_on
+    #   data_template:
+    #     entity_id: >
+    #       {% set trigger_entity = trigger.event.data.name %}
+    #       {% if trigger_entity == 'sunset' %}
+    #         scene.equipment_room_enclosure_device_001_ph_sunset1
+    #       {% endif %}
