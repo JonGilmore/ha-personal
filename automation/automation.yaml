@@ -962,9 +962,10 @@
         minutes: 15
     - platform: state
       entity_id:
-        - sensor.washer
-        - sensor.dryer
-      to: "off"
+        - binary_sensor.washer_wash_completed
+        - binary_sensor.dryer_dry_completed
+      from: "off"
+      to: "on"
   action:
     - service: notify.telegram_jon
       data_template:
