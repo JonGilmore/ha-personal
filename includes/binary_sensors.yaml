@@ -113,30 +113,40 @@
         or states.binary_sensor.basement_multi_motion.state == "on"
         or states.binary_sensor.powder_room_hall_occupancy.state == "on" }}
     deck_person:
-      friendly_name: "deck_person"
+      friendly_name: "deck person"
       device_class: motion
       value_template: >-
           {{ states('sensor.deck_person')|float > 0 }}
     deckstairs_person:
-      friendly_name: "deckstairs_person"
+      friendly_name: "deckstairs person"
       device_class: motion
       value_template: >-
           {{ states('sensor.deckstairs_person')|float > 0 }}
     doorbell_person:
-      friendly_name: "doorbell_person"
+      friendly_name: "doorbell person"
       device_class: motion
       value_template: >-
           {{ states('sensor.doorbell_person')|float > 0 }}
     driveway_person:
-      friendly_name: "driveway_person"
+      friendly_name: "driveway person"
       device_class: motion
       value_template: >-
           {{ states('sensor.driveway_person')|float > 0 }}
     garage_person:
-      friendly_name: "garage_person"
+      friendly_name: "garage person"
       device_class: motion
       value_template: >-
           {{ states('sensor.garage_person')|float > 0 }}
+    kitchen_person:
+      friendly_name: "kitchen person"
+      device_class: motion
+      value_template: >-
+          {{ states('sensor.kitchen_person')|float > 0 }}
+    loft_person:
+      friendly_name: "loft person"
+      device_class: motion
+      value_template: >-
+          {{ states('sensor.loft_person')|float > 0 }}
     basement_pir:
       friendly_name: "basement pir"
       device_class: motion
