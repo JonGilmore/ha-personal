@@ -14,18 +14,15 @@ wifi:
   fast_connect: true
   reboot_timeout: 45min
   power_save_mode: none
-  # manual_ip:
-  #   static_ip: 192.168.45.207
-  #   gateway: 192.168.45.1
-  #   subnet: 255.255.255.0
 
 # Enable logging
 logger:
   level: ERROR
 
-# Enable Home Assistant API
-api:
-  password: !secret hass_api
+mqtt:
+  broker: !secret hass_ip
+  username: !secret mqtt_user
+  password: !secret mqtt_pass
 
 ota:
   password: !secret esp_ota

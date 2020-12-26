@@ -18,9 +18,10 @@ wifi:
 logger:
   level: ERROR
 
-# Enable Home Assistant API
-api:
-  password: !secret hass_api
+mqtt:
+  broker: !secret hass_ip
+  username: !secret mqtt_user
+  password: !secret mqtt_pass
 
 ota:
   password: !secret esp_ota
