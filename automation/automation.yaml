@@ -82,9 +82,7 @@
       entity_id: timer.front_door_motion_timer
   action:
     - service: homeassistant.turn_off
-      data:
-        entity_id:
-          - switch.exterior_foyer
+      entity_id: switch.exterior_foyer
 #########################################
 - alias: "Security: doorbell rang - play google home video"
   description: "Play the front door video stream on the Google Home for 30 seconds"
@@ -220,7 +218,7 @@
         - binary_sensor.master_bedroom_occupancy
         - binary_sensor.office_occupancy
         - binary_sensor.gym_occupancy
-        # - binary_sensor.loft_multi_motion
+        - binary_sensor.loft_occupied
       to: "on"
     - platform: state
       entity_id:
@@ -238,7 +236,7 @@
         - binary_sensor.master_bedroom_occupancy
         - binary_sensor.gym_occupancy
         - binary_sensor.office_occupancy
-        # - binary_sensor.loft_multi_motion
+        - binary_sensor.loft_occupied
       to: "off"
       for:
         minutes: 4
@@ -281,7 +279,7 @@
           switch.office_lights
         {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
           light.gym_cans
-        {% elif trigger_entity == 'binary_sensor.loft_multi_motion' %}
+        {% elif trigger_entity == 'binary_sensor.loft_occupied' %}
           light.loft_lamp
         {% endif %}
 ########################################
@@ -1033,7 +1031,7 @@
     - service_template: >
         {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
         {% else %}homeassistant.turn_off{% endif %}
-      entity_id: switch.switch1
+      entity_id: switch.office_speakers
 #########################################
 - alias: "Work: wfh turn off recirculation pump"
   trigger:

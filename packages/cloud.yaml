@@ -52,7 +52,7 @@ cloud:
         - switch.princess_toilet_fan
         - switch.pulte_planning_center_lauras_office
         - switch.sunroom_sunroom_lamp
-        - switch.switch1
+        - switch.office_speakers
         - switch.switch2
         - switch.upstairs_hall_hall
         - switch.upstairs_hall_main_stairs
@@ -141,7 +141,7 @@ cloud:
         - switch.princess_toilet_fan
         - switch.pulte_planning_center_lauras_office
         - switch.sunroom_sunroom_lamp
-        - switch.switch1
+        - switch.office_speakers
         - switch.switch2
         - switch.upstairs_hall_hall
         - switch.upstairs_hall_main_stairs

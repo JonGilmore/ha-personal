@@ -376,6 +376,12 @@
       value_template: >-
         {{ states.binary_sensor.evelyns_room_occupancy.state == "on"
         or states.binary_sensor.evelyn_multi_motion.state == "on" }}
+    loft_occupied:
+      device_class: occupancy
+      friendly_name: "Loft Occupied"
+      value_template: >-
+        {{ states.binary_sensor.loft_person.state == "on"
+        or states.binary_sensor.loft_multi_motion.state == "on" }}
     christmas_season:
       value_template: >
         {% set today = states('sensor.date').split('-') %}

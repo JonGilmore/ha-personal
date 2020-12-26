@@ -78,7 +78,7 @@ interior_lights:
     - switch.upstairs_hall_hall
     - switch.upstairs_hall_main_stairs
     - switch.upstairs_hall_treads
-    - switch.switch1
+    - switch.office_speakers
     - switch.switch2
     - light.master_bath_toekick
 
@@ -159,7 +159,7 @@ all_lights:
     - switch.upstairs_hall_hall
     - switch.upstairs_hall_main_stairs
     - switch.upstairs_hall_treads
-    - switch.switch1
+    - switch.office_speakers
     - switch.switch2
     - light.master_bath_toekick
     - fan.patio_fan

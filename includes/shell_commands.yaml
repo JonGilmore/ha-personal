@@ -8,9 +8,4 @@ cam_kitchen_vid: !secret cam_kitchen_vid
 cam_doorbell_vid: !secret cam_doorbell_vid
 unifi_portfwd: /bin/bash /config/scripts/unifi.sh portfwd {{ username }} {{ password }} {{ baseurl }} {{ name }} {{ enabled }} {{ dst_port }} {{ ip }} {{ fwd_port }} {{ proto }} {{ id }} {{ unifi_site }}
 unifi_powercycle: /bin/bash /config/scripts/unifi.sh powercycleport {{ username }} {{ password }} {{ baseurl }} {{ mac }} {{ port }} {{ cmd }}
-cam_vid_doorbell: /usr/bin/ffmpeg -i {{ clip }} -t 00:00:08 -c copy /share/trimmed-doorbell.mp4 -y
-cam_vid_driveway: /usr/bin/ffmpeg -i {{ clip }} -t 00:00:08 -c copy /share/trimmed-driveway.mp4 -y
-cam_vid_deck: /usr/bin/ffmpeg -i {{ clip }} -t 00:00:08 -c copy /share/trimmed-deck.mp4 -y
-cam_vid_deckstairs: /usr/bin/ffmpeg -i {{ clip }} -t 00:00:08 -c copy /share/trimmed-deckstairs.mp4 -y
-cam_vid_garage: /usr/bin/ffmpeg -i {{ clip }} -t 00:00:08 -c copy /share/trimmed-garage.mp4 -y
-cam_vid_kitchen: /usr/bin/ffmpeg -i {{ clip }} -t 00:00:08 -c copy /share/trimmed-kitchen.mp4 -y
+trim_video: /usr/bin/ffmpeg -i {{ clip }} -t {{ duration }} -c copy {{ path }} -y

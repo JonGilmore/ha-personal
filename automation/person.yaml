@@ -24,9 +24,11 @@
           state: "not_home"
   action:
     # trim the clip in case its really long, save to a static file
-    - service: shell_command.cam_vid_doorbell
+    - service: shell_command.trim_video
       data_template:
         clip: "{{ trigger.event.data.path }}"
+        duration: "00:00:08"
+        path: "/share/trimmed-doorbell.mp4"
     - service: telegram_bot.send_video
       data:
         file: "/share/trimmed-doorbell.mp4"
@@ -55,9 +57,11 @@
           state: "not_home"
   action:
     # trim the clip in case its really long, save to a static file
-    - service: shell_command.cam_vid_driveway
+    - service: shell_command.trim_video
       data_template:
         clip: "{{ trigger.event.data.path }}"
+        duration: "00:00:08"
+        path: "/share/trimmed-driveway.mp4"
     - service: telegram_bot.send_video
       data:
         file: "/share/trimmed-driveway.mp4"
@@ -86,9 +90,11 @@
           state: "not_home"
   action:
     # trim the clip in case its really long, save to a static file
-    - service: shell_command.cam_vid_deck
+    - service: shell_command.trim_video
       data_template:
         clip: "{{ trigger.event.data.path }}"
+        duration: "00:00:08"
+        path: "/share/trimmed-deck.mp4"
     - service: telegram_bot.send_video
       data:
         file: "/share/trimmed-deck.mp4"
@@ -117,9 +123,11 @@
           state: "not_home"
   action:
     # trim the clip in case its really long, save to a static file
-    - service: shell_command.cam_vid_deckstairs
+    - service: shell_command.trim_video
       data_template:
         clip: "{{ trigger.event.data.path }}"
+        duration: "00:00:08"
+        path: "/share/trimmed-deckstairs.mp4"
     - service: telegram_bot.send_video
       data:
         file: "/share/trimmed-deckstairs.mp4"
@@ -148,9 +156,11 @@
           state: "not_home"
   action:
     # trim the clip in case its really long, save to a static file
-    - service: shell_command.cam_vid_garage
+    - service: shell_command.trim_video
       data_template:
         clip: "{{ trigger.event.data.path }}"
+        duration: "00:00:08"
+        path: "/share/trimmed-garage.mp4"
     - service: telegram_bot.send_video
       data:
         file: "/share/trimmed-garage.mp4"
@@ -179,9 +189,11 @@
           state: "not_home"
   action:
     # trim the clip in case its really long, save to a static file
-    - service: shell_command.cam_vid_kitchen
+    - service: shell_command.trim_video
       data_template:
         clip: "{{ trigger.event.data.path }}"
+        duration: "00:00:08"
+        path: "/share/trimmed-kitchen.mp4"
     - service: telegram_bot.send_video
       data:
         file: "/share/trimmed-kitchen.mp4"
@@ -215,3 +227,35 @@
           photo:
             - file: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
               caption: "{{ trigger.to_state.attributes.friendly_name }}"
+#########################################
+# - alias: "Person Detection: driveway or porch person - telegram & tv notify"
+#   description: "When a person is detected on the driveway or porch - notify via telegram and LG TV"
+#   trigger:
+#     - platform: state
+#       entity_id:
+#         - binary_sensor.doorbell_person
+#         - binary_sensor.driveway_person
+#       from: "off"
+#       to: "on"
+#   action:
+#     - data_template:
+#         entity_id: "camera.{{ trigger.to_state.object_id }}" # ex: camera.deck_person
+#         filename: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
+#       service: camera.snapshot
+#     - service: notify.living_room_tv
+#       data_template:
+#         message: "{{ trigger.to_state.attributes.friendly_name }} detected"
+#         data:
+#           icon: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
+#     - service: notify.telegram_jon
+#       data_template:
+#         title: "{{ trigger.to_state.attributes.friendly_name }}"
+#         message: "{{ trigger.to_state.attributes.friendly_name }}"
+#         data:
+#           photo:
+#             url: >
+#               {% if trigger.entity_id == 'binary_sensor.driveway_person' %}
+#                 {{ states.sensor.hik_driveway_pic.state }}
+#               {% elif trigger.entity_id == 'binary_sensor.doorbell_person' %}
+#                 {{ states.sensor.db_pic.state }}
+#               {% endif %}
