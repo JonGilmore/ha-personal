@@ -1,14 +1,18 @@
 #!/bin/sh
 
 cookie=$(mktemp)
-curl_cmd="curl --tlsv1 --silent --cookie ${cookie} --cookie-jar ${cookie} --insecure"
+headers=$(mktemp)
+curl_cmd="curl --silent --output /dev/null --cookie ${cookie} --cookie-jar ${cookie} --insecure"
 
 portfwd() {
   # authenticate against unifi controller
-  ${curl_cmd} -d "{\"username\":\"$1\", \"password\":\"$2\"}" https://${3}:8443/api/login
+  ${curl_cmd} -H 'Content-Type: application/json' -D ${headers} -d "{\"username\":\"$1\", \"password\":\"$2\"}" https://${3}/api/auth/login
+
+  # grab the `X-CSRF-Token` and strip the newline (added when upgraded to controller 6.1.26)
+  csrf="$(awk -v FS=': ' '/^X-CSRF-Token/{print $2}' "${headers}" | tr -d '\r')"
 
   # enable/disable firewall rule
-  ${curl_cmd} -k -X PUT https://${3}:8443/api/s/default/rest/portforward/${10} -H "Content-Type: application/json" -d @- <<-EOF
+  ${curl_cmd} -k -X PUT https://${3}/proxy/network/api/s/default/rest/portforward/${10} -H "Content-Type: application/json" -H "X-CSRF-Token: ${csrf}" -d @- <<-EOF
   {
     "name":"$4",
     "enabled":$5,
@@ -19,17 +23,19 @@ portfwd() {
     "proto":"$9",
     "log":false,
     "_id":"$10",
-    "site_id":"$11"
+    "site_id":"$11",
+    "pfwd_interface":"wan",
+    "destination_ip":"any"
   }
 EOF
 }
 
 powercycleport() {
   # authenticate against unifi controller
-  ${curl_cmd} -d "{\"username\":\"$1\", \"password\":\"$2\"}" https://${3}:8443/api/login
+  ${curl_cmd} -d "{\"username\":\"$1\", \"password\":\"$2\"}" https://${3}/api/login
 
   # cycle unifi port
-  ${curl_cmd} -k -X POST https://${3}:8443/api/s/default/cmd/devmgr -H "Content-Type: application/json" -d @- <<-EOF
+  ${curl_cmd} -k -X POST https://${3}/api/s/default/cmd/devmgr -H "Content-Type: application/json" -d @- <<-EOF
     {
         "mac":"$4",
         "port_idx":$5,
