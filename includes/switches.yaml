@@ -5,10 +5,14 @@
   lights_ct:
     - light.master_entry_lifx
     - light.sitting_room_lifx
-    - light.master_bath_toekick
-    - light.master_toilet_fixture
     - light.lauras_lamp_lifx
     - light.jons_lamp_lifx
+- platform: circadian_lighting
+  name: Master Bath
+  min_brightness: 30
+  lights_ct:
+    - light.master_bath_toekick
+    - light.master_toilet_fixture
 - platform: circadian_lighting
   name: Gym
   min_brightness: 5

@@ -44,3 +44,18 @@
     #       {% if trigger_entity == 'sunset' %}
     #         scene.equipment_room_enclosure_device_001_ph_sunset1
     #       {% endif %}
+#########################################
+# https://community.home-assistant.io/t/rhasspy-event-templates/260201
+# - alias: "Rhasspy: template lights"
+#   description: "Voice Control on/off states for lights"
+#   trigger:
+#     - event_data: {}
+#       event_type: rhasspy_Lights
+#       platform: event
+#   action:
+#     - service: script.rhasspy_lights
+#       data_template:
+#         light_name: "{{ trigger.event.data.light_name }}"
+#         light_state: "{{ trigger.event.data.light_state }}"
+#         siteId: "{{ trigger.event.data._intent.siteId }}"
+#         light_group: "{{ trigger.event.data.light_group }}"
