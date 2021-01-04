@@ -57,6 +57,8 @@ cloud:
         - switch.upstairs_hall_hall
         - switch.upstairs_hall_main_stairs
         - switch.upstairs_hall_treads
+        - light.sitting_room_lamp
+        - light.master_entry_lamp
         - script.vacuum_foyer
         - script.vacuum_kitchen
         - script.window_status
@@ -146,6 +148,8 @@ cloud:
         - switch.upstairs_hall_hall
         - switch.upstairs_hall_main_stairs
         - switch.upstairs_hall_treads
+        - light.sitting_room_lamp
+        - light.master_entry_lamp
         - script.vacuum_foyer
         - script.vacuum_kitchen
         - script.window_status

@@ -1,0 +1,56 @@
+---
+localtuya:
+  - host: !secret sylvania1_ip
+    device_id: !secret sylvania1_devid
+    local_key: !secret sylvania1_local_key
+    friendly_name: sylvania1
+    protocol_version: "3.3"
+    entities:
+      - platform: light
+        friendly_name: sylvania1
+        id: 20
+        color_mode: 21
+        brightness: 22
+        color_temp: 23
+        color: 24
+        brightness_lower: 10
+        brightness_upper: 1000
+        color_temp_min_kelvin: 2700
+        color_temp_max_kelvin: 6500
+        scene: 25
+  - host: !secret sylvania2_ip
+    device_id: !secret sylvania2_devid
+    local_key: !secret sylvania2_local_key
+    friendly_name: Master Entry Lamp
+    protocol_version: "3.3"
+    entities:
+      - platform: light
+        friendly_name: Master Entry Lamp
+        id: 20
+        color_mode: 21
+        brightness: 22
+        color_temp: 23
+        color: 24
+        brightness_lower: 10
+        brightness_upper: 1000
+        color_temp_min_kelvin: 2700
+        color_temp_max_kelvin: 6500
+        scene: 25
+  - host: !secret sylvania3_ip
+    device_id: !secret sylvania3_devid
+    local_key: !secret sylvania3_local_key
+    friendly_name: Sitting Room Lamp
+    protocol_version: "3.3"
+    entities:
+      - platform: light
+        friendly_name: Sitting Room Lamp
+        id: 20
+        color_mode: 21
+        brightness: 22
+        color_temp: 23
+        color: 24
+        brightness_lower: 10
+        brightness_upper: 1000
+        color_temp_min_kelvin: 2700
+        color_temp_max_kelvin: 6500
+        scene: 25

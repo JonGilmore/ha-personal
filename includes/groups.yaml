@@ -126,8 +126,8 @@ all_lights:
     - switch.master_bedroom_fan
     - light.master_toilet_fixture
     - light.master_bedroom_fixtures
-    - light.sitting_room_lifx
-    - light.master_entry_lifx
+    - light.sitting_room_lamp
+    - light.master_entry_lamp
     - light.lauras_lamp_lifx
     - light.jons_lamp_lifx
     - switch.master_bedroom_lauras_lamp
@@ -231,8 +231,8 @@ upstairs_lights:
     - switch.upstairs_hall_treads
     - switch.master_closet
     - light.evelyns_room_lamp
-    - light.sitting_room_lifx
-    - light.master_entry_lifx
+    - light.sitting_room_lamp
+    - light.master_entry_lamp
     - light.lauras_lamp_lifx
     - light.jons_lamp_lifx
     - light.master_bath_toekick

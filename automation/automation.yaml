@@ -283,7 +283,7 @@
           light.loft_lamp
         {% endif %}
 ########################################
-- alias: "Automatic Lighting: lifx lighting template - on"
+- alias: "Automatic Lighting: mbr lighting template - on"
   trigger:
     - platform: state
       entity_id:
@@ -291,18 +291,17 @@
         - binary_sensor.sitting_room_pir
       to: "on"
   action:
-    - service: lifx.set_state
+    - service: homeassistant.turn_on
       data_template:
         entity_id: >
           {% set trigger_entity = trigger.entity_id %}
           {% if trigger_entity == 'binary_sensor.master_entry_pir' %}
-            light.master_entry_lifx
+            light.master_entry_lamp
           {% elif trigger_entity == 'binary_sensor.sitting_room_pir' %}
-            light.sitting_room_lifx
+            light.sitting_room_lamp
           {% endif %}
-        power: true
 ########################################
-- alias: "Automatic Lighting: lifx lighting template - off"
+- alias: "Automatic Lighting: mbr lighting template - off"
   trigger:
     - platform: state
       entity_id: binary_sensor.master_entry_pir
@@ -320,9 +319,9 @@
         entity_id: >
           {% set trigger_entity = trigger.entity_id %}
           {% if trigger_entity == 'binary_sensor.master_entry_pir' %}
-            light.master_entry_lifx
+            light.master_entry_lamp
           {% elif trigger_entity == 'binary_sensor.sitting_room_pir' %}
-            light.sitting_room_lifx
+            light.sitting_room_lamp
           {% endif %}
 ########################################
 - alias: "Automatic Lighting: motion light template - scenes"
