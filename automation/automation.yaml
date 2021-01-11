@@ -922,6 +922,8 @@
       entity_id:
         - sensor.public_ip
         - binary_sensor.rain_sensor
+        - device_tracker.jon_bt
+        - device_tracker.laura_bt
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state
