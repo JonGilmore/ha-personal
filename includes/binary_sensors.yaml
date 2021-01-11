@@ -182,6 +182,11 @@
       device_class: motion
       value_template: >-
         {{ states.sensor.kitchen_pir.state == "Violated" }}
+    garage_pir:
+      friendly_name: "garage pir"
+      device_class: motion
+      value_template: >-
+        {{ states.sensor.garage_pir.state == "Violated" }}
     double_garage:
       friendly_name: "double garage"
       device_class: garage_door
