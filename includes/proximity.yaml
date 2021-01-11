@@ -1,0 +1,10 @@
+jon_home:
+  zone: home
+  devices:
+    - device_tracker.jons_iphone
+  unit_of_measurement: m
+laura_home:
+  zone: home
+  devices:
+    - device_tracker.lauras_iphone
+  unit_of_measurement: m

@@ -1,0 +1,8 @@
+---
+- platform: mqtt
+  source_type: "bluetooth"
+  devices:
+    jon_bt_lr: "monitor/pi-lr/jons_iphone_bt/device_tracker"
+    jon_bt_office: "monitor/respeaker/jons_iphone_bt/device_tracker"
+    laura_bt_lr: "monitor/respeaker/lauras_iphone_bt/device_tracker"
+    laura_bt_office: "monitor/pi-lr/lauras_iphone_bt/device_tracker"
