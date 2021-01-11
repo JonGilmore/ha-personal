@@ -129,11 +129,13 @@ binary_sensor: !include includes/binary_sensors.yaml
 camera: !include includes/cameras.yaml
 climate: !include includes/climate.yaml
 cover: !include includes/covers.yaml
+device_tracker: !include includes/device_tracker.yaml
 fan: !include includes/fans.yaml
 group: !include includes/groups.yaml
 input_boolean: !include includes/input_booleans.yaml
 input_select: !include includes/input_selects.yaml
 intent_script: !include includes/intent_scripts.yaml
+proximity: !include includes/proximity.yaml
 rest_command: !include includes/rest_commands.yaml
 script: !include includes/scripts.yaml
 sensor: !include includes/sensors.yaml
