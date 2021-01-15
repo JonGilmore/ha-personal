@@ -8,4 +8,4 @@ cameras:
     - camera.deck
     - camera.deckstairs
     - camera.front_door_live
-    - camera.kitchen_camera
+    - camera.kitchen
