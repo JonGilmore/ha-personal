@@ -198,35 +198,56 @@
       data:
         file: "/share/trimmed-kitchen.mp4"
 #########################################
-- alias: "Person Detection: testing person picture"
-  trigger:
-    - platform: state
-      entity_id:
-        - binary_sensor.deck_person
-        - binary_sensor.deckstairs_person
-        - binary_sensor.doorbell_person
-        # - binary_sensor.driveway_person
-        # - binary_sensor.garage_person
-        # - binary_sensor.kitchen_person
-        # - binary_sensor.loft_person
-      from: "off"
-      to: "on"
-  condition:
-    - condition: state
-      entity_id: person.jon
-      state: "not_home"
-  action:
-    - data_template:
-        entity_id: "camera.{{ trigger.to_state.object_id }}" # ex: camera.deck_person
-        filename: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
-      service: camera.snapshot
-    - service: notify.telegram_jon
-      data_template:
-        message: "message placeholder"
-        data:
-          photo:
-            - file: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
-              caption: "{{ trigger.to_state.attributes.friendly_name }}"
+# - alias: "Person Detection: testing person picture"
+#   trigger:
+#     - platform: state
+#       entity_id:
+#         - binary_sensor.deck_person
+#         - binary_sensor.deckstairs_person
+#         - binary_sensor.doorbell_person
+#         # - binary_sensor.driveway_person
+#         # - binary_sensor.garage_person
+#         # - binary_sensor.kitchen_person
+#         # - binary_sensor.loft_person
+#       from: "off"
+#       to: "on"
+#   condition:
+#     - condition: state
+#       entity_id: person.jon
+#       state: "not_home"
+#   action:
+#     - data_template:
+#         entity_id: "camera.{{ trigger.to_state.object_id }}" # ex: camera.deck_person
+#         filename: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
+#       service: camera.snapshot
+#     - service: notify.telegram_jon
+#       data_template:
+#         message: "message placeholder"
+#         data:
+#           photo:
+#             - file: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
+#               caption: "{{ trigger.to_state.attributes.friendly_name }}"
+#########################################
+# - alias: "Person Detection: notify of events"
+#   description: "testing notifications"
+#   trigger:
+#     platform: mqtt
+#     topic: frigate/events
+#   condition:
+#     # - "{{ trigger.payload_json['after']['label'] == 'person' }}"
+#     - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_notify_of_events', 'last_triggered')) |int(0) ) > 45 }}"
+#   action:
+#     - data_template:
+#         entity_id: "camera.{{ trigger.to_state.object_id }}" # ex: camera.deck_person
+#         filename: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
+#       service: camera.snapshot
+#     - service: notify.telegram_jon
+#       data_template:
+#         message: 'A {{trigger.payload_json["after"]["label"]}} was detected.'
+#         data:
+#           photo:
+#             - file: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
+#               caption: "{{ trigger.to_state.attributes.friendly_name }}"
 #########################################
 # - alias: "Person Detection: driveway or porch person - telegram & tv notify"
 #   description: "When a person is detected on the driveway or porch - notify via telegram and LG TV"

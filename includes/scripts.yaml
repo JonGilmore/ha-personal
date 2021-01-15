@@ -428,9 +428,6 @@ scan_bt_depart:
       data:
         topic: monitor/scan/arrive
     - delay: "00:00:10"
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
     - service: mqtt.publish
       data:
         topic: monitor/scan/depart
@@ -445,6 +442,13 @@ scan_bt_depart:
       entity_id: binary_sensor.anybody_home
       state: "off"
     - delay: "00:01:00"
+    - service: mqtt.publish
+      data:
+        topic: monitor/scan/depart
+    - condition: state # Stop if everybody is away
+      entity_id: binary_sensor.anybody_home
+      state: "off"
+    - delay: "00:02:00"
     - service: mqtt.publish
       data:
         topic: monitor/scan/depart

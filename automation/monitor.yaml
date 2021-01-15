@@ -126,30 +126,49 @@
 #       continue_on_timeout: false
 #     - service: script.scan_bt_arrive
 #########################################
-- alias: "Monitor: departure scan front door"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.foyer_pir
-      to: "on"
-  action:
-    - wait_for_trigger:
-        - platform: state
-          entity_id: binary_sensor.front_door
-          to: "on"
-      timeout: 60
-      continue_on_timeout: false
-    - service: script.scan_bt_depart
+# - alias: "Monitor: departure scan front door"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.foyer_pir
+#       to: "on"
+#   action:
+#     - wait_for_trigger:
+#         - platform: state
+#           entity_id: binary_sensor.front_door
+#           to: "on"
+#       timeout: 240
+#       continue_on_timeout: false
+#     - service: script.scan_bt_depart
 #########################################
-- alias: "Monitor: departure scan garage door"
+# - alias: "Monitor: departure scan garage door"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.garage_door
+#       to: "on"
+#   action:
+#     - wait_for_trigger:
+#         - platform: state
+#           entity_id: binary_sensor.garage_doors
+#           to: "on"
+#       timeout: 240
+#       continue_on_timeout: false
+#     - service: script.scan_bt_depart
+#########################################
+- alias: "Monitor: departure scan"
   trigger:
     - platform: state
-      entity_id: binary_sensor.garage_doors
+      entity_id:
+        - binary_sensor.garage_doors
+        - binary_sensor.front_door
       to: "on"
+  condition:
+    condition: or
+    conditions:
+      - condition: state
+        entity_id: device_tracker.jon_bt
+        state: "home"
+      - condition: state
+        entity_id: device_tracker.laura_bt
+        state: "home"
   action:
-    - wait_for_trigger:
-        - platform: state
-          entity_id: binary_sensor.garage_door
-          to: "on"
-      timeout: 90
-      continue_on_timeout: false
     - service: script.scan_bt_depart

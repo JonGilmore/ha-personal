@@ -6,3 +6,5 @@
     jon_bt_office: "monitor/respeaker/jons_iphone_bt/device_tracker"
     laura_bt_lr: "monitor/respeaker/lauras_iphone_bt/device_tracker"
     laura_bt_office: "monitor/pi-lr/lauras_iphone_bt/device_tracker"
+    jon_bt_master: "monitor/pi-presence-master/jons_iphone_bt/device_tracker"
+    laura_bt_master: "monitor/pi-presence-master/lauras_iphone_bt/device_tracker"
