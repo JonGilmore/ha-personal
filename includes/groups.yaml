@@ -355,11 +355,11 @@ basement_motions:
 exterior_motions:
   name: Exterior Motions
   entities:
-    - binary_sensor.deck_person
-    - binary_sensor.deckstairs_person
-    - binary_sensor.doorbell_person
-    - binary_sensor.driveway_person
-    - binary_sensor.garage_person
+    - binary_sensor.deck_person_motion
+    - binary_sensor.deckstairs_person_motion
+    - binary_sensor.doorbell_person_motion
+    - binary_sensor.driveway_person_motion
+    - binary_sensor.garage_person_motion
 
 windows:
   name: All Windows

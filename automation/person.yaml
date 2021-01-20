@@ -202,13 +202,13 @@
 #   trigger:
 #     - platform: state
 #       entity_id:
-#         - binary_sensor.deck_person
-#         - binary_sensor.deckstairs_person
-#         - binary_sensor.doorbell_person
-#         # - binary_sensor.driveway_person
-#         # - binary_sensor.garage_person
-#         # - binary_sensor.kitchen_person
-#         # - binary_sensor.loft_person
+#         - binary_sensor.deck_person_motion
+#         - binary_sensor.deckstairs_person_motion
+#         - binary_sensor.doorbell_person_motion
+#         # - binary_sensor.driveway_person_motion
+#         # - binary_sensor.garage_person_motion
+#         # - binary_sensor.kitchen_person_motion
+#         # - binary_sensor.loft_person_motion
 #       from: "off"
 #       to: "on"
 #   condition:
@@ -254,8 +254,8 @@
 #   trigger:
 #     - platform: state
 #       entity_id:
-#         - binary_sensor.doorbell_person
-#         - binary_sensor.driveway_person
+#         - binary_sensor.doorbell_person_motion
+#         - binary_sensor.driveway_person_motion
 #       from: "off"
 #       to: "on"
 #   action:
@@ -275,8 +275,8 @@
 #         data:
 #           photo:
 #             url: >
-#               {% if trigger.entity_id == 'binary_sensor.driveway_person' %}
+#               {% if trigger.entity_id == 'binary_sensor.driveway_person_motion' %}
 #                 {{ states.sensor.hik_driveway_pic.state }}
-#               {% elif trigger.entity_id == 'binary_sensor.doorbell_person' %}
+#               {% elif trigger.entity_id == 'binary_sensor.doorbell_person_motion' %}
 #                 {{ states.sensor.db_pic.state }}
 #               {% endif %}
