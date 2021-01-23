@@ -1,8 +1,0 @@
----
-global:
-  language: en
-  weather: weather.dark_sky
-  outside_temperature: sensor.dark_sky_temperature
-  outside_humidity: sensor.dark_sky_humidity
-  alarm: alarm_control_panel.area001
-  inside_temperature: sensor.office_multi_temperature_measurement

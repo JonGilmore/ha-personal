@@ -31,6 +31,8 @@ recorder:
     entity_globs:
       - sensor.dark_sky*
 
+lovelace:
+  mode: yaml
 system_health:
 circadian_lighting:
   min_colortemp: 2700
