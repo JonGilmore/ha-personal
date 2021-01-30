@@ -213,7 +213,6 @@
       to: "Violated"
     - platform: state
       entity_id:
-        - binary_sensor.master_toilet_occupancy
         # - binary_sensor.evelyns_room_occupied
         - binary_sensor.master_bedroom_occupancy
         - binary_sensor.office_occupancy
@@ -232,7 +231,6 @@
         minutes: 10
     - platform: state
       entity_id:
-        - binary_sensor.master_toilet_occupancy
         - binary_sensor.master_bedroom_occupancy
         - binary_sensor.gym_occupancy
         - binary_sensor.office_occupancy
@@ -265,8 +263,6 @@
           switch.basement_main
         {% elif trigger_entity == 'sensor.bar_pir' %}
           switch.basement_bar_cabinets
-        {% elif trigger_entity == 'binary_sensor.master_toilet_occupancy' %}
-          light.master_toilet_fixture
         {% elif trigger_entity == 'binary_sensor.evelyns_room_occupied' %}
           light.evelyns_room_lamp
         {% elif trigger_entity == 'sensor.storage_pir' %}
