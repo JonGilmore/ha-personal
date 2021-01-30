@@ -7,12 +7,13 @@
     - light.sitting_room_lamp
     - light.lauras_lamp_lifx
     - light.jons_lamp_lifx
+    - light.master_bath_toekick
 - platform: circadian_lighting
   name: Master Bath
-  min_brightness: 30
+  min_brightness: 60
   lights_ct:
-    - light.master_bath_toekick
     - light.master_toilet_fixture
+    - light.master_bedroom_fixtures
 - platform: circadian_lighting
   name: Gym
   min_brightness: 5
@@ -21,7 +22,7 @@
     - light.gym_cans
 - platform: circadian_lighting
   name: Office
-  max_brightness: 90
+  max_brightness: 80
   lights_ct:
     - light.office_cans
 
