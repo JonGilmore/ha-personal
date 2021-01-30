@@ -30,7 +30,8 @@ recorder:
   exclude:
     entity_globs:
       - sensor.dark_sky*
-
+frontend:
+  themes: !include_dir_merge_named themes/
 lovelace:
   mode: yaml
 system_health:
@@ -185,9 +186,14 @@ webostv:
 mobile_app:
 
 browser_mod:
+  prefix: "browser_"
   devices:
     37a201ed-e63fb778:
       name: wallpanel
+    d076aed9-3b526fc1:
+      name: jons_iphone
+    00d5d99a-b03ecc8e:
+      name: jons_macbook
 
 lifx:
   light:
