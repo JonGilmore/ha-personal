@@ -41,6 +41,8 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-battery-entity-row/battery-entity-row.js
     type: module
+  - url: /hacsfiles/lovelace-layout-card/layout-card.js
+    type: module
 
 decluttering_templates:
   cam_small:
@@ -382,32 +384,37 @@ views:
         entities:
           - scene.equipment_room_enclosure_device_001_ph_sunset1
       - type: picture-glance
-        camera_image: camera.kitchen_camera
+        camera_image: camera.kitchen
         title: Kitchen
         entities:
           - sensor.kitchen_pir
           - scene.equipment_room_enclosure_device_001_ph_main_off
           - scene.equipment_room_enclosure_device_001_ph_main_on
-      - type: custom:decluttering-card
-        template: cam_history
-        variables:
-          - cam: driveway
-      - type: custom:decluttering-card
-        template: cam_history
-        variables:
-          - cam: doorbell
-      - type: custom:decluttering-card
-        template: cam_history
-        variables:
-          - cam: deck
-      - type: custom:decluttering-card
-        template: cam_history
-        variables:
-          - cam: deckstairs
-      - type: custom:decluttering-card
-        template: cam_history
-        variables:
-          - cam: garage
+      - type: picture-glance
+        camera_image: camera.loft
+        title: Kitchen
+        entities:
+          - light.loft_lamp
+      # - type: custom:decluttering-card
+      #   template: cam_history
+      #   variables:
+      #     - cam: driveway
+      # - type: custom:decluttering-card
+      #   template: cam_history
+      #   variables:
+      #     - cam: doorbell
+      # - type: custom:decluttering-card
+      #   template: cam_history
+      #   variables:
+      #     - cam: deck
+      # - type: custom:decluttering-card
+      #   template: cam_history
+      #   variables:
+      #     - cam: deckstairs
+      # - type: custom:decluttering-card
+      #   template: cam_history
+      #   variables:
+      #     - cam: garage
   ##########################################
   # MUSIC TAB
   ##########################################
@@ -950,9 +957,6 @@ views:
           - entity: sensor.speedtest_upload
             name: upload
             show_state: true
-      - type: custom:search-card
-        max_results: 10
-
   ##########################################
   # MOBILE TAB
   ##########################################
@@ -963,7 +967,7 @@ views:
       - type: "custom:auto-entities"
         card:
           show_header_toggle: false
-          title: Pixel
+          title: Jon
           type: entities
         sort:
           method: state
@@ -976,7 +980,7 @@ views:
       - type: "custom:auto-entities"
         card:
           show_header_toggle: false
-          title: iPhone
+          title: Laura
           type: entities
         sort:
           method: state
