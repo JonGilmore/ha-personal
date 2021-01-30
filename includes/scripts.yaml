@@ -459,3 +459,13 @@ scan_bt_depart:
     - service: mqtt.publish
       data:
         topic: monitor/scan/depart
+
+master_off:
+  alias: "master off"
+  sequence:
+    - service: homeassistant.turn_off
+      entity_id:
+        - light.master_entry_lamp
+        - light.sitting_room_lamp
+    - service: scene.turn_on
+      entity_id: scene.equipment_room_enclosure_device_001_ph_masterbath_off
