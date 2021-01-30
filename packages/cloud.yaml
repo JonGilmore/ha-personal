@@ -63,6 +63,7 @@ cloud:
         - script.vacuum_kitchen
         - script.window_status
         - script.jon_meeting
+        - script.master_off
         - camera.daisy
         - camera.deck
         - camera.deckstairs
@@ -154,6 +155,7 @@ cloud:
         - script.vacuum_kitchen
         - script.window_status
         - script.jon_meeting
+        - script.master_off
         - camera.daisy
         - camera.deck
         - camera.deckstairs
