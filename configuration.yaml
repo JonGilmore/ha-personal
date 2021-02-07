@@ -103,14 +103,6 @@ lutron:
   username: !secret rr_usr
   password: !secret rr_pwd
 
-# water_heater:
-#   - platform: econet
-#     username: !secret econet_user
-#     password: !secret econet_pwd
-
-hunterdouglas_powerview:
-  - host: !secret powerview_ip
-
 notify:
   - name: telegram_jon
     platform: telegram
