@@ -32,439 +32,439 @@
 
 ⚠️ Total number of automations: **118** ⚠️
 
-## [Security](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml)
-### [Line crossing template - telegram & tv notify](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L3)
+## [Security](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml)
+### [Line crossing template - telegram & tv notify](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L3)
   When something crosses a line on the driveway or porch, notify via telegram and LG TV
 
 *which uses:*
--   [sensor.db_pic](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L113)
--   [sensor.hik_driveway_pic](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L115)
+-   [sensor.db_pic](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L113)
+-   [sensor.hik_driveway_pic](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L115)
 
-### [Front door line crossing or doorbell rang - occupied](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L28)
+### [Front door line crossing or doorbell rang - occupied](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L28)
   When its dark out & house occupied - foyer and exterior lights on
 
 *which uses:*
--   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L256)
--   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L273)
--   [script.popup_camera](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L173)
+-   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L256)
+-   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L273)
+-   [script.popup_camera](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L173)
 
-### [Front door line crossing or doorbell rang - unoccupied](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L54)
+### [Front door line crossing or doorbell rang - unoccupied](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L54)
   When its dark out & house unoccupied - foyer and exterior lights on for 10 min
 
 *which uses:*
--   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L256)
--   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L273)
--   [timer.front_door_motion_timer](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/timers.yaml#L2)
+-   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L256)
+-   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L273)
+-   [timer.front_door_motion_timer](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/timers.yaml#L2)
 
-### [Turn off foyer and exterior lights 10 minutes after trigger](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L77)
+### [Turn off foyer and exterior lights 10 minutes after trigger](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L77)
 *which uses:*
--   [timer.front_door_motion_timer](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/timers.yaml#L2)
+-   [timer.front_door_motion_timer](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/timers.yaml#L2)
 
-### [Doorbell rang - play google home video](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L87)
+### [Doorbell rang - play google home video](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L87)
   Play the front door video stream on the Google Home for 30 seconds
 
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Doorbell rang - interrupt sonos master](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L103)
+### [Doorbell rang - interrupt sonos master](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L103)
 *which uses:*
--   [script.sonos_say](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L190)
+-   [script.sonos_say](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L190)
 
-### [Deck person & dark out - turn deck lights on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L119)
+### [Deck person & dark out - turn deck lights on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L119)
 *which uses:*
--   [sensor.period_of_day](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L179)
+-   [sensor.period_of_day](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L179)
 
-### [Deck lights on when deck door opens](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L134)
+### [Deck lights on when deck door opens](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L134)
 *which uses:*
--   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L273)
+-   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L273)
 
-### [Garage person/motion detected & dark out - garage lights on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L153)
+### [Garage person/motion detected & dark out - garage lights on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L153)
 *which uses:*
--   [sensor.period_of_day](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L179)
+-   [sensor.period_of_day](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L179)
 
-### [Garage lights off when no person detected for 15min](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L168)
+### [Garage lights off when no person detected for 15min](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L168)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Wake up (only between Oct-May) & turn on some lights](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L183)
+### [Wake up (only between Oct-May) & turn on some lights](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L183)
 *which uses:*
--   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L273)
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
+-   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L273)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
 
-### [Motion light template](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L203)
+### [Motion light template](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L203)
   template for foyer & basement & bar & master toilet & evelyns lamp & storage & master toekick & office desk & gym
 
 *which uses:*
--   [binary_sensor.evelyns_room_occupied](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L343)
--   [binary_sensor.loft_occupied](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L349)
+-   [binary_sensor.evelyns_room_occupied](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L343)
+-   [binary_sensor.loft_occupied](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L349)
 
-### [Mbr lighting template - on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L282)
+### [Mbr lighting template - on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L282)
 *which uses:*
--   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L18)
--   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L18)
+-   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L18)
+-   [input_boolean.master_override](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L18)
 
-### [Mbr lighting template - off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L303)
+### [Mbr lighting template - off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L303)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Motion light template - scenes](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L325)
+### [Motion light template - scenes](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L325)
   Template to turn off basement & kitchen & deck
 
 *which uses:*
--   [binary_sensor.basement_motions](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L52)
+-   [binary_sensor.basement_motions](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L52)
 
-### [Enable motion light boolean 2hours before sunset & disable 2hour after sunrise](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L365)
+### [Enable motion light boolean 2hours before sunset & disable 2hour after sunrise](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L365)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L379)
+### [Turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L379)
 *which uses:*
--   [binary_sensor.all_motions](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L87)
+-   [binary_sensor.all_motions](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L87)
 
-### [Backyard party lights](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L401)
+### [Backyard party lights](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L401)
 *which uses:*
--   [input_boolean.party](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L14)
--   [input_boolean.party](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L14)
+-   [input_boolean.party](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L14)
+-   [input_boolean.party](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L14)
 
-### [Basement lights on after stairs motion](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L416)
-*which uses:*
-
--   Entity not defined in YAML
-
-### [Toilet off when bathroom off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L431)
+### [Basement lights on after stairs motion](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L416)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Fishtank lights](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L451)
+### [Toilet off when bathroom off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L431)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Master blinds at dusk & only runs once (and after 1hr before sunset)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L464)
-*which uses:*
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L6)
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L6)
-
-### [Close master blinds at sunset](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L482)
-*which uses:*
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L6)
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L6)
-
-### [Open master blinds in the morning (after 45min of unoccupied bed)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L492)
-*which uses:*
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L6)
--   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L6)
--   [sensor.master_bed_people](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L287)
-
-### [Reset run-once variables - noon](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L512)
-*which uses:*
--   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L8)
--   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L8)
-
-### [Start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L520)
-*which uses:*
--   [input_boolean.guests](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L12)
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [input_boolean.guests](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L12)
-
-### [Start sleeping & check the garage doors](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L548)
-*which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
-
-### [Check the door locks](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L568)
-*which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [script.lock_doors](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L115)
--   [sensor.doors_unlocked](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L93)
--   [sensor.doors_unlocked_number](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L101)
-
-### [Done sleeping & HVAC fan off & recirculation pump on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L589)
-*which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
-
-### [Turn the HVAC fans on & recirculation pump and tvs off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L605)
-*which uses:*
--   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L256)
--   [script.tvs_off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L133)
-
-### [Away during the day & turn lights off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L622)
-*which uses:*
--   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L256)
--   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L273)
-
-### [Return home & turn the HVAC fans off & the recirculation pump on & stop daisy cam timer](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L635)
-*which uses:*
--   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L256)
--   [timer.daisy_cam_timer](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/timers.yaml#L4)
-
-### [Turn on sunset lights at dark or sunset](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L653)
-*which uses:*
--   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L8)
--   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L273)
--   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L8)
-
-### [Turn on sunset2 lights at ten min after sunset](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L675)
+### [Fishtank lights](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L451)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Turn on master fan at night (if AC is on)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L684)
+### [Master blinds at dusk & only runs once (and after 1hr before sunset)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L464)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L6)
 
-### [Turn off master fan in the morning](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L701)
+### [Close master blinds at sunset](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L482)
 *which uses:*
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L6)
 
--   Entity not defined in YAML
-
-### [Check the front door lock when leaving](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L709)
+### [Open master blinds in the morning (after 45min of unoccupied bed)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L492)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
--   [sensor.armed_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L15)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L6)
+-   [input_boolean.master_blinds_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L6)
+-   [sensor.master_bed_people](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L287)
 
-### [Winter indoor humidity check & see if its below the high threshold](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L729)
+### [Reset run-once variables - noon](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L512)
 *which uses:*
--   [sensor.target_humidity_max_winter](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L197)
+-   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L8)
+-   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L8)
 
-### [Winter indoor humidity check & see if its above the low threshold](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L742)
+### [Start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L520)
 *which uses:*
--   [sensor.target_humidity_min_winter](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L207)
+-   [input_boolean.guests](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L12)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [input_boolean.guests](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L12)
 
-### [If there is a water leak & notify & close the water valve & turn off recirculation pump](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L755)
+### [Start sleeping & check the garage doors](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L548)
 *which uses:*
--   [binary_sensor.moisture_sensors](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L239)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
 
-### [Dog walker here between 9:30-2pm (while the alarm is not disarmed)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L771)
+### [Check the door locks](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L568)
 *which uses:*
--   [script.video_daisy](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L15)
--   [sensor.armed_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L15)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [script.lock_doors](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L115)
+-   [sensor.doors_unlocked](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L93)
+-   [sensor.doors_unlocked_number](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L101)
 
-### [Fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L785)
+### [Done sleeping & HVAC fan off & recirculation pump on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L589)
 *which uses:*
--   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L16)
--   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L16)
--   [script.alarm](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L82)
--   [sensor.alarm_state](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L23)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
 
-### [Burglar active & lights on & send videos & repeat notifications](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L802)
+### [Turn the HVAC fans on & recirculation pump and tvs off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L605)
 *which uses:*
--   [script.alarm](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L82)
--   [sensor.alarm_state](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L23)
+-   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L256)
+-   [script.tvs_off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L133)
 
-### [Turn off alarm notifications because of user interaction](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L812)
+### [Away during the day & turn lights off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L622)
 *which uses:*
--   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L16)
--   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_booleans.yaml#L16)
+-   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L256)
+-   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L273)
 
-### [Patio fan off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L860)
+### [Return home & turn the HVAC fans off & the recirculation pump on & stop daisy cam timer](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L635)
 *which uses:*
+-   [binary_sensor.alarm_occupancy_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L256)
+-   [timer.daisy_cam_timer](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/timers.yaml#L4)
 
--   Entity not defined in YAML
-
-### [Elk Alarm trouble notification](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L879)
+### [Turn on sunset lights at dark or sunset](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L653)
 *which uses:*
--   [sensor.alarm_trouble](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L27)
+-   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L8)
+-   [binary_sensor.light_inside](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L273)
+-   [input_boolean.sunset_run_once](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L8)
 
-### [Doorbell notification event capture and notify](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L891)
-*which uses:*
-
--   Entity not defined in YAML
-
-### [General notifications](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L917)
-*which uses:*
--   [sensor.alarm_state](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L23)
-
-### [UPS notifications](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L971)
+### [Turn on sunset2 lights at ten min after sunset](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L675)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Important date (birthday & anniversary)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L980)
+### [Turn on master fan at night (if AC is on)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L684)
+*which uses:*
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
+
+### [Turn off master fan in the morning](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L701)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Create all groups](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L993)
+### [Check the front door lock when leaving](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L709)
 *which uses:*
--   [script.group_set](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L145)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
+-   [sensor.armed_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L15)
 
-### [Popup camera](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1004)
+### [Winter indoor humidity check & see if its below the high threshold](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L729)
 *which uses:*
--   [script.popup_camera](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L173)
+-   [sensor.target_humidity_max_winter](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L197)
 
-### [Office speakers on/off with presence](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1019)
+### [Winter indoor humidity check & see if its above the low threshold](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L742)
+*which uses:*
+-   [sensor.target_humidity_min_winter](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L207)
+
+### [If there is a water leak & notify & close the water valve & turn off recirculation pump](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L755)
+*which uses:*
+-   [binary_sensor.moisture_sensors](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L239)
+
+### [Dog walker here between 9:30-2pm (while the alarm is not disarmed)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L771)
+*which uses:*
+-   [script.video_daisy](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L15)
+-   [sensor.armed_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L15)
+
+### [Fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L785)
+*which uses:*
+-   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L16)
+-   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L16)
+-   [script.alarm](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L82)
+-   [sensor.alarm_state](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L23)
+
+### [Burglar active & lights on & send videos & repeat notifications](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L802)
+*which uses:*
+-   [script.alarm](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L82)
+-   [sensor.alarm_state](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L23)
+
+### [Turn off alarm notifications because of user interaction](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L812)
+*which uses:*
+-   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L16)
+-   [input_boolean.alarm_notifier](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_booleans.yaml#L16)
+
+### [Patio fan off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L860)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Wfh turn off recirculation pump](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1035)
+### [Elk Alarm trouble notification](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L879)
+*which uses:*
+-   [sensor.alarm_trouble](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L27)
+
+### [Doorbell notification event capture and notify](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L891)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Wfh turn on recirculation pump (only when somebody is home)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1047)
+### [General notifications](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L917)
 *which uses:*
--   [binary_sensor.anybody_home](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L281)
+-   [sensor.alarm_state](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L23)
 
-### [Acknowledge garage single open](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1059)
+### [UPS notifications](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L971)
 *which uses:*
--   [alert.garage_door_single](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/alerts.yaml#L2)
 
-### [Acknowledge garage double open](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1070)
+-   Entity not defined in YAML
+
+### [Important date (birthday & anniversary)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L980)
 *which uses:*
--   [alert.garage_door_double](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/alerts.yaml#L19)
 
-### [Lights off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1081)
+-   Entity not defined in YAML
+
+### [Create all groups](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L993)
+*which uses:*
+-   [script.group_set](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L145)
+
+### [Popup camera](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1004)
+*which uses:*
+-   [script.popup_camera](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L173)
+
+### [Office speakers on/off with presence](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1019)
+*which uses:*
+
+-   Entity not defined in YAML
+
+### [Wfh turn off recirculation pump](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1035)
+*which uses:*
+
+-   Entity not defined in YAML
+
+### [Wfh turn on recirculation pump (only when somebody is home)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1047)
+*which uses:*
+-   [binary_sensor.anybody_home](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L281)
+
+### [Acknowledge garage single open](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1059)
+*which uses:*
+-   [alert.garage_door_single](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/alerts.yaml#L2)
+
+### [Acknowledge garage double open](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1070)
+*which uses:*
+-   [alert.garage_door_double](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/alerts.yaml#L19)
+
+### [Lights off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1081)
   all lights off from iOS widget
 
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Toggle garage - single](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1097)
+### [Toggle garage - single](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1097)
 *which uses:*
--   [cover.garage_momentary_single](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/covers.yaml#L4)
+-   [cover.garage_momentary_single](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/covers.yaml#L4)
 
-### [Toggle garage - double](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1121)
+### [Toggle garage - double](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1121)
 *which uses:*
--   [cover.garage_momentary_double](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/covers.yaml#L13)
+-   [cover.garage_momentary_double](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/covers.yaml#L13)
 
-### [Unlock front door](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1136)
+### [Unlock front door](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1136)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Driveway notification](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/automation.yaml#L1160)
+### [Driveway notification](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/automation.yaml#L1160)
 *which uses:*
 
 -   Entity not defined in YAML
 
 [^ toc](#automations---table-of-contents)
 
-## [Garage](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/garage.yaml)
-### [Single is open - close](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/garage.yaml#L3)
+## [Garage](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/garage.yaml)
+### [Single is open - close](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/garage.yaml#L3)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Double is open - close](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/garage.yaml#L18)
+### [Double is open - close](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/garage.yaml#L18)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Either door is open for 10min & notify & kill heat if it is on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/garage.yaml#L33)
+### [Either door is open for 10min & notify & kill heat if it is on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/garage.yaml#L33)
 *which uses:*
--   [sensor.garage_temperature](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/sensors.yaml#L45)
+-   [sensor.garage_temperature](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/sensors.yaml#L45)
 
 [^ toc](#automations---table-of-contents)
 
-## [Location Awareness](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/location.yaml)
-### [Leave home & single garage open](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/location.yaml#L2)
+## [Location Awareness](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/location.yaml)
+### [Leave home & single garage open](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/location.yaml#L2)
   Leave `home` zone with the single garage open, send a photo notification & prompt to close
 
 *which uses:*
--   [cover.garage_momentary_single](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/covers.yaml#L4)
+-   [cover.garage_momentary_single](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/covers.yaml#L4)
 
 [^ toc](#automations---table-of-contents)
 
-## [Lutron Scene](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/lutron_scenes.yaml)
-### [Master lamps on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/lutron_scenes.yaml#L1)
+## [Lutron Scene](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/lutron_scenes.yaml)
+### [Master lamps on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/lutron_scenes.yaml#L1)
   LED is off & the scene is triggered - turn on the lamps and enable the LED
 
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Master lamps off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/lutron_scenes.yaml#L32)
+### [Master lamps off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/lutron_scenes.yaml#L32)
   LED is on & the scene is triggered - turn off the lamps and disable the LED
 
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Either master lamp on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/lutron_scenes.yaml#L60)
+### [Either master lamp on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/lutron_scenes.yaml#L60)
   Either master lamp is turned on - enable the scene LED
 
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Both master lamps off - jon](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/lutron_scenes.yaml#L74)
+### [Both master lamps off - jon](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/lutron_scenes.yaml#L74)
   Both master lamps off, turn off the scene LED
 
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Both master lamps off - laura](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/lutron_scenes.yaml#L89)
+### [Both master lamps off - laura](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/lutron_scenes.yaml#L89)
   Both master lamps off, turn off the scene LED
 
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Master lamps off from scene activation](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/lutron_scenes.yaml#L105)
+### [Master lamps off from scene activation](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/lutron_scenes.yaml#L105)
 *which uses:*
 
 -   Entity not defined in YAML
 
 [^ toc](#automations---table-of-contents)
 
-## [Monitor](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/monitor.yaml)
-### [Jon occupancy on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/monitor.yaml#L6)
+## [Monitor](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/monitor.yaml)
+### [Jon occupancy on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/monitor.yaml#L6)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Jon occupancy off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/monitor.yaml#L17)
+### [Jon occupancy off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/monitor.yaml#L17)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Laura occupancy on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/monitor.yaml#L28)
+### [Laura occupancy on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/monitor.yaml#L28)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Laura occupancy off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/monitor.yaml#L39)
+### [Laura occupancy off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/monitor.yaml#L39)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Restart Monitor service on HA startup](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/monitor.yaml#L51)
+### [Restart Monitor service on HA startup](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/monitor.yaml#L51)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Departure scan](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/monitor.yaml#L129)
+### [Departure scan](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/monitor.yaml#L129)
 *which uses:*
--   [binary_sensor.front_door](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L165)
--   [binary_sensor.garage_doors](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L225)
--   [script.scan_bt_depart](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L425)
+-   [binary_sensor.front_door](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L165)
+-   [binary_sensor.garage_doors](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L225)
+-   [script.scan_bt_depart](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L425)
 
 [^ toc](#automations---table-of-contents)
 
-## [Nabu Casa](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/nabu_casa.yaml)
-### [Sleep starting & all home & nabu casa disconnect](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/nabu_casa.yaml#L7)
+## [Nabu Casa](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/nabu_casa.yaml)
+### [Sleep starting & all home & nabu casa disconnect](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/nabu_casa.yaml#L7)
 *which uses:*
--   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L295)
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
+-   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L295)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
 
-### [Anybody leaves OR vacation on OR sleep off & nabu casa connect](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/nabu_casa.yaml#L19)
+### [Anybody leaves OR vacation on OR sleep off & nabu casa connect](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/nabu_casa.yaml#L19)
 *which uses:*
--   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L295)
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L295)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
 [^ toc](#automations---table-of-contents)
 
-## [Nest](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/nest.yaml)
-### [Testing](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/nest.yaml#L2)
+## [Nest](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/nest.yaml)
+### [Testing](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/nest.yaml#L2)
   Testing nest events
 
 *which uses:*
@@ -473,83 +473,83 @@
 
 [^ toc](#automations---table-of-contents)
 
-## [Person Detection](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/person.yaml)
-### [Doorbell person detected](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/person.yaml#L3)
+## [Person Detection](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/person.yaml)
+### [Doorbell person detected](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/person.yaml#L3)
   If nobody is home or were sleeping - send a video of the doorbell
 
 *which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L11)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L11)
 
-### [Driveway person detected](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/person.yaml#L36)
+### [Driveway person detected](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/person.yaml#L36)
   If nobody is home or were sleeping - send a video of the driveway
 
 *which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L11)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L11)
 
-### [Deck person detected](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/person.yaml#L69)
+### [Deck person detected](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/person.yaml#L69)
   If nobody is home or were sleeping - send a video of the deck
 
 *which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L11)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L11)
 
-### [Deckstairs person detected](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/person.yaml#L102)
+### [Deckstairs person detected](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/person.yaml#L102)
   If nobody is home or were sleeping - send a video of the deckstairs
 
 *which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L11)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L11)
 
-### [Garage person detected](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/person.yaml#L135)
+### [Garage person detected](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/person.yaml#L135)
   If nobody is home or were sleeping - send a video of the garage
 
 *which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L11)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L11)
 
-### [Kitchen person detected](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/person.yaml#L168)
+### [Kitchen person detected](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/person.yaml#L168)
   If nobody is home - send a video of the kitchen
 
 *which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L11)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [shell_command.trim_video](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L11)
 
 [^ toc](#automations---table-of-contents)
 
-## [Lutron Pico](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/picos.yaml)
-### [Lauras lamp on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/picos.yaml#L1)
+## [Lutron Pico](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/picos.yaml)
+### [Lauras lamp on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/picos.yaml#L1)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Jons lamp on](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/picos.yaml#L14)
+### [Jons lamp on](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/picos.yaml#L14)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Lauras lamp off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/picos.yaml#L27)
+### [Lauras lamp off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/picos.yaml#L27)
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Jons lamp off](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/picos.yaml#L38)
+### [Jons lamp off](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/picos.yaml#L38)
 *which uses:*
 
 -   Entity not defined in YAML
 
 [^ toc](#automations---table-of-contents)
 
-## [Rhasspy](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/rhasspy.yaml)
-### [Lights](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/rhasspy.yaml#L2)
+## [Rhasspy](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/rhasspy.yaml)
+### [Lights](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/rhasspy.yaml#L2)
   Testing rhasspy local voice processing
 
 *which uses:*
 
 -   Entity not defined in YAML
 
-### [Scenes](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/rhasspy.yaml#L27)
+### [Scenes](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/rhasspy.yaml#L27)
   Testing rhasspy local voice processing
 
 *which uses:*
@@ -558,127 +558,127 @@
 
 [^ toc](#automations---table-of-contents)
 
-## [HVAC](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml)
-### [Set cooling temps in the morning (if were not on vacation and somebody is home](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml#L2)
+## [HVAC](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml)
+### [Set cooling temps in the morning (if were not on vacation and somebody is home](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml#L2)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Set heating temps in the morning (if we're not on vacation and somebody is home)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml#L24)
+### [Set heating temps in the morning (if we're not on vacation and somebody is home)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml#L24)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Set back cooling temps at 8am only if were not on vacation and nobody is home](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml#L48)
+### [Set back cooling temps at 8am only if were not on vacation and nobody is home](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml#L48)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Set back heating temps at 8am only if were not on vacation and nobody is home](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml#L70)
+### [Set back heating temps at 8am only if were not on vacation and nobody is home](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml#L70)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Home from work (4pm) & set cooling temps to normal (only when were not on vacation)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml#L94)
+### [Home from work (4pm) & set cooling temps to normal (only when were not on vacation)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml#L94)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Home from work (4pm) & set heating temps to normal (only when were not on vacation)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml#L108)
+### [Home from work (4pm) & set heating temps to normal (only when were not on vacation)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml#L108)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [When we start sleeping set the thermostats back (for cooling)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml#L124)
+### [When we start sleeping set the thermostats back (for cooling)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml#L124)
 *which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [When we start sleeping set the thermostats back (for heating)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/thermostats.yaml#L139)
+### [When we start sleeping set the thermostats back (for heating)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/thermostats.yaml#L139)
 *which uses:*
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
 [^ toc](#automations---table-of-contents)
 
-## [Unifi](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/unifi.yaml)
-### [Port forward enable wireguard port forward if anybody leaves](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/unifi.yaml#L3)
+## [Unifi](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/unifi.yaml)
+### [Port forward enable wireguard port forward if anybody leaves](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/unifi.yaml#L3)
 *which uses:*
--   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L295)
--   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L9)
+-   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L295)
+-   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L9)
 
-### [Port forward disable wireguard port forward when we get home](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/unifi.yaml#L22)
+### [Port forward disable wireguard port forward when we get home](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/unifi.yaml#L22)
 *which uses:*
--   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L295)
--   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L9)
+-   [binary_sensor.anybody_away](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L295)
+-   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L9)
 
-### [Port forward enable NAS port forward for nightly backup at 1:58am](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/unifi.yaml#L42)
+### [Port forward enable NAS port forward for nightly backup at 1:58am](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/unifi.yaml#L42)
 *which uses:*
--   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L9)
+-   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L9)
 
-### [Port forward disable NAS port forward for backup](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/unifi.yaml#L60)
+### [Port forward disable NAS port forward for backup](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/unifi.yaml#L60)
 *which uses:*
--   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L9)
+-   [shell_command.unifi_portfwd](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L9)
 
-### [Garage camera force reboot weekly](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/unifi.yaml#L79)
+### [Garage camera force reboot weekly](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/unifi.yaml#L79)
   garage cam kinda sucks and needs to be rebooted pretty often
 
 *which uses:*
--   [shell_command.unifi_powercycle](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/shell_commands.yaml#L10)
+-   [shell_command.unifi_powercycle](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/shell_commands.yaml#L10)
 
 [^ toc](#automations---table-of-contents)
 
-## [Vacation Mode](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/vacation.yaml)
-### [While on vacation & turn off all lights at 23:30](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/vacation.yaml#L3)
+## [Vacation Mode](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/vacation.yaml)
+### [While on vacation & turn off all lights at 23:30](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/vacation.yaml#L3)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/vacation.yaml#L15)
+### [Summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/vacation.yaml#L15)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/vacation.yaml#L43)
+### [Return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/vacation.yaml#L43)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/vacation.yaml#L69)
+### [Winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/vacation.yaml#L69)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
-### [Return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/vacation.yaml#L106)
+### [Return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/vacation.yaml#L106)
 *which uses:*
--   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L252)
+-   [binary_sensor.vacation_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L252)
 
 [^ toc](#automations---table-of-contents)
 
-## [Vacuum](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/vacuum.yaml)
-### [Start cleaning kitchen](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/vacuum.yaml#L3)
+## [Vacuum](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/vacuum.yaml)
+### [Start cleaning kitchen](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/vacuum.yaml#L3)
 *which uses:*
--   [input_select.vacuum_room](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_selects.yaml#L2)
--   [input_select.vacuum_room](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/input_selects.yaml#L2)
--   [script.vacuum_foyer](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L220)
--   [script.vacuum_kitchen](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/scripts.yaml#L211)
+-   [input_select.vacuum_room](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_selects.yaml#L2)
+-   [input_select.vacuum_room](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/input_selects.yaml#L2)
+-   [script.vacuum_foyer](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L220)
+-   [script.vacuum_kitchen](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/scripts.yaml#L211)
 
 [^ toc](#automations---table-of-contents)
 
-## [Christmas](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/xmas.yaml)
-### [Roof lights on (only when xmas boolean on)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/xmas.yaml#L3)
+## [Christmas](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/xmas.yaml)
+### [Roof lights on (only when xmas boolean on)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/xmas.yaml#L3)
 *which uses:*
--   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L355)
+-   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L355)
 
-### [Trees on (only when xmas boolean on) if occupied](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/xmas.yaml#L15)
+### [Trees on (only when xmas boolean on) if occupied](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/xmas.yaml#L15)
 *which uses:*
--   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L355)
+-   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L355)
 
-### [Turn off at 11pm (only when xmas boolean on)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/xmas.yaml#L30)
+### [Turn off at 11pm (only when xmas boolean on)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/xmas.yaml#L30)
 *which uses:*
--   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L355)
+-   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L355)
 
-### [Turn off when sleeping starts (only when xmas boolean on)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/xmas.yaml#L42)
+### [Turn off when sleeping starts (only when xmas boolean on)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/xmas.yaml#L42)
 *which uses:*
--   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L355)
--   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L268)
+-   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L355)
+-   [binary_sensor.sleep_status](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L268)
 
-### [Lights off/on with geolocation presence (only in Dec)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/xmas.yaml#L56)
+### [Lights off/on with geolocation presence (only in Dec)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/xmas.yaml#L56)
 *which uses:*
--   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L355)
+-   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L355)
 
-### [Turn off when laura gets in bed (only when xmas boolean on)](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/automation/xmas.yaml#L81)
+### [Turn off when laura gets in bed (only when xmas boolean on)](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/automation/xmas.yaml#L81)
 *which uses:*
--   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/0de896fa6d237329a5417a60fe5db41cfcb1e92d/includes/binary_sensors.yaml#L355)
+-   [binary_sensor.christmas_season](https://github.com/jongilmore/ha-personal/blob/931fbe0b8186c52d2ca6b2ee487fac4a5c50c2f8/includes/binary_sensors.yaml#L355)
 
 [^ toc](#automations---table-of-contents)
