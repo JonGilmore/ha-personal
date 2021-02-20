@@ -187,3 +187,15 @@
       entity_id:
         - light.lauras_lamp_lifx
         - light.jons_lamp_lifx
+#########################################
+- alias: "Lutron Scene: jons keypad all off pressed"
+  description: "the `all off` scene is triggered on jons keypad - also turn off the master motion lamps"
+  trigger:
+    - platform: event
+      event_type: lutron_event
+      event_data:
+        id: jons_keypad_all_off
+        action: single
+        full_id: master_bedroom_jons_keypad_all_off
+  action:
+    - service: script.master_off

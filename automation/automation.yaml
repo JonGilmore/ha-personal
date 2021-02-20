@@ -280,6 +280,7 @@
         {% endif %}
 ########################################
 - alias: "Automatic Lighting: mbr lighting template - on"
+  description: "dont trigger this between midnight and 6:00am"
   trigger:
     - platform: state
       entity_id:
@@ -290,6 +291,9 @@
     - condition: state
       entity_id: input_boolean.master_override
       state: "off"
+    - condition: time
+      before: "23:59:59"
+      after: "06:00:00"
   action:
     - service: homeassistant.turn_on
       data_template:
