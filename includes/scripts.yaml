@@ -467,5 +467,7 @@ master_off:
       entity_id:
         - light.master_entry_lamp
         - light.sitting_room_lamp
+        - light.jons_lamp_lifx
+        - light.lauras_lamp_lifx
     - service: scene.turn_on
       entity_id: scene.equipment_room_enclosure_device_001_ph_master_off

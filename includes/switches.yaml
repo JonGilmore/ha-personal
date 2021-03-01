@@ -3,11 +3,15 @@
   name: Master
   min_brightness: 20
   lights_ct:
-    - light.master_entry_lamp
-    - light.sitting_room_lamp
     - light.lauras_lamp_lifx
     - light.jons_lamp_lifx
     - light.master_bath_toekick
+- platform: circadian_lighting
+  name: Master2
+  min_brightness: 5
+  lights_ct:
+    - light.master_entry_lamp
+    - light.sitting_room_lamp
 - platform: circadian_lighting
   name: Master Bath
   min_brightness: 60
