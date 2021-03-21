@@ -973,7 +973,7 @@ views:
           method: state
         filter:
           include:
-            - entity_id: "/^.*jons_iphone_.*/"
+            - entity_id: "/^.*pixel_.*/"
           exclude:
             - state: "Unavailable"
         show_empty: false

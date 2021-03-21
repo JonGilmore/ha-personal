@@ -1082,33 +1082,8 @@
       data:
         entity_id: alert.garage_door_double
 #########################################
-- alias: "iOS Actions: lights off"
-  description: "all lights off from iOS widget"
-  trigger:
-    - platform: event
-      event_type: ios.action_fired
-      event_data:
-        actionID: 29FB1363-11EA-4769-A3F9-EA64C93FF17A
-        actionName: All Off
-        sourceDeviceID: jons_iphone
-        sourceDeviceName: Jon’s iPhone
-        sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
-        triggerSource: widget
-  action:
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
-#########################################
 - alias: "iOS Actions: toggle garage - single"
   trigger:
-    - platform: event
-      event_type: ios.action_fired
-      event_data:
-        actionID: 4ACC41D1-FDFE-4C4C-9198-C80B02E658A6
-        actionName: Single
-        sourceDeviceID: jons_iphone
-        sourceDeviceName: Jon’s iPhone
-        sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
-        triggerSource: widget
     - platform: event
       event_type: ios.action_fired
       event_data:
@@ -1122,32 +1097,8 @@
     - service: homeassistant.toggle
       entity_id: cover.garage_momentary_single
 #########################################
-- alias: "iOS Actions: toggle garage - double"
-  trigger:
-    - platform: event
-      event_type: ios.action_fired
-      event_data:
-        actionID: 0F5702C6-2109-41E0-B3B8-5A775E009813
-        actionName: Double
-        sourceDeviceID: jons_iphone
-        sourceDeviceName: Jon’s iPhone
-        sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
-        triggerSource: widget
-  action:
-    - service: homeassistant.toggle
-      entity_id: cover.garage_momentary_double
-#########################################
 - alias: "iOS Actions: unlock front door"
   trigger:
-    - platform: event
-      event_type: ios.action_fired
-      event_data:
-        actionID: 99745D88-445D-431E-8101-140E007BE22D
-        actionName: Unlock Front
-        sourceDeviceID: jons_iphone
-        sourceDeviceName: Jon’s iPhone
-        sourceDevicePermanentID: ACEC417E-C0EA-43BB-86E6-728F640BE0DD
-        triggerSource: widget
     - platform: event
       event_type: ios.action_fired
       event_data:
@@ -1167,10 +1118,11 @@
       topic: frigate/events
   condition:
     # - "{{ trigger.payload_json['after']['label'] == 'person' }}" # person only
+    # - "{{ trigger.payload_json['type'] == 'new' }}" # only for new events
+    # - "{{ trigger.payload_json['after']['entered_zones']|length > 0 }}" # only notify for objects that have entered a zone
     - "{{ 'far' in trigger.payload_json['before']['current_zones'] }}"
     - "{{ 'near' in trigger.payload_json['after']['entered_zones'] }}"
-    # - "{{ trigger.payload_json['after']['entered_zones']|length > 0 }}" # only notify for objects that have entered a zone
-    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_notification', 'last_triggered')) |int(0) ) > 45 }}" # rate limit
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
   action:
     - service: system_log.write
       data_template:
