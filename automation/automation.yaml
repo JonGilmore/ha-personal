@@ -829,6 +829,7 @@
       entity_id: input_boolean.alarm_notifier
 #########################################
 - alias: "Frigate: turn off driveway notifications because of user interaction"
+  description: "runs if a user wants to mute driveway notifications for 60m"
   trigger:
     - platform: event
       event_type: telegram_callback
@@ -1132,6 +1133,7 @@
       entity_id: lock.front_door_lock
 #########################################
 - alias: "Frigate: driveway notification"
+  description: "only notify for `new` events with a 90s rate limit, optionally mute notifications for 60m with telegram callback"
   trigger:
     - platform: mqtt
       topic: frigate/events
