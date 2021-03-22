@@ -827,7 +827,25 @@
         show_alert: true
     - service: input_boolean.turn_off
       entity_id: input_boolean.alarm_notifier
-########################################
+#########################################
+- alias: "Frigate: turn off driveway notifications because of user interaction"
+  trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: "/mutefrigatedriveway"
+  action:
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: "{{ trigger.event.data.id }}"
+        message: "Disabling notifications for {{ trigger }} for 60min"
+        show_alert: true
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.frigate_driveway_notifier
+    - delay: "00:60:00"
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.frigate_driveway_notifier
+#########################################
 # - alias: "Daisy: daisy cam photo every 45 minutes when armed away and kennel closed"
 #   trigger:
 #     - platform: state
@@ -926,6 +944,7 @@
         - binary_sensor.rain_sensor
         - device_tracker.jon_bt
         - device_tracker.laura_bt
+        - input_boolean.frigate_driveway_notifier
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state
@@ -1117,21 +1136,28 @@
     - platform: mqtt
       topic: frigate/events
   condition:
+    - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}" # only driveway camera
+    - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}" # only driveway camera
     # - "{{ trigger.payload_json['after']['label'] == 'person' }}" # person only
-    # - "{{ trigger.payload_json['type'] == 'new' }}" # only for new events
+    - "{{ trigger.payload_json['type'] == 'new' }}" # only for new events
     # - "{{ trigger.payload_json['after']['entered_zones']|length > 0 }}" # only notify for objects that have entered a zone
-    - "{{ 'far' in trigger.payload_json['before']['current_zones'] }}"
-    - "{{ 'near' in trigger.payload_json['after']['entered_zones'] }}"
+    # - "{{ 'far' in trigger.payload_json['before']['current_zones'] }}"
+    # - "{{ 'near' in trigger.payload_json['after']['entered_zones'] }}"
     - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
+    - condition: state
+      entity_id: input_boolean.frigate_driveway_notifier
+      state: "on"
   action:
     - service: system_log.write
       data_template:
         message: "{{trigger.payload_json}}"
-        level: error
+        level: info
     - service: notify.telegram_jon
       data_template:
         message: "A {{trigger.payload_json['after']['label']}} was detected."
         data:
+          inline_keyboard:
+            - "Mute driveway 60m:/mutefrigatedriveway"
           photo:
             - url: "http://192.168.45.249:5000/api/events/{{trigger.payload_json['after']['id']}}/thumbnail.jpg"
               caption: "A {{trigger.payload_json['after']['label']}} was detected on {{ trigger.payload_json['after']['camera'] }} camera"

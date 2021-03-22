@@ -15,5 +15,11 @@ party:
   name: Party?
 alarm_notifier:
   name: Alarm Notifier
+  initial: true
+  icon: mdi:alarm-bell
+frigate_driveway_notifier:
+  name: Frigate Driveway Notifier
+  initial: true
+  icon: mdi:cctv
 master_override:
   name: Master Lights Override
