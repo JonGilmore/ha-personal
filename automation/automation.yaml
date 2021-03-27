@@ -1143,8 +1143,7 @@
     # - "{{ trigger.payload_json['after']['label'] == 'person' }}" # person only
     - "{{ trigger.payload_json['type'] == 'new' }}" # only for new events
     # - "{{ trigger.payload_json['after']['entered_zones']|length > 0 }}" # only notify for objects that have entered a zone
-    # - "{{ 'far' in trigger.payload_json['before']['current_zones'] }}"
-    # - "{{ 'near' in trigger.payload_json['after']['entered_zones'] }}"
+    - "{{ 'driveway' in trigger.payload_json['before']['current_zones'] || 'near' in trigger.payload_json['after']['entered_zones'] }}"
     - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
     - condition: state
       entity_id: input_boolean.frigate_driveway_notifier
