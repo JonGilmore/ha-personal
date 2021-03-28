@@ -18,8 +18,6 @@
 !scripts/**
 !images
 !images/**
-!dwains-dashboard
-!dwains-dashboard/**
 !includes
 !includes/*.yaml
 
