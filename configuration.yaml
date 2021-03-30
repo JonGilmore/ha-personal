@@ -141,6 +141,8 @@ zone: !include includes/zones.yaml
 
 logger:
   default: error
+  logs:
+    custom_components.localtuya.common: fatal
 
 history:
 sun:
@@ -149,7 +151,6 @@ logbook:
 # stream:
 hacs:
   token: !secret hacs
-
 person:
 config:
 hassio:
