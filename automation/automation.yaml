@@ -25,6 +25,19 @@
                 {{ states.sensor.db_pic.state }}
               {% endif %}
 #########################################
+- alias: "Security: doorbell notification event capture and notify"
+  trigger:
+    - platform: event
+      event_type: doorbird_front_door_doorbell
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        title: "doorbell rang"
+        message: "doorbell rang"
+        data:
+          photo:
+            url: "{{ states.sensor.db_pic.state }}"
+#########################################
 - alias: "Security: front door line crossing or doorbell rang - occupied"
   description: "When its dark out & house occupied - foyer and exterior lights on"
   trigger:
@@ -911,15 +924,6 @@
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 #########################################
-- alias: "Security: doorbell notification event capture and notify"
-  trigger:
-    - platform: event
-      event_type: doorbird_front_door_doorbell
-  action:
-    - service: notify.telegram_jon
-      data:
-        message: "doorbell rang"
-#########################################
 # - alias: "Work: victorops notification - turn on light"
 #   trigger:
 #     - platform: template
@@ -1041,6 +1045,7 @@
     - service: browser_mod.close_popup
 #########################################
 - alias: "Presence: office speakers on/off with presence"
+  initial_state: false
   trigger:
     - platform: state
       entity_id: binary_sensor.office_occupancy
@@ -1138,16 +1143,16 @@
     - platform: mqtt
       topic: frigate/events
   condition:
-    - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}" # only driveway camera
-    - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}" # only driveway camera
-    # - "{{ trigger.payload_json['after']['label'] == 'person' }}" # person only
     - "{{ trigger.payload_json['type'] == 'new' }}" # only for new events
-    # - "{{ trigger.payload_json['after']['entered_zones']|length > 0 }}" # only notify for objects that have entered a zone
-    - "{{ 'near' in trigger.payload_json['after']['entered_zones'] }}"
+    - "{{ 'near' in trigger.payload_json['after']['entered_zones'] }}" # only for objects entering the `near` zone
     - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
-    - condition: state
+    - condition: state # make sure notifications havent been paused from an actionable notification
       entity_id: input_boolean.frigate_driveway_notifier
       state: "on"
+    - condition: or # only driveway camera
+      conditions:
+        - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"
+        - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}"
   action:
     - service: system_log.write
       data_template:

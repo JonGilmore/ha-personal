@@ -8,13 +8,10 @@
     event_data:
       event_type: created
   condition:
-    - condition: template # filename doesnt start with /share/trimmed-*
-      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
-    - condition: template # filename starts with /share/doorbell-*
-      value_template: "{{ trigger.event.data.path.startswith('/share/doorbell-') }}"
-    - condition: template # only notify once every 5 minutes at most
-      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_doorbell_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
-    - condition: or
+    - "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}" # filename doesnt start with /share/trimmed-*
+    - "{{ trigger.event.data.path.startswith('/share/doorbell-') }}" # filename starts with /share/doorbell-*
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_doorbell_person_detected', 'last_triggered')) |int(0) ) > 60 }}" # rate limit
+    - condition: or # sleeping or away
       conditions:
         - condition: state
           entity_id: binary_sensor.sleep_status
@@ -41,13 +38,10 @@
     event_data:
       event_type: created
   condition:
-    - condition: template # filename doesnt start with /share/trimmed-*
-      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
-    - condition: template # filename starts with /share/driveway-*
-      value_template: "{{ trigger.event.data.path.startswith('/share/driveway-') }}"
-    - condition: template # only notify once every 5 minutes at most
-      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_driveway_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
-    - condition: or
+    - "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}" # filename doesnt start with /share/trimmed-*
+    - "{{ trigger.event.data.path.startswith('/share/driveway-') }}" # filename starts with /share/driveway-*
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_driveway_person_detected', 'last_triggered')) |int(0) ) > 60 }}" # rate limit
+    - condition: or # sleeping or away
       conditions:
         - condition: state
           entity_id: binary_sensor.sleep_status
@@ -74,13 +68,10 @@
     event_data:
       event_type: created
   condition:
-    - condition: template # filename doesnt start with /share/trimmed-*
-      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
-    - condition: template # filename starts with /share/deck-*
-      value_template: "{{ trigger.event.data.path.startswith('/share/deck-') }}"
-    - condition: template # only notify once every 5 minutes at most
-      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_deck_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
-    - condition: or
+    - "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}" # filename doesnt start with /share/trimmed-*
+    - "{{ trigger.event.data.path.startswith('/share/deck-') }}" # filename starts with /share/deck-*
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_deck_person_detected', 'last_triggered')) |int(0) ) > 60 }}" # rate limit
+    - condition: or # sleeping or away
       conditions:
         - condition: state
           entity_id: binary_sensor.sleep_status
@@ -107,13 +98,10 @@
     event_data:
       event_type: created
   condition:
-    - condition: template # filename doesnt start with /share/trimmed-*
-      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
-    - condition: template # filename starts with /share/deckstairs-*
-      value_template: "{{ trigger.event.data.path.startswith('/share/deckstairs-') }}"
-    - condition: template # only notify once every 5 minutes at most
-      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_deckstairs_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
-    - condition: or
+    - "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}" # filename doesnt start with /share/trimmed-*
+    - "{{ trigger.event.data.path.startswith('/share/deckstairs-') }}" # filename starts with /share/deckstairs-*
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_deckstairs_person_detected', 'last_triggered')) |int(0) ) > 60 }}" # rate limit
+    - condition: or # sleeping or away
       conditions:
         - condition: state
           entity_id: binary_sensor.sleep_status
@@ -140,13 +128,10 @@
     event_data:
       event_type: created
   condition:
-    - condition: template # filename doesnt start with /share/trimmed-*
-      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
-    - condition: template # filename starts with /share/garage-*
-      value_template: "{{ trigger.event.data.path.startswith('/share/garage-') }}"
-    - condition: template # only notify once every 5 minutes at most
-      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_garage_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
-    - condition: or
+    - "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}" # filename doesnt start with /share/trimmed-*
+    - "{{ trigger.event.data.path.startswith('/share/garage-') }}" # filename starts with /share/garage-*
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_garage_person_detected', 'last_triggered')) |int(0) ) > 60 }}" # rate limit
+    - condition: or # sleeping or away
       conditions:
         - condition: state
           entity_id: binary_sensor.sleep_status
@@ -173,13 +158,10 @@
     event_data:
       event_type: created
   condition:
-    - condition: template # filename doesnt start with /share/trimmed-*
-      value_template: "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}"
-    - condition: template # filename starts with /share/kitchen-*
-      value_template: "{{ trigger.event.data.path.startswith('/share/kitchen-') }}"
-    - condition: template # only notify once every 5 minutes at most
-      value_template: "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_kitchen_person_detected', 'last_triggered')) |int(0) ) > 60 }}"
-    - condition: or
+    - "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}" # filename doesnt start with /share/trimmed-*
+    - "{{ trigger.event.data.path.startswith('/share/kitchen-') }}" # filename starts with /share/kitchen-*
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_kitchen_person_detected', 'last_triggered')) |int(0) ) > 60 }}" # rate limit
+    - condition: or # sleeping or away
       conditions:
         - condition: state
           entity_id: binary_sensor.sleep_status
