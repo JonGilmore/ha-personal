@@ -94,3 +94,22 @@
         mac: !secret unifi_poe48_macaddr
         port: 14
         cmd: "power-cycle"
+#########################################
+- alias: "Unifi: theatre ap reboot"
+  description: "testing an access point reboot"
+  trigger:
+    platform: time
+    at: "3:55:00"
+  condition:
+    - condition: time
+      weekday:
+        - sun
+  action:
+    - service: shell_command.unifi_powercycle_device
+      data:
+        username: !secret unifi_usr
+        password: !secret unifi_pwd
+        baseurl: !secret unifi_ip
+        mac: !secret unifi_aptheatre_macaddr
+        reboot_type: "soft"
+        cmd: "restart"

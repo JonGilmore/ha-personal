@@ -44,4 +44,21 @@ powercycleport() {
 EOF
 }
 
+powercycledevice() {
+  # authenticate against unifi controller
+  ${curl_cmd} -H 'Content-Type: application/json' -D ${headers} -d "{\"username\":\"$1\", \"password\":\"$2\"}" https://${3}/api/auth/login
+
+  # grab the `X-CSRF-Token` and strip the newline (added when upgraded to controller 6.1.26)
+  csrf="$(awk -v FS=': ' '/^X-CSRF-Token/{print $2}' "${headers}" | tr -d '\r')"
+
+  # cycle unifi device
+  ${curl_cmd} -k -X POST https://${3}/proxy/network/api/s/default/cmd/devmgr -H "Content-Type: application/json" -H "X-CSRF-Token: ${csrf}" -d @- <<-EOF
+    {
+        "mac":"$4",
+        "reboot_type":"$5",
+        "cmd":"$6"
+    }
+EOF
+}
+
 "$@"
