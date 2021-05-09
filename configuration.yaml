@@ -136,6 +136,7 @@ script: !include includes/scripts.yaml
 sensor: !include includes/sensors.yaml
 shell_command: !include includes/shell_commands.yaml
 switch: !include includes/switches.yaml
+template: !include includes/template.yaml
 timer: !include includes/timers.yaml
 zone: !include includes/zones.yaml
 

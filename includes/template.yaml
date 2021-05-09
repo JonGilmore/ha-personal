@@ -1,0 +1,3 @@
+- binary_sensor:
+    - name: "Has Unavailable States"
+      state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
