@@ -262,3 +262,68 @@
 #               {% elif trigger.entity_id == 'binary_sensor.doorbell_person_motion' %}
 #                 {{ states.sensor.db_pic.state }}
 #               {% endif %}
+#########################################
+- alias: "Frigate: disable driveway notifications because of user interaction"
+  description: "options to mute notifications for 60m or the rest of the day"
+  trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: "/mutefrigatedriveway60"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: "/mutefrigatedrivewayday"
+  action:
+    - choose:
+        - conditions: "{{ trigger.event.data.command == '\/mutefrigatedriveway60' }}"
+          sequence:
+            - service: telegram_bot.answer_callback_query
+              data_template:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Disabling notifications for {{ trigger }} for 60min"
+                show_alert: true
+            - service: input_boolean.turn_off
+              entity_id: input_boolean.frigate_driveway_notifier
+            - delay: "00:60:00"
+            - service: input_boolean.turn_on
+              entity_id: input_boolean.frigate_driveway_notifier
+      default:
+        - service: telegram_bot.answer_callback_query
+          data_template:
+            callback_query_id: "{{ trigger.event.data.id }}"
+            message: "Disabling notifications for {{ trigger }} for the remainder of the day"
+            show_alert: true
+        - service: input_boolean.turn_off
+          entity_id: input_boolean.frigate_driveway_notifier
+#########################################
+- alias: "Frigate: driveway notification"
+  description: "only notify for `new` events with a 90s rate limit, optionally mute notifications for 60m with telegram callback"
+  trigger:
+    - platform: mqtt
+      topic: frigate/events
+  condition:
+    - "{{ trigger.payload_json['type'] == 'new' }}" # only for new events
+    - "{{ 'near' in trigger.payload_json['after']['entered_zones'] }}" # only for objects entering the `near` zone
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
+    - condition: state # make sure notifications havent been paused from an actionable notification
+      entity_id: input_boolean.frigate_driveway_notifier
+      state: "on"
+    - condition: or # only driveway camera
+      conditions:
+        - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"
+        - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}"
+  action:
+    - service: system_log.write
+      data_template:
+        message: "{{trigger.payload_json}}"
+        level: info
+    - service: notify.telegram_jon
+      data_template:
+        message: "A {{trigger.payload_json['after']['label']}} was detected."
+        data:
+          inline_keyboard:
+            - "60m:/mutefrigatedriveway60, Rest of day:/mutefrigatedrivewayday"
+          photo:
+            - url: "http://192.168.45.249:5000/api/events/{{trigger.payload_json['after']['id']}}/thumbnail.jpg"
+              caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
