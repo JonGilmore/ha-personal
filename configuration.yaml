@@ -35,12 +35,6 @@ frontend:
 lovelace:
   mode: yaml
 system_health:
-circadian_lighting:
-  min_colortemp: 2700
-  max_colortemp: 5100
-  sunrise_offset: 01:00:00
-  interval: 420
-  # sunset_offset:
 
 influxdb:
   host: localhost
@@ -118,6 +112,7 @@ telegram_bot:
 ####################################################
 #                     Includes                     #
 ####################################################
+adaptive_lighting: !include includes/adaptive_lighting.yaml
 alert: !include includes/alerts.yaml
 automation: !include_dir_merge_list automation
 binary_sensor: !include includes/binary_sensors.yaml
