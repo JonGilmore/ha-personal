@@ -77,7 +77,7 @@ switch.basement_fan:
   friendly_name: Workshop Fan
 sensor.bsmt_temperature:
   friendly_name: Freeze Alarm
-sensor.counter001:
+sensor.ctr_beep:
   friendly_name: Beep Status
 switch.front_door_light_on:
   friendly_name: Doorbird IR

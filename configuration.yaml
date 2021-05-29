@@ -6,6 +6,8 @@ homeassistant:
   elevation: !secret ha_elevation
   unit_system: imperial
   time_zone: !secret ha_tz
+  external_url: !secret ext_hass_url
+  internal_url: !secret int_hass_url
   customize: !include customize.yaml
   allowlist_external_dirs:
     - "/tmp"
@@ -16,9 +18,10 @@ homeassistant:
     local: /media
 
 http:
-  base_url: !secret hass_url
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
+  login_attempts_threshold: 3
+  ip_ban_enabled: true
 updater:
   reporting: false
 tts:
@@ -77,10 +80,6 @@ elkm1:
     enabled: false
   setting:
     enabled: false
-
-# hass_opensprinkler:
-#   host: !secret os_host
-#   password: !secret os_passwd
 
 # sleepiq:
 #   username: !secret sleep_usr

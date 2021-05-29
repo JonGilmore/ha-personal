@@ -93,12 +93,12 @@ views:
         show_name: false
         show_header_toggle: false
         entities:
-          - entity: alarm_control_panel.area001
+          - entity: alarm_control_panel.house
             type: custom:multiple-entity-row
             name: Alarm
             show_state: false
             entities:
-              - entity: alarm_control_panel.area001
+              - entity: alarm_control_panel.house
       - type: weather-forecast
         entity: weather.dark_sky
       - type: vertical-stack
@@ -1053,7 +1053,7 @@ views:
     cards:
       - id: alarmPanel
         type: alarm-panel
-        entity: alarm_control_panel.area001
+        entity: alarm_control_panel.house
         name: !secret name
         states:
           - arm_home

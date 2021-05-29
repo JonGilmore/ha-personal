@@ -245,13 +245,13 @@
     vacation_status:
       friendly_name: "Vacation?"
       device_class: occupancy
-      value_template: "{{ states.alarm_control_panel.area001.attributes['armed_status'] == 'armed_to_vacation' }}"
+      value_template: "{{ states.alarm_control_panel.house.attributes['armed_status'] == 'armed_to_vacation' }}"
     alarm_occupancy_status:
       friendly_name: "Occupied-Alarm?"
       device_class: occupancy
       value_template: >-
-        {{ not (states.alarm_control_panel.area001.attributes["armed_status"] == "armed_to_vacation"
-        or states.alarm_control_panel.area001.attributes["armed_status"] == "armed_away") }}
+        {{ not (states.alarm_control_panel.house.attributes["armed_status"] == "armed_to_vacation"
+        or states.alarm_control_panel.house.attributes["armed_status"] == "armed_away") }}
     cell_occupancy_status:
       friendly_name: "Occupied-Cell?"
       device_class: occupancy
@@ -261,8 +261,8 @@
     sleep_status:
       friendly_name: "Sleeping?"
       value_template: >-
-        {{ states.alarm_control_panel.area001.attributes["armed_status"] == "armed_to_night_instant"
-        or states.alarm_control_panel.area001.attributes["armed_status"] == "armed_to_night" }}
+        {{ states.alarm_control_panel.house.attributes["armed_status"] == "armed_to_night_instant"
+        or states.alarm_control_panel.house.attributes["armed_status"] == "armed_to_night" }}
     light_inside:
       friendly_name: "light inside?"
       device_class: light
