@@ -9,11 +9,11 @@ homeassistant:
   external_url: !secret ext_hass_url
   internal_url: !secret int_hass_url
   customize: !include customize.yaml
+  packages: !include_dir_named packages
   allowlist_external_dirs:
     - "/tmp"
     - "/config/www"
     - "/share"
-  packages: !include_dir_named packages
   media_dirs:
     local: /media
 
