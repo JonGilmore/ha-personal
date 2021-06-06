@@ -1,13 +1,10 @@
 ---
-- alias: "HVAC: set cooling temps in the morning (if were not on vacation and somebody is home"
+- alias: "HVAC: set temps in the morning (if were not on vacation and somebody is home"
   trigger:
     - platform: time
       at: "04:30:00"
   condition:
     - condition: state
-      entity_id: climate.main_thermostat
-      state: cool
-    - condition: state
       entity_id: binary_sensor.vacation_status
       state: "off"
     - condition: or
@@ -19,40 +16,20 @@
           entity_id: person.laura
           state: "home"
   action:
-    - service: scene.turn_on
-      entity_id: scene.cool_77_auto
-- alias: "HVAC: set heating temps in the morning (if we're not on vacation and somebody is home)"
-  trigger:
-    platform: time
-    at: "04:30:00"
-  condition:
-    - condition: state
-      entity_id: climate.main_thermostat
-      state: heat
-    - condition: state
-      entity_id: binary_sensor.vacation_status
-      state: "off"
-    - condition: or
-      conditions:
-        - condition: state
-          entity_id: person.jon
-          state: "home"
-        - condition: state
-          entity_id: person.laura
-          state: "home"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.heat_72_auto
+    - choose:
+        - conditions: "{{ is_state('climate.main_thermostat'), 'cool' }}"
+          sequence:
+            - service: scene.turn_on
+              entity_id: scene.cool_76_auto
+      default:
+        - service: scene.turn_on
+          entity_id: scene.heat_72_auto
 #########################################
-# set the temperature back for work ONLY if we're not on vacation AND both people are not_home
-- alias: "HVAC: set back cooling temps at 8am only if were not on vacation and nobody is home"
+- alias: "HVAC: set back temps at 8am only if were not on vacation and nobody is home"
   trigger:
     platform: time
     at: "08:00:00"
   condition:
-    - condition: state
-      entity_id: climate.main_thermostat
-      state: cool
     - condition: state
       entity_id: binary_sensor.vacation_status
       state: "off"
@@ -65,89 +42,48 @@
           entity_id: person.laura
           state: "not_home"
   action:
-    - service: scene.turn_on
-      entity_id: scene.cool_78_auto
-- alias: "HVAC: set back heating temps at 8am only if were not on vacation and nobody is home"
-  trigger:
-    platform: time
-    at: "08:00:00"
-  condition:
-    - condition: state
-      entity_id: climate.main_thermostat
-      state: heat
-    - condition: state
-      entity_id: binary_sensor.vacation_status
-      state: "off"
-    - condition: and
-      conditions:
-        - condition: state
-          entity_id: person.jon
-          state: "not_home"
-        - condition: state
-          entity_id: person.laura
-          state: "not_home"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.heat_67_auto
+    - choose:
+        - conditions: "{{ is_state('climate.main_thermostat'), 'cool' }}"
+          sequence:
+            - service: scene.turn_on
+              entity_id: scene.cool_78_auto
+      default:
+        - service: scene.turn_on
+          entity_id: scene.heat_67_auto
 #########################################
-# (probably) getting home from work (or soon), make sure were not on vacation, and set the temps to normal
-- alias: "HVAC: home from work (4pm) & set cooling temps to normal (only when were not on vacation)"
+- alias: "HVAC: home from work (4pm) & set temps to normal (only when were not on vacation)"
   trigger:
     platform: time
     at: "16:00:00"
   condition:
     - condition: state
-      entity_id: climate.main_thermostat
-      state: cool
-    - condition: state
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: scene.turn_on
-      entity_id: scene.cool_77_auto
-- alias: "HVAC: home from work (4pm) & set heating temps to normal (only when were not on vacation)"
-  trigger:
-    platform: time
-    at: "16:00:00"
-  condition:
-    - condition: state
-      entity_id: climate.main_thermostat
-      state: heat
-    - condition: state
-      entity_id: binary_sensor.vacation_status
-      state: "off"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.heat_72_auto
+    - choose:
+        - conditions: "{{ is_state('climate.main_thermostat'), 'cool' }}"
+          sequence:
+            - service: scene.turn_on
+              entity_id: scene.cool_76_auto
+      default:
+        - service: scene.turn_on
+          entity_id: scene.heat_72_auto
 #########################################
-# when we start sleeping, and we're not on vacation, set the temps back
-- alias: "HVAC: when we start sleeping set the thermostats back (for cooling)"
+- alias: "HVAC: start sleeping set the thermostats back"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleep_status
       to: "on"
   condition:
     - condition: state
-      entity_id: climate.main_thermostat
-      state: cool
-    - condition: state
       entity_id: binary_sensor.vacation_status
       state: "off"
   action:
-    - service: scene.turn_on
-      entity_id: scene.cool_78_auto
-- alias: "HVAC: when we start sleeping set the thermostats back (for heating)"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.sleep_status
-      to: "on"
-  condition:
-    - condition: state
-      entity_id: climate.main_thermostat
-      state: heat
-    - condition: state
-      entity_id: binary_sensor.vacation_status
-      state: "off"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.heat_70_auto
+    - choose:
+        - conditions: "{{ is_state('climate.main_thermostat'), 'cool' }}"
+          sequence:
+            - service: scene.turn_on
+              entity_id: scene.cool_78_auto
+      default:
+        - service: scene.turn_on
+          entity_id: scene.heat_70_auto
