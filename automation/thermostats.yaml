@@ -7,17 +7,12 @@
     - condition: state
       entity_id: binary_sensor.vacation_status
       state: "off"
-    - condition: or
-      conditions:
-        - condition: state
-          entity_id: person.jon
-          state: "home"
-        - condition: state
-          entity_id: person.laura
-          state: "home"
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "on"
   action:
     - choose:
-        - conditions: "{{ is_state('climate.main_thermostat'), 'cool' }}"
+        - conditions: "{{ is_state('climate.main_thermostat', 'cool') }}"
           sequence:
             - service: scene.turn_on
               entity_id: scene.cool_76_auto
@@ -33,17 +28,12 @@
     - condition: state
       entity_id: binary_sensor.vacation_status
       state: "off"
-    - condition: and
-      conditions:
-        - condition: state
-          entity_id: person.jon
-          state: "not_home"
-        - condition: state
-          entity_id: person.laura
-          state: "not_home"
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "off"
   action:
     - choose:
-        - conditions: "{{ is_state('climate.main_thermostat'), 'cool' }}"
+        - conditions: "{{ is_state('climate.main_thermostat', 'cool') }}"
           sequence:
             - service: scene.turn_on
               entity_id: scene.cool_78_auto
@@ -61,7 +51,7 @@
       state: "off"
   action:
     - choose:
-        - conditions: "{{ is_state('climate.main_thermostat'), 'cool' }}"
+        - conditions: "{{ is_state('climate.main_thermostat', 'cool') }}"
           sequence:
             - service: scene.turn_on
               entity_id: scene.cool_76_auto
@@ -80,10 +70,10 @@
       state: "off"
   action:
     - choose:
-        - conditions: "{{ is_state('climate.main_thermostat'), 'cool' }}"
+        - conditions: "{{ is_state('climate.main_thermostat', 'cool') }}"
           sequence:
             - service: scene.turn_on
-              entity_id: scene.cool_78_auto
+              entity_id: scene.cool_77_auto
       default:
         - service: scene.turn_on
           entity_id: scene.heat_70_auto

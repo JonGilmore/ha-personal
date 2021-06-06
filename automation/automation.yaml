@@ -44,7 +44,7 @@
     - service: homeassistant.turn_on
       entity_id: switch.exterior_foyer, switch.exterior_cans
     - choose:
-        - conditions: "{{ is_state('binary_sensor.alarm_occupancy_status'), 'on' }}"
+        - conditions: "{{ is_state('binary_sensor.alarm_occupancy_status', 'on') }}"
           sequence:
             - service: script.popup_camera
               data:
