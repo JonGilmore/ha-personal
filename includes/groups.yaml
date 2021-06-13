@@ -27,8 +27,8 @@ interior_lights:
     - light.basement_theater
     - light.basement_theater_front_lamp
     - light.evelyns_room_lamp
-    - light.craftroom_cans
-    - light.craftroom_craftroom_fan
+    - light.evelyns_room_cans
+    - light.evelyns_room_fan
     - light.dining_room_cans
     - light.dining_room_chandelier
     - switch.exterior_foyer
@@ -96,8 +96,8 @@ all_lights:
     - light.basement_theater
     - light.basement_theater_front_lamp
     - light.evelyns_room_lamp
-    - light.craftroom_cans
-    - light.craftroom_craftroom_fan
+    - light.evelyns_room_cans
+    - light.evelyns_room_fan
     - light.dining_room_cans
     - light.dining_room_chandelier
     - switch.exterior_cans
@@ -209,7 +209,7 @@ main_floor_lights:
 upstairs_lights:
   name: Upstairs Lights
   entities:
-    - light.craftroom_cans
+    - light.evelyns_room_cans
     - switch.jack_and_jill_light
     - switch.jack_and_jill_lights
     - light.loft_cans
@@ -248,7 +248,7 @@ all_fans:
     - switch.princess_toilet_fan
     - light.second_bedroom_fan
     - switch.jack_and_jill_fan
-    - light.craftroom_craftroom_fan
+    - light.evelyns_room_fan
     - switch.master_bedroom_fan
     - light.master_bedroom_master_fan
     - switch.master_toilet_toilet_fan

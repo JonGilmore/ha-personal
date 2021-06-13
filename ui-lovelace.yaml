@@ -1009,24 +1009,24 @@ views:
   ##########################################
   # BATTERY TAB
   ##########################################
-  - title: Battery Devices
-    id: battery_devices
-    icon: mdi:battery-charging-wireless-90
-    cards:
-      - type: "custom:group-card"
-        card:
-          type: entities
-          title: Battery Status
-          show_header_toggle: false
-        group: group.battery_status
-      - type: "custom:group-card"
-        card:
-          type: entities
-          title: Battery Alert
-          show_header_toggle: false
-        group: group.battery_alert
-      - type: custom:search-card
-        max_results: 10
+  # - title: Battery Devices
+  #   id: battery_devices
+  #   icon: mdi:battery-charging-wireless-90
+  #   cards:
+  #     - type: "custom:group-card"
+  #       card:
+  #         type: entities
+  #         title: Battery Status
+  #         show_header_toggle: false
+  #       group: group.battery_status
+  #     - type: "custom:group-card"
+  #       card:
+  #         type: entities
+  #         title: Battery Alert
+  #         show_header_toggle: false
+  #       group: group.battery_alert
+  #     - type: custom:search-card
+  #       max_results: 10
 
   ##########################################
   # GRAPH TAB

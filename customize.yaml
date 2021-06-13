@@ -65,8 +65,8 @@ switch.exterior_lights:
   friendly_name: Backyard Uplights
 switch.master_bedroom_fan:
   friendly_name: Master Bath Fan
-light.craftroom_craftroom_fan:
-  friendly_name: Craftroom Fan
+light.evelyns_room_fan:
+  friendly_name: Evelyns Fan
 switch.office_lights:
   friendly_name: Desk Lights
 switch.princess_light:

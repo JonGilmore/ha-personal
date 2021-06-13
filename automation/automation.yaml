@@ -869,8 +869,6 @@
       entity_id:
         - sensor.public_ip
         - binary_sensor.rain_sensor
-        - device_tracker.jon_bt
-        - device_tracker.laura_bt
         - input_boolean.frigate_driveway_notifier
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
@@ -895,14 +893,14 @@
       to: "Disconnected"
     - platform: numeric_state
       entity_id:
-        - sensor.keypad004
+        - sensor.basement_keypad
         - sensor.master_entry_temperature
       above: 84
       for:
         minutes: 15
     - platform: numeric_state
       entity_id:
-        - sensor.keypad004
+        - sensor.basement_keypad
         - sensor.master_entry_temperature
       below: 55
       for:
