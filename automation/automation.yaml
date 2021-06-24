@@ -846,22 +846,22 @@
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 #########################################
-# - alias: "Work: victorops notification - turn on light"
-#   trigger:
-#     - platform: template
-#       value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel_3_ariela_notification_grabber_sensor.attributes['packageName'] }}"
-#   condition:
-#     - condition: template
-#       value_template: "{{ not is_state('sensor.period_of_day', 'day') }}"
-#     - condition: state
-#       entity_id: person.jon
-#       state: "home"
-#   action:
-#     - service: notify.telegram_jon
-#       data:
-#         message: "ALERT! Work page"
-#     - service: homeassistant.turn_on
-#       entity_id: light.master_bedroom_jons_lamp
+- alias: "Work: victorops notification - notify"
+  description: "if its not daytime and Jon is home, also turn on his lamp"
+  trigger:
+    - platform: template
+      value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel5_last_notification.attributes['package'] }}"
+  action:
+    - service: notify.telegram_jon
+      data:
+        message: "ALERT! Work page: {{ states.sensor.pixel5_last_notification.attributes['android.text'] }}"
+    - choose:
+        - conditions: "{{ not is_state('sensor.period_of_day', 'day') and is_state('person.jon', 'home') }}"
+          sequence:
+            - service: lifx.set_state
+              data:
+                entity_id: light.jons_lamp_lifx
+                power: true
 #########################################
 - alias: "Utility: general notifications"
   trigger:
@@ -948,21 +948,6 @@
         object_id: all_locks
         name: All Locks
         types: "lock"
-#########################################
-- alias: "Security: popup camera"
-  trigger:
-    - platform: state
-      entity_id: light.jons_lamp_lifx
-      to: "on"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: light.wallpanel
-    - service: script.popup_camera
-      data:
-        deviceID: "37a201ed-e63fb778"
-        camera: "camera.front_door_live"
-    - delay: "00:00:30"
-    - service: browser_mod.close_popup
 #########################################
 - alias: "Presence: office speakers on/off with presence"
   initial_state: false
