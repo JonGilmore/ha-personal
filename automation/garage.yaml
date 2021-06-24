@@ -33,23 +33,24 @@
 - alias: "Garage: either door is open for 10min & notify & kill heat if it is on"
   trigger:
     - platform: state
-      entity_id: sensor.single_garage
+      entity_id:
+        - sensor.single_garage
+        - sensor.double_garage
       to: "Violated"
       for:
         minutes: 10
-    - platform: state
-      entity_id: sensor.double_garage
-      to: "Violated"
-      for:
-        minutes: 10
-  condition:
-    - condition: state
-      entity_id: climate.garage_thermostat
-      state: "heat"
   action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "Temperature Alert!"
-        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}, current temperature is {{ states('sensor.garage_temperature') }}"
-    - service: climate.turn_off
-      entity_id: climate.garage_thermostat
+    - choose:
+        - conditions: "{{ is_state('climate.garage_thermostat', 'heat') }}"
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                title: "Temperature Alert!"
+                message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}, current temperature is {{ states('sensor.garage_temperature') }}"
+            - service: climate.turn_off
+              entity_id: climate.garage_thermostat
+      default:
+        - service: notify.telegram_jon
+          data_template:
+            title: "Garage open!"
+            message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}"
