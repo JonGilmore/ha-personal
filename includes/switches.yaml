@@ -21,6 +21,8 @@
 # app="lolminer"
 
 # function start {
+#     # perform GPU tuning/etc here
+#     sudo /root/setup.sh
 #     if state; then
 #         echo "$app is already running: $pid"
 #         exit 0
@@ -35,7 +37,7 @@
 #     if state; then
 #         echo "$app running, stopping $pid"
 #         kill $pid
-#         # sudo shutdown -h now
+#         sudo shutdown -h now
 #     else
 #         echo "$app already stopped"
 #         exit 0

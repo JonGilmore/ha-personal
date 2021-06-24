@@ -213,6 +213,7 @@ views:
         title: Equipment
         show_header_toggle: false
         entities:
+          - entity: switch.mine_crypto
           - entity: switch.water_main_shut_off
             type: custom:multiple-entity-row
             name: Water Main
