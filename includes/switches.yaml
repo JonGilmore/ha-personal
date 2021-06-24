@@ -8,3 +8,10 @@
       command_state: !secret basement_tablet_screen_state
       value_template: "{{ value == 'on' }}"
       friendly_name: basement tablet screen
+- platform: command_line
+  switches:
+    mine_crypto:
+      command_on: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh start"
+      command_off: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh stop"
+      command_state: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh state"
+      friendly_name: Mine Crypto
