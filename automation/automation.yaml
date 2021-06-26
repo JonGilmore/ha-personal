@@ -756,6 +756,10 @@
           - lock.garage_door_lock
           - lock.front_door_lock
     - service: script.alarm
+    - service: notify.mobile_app_lauras_iphone
+      data:
+        title: "Fire alarm active"
+        message: "check the alarm, fire detected"
 #########################################
 - alias: "Alarm: burglar active & lights on & send videos & repeat notifications"
   trigger:
@@ -1019,7 +1023,7 @@
         actionName: Single Garage
         sourceDeviceID: lauras_iphone
         sourceDeviceName: Lauras iPhone
-        sourceDevicePermanentID: E40B31D8-8192-4C4A-AFAC-AD5ECC0F9BD8
+        sourceDevicePermanentID: !secret ios_id
         triggerSource: widget
   action:
     - service: homeassistant.toggle
@@ -1034,7 +1038,7 @@
         actionName: Unlock Front
         sourceDeviceID: lauras_iphone
         sourceDeviceName: Lauras iPhone
-        sourceDevicePermanentID: E40B31D8-8192-4C4A-AFAC-AD5ECC0F9BD8
+        sourceDevicePermanentID: !secret ios_id
         triggerSource: widget
   action:
     - service: lock.unlock
