@@ -297,6 +297,8 @@
   name: HA Version
   scan_interval: 86400
 
+- platform: websocket_api
+
 - platform: command_line
   name: Public IP
   command: "dig +short myip.opendns.com @resolver1.opendns.com"
