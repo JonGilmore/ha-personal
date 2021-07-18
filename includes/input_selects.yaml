@@ -7,3 +7,10 @@ vacuum_room:
     - foyer
   initial: Select Input
   icon: mdi:robot-vacuum
+camera_view:
+  name: Camera view
+  options:
+    - live
+    - last
+  initial: live
+  icon: mdi:camera

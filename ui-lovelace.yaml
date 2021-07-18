@@ -43,6 +43,8 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-layout-card/layout-card.js
     type: module
+  - url: /hacsfiles/lovelace-state-switch/state-switch.js
+    type: module
 
 decluttering_templates:
   cam_small:
@@ -348,54 +350,88 @@ views:
     id: camera
     icon: mdi:camera
     cards:
-      - type: picture-glance
-        camera_image: camera.driveway
-        title: Exterior
+      - type: entities
         entities:
-          - scene.equipment_room_enclosure_device_001_ph_sunset1
-      - type: picture-glance
-        camera_image: camera.front_door
-        title: Front Door
-        entities:
-          - scene.equipment_room_enclosure_device_001_ph_sunset1
-      - type: picture-glance
-        camera_image: camera.garage
-        title: Garage
-        entities:
-          - light.mudroom_garage_lights
-      - type: picture-glance
-        camera_image: camera.daisy
-        title: Daisy
-        entities:
-          - switch.pulte_planning_center_lauras_office
-          - light.pulte_planning_center_lamp
-      - type: picture-glance
-        camera_image: camera.deck
-        title: Deck
-        entities:
-          - switch.exterior_posts
-      - type: picture-glance
-        camera_image: camera.deckstairs
-        title: DeckStairs
-        entities:
-          - switch.exterior_posts
-      - type: picture-glance
-        camera_image: camera.front_door_live
-        title: Doorbell
-        entities:
-          - scene.equipment_room_enclosure_device_001_ph_sunset1
-      - type: picture-glance
-        camera_image: camera.kitchen
-        title: Kitchen
-        entities:
-          - sensor.kitchen_pir
-          - scene.equipment_room_enclosure_device_001_ph_main_off
-          - scene.equipment_room_enclosure_device_001_ph_main_on
-      - type: picture-glance
-        camera_image: camera.loft
-        title: Kitchen
-        entities:
-          - light.loft_lamp
+          - input_select.camera_view
+      - type: custom:state-switch
+        entity: input_select.camera_view
+        states:
+          live:
+            type: vertical-stack
+            cards:
+              - type: picture-glance
+                camera_image: camera.driveway
+                title: Exterior
+                entities:
+                  - scene.equipment_room_enclosure_device_001_ph_sunset1
+              - type: picture-glance
+                camera_image: camera.front_door
+                title: Front Door
+                entities:
+                  - scene.equipment_room_enclosure_device_001_ph_sunset1
+              - type: picture-glance
+                camera_image: camera.garage
+                title: Garage
+                entities:
+                  - light.mudroom_garage_lights
+              - type: picture-glance
+                camera_image: camera.daisy
+                title: Daisy
+                entities:
+                  - switch.pulte_planning_center_lauras_office
+                  - light.pulte_planning_center_lamp
+              - type: picture-glance
+                camera_image: camera.deck
+                title: Deck
+                entities:
+                  - switch.exterior_posts
+              - type: picture-glance
+                camera_image: camera.deckstairs
+                title: DeckStairs
+                entities:
+                  - switch.exterior_posts
+              - type: picture-glance
+                camera_image: camera.front_door_live
+                title: Doorbell
+                entities:
+                  - scene.equipment_room_enclosure_device_001_ph_sunset1
+              - type: picture-glance
+                camera_image: camera.kitchen
+                title: Kitchen
+                entities:
+                  - sensor.kitchen_pir
+                  - scene.equipment_room_enclosure_device_001_ph_main_off
+                  - scene.equipment_room_enclosure_device_001_ph_main_on
+              - type: picture-glance
+                camera_image: camera.loft
+                title: Kitchen
+                entities:
+                  - light.loft_lamp
+          last:
+            type: vertical-stack
+            cards:
+              - type: picture-glance
+                camera_image: camera.driveway_person
+                entities: []
+              - type: picture-glance
+                camera_image: camera.deck_person
+                entities: []
+              - type: picture-glance
+                camera_image: camera.deckstairs_person
+                entities: []
+              - type: picture-glance
+                camera_image: camera.doorbell_person
+                entities: []
+              - type: picture-glance
+                camera_image: camera.garage_person
+                entities: []
+              - type: picture-glance
+                camera_image: camera.kitchen_person
+                entities: []
+              - type: picture-glance
+                camera_image: camera.loft_person
+                entities: []
+
       # - type: custom:decluttering-card
       #   template: cam_history
       #   variables:
