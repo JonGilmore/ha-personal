@@ -401,6 +401,16 @@
   state_topic: "rtl_433/Acurite-986/37649"
   unit_of_measurement: "°F"
   value_template: "{{ value_json.temperature_F }}"
+- platform: mqtt
+  name: Bar Freezer Temperature
+  state_topic: "rtl_433/Acurite-986/50597"
+  unit_of_measurement: "°F"
+  value_template: "{{ value_json.temperature_F }}"
+- platform: mqtt
+  name: Bar Fridge Temperature
+  state_topic: "rtl_433/Acurite-986/17933"
+  unit_of_measurement: "°F"
+  value_template: "{{ value_json.temperature_F }}"
 
 # rtl_915 sensors
 - platform: mqtt

@@ -459,6 +459,20 @@
   device_class: battery
   value_template: "{{ value_json.battery_ok }}"
 - platform: mqtt
+  name: Bar Freezer Battery
+  state_topic: "rtl_433/Acurite-986/50597"
+  payload_on: "0"
+  payload_off: "1"
+  device_class: battery
+  value_template: "{{ value_json.battery_ok }}"
+- platform: mqtt
+  name: Bar Fridge Battery
+  state_topic: "rtl_433/Acurite-986/17933"
+  payload_on: "0"
+  payload_off: "1"
+  device_class: battery
+  value_template: "{{ value_json.battery_ok }}"
+- platform: mqtt
   state_topic: "rtl_433/Kerui-Security/843225"
   device_class: motion
   name: Kerui PIR
