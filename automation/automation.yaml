@@ -883,13 +883,31 @@
         - binary_sensor.updater
       to: "on"
     - platform: numeric_state
-      entity_id: sensor.kitchen_fridge_door_temperature_measurement
-      above: 44
+      entity_id:
+        - sensor.bar_fridge_temperature
+        - sensor.kitchen_fridge_temperature
+      above: 46
       for:
         minutes: 20
     - platform: numeric_state
-      entity_id: sensor.kitchen_fridge_door_temperature_measurement
+      entity_id:
+        - sensor.bar_fridge_temperature
+        - sensor.kitchen_fridge_temperature
       below: 30
+      for:
+        minutes: 20
+    - platform: numeric_state
+      entity_id:
+        - sensor.bar_freezer_temperature
+        - sensor.kitchen_freezer_temperature
+      above: 5
+      for:
+        minutes: 20
+    - platform: numeric_state
+      entity_id:
+        - sensor.bar_freezer_temperature
+        - sensor.kitchen_freezer_temperature
+      below: -8
       for:
         minutes: 20
     - platform: state
