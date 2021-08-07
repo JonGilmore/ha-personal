@@ -6,6 +6,11 @@
   type: mean
   entity_ids:
     - sensor.office_multi_relative_humidity_measurement
+    - sensor.basement_multi_relative_humidity_measurement
+    - sensor.evelyn_multi_relative_humidity_measurement
+    - sensor.loft_multi_relative_humidity_measurement
+    - sensor.gym_humidity
+    - sensor.nursery_humidity
     - sensor.master_entry_humidity
     - sensor.sunroom_humidity
 
