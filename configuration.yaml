@@ -113,7 +113,8 @@ telegram_bot:
 ####################################################
 adaptive_lighting: !include includes/adaptive_lighting.yaml
 alert: !include includes/alerts.yaml
-automation: !include_dir_merge_list automation
+automation: !include automations.yaml
+automation yaml: !include_dir_merge_list automation
 binary_sensor: !include includes/binary_sensors.yaml
 camera: !include includes/cameras.yaml
 climate: !include includes/climate.yaml
