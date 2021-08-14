@@ -883,6 +883,11 @@
         - binary_sensor.updater
       to: "on"
     - platform: numeric_state
+      entity_id: sensor.computer_multi_temperature_measurement
+      above: 105
+      for:
+        minutes: 5
+    - platform: numeric_state
       entity_id:
         - sensor.bar_fridge_temperature
         - sensor.kitchen_fridge_temperature
