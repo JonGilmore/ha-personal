@@ -545,6 +545,28 @@
       entity_id: sensor.time
       friendly_name: "Time is"
       value_template: "{{ now().strftime('%I:%M %p') }}"
+    events_today:
+      friendly_name: "Events Today"
+      value_template: >
+        {% set count = namespace(value=0) %}
+        {%- for state in states.sensor -%}
+          {%- if state.attributes.attribution == "Sensor data calculated by Anniversaries Integration" and state.state | int <= 0 -%}
+            {%- if count.value != 0 %},{% endif %}
+            {{state.attributes.friendly_name}} is turning {{state.attributes.years_at_next_anniversary }}
+            {%- set count.value = count.value + 1 -%}
+          {%- endif -%}
+        {%- endfor %}
+    events_tomorrow:
+      friendly_name: "Events Tomorrow"
+      value_template: >-
+        {% set count = namespace(value=0) %}
+        {%- for state in states.sensor -%}
+          {%- if state.attributes.attribution == "Sensor data calculated by Anniversaries Integration" and state.state | int <= 1 -%}
+            {%- if count.value != 0 %},{% endif %}
+            {{state.attributes.friendly_name}} is turning {{state.attributes.years_at_next_anniversary }}
+            {%- set count.value = count.value + 1 -%}
+          {%- endif -%}
+        {%- endfor %}
 
     #THERMOSTAT TEMPLATES
     main_status:
