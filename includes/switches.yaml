@@ -10,6 +10,12 @@
       friendly_name: basement tablet screen
 - platform: command_line
   switches:
+    macbook_power:
+      command_off: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jongilmore@192.168.45.43 "/usr/bin/pmset sleepnow"
+      command_state: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jongilmore@192.168.45.43 "true"
+      friendly_name: Macbook Power
+- platform: command_line
+  switches:
     mine_crypto:
       command_on: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh start"
       command_off: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh stop"
