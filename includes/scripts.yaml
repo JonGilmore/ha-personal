@@ -244,7 +244,7 @@ jon_meeting:
       entity_id: media_player.kitchen
       data_template:
         message: |
-          {% if is_state("binary_sensor.jons_webcam", "on") -%}
+          {% if is_state("binary_sensor.macbook_pro_camera_in_use", "on") -%}
             Jon is probably in a meeting right now.
           {%- else -%}
             Jon doesn't appear to be in a meeting right now

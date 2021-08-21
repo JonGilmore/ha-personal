@@ -328,11 +328,6 @@
         or states.media_player.master.state == "playing"
         or states.media_player.portable.state == "playing"
         or states.media_player.workshop.state == "playing" }}
-    jons_webcam:
-      friendly_name: "Jons Webcam"
-      value_template: >-
-        {{ states.binary_sensor.macbook_pro_hd_pro_webcam_c920_camera.state == "on"
-        or states.binary_sensor.macbook_pro_facetime_hd_camera_built_in.state == "on" }}
     evelyns_room_occupied:
       device_class: occupancy
       friendly_name: "Evelyns Room Occupied"
