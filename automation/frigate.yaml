@@ -282,3 +282,32 @@
           photo:
             - url: "http://192.168.45.249:5000/api/events/{{trigger.payload_json['after']['id']}}/thumbnail.jpg"
               caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+#########################################
+- alias: "Frigate: driveway line crossing"
+  id: "Frigate: driveway line crossing"
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.far_person_motion
+        - binary_sensor.far_car_motion
+      to: "on"
+  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.near_car_motion
+            - binary_sensor.near_person_motion
+          to: "on"
+      timeout: 20
+      continue_on_timeout: false
+    - service: system_log.write
+      data_template:
+        message: "driveway far zone to near zone frigate detection"
+        level: info
+    - service: notify.telegram_jon
+      data_template:
+        title: "{{ trigger.to_state.attributes.friendly_name }}"
+        message: "{{ trigger.to_state.attributes.friendly_name }}"
+        data:
+          photo:
+            url: "{{ states.sensor.hik_driveway_pic.state }}"
