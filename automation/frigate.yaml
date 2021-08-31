@@ -300,10 +300,6 @@
           to: "on"
       timeout: 20
       continue_on_timeout: false
-    - service: system_log.write
-      data_template:
-        message: "driveway far zone to near zone frigate detection"
-        level: info
     - service: notify.telegram_jon
       data_template:
         title: "{{ trigger.to_state.attributes.friendly_name }}"

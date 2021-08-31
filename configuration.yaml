@@ -21,7 +21,7 @@ http:
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
   login_attempts_threshold: 3
-  ip_ban_enabled: true
+  ip_ban_enabled: false
 updater:
   reporting: false
 tts:
@@ -145,8 +145,6 @@ websocket_api:
 sun:
 conversation:
 logbook:
-hacs:
-  token: !secret hacs
 person:
 config:
 hassio:
@@ -179,8 +177,6 @@ browser_mod:
   devices:
     37a201ed-e63fb778:
       name: wallpanel
-    d076aed9-3b526fc1:
-      name: jons_iphone
     00d5d99a-b03ecc8e:
       name: jons_macbook
 
@@ -190,11 +186,6 @@ lifx:
     - broadcast: 192.168.45.182
     - broadcast: 192.168.45.183
     - broadcast: 192.168.45.184
-
-folder_watcher:
-  - folder: /share
-    patterns:
-      - "*.mp4"
 
 sonos:
   media_player:

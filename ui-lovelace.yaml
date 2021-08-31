@@ -1010,7 +1010,7 @@ views:
           method: state
         filter:
           include:
-            - entity_id: "/^.*pixel_.*/"
+            - entity_id: "/^.*pixel5_.*/"
           exclude:
             - state: "Unavailable"
         show_empty: false
@@ -1027,21 +1027,6 @@ views:
           exclude:
             - state: "Unknown"
         show_empty: false
-      - type: custom:stack-in-card
-        title: My Stack In Card
-        mode: vertical
-        cards:
-          - type: horizontal-stack
-            cards:
-              - type: button
-                entity: sun.sun
-              - type: button
-                entity: sun.sun
-          - type: vertical-stack
-            cards:
-              - type: entities
-                entities:
-                  - sun.sun
 
   ##########################################
   # BATTERY TAB
