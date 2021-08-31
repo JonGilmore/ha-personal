@@ -1,5 +1,6 @@
 ---
 - alias: "Location Awareness: leave home & single garage open"
+  id: "Location Awareness: leave home & single garage open"
   description: "Leave `home` zone with the single garage open, send a photo notification & prompt to close"
   trigger:
     - platform: state

@@ -4,6 +4,7 @@
 ## example: https://community.home-assistant.io/t/monitor-reliable-multi-user-distributed-bluetooth-occupancy-presence-detection/68505/1508?u=jon102034050
 ## example: https://blog.ceard.tech/2021/01/presence-detection-resurrection.html
 - alias: "Monitor: Jon occupancy on"
+  id: "Monitor: Jon occupancy on"
   trigger:
     - platform: numeric_state
       entity_id: sensor.jon_occupancy_confidence
@@ -15,6 +16,7 @@
         location_name: home
         source_type: bluetooth
 - alias: "Monitor: Jon occupancy off"
+  id: "Monitor: Jon occupancy off"
   trigger:
     - platform: numeric_state
       entity_id: sensor.jon_occupancy_confidence
@@ -26,6 +28,7 @@
         location_name: not_home
         source_type: bluetooth
 - alias: "Monitor: Laura occupancy on"
+  id: "Monitor: Laura occupancy on"
   trigger:
     - platform: numeric_state
       entity_id: sensor.laura_occupancy_confidence
@@ -37,6 +40,7 @@
         location_name: home
         source_type: bluetooth
 - alias: "Monitor: Laura occupancy off"
+  id: "Monitor: Laura occupancy off"
   trigger:
     - platform: numeric_state
       entity_id: sensor.laura_occupancy_confidence
@@ -49,6 +53,7 @@
         source_type: bluetooth
 ########################################
 - alias: "Monitor: Restart Monitor service on HA startup"
+  id: "Monitor: Restart Monitor service on HA startup"
   initial_state: "on"
   trigger:
     platform: homeassistant
@@ -155,6 +160,7 @@
 #     - service: script.scan_bt_depart
 #########################################
 - alias: "Monitor: departure scan"
+  id: "Monitor: departure scan"
   trigger:
     - platform: state
       entity_id:

@@ -1,6 +1,7 @@
 ---
 #########################################
 - alias: "Person Detection: doorbell person detected"
+  id: "Person Detection: doorbell person detected"
   description: "If nobody is home or were sleeping - send a video of the doorbell"
   trigger:
     platform: event
@@ -31,6 +32,7 @@
         file: "/share/trimmed-doorbell.mp4"
 #########################################
 - alias: "Person Detection: driveway person detected"
+  id: "Person Detection: driveway person detected"
   description: "If nobody is home or were sleeping - send a video of the driveway"
   trigger:
     platform: event
@@ -61,6 +63,7 @@
         file: "/share/trimmed-driveway.mp4"
 #########################################
 - alias: "Person Detection: deck person detected"
+  id: "Person Detection: deck person detected"
   description: "If nobody is home or were sleeping - send a video of the deck"
   trigger:
     platform: event
@@ -91,6 +94,7 @@
         file: "/share/trimmed-deck.mp4"
 #########################################
 - alias: "Person Detection: deckstairs person detected"
+  id: "Person Detection: deckstairs person detected"
   description: "If nobody is home or were sleeping - send a video of the deckstairs"
   trigger:
     platform: event
@@ -121,6 +125,7 @@
         file: "/share/trimmed-deckstairs.mp4"
 #########################################
 - alias: "Person Detection: garage person detected"
+  id: "Person Detection: garage person detected"
   description: "If nobody is home or were sleeping - send a video of the garage"
   trigger:
     platform: event
@@ -151,6 +156,7 @@
         file: "/share/trimmed-garage.mp4"
 #########################################
 - alias: "Person Detection: kitchen person detected"
+  id: "Person Detection: kitchen person detected"
   description: "If nobody is home - send a video of the kitchen"
   trigger:
     platform: event
@@ -211,6 +217,7 @@
 #               caption: "{{ trigger.to_state.attributes.friendly_name }}"
 #########################################
 - alias: "Frigate: disable driveway notifications because of user interaction"
+  id: "Frigate: disable driveway notifications because of user interaction"
   description: "options to mute notifications for 60m or the rest of the day"
   trigger:
     - platform: event
@@ -245,6 +252,7 @@
           entity_id: input_boolean.frigate_driveway_notifier
 #########################################
 - alias: "Frigate: driveway notification"
+  id: "Frigate: driveway notification"
   description: "only notify for `new` events with a 90s rate limit, optionally mute notifications for 60m with telegram callback"
   trigger:
     - platform: mqtt

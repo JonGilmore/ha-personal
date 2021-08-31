@@ -1,6 +1,7 @@
 ---
 #########################################
 - alias: "Vacation Mode: while on vacation & turn off all lights at 23:30"
+  id: "Vacation Mode: while on vacation & turn off all lights at 23:30"
   trigger:
     - platform: time
       at: "23:30:00"
@@ -13,6 +14,7 @@
       entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
 #########################################
 - alias: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
+  id: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
   trigger:
     - platform: state
       entity_id: binary_sensor.vacation_status
@@ -41,6 +43,7 @@
         message: "set back temps, turned off recirc pump, set vacation mode on water heater"
 #########################################
 - alias: "Vacation Mode: return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
+  id: "Vacation Mode: return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
   trigger:
     - platform: state
       entity_id: binary_sensor.vacation_status
@@ -67,6 +70,7 @@
         message: "turned on water main, set temps to normal, turned on recirc pump, removed vacation mode on water heater"
 #########################################
 - alias: "Vacation Mode: winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump"
+  id: "Vacation Mode: winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump"
   trigger:
     - platform: state
       entity_id: binary_sensor.vacation_status
@@ -104,6 +108,7 @@
         message: "set back temps, turned off recirc pump, set vacation mode on water heater,turned off water main"
 #########################################
 - alias: "Vacation Mode: return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
+  id: "Vacation Mode: return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
   trigger:
     - platform: state
       entity_id: binary_sensor.vacation_status

@@ -1,6 +1,7 @@
 ---
 #########################################
 - alias: "Vacuum: start cleaning kitchen"
+  id: "Vacuum: start cleaning kitchen"
   trigger:
     - platform: state
       entity_id: input_select.vacuum_room

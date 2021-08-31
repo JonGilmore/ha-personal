@@ -1,5 +1,6 @@
 ---
 - alias: "Nest: testing"
+  id: "Nest: testing"
   description: "Testing nest events"
   trigger:
     - platform: event

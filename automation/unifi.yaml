@@ -1,6 +1,7 @@
 ---
 #########################################
 - alias: "Unifi: Port forward enable wireguard port forward if anybody leaves"
+  id: "Unifi: Port forward enable wireguard port forward if anybody leaves"
   trigger:
     - platform: state
       entity_id: binary_sensor.anybody_away
@@ -20,6 +21,7 @@
         id: !secret wireguard_id
         unifi_site: !secret unifi_site
 - alias: "Unifi: Port forward disable wireguard port forward when we get home"
+  id: "Unifi: Port forward disable wireguard port forward when we get home"
   trigger:
     - platform: state
       entity_id: binary_sensor.anybody_away
@@ -40,6 +42,7 @@
         unifi_site: !secret unifi_site
 #########################################
 - alias: "Unifi: Port forward enable NAS port forward for nightly backup at 1:58am"
+  id: "Unifi: Port forward enable NAS port forward for nightly backup at 1:58am"
   trigger:
     platform: time
     at: "1:58:00"
@@ -58,6 +61,7 @@
         id: !secret nas_id
         unifi_site: !secret unifi_site
 - alias: "Unifi: Port forward disable NAS port forward for backup"
+  id: "Unifi: Port forward disable NAS port forward for backup"
   trigger:
     platform: time
     at: "2:58:00"
@@ -77,6 +81,7 @@
         unifi_site: !secret unifi_site
 #########################################
 - alias: "Unifi: garage camera force reboot weekly"
+  id: "Unifi: garage camera force reboot weekly"
   description: "garage cam kinda sucks and needs to be rebooted pretty often"
   trigger:
     platform: time
@@ -96,6 +101,7 @@
         cmd: "power-cycle"
 #########################################
 - alias: "Unifi: theatre ap reboot"
+  id: "Unifi: theatre ap reboot"
   description: "testing an access point reboot"
   trigger:
     platform: time

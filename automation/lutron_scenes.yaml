@@ -1,4 +1,5 @@
 - alias: "Lutron Scene: Master lamps on"
+  id: "Lutron Scene: Master lamps on"
   description: "LED is off & the scene is triggered - turn on the lamps and enable the LED"
   trigger:
     - platform: event
@@ -30,6 +31,7 @@
         - switch.master_bedroom_sitting_keypad_lamps_led
         - switch.master_bedroom_jons_keypad_lamps_led
 - alias: "Lutron Scene: Master lamps off"
+  id: "Lutron Scene: Master lamps off"
   description: "LED is on & the scene is triggered - turn off the lamps and disable the LED"
   trigger:
     - platform: event
@@ -58,6 +60,7 @@
         - switch.master_bedroom_sitting_keypad_lamps_led
         - switch.master_bedroom_jons_keypad_lamps_led
 - alias: "Lutron Scene: Either master lamp on"
+  id: "Lutron Scene: Either master lamp on"
   description: "Either master lamp is turned on - enable the scene LED"
   trigger:
     - platform: state
@@ -72,6 +75,7 @@
         - switch.master_bedroom_sitting_keypad_lamps_led
         - switch.master_bedroom_jons_keypad_lamps_led
 - alias: "Lutron Scene: Both master lamps off - jon"
+  id: "Lutron Scene: Both master lamps off - jon"
   description: "Both master lamps off, turn off the scene LED"
   trigger:
     - platform: state
@@ -87,6 +91,7 @@
         - switch.master_bedroom_sitting_keypad_lamps_led
         - switch.master_bedroom_jons_keypad_lamps_led
 - alias: "Lutron Scene: Both master lamps off - laura"
+  id: "Lutron Scene: Both master lamps off - laura"
   description: "Both master lamps off, turn off the scene LED"
   trigger:
     - platform: state
@@ -103,6 +108,7 @@
         - switch.master_bedroom_jons_keypad_lamps_led
 ########################################
 - alias: "Lutron Scene: Master lamps off from scene activation"
+  id: "Lutron Scene: Master lamps off from scene activation"
   trigger:
     - platform: event
       event_type: lutron_event
@@ -189,6 +195,7 @@
         - light.jons_lamp_lifx
 #########################################
 - alias: "Lutron Scene: jons keypad all off pressed"
+  id: "Lutron Scene: jons keypad all off pressed"
   description: "the `all off` scene is triggered on jons keypad - also turn off the master motion lamps"
   trigger:
     - platform: event
