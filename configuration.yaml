@@ -5,6 +5,7 @@ homeassistant:
   longitude: !secret ha_longitude
   elevation: !secret ha_elevation
   unit_system: imperial
+  currency: USD
   time_zone: !secret ha_tz
   external_url: !secret ext_hass_url
   internal_url: !secret int_hass_url
@@ -16,6 +17,12 @@ homeassistant:
     - "/share"
   media_dirs:
     local: /media
+energy:
+
+utility_meter:
+  energy:
+    source: sensor.aeotec_hem_energy_meter
+    cycle: monthly
 
 http:
   ssl_certificate: /ssl/fullchain.pem
