@@ -23,3 +23,5 @@ frigate_driveway_notifier:
   icon: mdi:cctv
 master_override:
   name: Master Lights Override
+driveway_sentry:
+  name: Driveway Sentry Mode

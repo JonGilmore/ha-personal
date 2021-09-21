@@ -517,14 +517,18 @@
     - service: homeassistant.turn_off
       entity_id: input_boolean.master_blinds_run_once
 #########################################
-- alias: "Utility: reset run-once variables - noon"
-  id: "Utility: reset run-once variables - noon"
+- alias: "Utility: reset run-once variables - noon and 8am"
+  id: "Utility: reset run-once variables - noon and 8am"
   trigger:
-    platform: time
-    at: "12:00:00"
+    - platform: time
+      at: "12:00:00"
+    - platform: time
+      at: "8:00:01"
   action:
     - service: homeassistant.turn_off
-      entity_id: input_boolean.sunset_run_once
+      entity_id:
+        - input_boolean.sunset_run_once
+        - input_boolean.driveway_sentry
 #########################################
 - alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"

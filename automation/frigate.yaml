@@ -268,19 +268,24 @@
       conditions:
         - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"
         - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}"
-    - condition: or # sleeping or away
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.sleep_status
-          state: "on"
-        - condition: state
-          entity_id: person.jon
-          state: "not_home"
+    # - condition: or # sleeping or away
+    #   conditions:
+    #     - condition: state
+    #       entity_id: binary_sensor.sleep_status
+    #       state: "on"
+    #     - condition: state
+    #       entity_id: person.jon
+    #       state: "not_home"
   action:
-    - service: system_log.write
+    # - service: system_log.write
+    #   data_template:
+    #     message: "{{trigger.payload_json}}"
+    #     level: info
+    - service: telegram_bot.send_video
       data_template:
-        message: "{{trigger.payload_json}}"
-        level: info
+        url: http://192.168.45.249:5005/api/events/{{trigger.payload_json["after"]["id"]}}/{{trigger.payload_json["after"]["camera"]}}/clip.mp4
+        timeout: 1000
+        caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{trigger.payload_json["after"]["camera"] }} camera
     - service: notify.telegram_jon
       data_template:
         message: "A {{trigger.payload_json['after']['label']}} was detected."
@@ -288,11 +293,11 @@
           inline_keyboard:
             - "60m:/mutefrigatedriveway60, Rest of day:/mutefrigatedrivewayday"
           photo:
-            - url: "http://192.168.45.249:5000/api/events/{{trigger.payload_json['after']['id']}}/thumbnail.jpg"
+            - url: "http://192.168.45.249:5005/api/events/{{trigger.payload_json['after']['id']}}/thumbnail.jpg"
               caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
 #########################################
-- alias: "Frigate: driveway line crossing"
-  id: "Frigate: driveway line crossing"
+- alias: "Frigate: driveway arrival"
+  id: "Frigate: driveway arrival"
   trigger:
     - platform: state
       entity_id:
@@ -315,3 +320,57 @@
         data:
           photo:
             url: "{{ states.sensor.hik_driveway_pic.state }}"
+#########################################
+- alias: "Frigate: driveway departure"
+  id: "Frigate: driveway departure"
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.near_car_motion
+        - binary_sensor.near_person_motion
+      to: "on"
+  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.far_person_motion
+            - binary_sensor.far_car_motion
+          to: "on"
+      timeout: 20
+      continue_on_timeout: false
+    - choose: # between the hours of 6-8am, turn on driveway sentry mode
+        - conditions: "{{ now().strftime('%H')|int > 6 and now().strftime('%H')|int < 8 }}"
+          sequence:
+            - service: homeassistant.turn_on
+              entity_id: input_boolean.driveway_sentry
+#########################################
+- alias: "Frigate: driveway sentry notification"
+  id: "Frigate: driveway sentry notification"
+  trigger:
+    - platform: mqtt
+      topic: frigate/events
+  condition:
+    - "{{ trigger.payload_json['type'] == 'end' }}"
+    - "{{ trigger.payload_json['after']['has_clip'] == 'true' }}"
+    # - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_sentry_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
+    # - condition: state # make sure notifications havent been paused from an actionable notification
+    #   entity_id: input_boolean.frigate_driveway_notifier
+    #   state: "on"
+    # - condition: state
+    #   entity_id: input_boolean.driveway_sentry
+    #   state: "on"
+    - condition: or # only driveway camera
+      conditions:
+        - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"
+        - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}"
+  action:
+    # - delay:
+    #     hours: 0
+    #     minutes: 0
+    #     seconds: 45
+    #     milliseconds: 0
+    - service: telegram_bot.send_video
+      data_template:
+        url: http://192.168.45.249:5005/api/events/{{trigger.payload_json["after"]["id"]}}/{{trigger.payload_json["after"]["camera"]}}/clip.mp4
+        timeout: 2000
+        caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{trigger.payload_json["after"]["camera"] }} camera
