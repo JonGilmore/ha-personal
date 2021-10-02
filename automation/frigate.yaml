@@ -128,7 +128,7 @@
     #     level: info
     - service: telegram_bot.send_video
       data_template:
-        url: http://192.168.45.249:5005/api/events/{{trigger.payload_json["after"]["id"]}}/{{trigger.payload_json["after"]["camera"]}}/clip.mp4
+        url: http://192.168.45.249:5005/api/events/{{trigger.payload_json["after"]["id"]}}/clip.mp4
         timeout: 1000
         caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{trigger.payload_json["after"]["camera"] }} camera
     - service: notify.telegram_jon
@@ -197,25 +197,66 @@
   condition:
     - "{{ trigger.payload_json['type'] == 'end' }}"
     - "{{ trigger.payload_json['after']['has_clip'] == 'true' }}"
-    # - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_sentry_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
-    # - condition: state # make sure notifications havent been paused from an actionable notification
-    #   entity_id: input_boolean.frigate_driveway_notifier
-    #   state: "on"
-    # - condition: state
-    #   entity_id: input_boolean.driveway_sentry
-    #   state: "on"
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_sentry_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
+    - condition: state # make sure notifications havent been paused from an actionable notification
+      entity_id: input_boolean.frigate_driveway_notifier
+      state: "on"
+    - condition: state
+      entity_id: input_boolean.driveway_sentry
+      state: "on"
     - condition: or # only driveway camera
       conditions:
         - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"
         - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}"
+  variables:
+    camera: "{{ trigger.payload_json['after']['camera'] }}"
   action:
-    # - delay:
-    #     hours: 0
-    #     minutes: 0
-    #     seconds: 45
-    #     milliseconds: 0
+    # download & trim the clip in case its really long, save to a static file
+    - service: shell_command.download_file
+      data_template:
+        url: "http://192.168.45.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
+        download: "/share/{{camera}}.mp4"
+    - service: shell_command.trim_video
+      data_template:
+        duration: "00:00:09"
+        clip: "/share/{{camera}}.mp4"
+        path: "/share/trimmed-{{camera}}.mp4"
     - service: telegram_bot.send_video
       data_template:
-        url: http://192.168.45.249:5005/api/events/{{trigger.payload_json["after"]["id"]}}/{{trigger.payload_json["after"]["camera"]}}/clip.mp4
-        timeout: 2000
-        caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{trigger.payload_json["after"]["camera"] }} camera
+        file: "/share/trimmed-{{camera}}.mp4"
+        caption: "{{trigger.payload_json['after']['label']}} detected on {{camera}}"
+#########################################
+- alias: "Frigate: kitchen video notification"
+  id: "Frigate: kitchen video notification"
+  description: "If Jons away - send a video of the kitchen"
+  trigger:
+    - platform: mqtt
+      topic: frigate/events
+  condition:
+    - "{{ trigger.payload_json['type'] == 'end' }}"
+    - "{{ trigger.payload_json['after']['has_clip'] == true }}"
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_kitchen_testing_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
+    - condition: state
+      entity_id: person.jon
+      state: "not_home"
+    - condition: or # only kitchen camera
+      conditions:
+        - "{{ trigger.payload_json['after']['camera'] == 'kitchen' }}"
+        - "{{ trigger.payload_json['before']['camera'] == 'kitchen' }}"
+  variables:
+    camera: "{{ trigger.payload_json['after']['camera'] }}"
+  action:
+    # download & trim the clip in case its really long, save to a static file
+    - service: shell_command.download_file
+      data_template:
+        url: "http://192.168.45.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
+        download: "/share/{{camera}}.mp4"
+    - service: shell_command.trim_video
+      data_template:
+        duration: "00:00:09"
+        clip: "/share/{{camera}}.mp4"
+        path: "/share/trimmed-{{camera}}.mp4"
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/share/trimmed-{{camera}}.mp4"
+        caption: "{{camera}}"
