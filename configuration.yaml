@@ -40,6 +40,7 @@ recorder:
   exclude:
     entity_globs:
       - sensor.dark_sky*
+      - sensor.pixel5_*
 frontend:
   themes: !include_dir_merge_named themes/
 lovelace:
