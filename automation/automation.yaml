@@ -560,7 +560,9 @@
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
     - service: input_boolean.turn_on
-      entity_id: input_boolean.frigate_driveway_notifier
+      entity_id:
+        - input_boolean.frigate_driveway_notifier
+        - input_boolean.frigate_kitchen_notifier
     - choose: # check the garage doors & notify
         conditions:
           condition: or
@@ -919,6 +921,7 @@
         - sensor.public_ip
         - binary_sensor.rain_sensor
         - input_boolean.frigate_driveway_notifier
+        - input_boolean.frigate_kitchen_notifier
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state

@@ -1,78 +1,25 @@
 ---
 #########################################
-- alias: "Person Detection: driveway person detected"
-  id: "Person Detection: driveway person detected"
-  description: "If nobody is home or were sleeping - send a video of the driveway"
-  trigger:
-    platform: event
-    event_type: folder_watcher
-    event_data:
-      event_type: created
-  condition:
-    - "{{ not(trigger.event.data.path.startswith('/share/trimmed-')) }}" # filename doesnt start with /share/trimmed-*
-    - "{{ trigger.event.data.path.startswith('/share/driveway-') }}" # filename starts with /share/driveway-*
-    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.person_detection_driveway_person_detected', 'last_triggered')) |int(0) ) > 60 }}" # rate limit
-    - condition: or # sleeping or away
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.sleep_status
-          state: "on"
-        - condition: state
-          entity_id: person.jon
-          state: "not_home"
-  action:
-    # trim the clip in case its really long, save to a static file
-    - service: shell_command.trim_video
-      data_template:
-        clip: "{{ trigger.event.data.path }}"
-        duration: "00:00:08"
-        path: "/share/trimmed-driveway.mp4"
-    - service: telegram_bot.send_video
-      data:
-        file: "/share/trimmed-driveway.mp4"
-#########################################
-# - alias: "Person Detection: testing person picture"
-#   trigger:
-#     - platform: state
-#       entity_id:
-#         - binary_sensor.deck_person_motion
-#         - binary_sensor.deckstairs_person_motion
-#         - binary_sensor.doorbell_person_motion
-#         # - binary_sensor.driveway_person_motion
-#         # - binary_sensor.garage_person_motion
-#         # - binary_sensor.kitchen_person_motion
-#         # - binary_sensor.loft_person_motion
-#       from: "off"
-#       to: "on"
-#   condition:
-#     - condition: state
-#       entity_id: person.jon
-#       state: "not_home"
-#   action:
-#     - data_template:
-#         entity_id: "camera.{{ trigger.to_state.object_id }}" # ex: camera.deck_person
-#         filename: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
-#       service: camera.snapshot
-#     - service: notify.telegram_jon
-#       data_template:
-#         message: "message placeholder"
-#         data:
-#           photo:
-#             - file: "/config/www/{{ trigger.to_state.object_id }}.jpg }}"
-#               caption: "{{ trigger.to_state.attributes.friendly_name }}"
-#########################################
-- alias: "Frigate: disable driveway notifications because of user interaction"
-  id: "Frigate: disable driveway notifications because of user interaction"
+- alias: "Frigate: disable notifications because of user interaction"
+  id: "Frigate: disable notifications because of user interaction"
   description: "options to mute notifications for 60m or the rest of the day"
   trigger:
     - platform: event
       event_type: telegram_callback
       event_data:
-        data: "/mutefrigatedriveway60"
+        command: "/mutefrigatedriveway60"
     - platform: event
       event_type: telegram_callback
       event_data:
-        data: "/mutefrigatedrivewayday"
+        command: "/mutefrigatedrivewayday"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigatekitchen60"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigatekitchenday"
   action:
     - choose:
         - conditions: "{{ trigger.event.data.command == '\/mutefrigatedriveway60' }}"
@@ -87,6 +34,27 @@
             - delay: "00:60:00"
             - service: input_boolean.turn_on
               entity_id: input_boolean.frigate_driveway_notifier
+        - conditions: "{{ trigger.event.data.command == '\/mutefrigatekitchen60' }}"
+          sequence:
+            - service: telegram_bot.answer_callback_query
+              data_template:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Disabling notifications for {{ trigger }} for 60min"
+                show_alert: true
+            - service: input_boolean.turn_off
+              entity_id: input_boolean.frigate_kitchen_notifier
+            - delay: "00:60:00"
+            - service: input_boolean.turn_on
+              entity_id: input_boolean.frigate_kitchen_notifier
+        - conditions: "{{ trigger.event.data.command == '\/mutefrigatekitchenday' }}"
+          sequence:
+            - service: telegram_bot.answer_callback_query
+              data_template:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Disabling notifications for {{ trigger }} for the remainder of the day"
+                show_alert: true
+            - service: input_boolean.turn_off
+              entity_id: input_boolean.frigate_driveway_notifier
       default:
         - service: telegram_bot.answer_callback_query
           data_template:
@@ -95,51 +63,6 @@
             show_alert: true
         - service: input_boolean.turn_off
           entity_id: input_boolean.frigate_driveway_notifier
-#########################################
-- alias: "Frigate: driveway notification"
-  id: "Frigate: driveway notification"
-  description: "only notify for `new` events with a 90s rate limit, optionally mute notifications for 60m with telegram callback"
-  trigger:
-    - platform: mqtt
-      topic: frigate/events
-  condition:
-    - "{{ trigger.payload_json['type'] == 'new' }}" # only for new events
-    - "{{ 'near' in trigger.payload_json['after']['entered_zones'] }}" # only for objects entering the `near` zone
-    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
-    - condition: state # make sure notifications havent been paused from an actionable notification
-      entity_id: input_boolean.frigate_driveway_notifier
-      state: "on"
-    - condition: or # only driveway camera
-      conditions:
-        - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"
-        - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}"
-    # - condition: or # sleeping or away
-    #   conditions:
-    #     - condition: state
-    #       entity_id: binary_sensor.sleep_status
-    #       state: "on"
-    #     - condition: state
-    #       entity_id: person.jon
-    #       state: "not_home"
-  action:
-    # - service: system_log.write
-    #   data_template:
-    #     message: "{{trigger.payload_json}}"
-    #     level: info
-    - service: telegram_bot.send_video
-      data_template:
-        url: http://192.168.45.249:5005/api/events/{{trigger.payload_json["after"]["id"]}}/clip.mp4
-        timeout: 1000
-        caption: A {{trigger.payload_json["after"]["label"]}} was detected on {{trigger.payload_json["after"]["camera"] }} camera
-    - service: notify.telegram_jon
-      data_template:
-        message: "A {{trigger.payload_json['after']['label']}} was detected."
-        data:
-          inline_keyboard:
-            - "60m:/mutefrigatedriveway60, Rest of day:/mutefrigatedrivewayday"
-          photo:
-            - url: "http://192.168.45.249:5005/api/events/{{trigger.payload_json['after']['id']}}/thumbnail.jpg"
-              caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
 #########################################
 - alias: "Frigate: driveway arrival"
   id: "Frigate: driveway arrival"
@@ -189,8 +112,9 @@
             - service: homeassistant.turn_on
               entity_id: input_boolean.driveway_sentry
 #########################################
-- alias: "Frigate: driveway sentry notification"
-  id: "Frigate: driveway sentry notification"
+- alias: "Frigate: driveway video notification"
+  id: "Frigate: driveway video notification"
+  description: "if Jons away or were asleep - send a video of the driveway"
   trigger:
     - platform: mqtt
       topic: frigate/events
@@ -218,27 +142,32 @@
         download: "/share/{{camera}}.mp4"
     - service: shell_command.trim_video
       data_template:
-        duration: "00:00:09"
+        duration: "00:00:10"
         clip: "/share/{{camera}}.mp4"
         path: "/share/trimmed-{{camera}}.mp4"
     - service: telegram_bot.send_video
       data_template:
         file: "/share/trimmed-{{camera}}.mp4"
-        caption: "{{trigger.payload_json['after']['label']}} detected on {{camera}}"
+        inline_keyboard:
+          - "60m:/mutefrigatedriveway60, Rest of day:/mutefrigatedrivewayday"
+        caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
 #########################################
 - alias: "Frigate: kitchen video notification"
   id: "Frigate: kitchen video notification"
-  description: "If Jons away - send a video of the kitchen"
+  description: "if everybody is away - send a video of the kitchen"
   trigger:
     - platform: mqtt
       topic: frigate/events
   condition:
     - "{{ trigger.payload_json['type'] == 'end' }}"
     - "{{ trigger.payload_json['after']['has_clip'] == true }}"
-    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_kitchen_testing_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_kitchen_video_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
+    - condition: state # make sure notifications havent been paused from an actionable notification
+      entity_id: input_boolean.frigate_kitchen_notifier
+      state: "on"
     - condition: state
-      entity_id: person.jon
-      state: "not_home"
+      entity_id: binary_sensor.anybody_home
+      state: "off"
     - condition: or # only kitchen camera
       conditions:
         - "{{ trigger.payload_json['after']['camera'] == 'kitchen' }}"
@@ -253,10 +182,12 @@
         download: "/share/{{camera}}.mp4"
     - service: shell_command.trim_video
       data_template:
-        duration: "00:00:09"
+        duration: "00:00:10"
         clip: "/share/{{camera}}.mp4"
         path: "/share/trimmed-{{camera}}.mp4"
     - service: telegram_bot.send_video
       data_template:
         file: "/share/trimmed-{{camera}}.mp4"
-        caption: "{{camera}}"
+        inline_keyboard:
+          - "60m:/mutefrigatekitchen60, Rest of day:/mutefrigatekitchenday"
+        caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"

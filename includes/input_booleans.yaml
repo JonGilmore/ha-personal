@@ -21,6 +21,10 @@ frigate_driveway_notifier:
   name: Frigate Driveway Notifier
   initial: true
   icon: mdi:cctv
+frigate_kitchen_notifier:
+  name: Frigate Kitchen Notifier
+  initial: true
+  icon: mdi:knife
 master_override:
   name: Master Lights Override
 driveway_sentry:
