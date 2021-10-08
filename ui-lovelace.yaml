@@ -966,7 +966,7 @@ views:
           method: state
         filter:
           include:
-            - entity_id: "/^.*pixel5_.*/"
+            - entity_id: "/^.*pixel.*/"
           exclude:
             - state: "Unavailable"
         show_empty: false
@@ -1075,14 +1075,3 @@ views:
             - group: group.upstairs_motions
         sort:
           method: name
-      - entity: binary_sensor.office_occupancy
-        name: Room sensors
-        template: room-sensor-tile-compact
-        type: custom:button-card
-        aspect_ratio: 1/1.1
-        variables:
-          temp_hdr: sensor.office_multi_temperature_measurement
-          temp: sensor.office_multi_temperature_measurement
-          light: sensor.office_multi_illuminance
-          humidity: sensor.office_multi_illuminance
-          pressure: sensor.office_multi_illuminance
