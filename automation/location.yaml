@@ -46,30 +46,16 @@
 #             - url: !secret camera_garage_pic
 #               caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
 #########################################
-# logic with recirc pump
-#   - if either of us are home, make sure its on
-#   - if we're both away, turn it off
-#   - turn it off at night when we go to bed
-#   - turn it back on when the MBR PIRs detect movement & its off (this will handle nighttime feedings)
-#   - if its night, and MBR PIRs dont detect movement for 30 min, turn it off
-# - alias: "Location Awareness: turn on/off recirculation pump based on presence"
-#   description: "WIP: If Jon/Laura is home, make sure recirculation pump is on"
-#   trigger:
-#     - platform: state
-#       entity_id:
-#         - binary_sensor.anybody_away
-#         - binary_sensor.anybody_home
-#   action:
-#     - service_template: >
-#         {% if trigger.to_state.state == 'off' %}homeassistant.turn_on
-#         {% else %}homeassistant.turn_off{% endif %}
-#       data_template:
-#         entity_id: >
-#           {% set trigger_entity = trigger.entity_id %}
-#           {% if trigger_entity == 'sensor.storage_pir' %}
-#             switch.basement_storage_lights
-#           {% elif trigger_entity == 'binary_sensor.master_bedroom_occupancy' %}
-#             light.master_bath_toekick
-#           {% endif %}
-#     # - service: homeassistant.turn_off
-#     #   entity_id: switch.equipment_room_recirculation_pump
+# alarm_occupancy_status switches to off (were away), then turn ON detection and snapshots
+- alias: "Location Awareness: house unoccupied"
+  description: "if we leave - turn on detection and snapshots"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.alarm_occupancy_status
+  action:
+    - service_template: >
+        {% if trigger.to_state.state == 'off' %}homeassistant.turn_on
+        {% else %}homeassistant.turn_off{% endif %}
+      entity_id:
+        - switch.kitchen_detect
+        - switch.kitchen_snapshots

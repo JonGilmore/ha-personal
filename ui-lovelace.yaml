@@ -45,6 +45,10 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-state-switch/state-switch.js
     type: module
+  - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
+    type: module
+  # - url: /hacsfiles/bootstrap-grid-card.js
+  #   type: module
 
 decluttering_templates:
   cam_small:
@@ -350,108 +354,60 @@ views:
     id: camera
     icon: mdi:camera
     cards:
-      - type: entities
+      - type: custom:frigate-card
+        camera_entity: camera.driveway
+        live_provider: webrtc
+        menu_mode: overlay-right
+        webrtc:
+          entity: camera.driveway_rtsp
+      - type: picture-glance
+        camera_image: camera.front_door
+        title: Front Door
         entities:
-          - input_select.camera_view
-      - type: custom:state-switch
-        entity: input_select.camera_view
-        states:
-          live:
-            type: vertical-stack
-            cards:
-              - type: picture-glance
-                camera_image: camera.driveway
-                title: Exterior
-                entities:
-                  - scene.equipment_room_enclosure_device_001_ph_sunset1
-              - type: picture-glance
-                camera_image: camera.front_door
-                title: Front Door
-                entities:
-                  - scene.equipment_room_enclosure_device_001_ph_sunset1
-              - type: picture-glance
-                camera_image: camera.garage
-                title: Garage
-                entities:
-                  - light.mudroom_garage_lights
-              - type: picture-glance
-                camera_image: camera.daisy
-                title: Daisy
-                entities:
-                  - switch.pulte_planning_center_lauras_office
-                  - light.pulte_planning_center_lamp
-              - type: picture-glance
-                camera_image: camera.deck
-                title: Deck
-                entities:
-                  - switch.exterior_posts
-              - type: picture-glance
-                camera_image: camera.deckstairs
-                title: DeckStairs
-                entities:
-                  - switch.exterior_posts
-              - type: picture-glance
-                camera_image: camera.front_door_live
-                title: Doorbell
-                entities:
-                  - scene.equipment_room_enclosure_device_001_ph_sunset1
-              - type: picture-glance
-                camera_image: camera.kitchen
-                title: Kitchen
-                entities:
-                  - sensor.kitchen_pir
-                  - scene.equipment_room_enclosure_device_001_ph_main_off
-                  - scene.equipment_room_enclosure_device_001_ph_main_on
-              - type: picture-glance
-                camera_image: camera.loft
-                title: Kitchen
-                entities:
-                  - light.loft_lamp
-          last:
-            type: vertical-stack
-            cards:
-              - type: picture-glance
-                camera_image: camera.driveway_person
-                entities: []
-              - type: picture-glance
-                camera_image: camera.deck_person
-                entities: []
-              - type: picture-glance
-                camera_image: camera.deckstairs_person
-                entities: []
-              - type: picture-glance
-                camera_image: camera.doorbell_person
-                entities: []
-              - type: picture-glance
-                camera_image: camera.garage_person
-                entities: []
-              - type: picture-glance
-                camera_image: camera.kitchen_person
-                entities: []
-              - type: picture-glance
-                camera_image: camera.loft_person
-                entities: []
+          - scene.equipment_room_enclosure_device_001_ph_sunset1
+      - type: custom:frigate-card
+        camera_entity: camera.garage
+        live_provider: webrtc
+        menu_mode: overlay-right
+        webrtc:
+          entity: camera.garage_rtsp
+      - type: picture-glance
+        camera_image: camera.daisy
+        title: Daisy
+        entities:
+          - switch.pulte_planning_center_lauras_office
+          - light.pulte_planning_center_lamp
+      - type: custom:frigate-card
+        camera_entity: camera.deck
+        live_provider: webrtc
+        menu_mode: overlay-right
+        webrtc:
+          entity: camera.deck_rtsp
+      - type: custom:frigate-card
+        camera_entity: camera.deckstairs
+        live_provider: webrtc
+        menu_mode: overlay-right
+        webrtc:
+          entity: camera.deckstairs_rtsp
+      - type: custom:frigate-card
+        camera_entity: camera.doorbell
+        live_provider: webrtc
+        menu_mode: overlay-right
+        webrtc:
+          entity: camera.front_door_live
+      - type: custom:frigate-card
+        camera_entity: camera.kitchen
+        live_provider: webrtc
+        menu_mode: overlay-right
+        webrtc:
+          entity: camera.kitchen_rtsp
+      - type: custom:frigate-card
+        camera_entity: camera.loft
+        live_provider: webrtc
+        menu_mode: overlay-right
+        webrtc:
+          entity: camera.loft_rtsp
 
-      # - type: custom:decluttering-card
-      #   template: cam_history
-      #   variables:
-      #     - cam: driveway
-      # - type: custom:decluttering-card
-      #   template: cam_history
-      #   variables:
-      #     - cam: doorbell
-      # - type: custom:decluttering-card
-      #   template: cam_history
-      #   variables:
-      #     - cam: deck
-      # - type: custom:decluttering-card
-      #   template: cam_history
-      #   variables:
-      #     - cam: deckstairs
-      # - type: custom:decluttering-card
-      #   template: cam_history
-      #   variables:
-      #     - cam: garage
   ##########################################
   # MUSIC TAB
   ##########################################
@@ -1119,3 +1075,14 @@ views:
             - group: group.upstairs_motions
         sort:
           method: name
+      - entity: binary_sensor.office_occupancy
+        name: Room sensors
+        template: room-sensor-tile-compact
+        type: custom:button-card
+        aspect_ratio: 1/1.1
+        variables:
+          temp_hdr: sensor.office_multi_temperature_measurement
+          temp: sensor.office_multi_temperature_measurement
+          light: sensor.office_multi_illuminance
+          humidity: sensor.office_multi_illuminance
+          pressure: sensor.office_multi_illuminance

@@ -1,6 +1,4 @@
 ---
-###################################
-# mjpeg cameras
 - platform: mjpeg
   mjpeg_url: http://192.168.45.116:80/Streaming/Channels/2/preview
   name: Front Door
@@ -11,3 +9,22 @@
   name: Daisy
   username: admin
   password: !secret hik_pwd
+
+- platform: ffmpeg
+  input: !secret kitchen_rtsp
+  name: kitchen-rtsp
+- platform: ffmpeg
+  input: !secret driveway_rtsp
+  name: driveway-rtsp
+- platform: ffmpeg
+  input: !secret deck_rtsp
+  name: deck-rtsp
+- platform: ffmpeg
+  input: !secret garage_rtsp
+  name: garage-rtsp
+- platform: ffmpeg
+  input: !secret deckstairs_rtsp
+  name: deckstairs-rtsp
+- platform: ffmpeg
+  input: !secret loft_rtsp
+  name: loft-rtsp
