@@ -338,14 +338,11 @@ views:
       - type: custom:mini-graph-card
         name: HVAC Runtime
         entities:
-          - entity: sensor.hvac_duty_cycle
-            # name: Main TV Lux
+          - entity: sensor.daily_hvac_duty_cycle
             show_state: true
-          - entity: sensor.hvac_on_count
-            # name: Sitting Room Lux
+          - entity: sensor.daily_hvac_on_count
             show_state: true
-          - entity: sensor.hvac_on_time
-            # name: Sitting Room Lux
+          - entity: sensor.daily_hvac_on_time
             show_state: true
   ##########################################
   # CAMERA TAB
@@ -354,59 +351,71 @@ views:
     id: camera
     icon: mdi:camera
     cards:
-      - type: custom:frigate-card
-        camera_entity: camera.driveway
-        live_provider: webrtc
-        menu_mode: overlay-right
-        webrtc:
-          entity: camera.driveway_rtsp
-      - type: picture-glance
-        camera_image: camera.front_door
-        title: Front Door
+      - type: entities
         entities:
-          - scene.equipment_room_enclosure_device_001_ph_sunset1
-      - type: custom:frigate-card
-        camera_entity: camera.garage
-        live_provider: webrtc
-        menu_mode: overlay-right
-        webrtc:
-          entity: camera.garage_rtsp
-      - type: picture-glance
-        camera_image: camera.daisy
-        title: Daisy
-        entities:
-          - switch.pulte_planning_center_lauras_office
-          - light.pulte_planning_center_lamp
-      - type: custom:frigate-card
-        camera_entity: camera.deck
-        live_provider: webrtc
-        menu_mode: overlay-right
-        webrtc:
-          entity: camera.deck_rtsp
-      - type: custom:frigate-card
-        camera_entity: camera.deckstairs
-        live_provider: webrtc
-        menu_mode: overlay-right
-        webrtc:
-          entity: camera.deckstairs_rtsp
-      - type: custom:frigate-card
-        camera_entity: camera.doorbell
-        live_provider: webrtc
-        menu_mode: overlay-right
-        webrtc:
-          entity: camera.front_door_live
-      - type: custom:frigate-card
-        camera_entity: camera.kitchen
-        live_provider: webrtc
-        menu_mode: overlay-right
-        webrtc:
-          entity: camera.kitchen_rtsp
-      - type: custom:frigate-card
-        camera_entity: camera.loft
-        live_provider: webrtc
-        menu_mode: overlay-right
-        webrtc:
-          entity: camera.loft_rtsp
+          - input_select.camera_view
+      - type: custom:state-switch
+        entity: input_select.camera_view
+        states:
+          exterior:
+            type: vertical-stack
+            cards:
+              - type: custom:frigate-card
+                camera_entity: camera.driveway
+                live_provider: webrtc
+                menu_mode: overlay-right
+                webrtc:
+                  entity: camera.driveway_rtsp
+              - type: picture-glance
+                camera_image: camera.front_door
+                title: Front Door
+                entities:
+                  - scene.equipment_room_enclosure_device_001_ph_sunset1
+              - type: custom:frigate-card
+                camera_entity: camera.garage
+                live_provider: webrtc
+                menu_mode: overlay-right
+                webrtc:
+                  entity: camera.garage_rtsp
+              - type: custom:frigate-card
+                camera_entity: camera.deck
+                live_provider: webrtc
+                menu_mode: overlay-right
+                webrtc:
+                  entity: camera.deck_rtsp
+              - type: custom:frigate-card
+                camera_entity: camera.deckstairs
+                live_provider: webrtc
+                menu_mode: overlay-right
+                webrtc:
+                  entity: camera.deckstairs_rtsp
+              - type: custom:frigate-card
+                camera_entity: camera.doorbell
+                live_provider: webrtc
+                menu_mode: overlay-right
+                webrtc:
+                  entity: camera.front_door_live
+          interior:
+            type: vertical-stack
+            cards:
+              - type: custom:frigate-card
+                camera_entity: camera.kitchen
+                live_provider: webrtc
+                menu_mode: overlay-right
+                webrtc:
+                  entity: camera.kitchen_rtsp
+              - type: custom:frigate-card
+                camera_entity: camera.loft
+                live_provider: webrtc
+                menu_mode: overlay-right
+                webrtc:
+                  entity: camera.loft_rtsp
+              - type: picture-glance
+                camera_image: camera.daisy
+                title: Daisy
+                entities:
+                  - switch.pulte_planning_center_lauras_office
+                  - light.pulte_planning_center_lamp
 
   ##########################################
   # MUSIC TAB

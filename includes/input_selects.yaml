@@ -10,7 +10,7 @@ vacuum_room:
 camera_view:
   name: Camera view
   options:
-    - live
-    - last
-  initial: live
+    - exterior
+    - interior
+  initial: exterior
   icon: mdi:camera
