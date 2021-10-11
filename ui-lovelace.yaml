@@ -3,25 +3,13 @@ title: !secret name
 resources:
   - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
     type: module
-  - url: /hacsfiles/lovelace-card-tools/card-tools.js
-    type: js
   - url: /hacsfiles/button-card/button-card.js
     type: module
-  - url: /hacsfiles/group-card/group-card.js
-    type: js
   - url: /hacsfiles/decluttering-card/decluttering-card.js
-    type: module
-  - url: /hacsfiles/bar-card/bar-card.js
     type: module
   - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
     type: module
-  - url: /hacsfiles/text-divider-row/text-divider-row.js
-    type: module
   - url: /hacsfiles/mini-climate-card/mini-climate-card-bundle.js
-    type: module
-  - url: /hacsfiles/search-card/search-card.js
-    type: module
-  - url: /hacsfiles/swipe-card/swipe-card.js
     type: module
   - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
     type: module
@@ -31,24 +19,10 @@ resources:
     type: module
   - url: /browser_mod.js
     type: module
-  - url: /hacsfiles/lovelace-card-mod/card-mod.js
-    type: module
-  - url: /hacsfiles/light-entity-card/light-entity-card.js
-    type: module
-  - url: /hacsfiles/lovelace-more-info-card/more-info-card.js
-    type: module
-  - url: /hacsfiles/lovelace-state-switch/state-switch.js
-    type: module
-  - url: /hacsfiles/lovelace-battery-entity-row/battery-entity-row.js
-    type: module
   - url: /hacsfiles/lovelace-layout-card/layout-card.js
-    type: module
-  - url: /hacsfiles/lovelace-state-switch/state-switch.js
     type: module
   - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
     type: module
-  # - url: /hacsfiles/bootstrap-grid-card.js
-  #   type: module
 
 decluttering_templates:
   cam_small:
@@ -61,31 +35,6 @@ decluttering_templates:
         service: script.turn_on
         service_data:
           entity_id: "[[entity_id]]"
-  cam_history:
-    card:
-      type: custom:swipe-card
-      start_card: 10
-      cards:
-        - type: picture-entity
-          entity: "camera.[[cam]]_history1"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history2"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history3"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history4"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history5"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history6"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history7"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history8"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history9"
-        - type: picture-entity
-          entity: "camera.[[cam]]_history10"
 
 views:
   ##########################################
@@ -350,72 +299,107 @@ views:
   - title: Cameras
     id: camera
     icon: mdi:camera
+    panel: true
     cards:
-      - type: entities
-        entities:
-          - input_select.camera_view
-      - type: custom:state-switch
-        entity: input_select.camera_view
-        states:
-          exterior:
-            type: vertical-stack
-            cards:
-              - type: custom:frigate-card
-                camera_entity: camera.driveway
-                live_provider: webrtc
-                menu_mode: overlay-right
-                webrtc:
-                  entity: camera.driveway_rtsp
-              - type: picture-glance
-                camera_image: camera.front_door
-                title: Front Door
-                entities:
-                  - scene.equipment_room_enclosure_device_001_ph_sunset1
-              - type: custom:frigate-card
-                camera_entity: camera.garage
-                live_provider: webrtc
-                menu_mode: overlay-right
-                webrtc:
-                  entity: camera.garage_rtsp
-              - type: custom:frigate-card
-                camera_entity: camera.deck
-                live_provider: webrtc
-                menu_mode: overlay-right
-                webrtc:
-                  entity: camera.deck_rtsp
-              - type: custom:frigate-card
-                camera_entity: camera.deckstairs
-                live_provider: webrtc
-                menu_mode: overlay-right
-                webrtc:
-                  entity: camera.deckstairs_rtsp
-              - type: custom:frigate-card
-                camera_entity: camera.doorbell
-                live_provider: webrtc
-                menu_mode: overlay-right
-                webrtc:
-                  entity: camera.front_door_live
-          interior:
-            type: vertical-stack
-            cards:
-              - type: custom:frigate-card
-                camera_entity: camera.kitchen
-                live_provider: webrtc
-                menu_mode: overlay-right
-                webrtc:
-                  entity: camera.kitchen_rtsp
-              - type: custom:frigate-card
-                camera_entity: camera.loft
-                live_provider: webrtc
-                menu_mode: overlay-right
-                webrtc:
-                  entity: camera.loft_rtsp
-              - type: picture-glance
-                camera_image: camera.daisy
-                title: Daisy
-                entities:
-                  - switch.pulte_planning_center_lauras_office
-                  - light.pulte_planning_center_lamp
+      - type: custom:layout-card
+        layout_type: custom:grid
+        layout:
+          mediaquery:
+            "(min-width: 1800px)":
+              grid-template-areas: |
+                "cam1 cam2 cam3"
+                "cam4 cam5 cam6"
+                "cam7 cam8 cam9"
+            "(min-width: 1000px)":
+              grid-template-areas: |
+                "cam1 cam2"
+                "cam3 cam4"
+                "cam5 cam6"
+                "cam7 cam8"
+                "cam9 ."
+            "all":
+              grid-template-areas: |
+                "cam1"
+                "cam2"
+                "cam3"
+                "cam4"
+                "cam5"
+                "cam6"
+                "cam7"
+                "cam8"
+                "cam9"
+        cards:
+          - type: custom:frigate-card
+            camera_entity: camera.driveway
+            live_provider: webrtc
+            menu_mode: overlay-right
+            webrtc:
+              entity: camera.driveway_rtsp
+            view_layout:
+              grid-area: cam1
+          - type: picture-glance
+            camera_image: camera.front_door
+            title: Front Door
+            entities:
+              - scene.equipment_room_enclosure_device_001_ph_sunset1
+            view_layout:
+              grid-area: cam2
+          - type: custom:frigate-card
+            camera_entity: camera.deck
+            live_provider: webrtc
+            menu_mode: overlay-right
+            webrtc:
+              entity: camera.deck_rtsp
+            view_layout:
+              grid-area: cam3
+          - type: custom:frigate-card
+            camera_entity: camera.deckstairs
+            live_provider: webrtc
+            menu_mode: overlay-right
+            webrtc:
+              entity: camera.deckstairs_rtsp
+            view_layout:
+              grid-area: cam4
+          - type: custom:frigate-card
+            camera_entity: camera.doorbell
+            live_provider: webrtc
+            menu_mode: overlay-right
+            webrtc:
+              entity: camera.front_door_live
+            view_layout:
+              grid-area: cam5
+          - type: custom:frigate-card
+            camera_entity: camera.garage
+            live_provider: webrtc
+            menu_mode: overlay-right
+            webrtc:
+              entity: camera.garage_rtsp
+            view_layout:
+              grid-area: cam6
+          - type: custom:frigate-card
+            camera_entity: camera.kitchen
+            live_provider: webrtc
+            menu_mode: overlay-right
+            webrtc:
+              entity: camera.kitchen_rtsp
+            view_layout:
+              grid-area: cam7
+          - type: custom:frigate-card
+            camera_entity: camera.loft
+            live_provider: webrtc
+            menu_mode: overlay-right
+            webrtc:
+              entity: camera.loft_rtsp
+            view_layout:
+              grid-area: cam8
+          - type: picture-glance
+            camera_image: camera.daisy
+            title: Daisy
+            entities:
+              - switch.pulte_planning_center_lauras_office
+              - light.pulte_planning_center_lamp
+            view_layout:
+              grid-area: cam9
 
   ##########################################
   # MUSIC TAB
@@ -992,28 +976,6 @@ views:
           exclude:
             - state: "Unknown"
         show_empty: false
-
-  ##########################################
-  # BATTERY TAB
-  ##########################################
-  # - title: Battery Devices
-  #   id: battery_devices
-  #   icon: mdi:battery-charging-wireless-90
-  #   cards:
-  #     - type: "custom:group-card"
-  #       card:
-  #         type: entities
-  #         title: Battery Status
-  #         show_header_toggle: false
-  #       group: group.battery_status
-  #     - type: "custom:group-card"
-  #       card:
-  #         type: entities
-  #         title: Battery Alert
-  #         show_header_toggle: false
-  #       group: group.battery_alert
-  #     - type: custom:search-card
-  #       max_results: 10
 
   ##########################################
   # GRAPH TAB
