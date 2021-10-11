@@ -23,6 +23,8 @@ resources:
     type: module
   - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
     type: module
+  - url: /hacsfiles/lovelace-card-tools/card-tools.js
+    type: js
 
 decluttering_templates:
   cam_small:
@@ -80,8 +82,7 @@ views:
                 name: garage lock
                 tap_action:
                   action: call-service
-                  service: >-
-                    [[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]
+                  service: '[[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]'
                   service_data:
                     entity_id: entity
               - entity: lock.front_door_lock
@@ -89,8 +90,7 @@ views:
                 name: front lock
                 tap_action:
                   action: call-service
-                  service: >-
-                    [[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]
+                  service: '[[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]'
                   service_data:
                     entity_id: entity
           - type: horizontal-stack
