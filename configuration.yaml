@@ -25,8 +25,9 @@ utility_meter:
     cycle: monthly
 
 http:
-  ssl_certificate: /ssl/fullchain.pem
-  ssl_key: /ssl/privkey.pem
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
   login_attempts_threshold: 3
   ip_ban_enabled: false
 updater:
@@ -40,7 +41,7 @@ recorder:
   exclude:
     entity_globs:
       - sensor.dark_sky*
-      - sensor.pixel5_*
+      - sensor.pixel*
 frontend:
   themes: !include_dir_merge_named themes/
 lovelace:

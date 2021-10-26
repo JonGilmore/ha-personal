@@ -6,7 +6,7 @@ cam_deckstairs_vid: !secret cam_deckstairs_vid
 cam_garage_vid: !secret cam_garage_vid
 cam_kitchen_vid: !secret cam_kitchen_vid
 cam_doorbell_vid: !secret cam_doorbell_vid
-unifi_portfwd: /bin/bash /config/scripts/unifi.sh portfwd {{ username }} {{ password }} {{ baseurl }} {{ name }} {{ enabled }} {{ dst_port }} {{ ip }} {{ fwd_port }} {{ proto }} {{ id }} {{ unifi_site }}
+unifi_portfwd: /bin/bash /config/scripts/unifi.sh portfwd {{ username }} {{ password }} {{ baseurl }} {{ name }} {{ enabled }} {{ dst_port }} {{ ip }} {{ fwd_port }} {{ proto }} {{ id }} {{ unifi_site }} {{ src }}
 unifi_powercycle: /bin/bash /config/scripts/unifi.sh powercycleport {{ username }} {{ password }} {{ baseurl }} {{ mac }} {{ port }} {{ cmd }}
 unifi_powercycle_device: /bin/bash /config/scripts/unifi.sh powercycledevice {{ username }} {{ password }} {{ baseurl }} {{ mac }} {{ reboot_type }} {{ cmd }}
 trim_video: /usr/bin/ffmpeg -i {{ clip }} -t {{ duration }} -c copy {{ path }} -y
