@@ -125,9 +125,9 @@
     - condition: state # make sure notifications havent been paused from an actionable notification
       entity_id: input_boolean.frigate_driveway_notifier
       state: "on"
-    - condition: state
-      entity_id: input_boolean.driveway_sentry
-      state: "on"
+    # - condition: state
+    #   entity_id: input_boolean.driveway_sentry
+    #   state: "on"
     - condition: or # only driveway camera
       conditions:
         - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"

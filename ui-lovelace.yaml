@@ -332,11 +332,17 @@ views:
           - type: custom:frigate-card
             camera_entity: camera.driveway
             live_provider: webrtc
-            menu_mode: overlay-right
             webrtc:
               entity: camera.driveway_rtsp
             view_layout:
               grid-area: cam1
+            elements:
+              - type: state-badge
+                entity: sensor.dark_sky_apparent_temperature
+                style:
+                  right: "-20px"
+                  top: 100px
+                  opacity: 0.6
           - type: picture-glance
             camera_image: camera.front_door
             title: Front Door
@@ -347,7 +353,6 @@ views:
           - type: custom:frigate-card
             camera_entity: camera.deck
             live_provider: webrtc
-            menu_mode: overlay-right
             webrtc:
               entity: camera.deck_rtsp
             view_layout:
@@ -355,7 +360,6 @@ views:
           - type: custom:frigate-card
             camera_entity: camera.deckstairs
             live_provider: webrtc
-            menu_mode: overlay-right
             webrtc:
               entity: camera.deckstairs_rtsp
             view_layout:
@@ -363,7 +367,6 @@ views:
           - type: custom:frigate-card
             camera_entity: camera.doorbell
             live_provider: webrtc
-            menu_mode: overlay-right
             webrtc:
               entity: camera.front_door_live
             view_layout:
@@ -371,7 +374,6 @@ views:
           - type: custom:frigate-card
             camera_entity: camera.garage
             live_provider: webrtc
-            menu_mode: overlay-right
             webrtc:
               entity: camera.garage_rtsp
             view_layout:
@@ -379,7 +381,6 @@ views:
           - type: custom:frigate-card
             camera_entity: camera.kitchen
             live_provider: webrtc
-            menu_mode: overlay-right
             webrtc:
               entity: camera.kitchen_rtsp
             view_layout:
@@ -387,7 +388,6 @@ views:
           - type: custom:frigate-card
             camera_entity: camera.loft
             live_provider: webrtc
-            menu_mode: overlay-right
             webrtc:
               entity: camera.loft_rtsp
             view_layout:

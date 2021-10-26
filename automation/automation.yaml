@@ -900,11 +900,11 @@
   description: "if its not daytime and Jon is home, also turn on his lamp"
   trigger:
     - platform: template
-      value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel5_last_notification.attributes['package'] }}"
+      value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel_5_last_notification.attributes['package'] }}"
   action:
     - service: notify.telegram_jon
       data:
-        message: "ALERT! Work page: {{ states.sensor.pixel5_last_notification.attributes['android.text'] }}"
+        message: "ALERT! Work page: {{ states.sensor.pixel_5_last_notification.attributes['android.text'] }}"
     - choose:
         - conditions: "{{ not is_state('sensor.period_of_day', 'day') and is_state('person.jon', 'home') }}"
           sequence:
