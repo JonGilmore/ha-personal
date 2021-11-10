@@ -189,7 +189,24 @@
                 value_template: '{{ now().strftime("%m")|int < 4 }}'
         sequence:
           - service: homeassistant.turn_on
-            entity_id: switch.upstairs_hall_treads, switch.great_room_lamp
+            entity_id: switch.sunroom_sunroom_lamp, switch.great_room_lamp
+########################################
+- alias: "Day Mode: turn off wake mode morning lamps"
+  id: "Day Mode: turn off wake mode morning lamps"
+  description: "only trigger between 6am and 10am"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.light_inside
+      to: "on"
+      for:
+        minutes: 10
+  condition:
+    - condition: time
+      after: "6:00:00"
+      before: "10:00:00"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.sunroom_sunroom_lamp, switch.great_room_lamp
 #########################################
 - alias: "Automatic Lighting: motion light template"
   id: "Automatic Lighting: motion light template"
