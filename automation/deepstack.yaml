@@ -1,0 +1,66 @@
+---
+#########################################
+- alias: "Frigate: driveway arrival"
+  id: "Frigate: driveway arrival"
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.far_person_motion
+        - binary_sensor.far_car_motion
+      to: "on"
+  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id:
+            - binary_sensor.near_car_motion
+            - binary_sensor.near_person_motion
+          to: "on"
+      timeout: 20
+      continue_on_timeout: false
+    - service: notify.telegram_jon
+      data_template:
+        title: "{{ trigger.to_state.attributes.friendly_name }}"
+        message: "{{ trigger.to_state.attributes.friendly_name }}"
+        data:
+          photo:
+            url: "{{ states.sensor.hik_driveway_pic.state }}"
+#########################################
+- alias: "Deepstack: image processing"
+  id: "Deepstack: image processing"
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.double_take_laura
+        - sensor.double_take_jon
+  condition:
+    - condition: template
+      value_template: "{{ trigger.to_state.state != trigger.from_state.state }}"
+    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.deepstack_image_processing', 'last_triggered')) |int(0) ) > 60 }}" # rate limit
+  action:
+    - service: notify.telegram_jon
+      data:
+        message: |-
+          {% if trigger.to_state.attributes.match is defined %}
+            {{trigger.to_state.attributes.friendly_name}} is near the {{trigger.to_state.state}} @ {{trigger.to_state.attributes.match.confidence}}% by {{trigger.to_state.attributes.match.detector}}:{{trigger.to_state.attributes.match.type}} taking {{trigger.to_state.attributes.attempts}} attempt(s) @ {{trigger.to_state.attributes.duration}} sec
+          {% elif trigger.to_state.attributes.unknown is defined %}
+            unknown is near the {{trigger.to_state.state}} @ {{trigger.to_state.attributes.unknown.confidence}}% by {{trigger.to_state.attributes.unknown.detector}}:{{trigger.to_state.attributes.unknown.type}} taking {{trigger.to_state.attributes.attempts}} attempt(s) @ {{trigger.to_state.attributes.duration}} sec
+          {% endif %}
+        data:
+          attachment:
+            url: |-
+              {% if trigger.to_state.attributes.match is defined %}
+                http://192.168.1.2:3000/api/storage/matches/{{trigger.to_state.attributes.match.filename}}?box=true&token={{trigger.to_state.attributes.token}}
+              {% elif trigger.to_state.attributes.unknown is defined %}
+                http://192.168.1.2:3000/api/storage/matches/{{trigger.to_state.attributes.unknown.filename}}?box=true&token={{trigger.to_state.attributes.token}}
+              {% endif %}
+          # actions:
+          #   - action: URI
+          #     title: View Image
+          #     uri: |-
+          #       {% if trigger.to_state.attributes.match is defined %}
+          #         http://192.168.1.2:3000/api/storage/matches/{{trigger.to_state.attributes.match.filename}}?box=true&token={{trigger.to_state.attributes.token}}
+          #       {% elif trigger.to_state.attributes.unknown is defined %}
+          #         http://192.168.1.2:3000/api/storage/matches/{{trigger.to_state.attributes.unknown.filename}}?box=true&token={{trigger.to_state.attributes.token}}
+          #       {% endif %}
+  mode: parallel
+  max: 10
