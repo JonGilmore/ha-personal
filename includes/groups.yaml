@@ -79,7 +79,7 @@ interior_lights:
     - switch.upstairs_hall_main_stairs
     - switch.upstairs_hall_treads
     - switch.office_speakers
-    - switch.switch2
+    - switch.christmas_tree
     - light.master_bath_toekick
 
 all_lights:
@@ -160,7 +160,7 @@ all_lights:
     - switch.upstairs_hall_main_stairs
     - switch.upstairs_hall_treads
     - switch.office_speakers
-    - switch.switch2
+    - switch.christmas_tree
     - light.master_bath_toekick
     - fan.patio_fan
 
@@ -268,13 +268,13 @@ christmasLights:
     - switch.exterior_light
     - switch.exterior_outlets
     - switch.sunroom_xmas_tree
-    - switch.switch2
+    - switch.christmas_tree
 
 christmasTrees:
   name: Christmas Trees
   entities:
     - switch.sunroom_xmas_tree
-    - switch.switch2
+    - switch.christmas_tree
 
 garmin:
   name: garmin
