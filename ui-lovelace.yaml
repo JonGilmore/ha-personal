@@ -331,9 +331,10 @@ views:
         cards:
           - type: custom:frigate-card
             camera_entity: camera.driveway
-            live_provider: webrtc
-            webrtc:
-              entity: camera.driveway_rtsp
+            live:
+              provider: webrtc
+              webrtc:
+                entity: camera.driveway_rtsp
             view_layout:
               grid-area: cam1
             elements:
@@ -352,44 +353,50 @@ views:
               grid-area: cam2
           - type: custom:frigate-card
             camera_entity: camera.deck
-            live_provider: webrtc
-            webrtc:
-              entity: camera.deck_rtsp
+            live:
+              provider: webrtc
+              webrtc:
+                entity: camera.deck_rtsp
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             camera_entity: camera.deckstairs
-            live_provider: webrtc
-            webrtc:
-              entity: camera.deckstairs_rtsp
+            live:
+              provider: webrtc
+              webrtc:
+                entity: camera.deckstairs_rtsp
             view_layout:
               grid-area: cam4
           - type: custom:frigate-card
             camera_entity: camera.doorbell
-            live_provider: webrtc
-            webrtc:
-              entity: camera.front_door_live
+            live:
+              provider: webrtc
+              webrtc:
+                entity: camera.front_door_live
             view_layout:
               grid-area: cam5
           - type: custom:frigate-card
             camera_entity: camera.garage
-            live_provider: webrtc
-            webrtc:
-              entity: camera.garage_rtsp
+            live:
+              provider: webrtc
+              webrtc:
+                entity: camera.garage_rtsp
             view_layout:
               grid-area: cam6
           - type: custom:frigate-card
             camera_entity: camera.kitchen
-            live_provider: webrtc
-            webrtc:
-              entity: camera.kitchen_rtsp
+            live:
+              provider: webrtc
+              webrtc:
+                entity: camera.kitchen_rtsp
             view_layout:
               grid-area: cam7
           - type: custom:frigate-card
             camera_entity: camera.loft
-            live_provider: webrtc
-            webrtc:
-              entity: camera.loft_rtsp
+            live:
+              provider: webrtc
+              webrtc:
+                entity: camera.loft_rtsp
             view_layout:
               grid-area: cam8
           - type: picture-glance
