@@ -195,11 +195,9 @@
   id: "Day Mode: turn off wake mode morning lamps"
   description: "only trigger between 6am and 10am"
   trigger:
-    - platform: state
-      entity_id: binary_sensor.light_inside
-      to: "on"
-      for:
-        minutes: 10
+    - platform: sun
+      event: sunrise
+      offset: "+01:00:00"
   condition:
     - condition: time
       after: "6:00:00"
