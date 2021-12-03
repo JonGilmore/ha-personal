@@ -27,7 +27,7 @@
       state: "home"
   action:
     - service: homeassistant.turn_on
-      entity_id: group.christmasTrees
+      entity_id: group.christmastrees
 #########################################
 - alias: "Christmas: turn off at 11pm (only when xmas boolean on)"
   id: "Christmas: turn off at 11pm (only when xmas boolean on)"
@@ -40,7 +40,7 @@
       state: "on"
   action:
     - service: homeassistant.turn_off
-      entity_id: group.christmasLights
+      entity_id: group.christmaslights
 #########################################
 - alias: "Christmas: turn off when sleeping starts (only when xmas boolean on)"
   id: "Christmas: turn off when sleeping starts (only when xmas boolean on)"
@@ -55,7 +55,7 @@
       state: "on"
   action:
     - service: homeassistant.turn_off
-      entity_id: group.christmasLights
+      entity_id: group.christmaslights
 #########################################
 - alias: "Christmas: lights off/on with geolocation presence (only in Dec)"
   id: "Christmas: lights off/on with geolocation presence (only in Dec)"
@@ -78,7 +78,7 @@
     - service_template: >
         {% if trigger.to_state.state == 'home' %}homeassistant.turn_on
         {% else %}homeassistant.turn_off{% endif %}
-      entity_id: group.christmasTrees
+      entity_id: group.christmastrees
     - service: notify.telegram_jon
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees are toggled"
@@ -100,4 +100,4 @@
       before: "23:59:59"
   action:
     - service: homeassistant.turn_off
-      entity_id: group.christmasTrees
+      entity_id: group.christmastrees

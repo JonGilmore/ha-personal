@@ -90,9 +90,9 @@ elkm1:
   setting:
     enabled: false
 
-# sleepiq:
-#   username: !secret sleep_usr
-#   password: !secret sleep_pwd
+sleepiq:
+  username: !secret sleep_usr
+  password: !secret sleep_pwd
 
 nest:
   client_id: !secret nest_client_id
