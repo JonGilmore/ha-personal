@@ -1,7 +1,7 @@
 ---
 #########################################
-- alias: "Christmas: roof lights on (only when xmas boolean on)"
-  id: "Christmas: roof lights on (only when xmas boolean on)"
+- alias: "Christmas: roof lights on & optionally trees (only when xmas boolean on)"
+  id: "Christmas: roof lights on & optionally trees (only when xmas boolean on)"
   trigger:
     - platform: time
       at: "17:00:00"
@@ -12,22 +12,14 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.exterior_light
-#########################################
-- alias: "Christmas: trees on (only when xmas boolean on) if occupied"
-  id: "Christmas: trees on (only when xmas boolean on) if occupied"
-  trigger:
-    - platform: time
-      at: "17:00:00"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.christmas_season
-      state: "on"
-    - condition: state
-      entity_id: person.laura
-      state: "home"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: group.christmastrees
+    - choose:
+        conditions:
+          - condition: state
+            entity_id: person.laura
+            state: "home"
+        sequence:
+          - service: homeassistant.turn_on
+            entity_id: group.christmastrees
 #########################################
 - alias: "Christmas: turn off at 11pm (only when xmas boolean on)"
   id: "Christmas: turn off at 11pm (only when xmas boolean on)"
