@@ -21,22 +21,11 @@
           - service: homeassistant.turn_on
             entity_id: group.christmastrees
 #########################################
-- alias: "Christmas: turn off at 11pm (only when xmas boolean on)"
-  id: "Christmas: turn off at 11pm (only when xmas boolean on)"
+- alias: "Christmas: turn off at 11pm or when sleeping starts (only when xmas boolean on)"
+  id: "Christmas: turn off at 11pm or when sleeping starts (only when xmas boolean on)"
   trigger:
-    platform: time
-    at: "23:00:00"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.christmas_season
-      state: "on"
-  action:
-    - service: homeassistant.turn_off
-      entity_id: group.christmaslights
-#########################################
-- alias: "Christmas: turn off when sleeping starts (only when xmas boolean on)"
-  id: "Christmas: turn off when sleeping starts (only when xmas boolean on)"
-  trigger:
+    - platform: time
+      at: "23:00:00"
     - platform: state
       entity_id: binary_sensor.sleep_status
       from: "off"
@@ -51,6 +40,7 @@
 #########################################
 - alias: "Christmas: lights off/on with geolocation presence (only in Dec)"
   id: "Christmas: lights off/on with geolocation presence (only in Dec)"
+  description: "only before 11pm"
   trigger:
     - platform: state
       entity_id: person.laura
@@ -62,8 +52,6 @@
     - condition: state
       entity_id: binary_sensor.christmas_season
       state: "on"
-    - condition: time
-      after: "13:00:00"
     - condition: time
       before: "23:00:00"
   action:
