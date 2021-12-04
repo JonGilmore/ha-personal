@@ -668,6 +668,8 @@
     - condition: state
       entity_id: input_boolean.sunset_run_once
       state: "off"
+    - condition: time
+      after: "15:30:00"
     - condition: state
       entity_id: input_boolean.motion_lights
       state: "on"
