@@ -909,27 +909,6 @@ views:
           - sensor.memory_use_percent
           - sensor.cpu_temperature
       - type: entities
-        title: COVID-19
-        show_header_toggle: false
-        entities:
-          - sensor.us_current
-          - sensor.us_recovered
-          - sensor.us_deaths
-          - sensor.us_confirmed
-          - sensor.covid_mn_death
-          - sensor.covid_mn_negative
-          - sensor.covid_mn_positive
-          - sensor.covid_mn_total
-      # - type: entities
-      #   title: Master Bed
-      #   show_header_toggle: false
-      #   entities:
-      #     - binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed
-      #     - binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed
-      #     - type: divider
-      #     - sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_sleepnumber
-      #     - sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_sleepnumber
-      - type: entities
         title: Toggles
         show_header_toggle: false
         entities:
@@ -987,18 +966,15 @@ views:
   ##########################################
   # GRAPH TAB
   ##########################################
-  - title: Graphs
-    id: graphs
-    icon: mdi:chart-areaspline
-    cards:
-      - type: iframe
-        url: !secret hvac_graph
-        aspect_ratio: 75%
-      - type: iframe
-        url: !secret pwr_graph
-      - type: iframe
-        url: https://video.dot.state.mn.us/video/image/metro/C908
-        aspect_ratio: 100%
+  # - title: Graphs
+  #   id: graphs
+  #   icon: mdi:chart-areaspline
+  #   cards:
+  #     - type: entities
+  #       title: Moisture Sensors
+  #       show_header_toggle: false
+  #       entities:
+  #         - sensor.covid_mn_death
 
   ##########################################
   # ALARM PAGE
