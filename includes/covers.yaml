@@ -8,8 +8,8 @@
         service: scene.turn_on
         entity_id: scene.single_garage_op
       close_cover:
-        service: scene.single_garage_cl
-        entity_id: scene.task_002
+        service: scene.turn_on
+        entity_id: scene.single_garage_cl
     garage_momentary_double:
       value_template: "{{ states.sensor.double_garage.state == 'Violated' }}"
       friendly_name: Double Garage

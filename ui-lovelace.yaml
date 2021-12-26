@@ -54,6 +54,7 @@ views:
             type: custom:multiple-entity-row
             name: Alarm
             show_state: false
+            secondary_info: last-changed
             entities:
               - entity: alarm_control_panel.house
       - type: weather-forecast
@@ -68,6 +69,7 @@ views:
                 type: custom:multiple-entity-row
                 name: Garage
                 show_state: false
+                secondary_info: last-changed
                 entities:
                   - entity: cover.garage_momentary_single
                     tap_action:
