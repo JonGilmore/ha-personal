@@ -25,6 +25,8 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-card-tools/card-tools.js
     type: js
+  - url: /hacsfiles/lovelace-fold-entity-row/fold-entity-row.js
+    type: module
 
 decluttering_templates:
   cam_small:
@@ -37,6 +39,20 @@ decluttering_templates:
         service: script.turn_on
         service_data:
           entity_id: "[[entity_id]]"
+  big_group:
+    card:
+      type: entities
+      entities:
+        - type: custom:auto-entities
+          show_empty: false
+          sort:
+            method: name
+          card:
+            type: custom:fold-entity-row
+            head: "[[group]]"
+          filter:
+            include:
+              - group: "[[group]]"
 
 views:
   ##########################################
@@ -661,56 +677,26 @@ views:
     id: lights
     icon: mdi:lightbulb
     cards:
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Basement Lights
-        filter:
-          include:
-            - group: group.basement_lights
-        sort:
-          method: name
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Main Floor Lights
-        filter:
-          include:
-            - group: group.main_floor_lights
-        sort:
-          method: name
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Upstairs Lights
-        filter:
-          include:
-            - group: group.upstairs_lights
-        sort:
-          method: name
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Exterior Lights
-        filter:
-          include:
-            - group: group.exterior_lights
-        sort:
-          method: name
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: All Fans
-        filter:
-          include:
-            - group: group.all_fans
-        sort:
-          method: name
+      - type: custom:decluttering-card
+        template: big_group
+        variables:
+          - group: group.basement_lights
+      - type: custom:decluttering-card
+        template: big_group
+        variables:
+          - group: group.main_floor_lights
+      - type: custom:decluttering-card
+        template: big_group
+        variables:
+          - group: group.upstairs_lights
+      - type: custom:decluttering-card
+        template: big_group
+        variables:
+          - group: group.exterior_lights
+      - type: custom:decluttering-card
+        template: big_group
+        variables:
+          - group: group.all_fans
   ##########################################
   # SMARTTHINGS TAB
   ##########################################
