@@ -360,6 +360,23 @@ exterior_motions:
     - binary_sensor.doorbell_person_motion
     - binary_sensor.driveway_person_motion
     - binary_sensor.garage_person_motion
+    - binary_sensor.driveway_bicycle_motion
+    - binary_sensor.driveway_car_motion
+    - binary_sensor.driveway_cat_motion
+    - binary_sensor.driveway_dog_motion
+    - binary_sensor.driveway_motorcycle_motion
+    - binary_sensor.driveway_truck_motion
+
+driveway_motion:
+  name: Driveway Motion
+  entities:
+    - binary_sensor.driveway_bicycle_motion
+    - binary_sensor.driveway_car_motion
+    - binary_sensor.driveway_cat_motion
+    - binary_sensor.driveway_dog_motion
+    - binary_sensor.driveway_motorcycle_motion
+    - binary_sensor.driveway_person_motion
+    - binary_sensor.driveway_truck_motion
 
 windows:
   name: All Windows
