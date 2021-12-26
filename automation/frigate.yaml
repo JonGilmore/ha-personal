@@ -120,7 +120,6 @@
       topic: frigate/events
   condition:
     - "{{ trigger.payload_json['type'] == 'end' }}"
-    - "{{ trigger.payload_json['after']['has_clip'] == 'true' }}"
     - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_sentry_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
     - condition: state # make sure notifications havent been paused from an actionable notification
       entity_id: input_boolean.frigate_driveway_notifier
