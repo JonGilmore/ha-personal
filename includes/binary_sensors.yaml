@@ -409,15 +409,10 @@
       prob_given_false: 0.6
       to_state: "home"
     - platform: "numeric_state"
-      entity_id: "sensor.office_desk"
-      prob_given_true: 0.90
-      prob_given_false: 0.3
-      below: 1.1
-    - platform: "numeric_state"
       entity_id: "sensor.sonoff2_energy_apparentpower"
       prob_given_true: 0.80
       prob_given_false: 0.3
-      above: 25
+      above: 24
     - platform: "state"
       entity_id: "binary_sensor.office_multi_motion"
       prob_given_true: 0.95

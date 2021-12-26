@@ -129,7 +129,7 @@ camera: !include includes/cameras.yaml
 climate: !include includes/climate.yaml
 cover: !include includes/covers.yaml
 device_tracker: !include includes/device_tracker.yaml
-fan: !include includes/fans.yaml
+# fan: !include includes/fans.yaml
 group: !include includes/groups.yaml
 input_boolean: !include includes/input_booleans.yaml
 input_select: !include includes/input_selects.yaml
