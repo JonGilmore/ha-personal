@@ -134,6 +134,20 @@ views:
                 variables:
                   - icon: mdi:car
                   - entity_id: script.video_garage
+      - type: entities
+        show_name: false
+        show_header_toggle: false
+        entities:
+          - entity: sensor.eth_average
+            type: custom:multiple-entity-row
+            name: crypto
+            icon: mdi:ethereum
+            entities:
+              - entity: switch.mine_crypto
+                name: mine
+                toggle: true
+              - entity: sensor.eth_success_ratio
+                name: success
       - type: picture-glance
         camera_image: camera.driveway
         title: Exterior
@@ -187,7 +201,6 @@ views:
         title: Equipment
         show_header_toggle: false
         entities:
-          - entity: switch.mine_crypto
           - entity: switch.water_main_shut_off
             type: custom:multiple-entity-row
             name: Water Main

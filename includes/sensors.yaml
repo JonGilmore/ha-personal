@@ -141,6 +141,47 @@
       value_template: !secret cam_doorbell_vid
     cam_kitchen_vid:
       value_template: !secret cam_kitchen_vid
+    eth_unpaid: 
+      friendly_name: "Unpaid Eth Ethermine"
+      value_template: "{{(states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['unpaid'] /1000000000000000000 )}}"
+      unit_of_measurement: "ETH"
+    eth_current:
+      friendly_name: "Current Hashrate Ethermine"
+      value_template: "{{ (states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['current_hashrate'] /1000000 )|round(2)}}"
+      unit_of_measurement: "MH/s"
+    eth_reported:
+      friendly_name: "Reported Hashrate Ethermine"
+      value_template: "{{ (states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['reported_hashrate'] /1000000 )|round(2)}}"
+      unit_of_measurement: "MH/s"
+    eth_average:
+      friendly_name: "Average Hashrate Ethermine 24h"
+      value_template: "{{ (states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['average_hashrate_24h'] /1000000 )|round(2)}}"
+      unit_of_measurement: "MH/s"
+    eth_valid:
+      friendly_name: "Valid Shares Ethermine"
+      value_template: "{{ (states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['valid_shares'] )}}"
+      unit_of_measurement: "Shares"
+    eth_stale:
+      friendly_name: "Stale Shares Ethermine"
+      value_template: "{{ (states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['stale_shares'] )}}"
+      unit_of_measurement: "Shares"
+    eth_invalid:
+      friendly_name: "Invalid Shares Ethermine"
+      value_template: "{{ (states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['invalid_shares'] )}}"
+      unit_of_measurement: "Shares"
+    eth_success_ratio:
+      friendly_name: "Success Rate Ethermine"
+      value_template: "{{ 
+        (((
+        (states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['valid_shares'])
+        )
+        /((states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['valid_shares'])
+        +(states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['invalid_shares'])
+        +(states.sensor.ethermineinfo_0xc4c690b587f8395b4cb3afcf291ca7292fba2ea4.attributes['stale_shares'])
+        ))|round(3)
+        )*100
+        }}"
+      unit_of_measurement: "%"
 
 # DARK SKY
 - platform: darksky
@@ -548,3 +589,7 @@
       friendly_name: Dining Room Temperature
       value_template: >-
         {{ states('sensor.dining_room_temperature') | round | int }}°
+
+- platform: ethermineinfo
+  miner_address: "0xC4C690b587F8395B4Cb3AFcf291Ca7292FbA2ea4"
+  currency_name: USD
