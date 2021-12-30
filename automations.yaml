@@ -1,0 +1,11 @@
+- id: '1640828194566'
+  alias: Low battery level detection & notification for all battery sensors
+  description: ''
+  use_blueprint:
+    path: Sbyx/low-battery-level-detection-notification-for-all-battery-sensors.yaml
+    input:
+      time: 09:59:00
+      actions:
+      - service: notify.telegram_jon
+        data:
+          message: 'Low battery warning for: {{sensors|replace("_"," ")}}'

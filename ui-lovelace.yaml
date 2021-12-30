@@ -27,6 +27,8 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-fold-entity-row/fold-entity-row.js
     type: module
+  - url: /hacsfiles/battery-state-card/battery-state-card.js
+    type: module
 
 decluttering_templates:
   cam_small:
@@ -931,6 +933,25 @@ views:
           - entity: sensor.speedtest_upload
             name: upload
             show_state: true
+      - type: "custom:battery-state-card"
+        title: Batteries < 60%
+        sort_by_level: "asc"
+        tap_action: more-info
+        secondary_info: last_updated
+        filter:
+          include:
+            - name: entity_id
+              value: "*battery*"
+            - name: attributes.device_class
+              value: battery
+          exclude:
+            - name: state
+              value: 60
+              operator: ">"
+            - name: entity_id
+              value: "automation.*"
+            - name: state
+              value: "/Off|Good|Not Charging|Discharging/"
   ##########################################
   # MOBILE TAB
   ##########################################
