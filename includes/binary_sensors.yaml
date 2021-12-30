@@ -401,16 +401,11 @@
 - platform: bayesian
   name: office occupancy
   prior: 0.5
-  probability_threshold: 0.86
+  probability_threshold: 0.70
   observations:
-    - platform: "state"
-      entity_id: "person.jon"
-      prob_given_true: 0.99
-      prob_given_false: 0.6
-      to_state: "home"
     - platform: "numeric_state"
       entity_id: "sensor.sonoff2_energy_apparentpower"
-      prob_given_true: 0.80
+      prob_given_true: 0.99
       prob_given_false: 0.3
       above: 24
     - platform: "state"

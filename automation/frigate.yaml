@@ -127,6 +127,9 @@
     # - condition: state
     #   entity_id: input_boolean.driveway_sentry
     #   state: "on"
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "off"
     - condition: or # only driveway camera
       conditions:
         - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"
