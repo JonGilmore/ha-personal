@@ -184,10 +184,10 @@ mobile_app:
 browser_mod:
   prefix: "browser_"
   devices:
-    37a201ed-e63fb778:
-      name: wallpanel
-    00d5d99a-b03ecc8e:
+    c427d3b2-52fa9681:
       name: jons_macbook
+    06bc0513-a22e88bf:
+      name: jons_pixel
 
 lifx:
   light:
