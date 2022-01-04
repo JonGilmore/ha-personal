@@ -946,12 +946,14 @@ views:
               value: battery
           exclude:
             - name: state
-              value: 60
+              value: 40
               operator: ">"
             - name: entity_id
               value: "automation.*"
             - name: state
               value: "/Off|Good|Not Charging|Discharging/"
+            - name: entity_id
+              value: "*temp*"
   ##########################################
   # MOBILE TAB
   ##########################################
