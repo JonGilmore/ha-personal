@@ -91,9 +91,11 @@ views:
                 secondary_info: last-changed
                 entities:
                   - entity: cover.garage_momentary_single
+                    name: single
                     tap_action:
                       action: toggle
                   - entity: cover.garage_momentary_double
+                    name: double
                     tap_action:
                       action: toggle
           - type: horizontal-stack
@@ -209,10 +211,10 @@ views:
             secondary_info: last-changed
             entities:
               - entity: switch.water_main_shut_off
-                name: Main
+                name: main
                 toggle: true
               - entity: switch.equipment_room_recirculation_pump
-                name: Recirc
+                name: recirc
                 toggle: true
           - entity: sensor.period_of_day
             type: custom:multiple-entity-row
@@ -220,9 +222,29 @@ views:
             secondary_info: last-changed
             entities:
               - entity: binary_sensor.light_inside
-                name: light main?
+                name: main?
               - entity: binary_sensor.light_inside_master
-                name: light second?
+                name: second?
+          - entity: binary_sensor.kitchen_fridge_leak_water
+            type: custom:multiple-entity-row
+            name: Kitchen
+            icon: mdi:fridge
+            show_state: false
+            entities:
+              - entity: sensor.bar_fridge_temperature
+                name: fridge
+              - entity: sensor.bar_freezer_temperature
+                name: freezer
+          - entity: sensor.bar_fridge_leak_sensor
+            type: custom:multiple-entity-row
+            name: Bar
+            icon: mdi:fridge
+            show_state: false
+            entities:
+              - entity: sensor.kitchen_fridge_temperature
+                name: fridge
+              - entity: sensor.kitchen_freezer_temperature
+                name: freezer
           - entity: input_select.vacuum_room
       - type: custom:mini-graph-card
         name: Lux Sensors
