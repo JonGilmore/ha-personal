@@ -225,9 +225,9 @@ views:
                 name: main?
               - entity: binary_sensor.light_inside_master
                 name: second?
-          - entity: binary_sensor.kitchen_fridge_leak_water
+          - entity: sensor.bar_fridge_leak_sensor
             type: custom:multiple-entity-row
-            name: Kitchen
+            name: bar
             icon: mdi:fridge
             show_state: false
             entities:
@@ -235,9 +235,9 @@ views:
                 name: fridge
               - entity: sensor.bar_freezer_temperature
                 name: freezer
-          - entity: sensor.bar_fridge_leak_sensor
+          - entity: binary_sensor.kitchen_fridge_leak_water
             type: custom:multiple-entity-row
-            name: Bar
+            name: kitchen
             icon: mdi:fridge
             show_state: false
             entities:
