@@ -8,11 +8,11 @@ portfwd() {
   # authenticate against unifi controller
   ${curl_cmd} -H 'Content-Type: application/json' -D ${headers} -d "{\"username\":\"$1\", \"password\":\"$2\"}" https://${3}/api/auth/login
 
-  # grab the `X-CSRF-Token` and strip the newline (added when upgraded to controller 6.1.26)
-  csrf="$(awk -v FS=': ' '/^X-CSRF-Token/{print $2}' "${headers}" | tr -d '\r')"
+  # grab the `x-csrf-token` and strip the newline (added when upgraded to controller 6.1.26)
+  csrf="$(awk -v FS=': ' '/^x-csrf-token/{print $2}' "${headers}" | tr -d '\r')"
 
   # enable/disable firewall rule
-  ${curl_cmd} -k -X PUT https://${3}/proxy/network/api/s/default/rest/portforward/${10} -H "Content-Type: application/json" -H "X-CSRF-Token: ${csrf}" -d @- <<-EOF
+  ${curl_cmd} -k -X PUT https://${3}/proxy/network/api/s/default/rest/portforward/${10} -H "Content-Type: application/json" -H "x-csrf-token: ${csrf}" -d @- <<-EOF
   {
     "name":"${4}",
     "enabled":${5},
@@ -48,11 +48,11 @@ powercycledevice() {
   # authenticate against unifi controller
   ${curl_cmd} -H 'Content-Type: application/json' -D ${headers} -d "{\"username\":\"$1\", \"password\":\"$2\"}" https://${3}/api/auth/login
 
-  # grab the `X-CSRF-Token` and strip the newline (added when upgraded to controller 6.1.26)
-  csrf="$(awk -v FS=': ' '/^X-CSRF-Token/{print $2}' "${headers}" | tr -d '\r')"
+  # grab the `x-csrf-token` and strip the newline (added when upgraded to controller 6.1.26)
+  csrf="$(awk -v FS=': ' '/^x-csrf-token/{print $2}' "${headers}" | tr -d '\r')"
 
   # cycle unifi device
-  ${curl_cmd} -k -X POST https://${3}/proxy/network/api/s/default/cmd/devmgr -H "Content-Type: application/json" -H "X-CSRF-Token: ${csrf}" -d @- <<-EOF
+  ${curl_cmd} -k -X POST https://${3}/proxy/network/api/s/default/cmd/devmgr -H "Content-Type: application/json" -H "x-csrf-token: ${csrf}" -d @- <<-EOF
     {
         "mac":"$4",
         "reboot_type":"$5",
