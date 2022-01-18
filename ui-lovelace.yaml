@@ -13,8 +13,6 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
     type: module
-  - url: /hacsfiles/secondaryinfo-entity-row/secondaryinfo-entity-row.js
-    type: module
   - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
     type: module
   - url: /browser_mod.js
@@ -28,6 +26,8 @@ resources:
   - url: /hacsfiles/lovelace-fold-entity-row/fold-entity-row.js
     type: module
   - url: /hacsfiles/battery-state-card/battery-state-card.js
+    type: module
+  - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
     type: module
 
 decluttering_templates:
@@ -186,10 +186,11 @@ views:
         sort:
           method: name
       - type: "custom:auto-entities"
+        show_empty: true
         card:
-          show_header_toggle: false
           title: Important Dates
           type: entities
+          show_header_toggle: false
         sort:
           method: state
           numeric: true
@@ -198,9 +199,24 @@ views:
             - entity_id: "/(birthday|anniversary)/"
               state: < 45
               options:
-                type: "custom:secondaryinfo-entity-row"
-                secondary_info: "[[ {entity}.attributes.date ]]  ([[ {entity}.attributes.years_at_next_anniversary ]] yrs)"
-        show_empty: true
+                type: custom:template-entity-row
+                state: |
+                  {% if is_state(config.entity, '0') %}
+                    today
+                  {% elif is_state(config.entity, '1') %}
+                    tomorrow
+                  {% else %}
+                    {{ states(config.entity) }} days
+                  {% endif %}
+                secondary: |
+                  {% if is_state(config.entity, '0') %}
+                    {{ state_attr(config.entity, 'current_years') }} yrs - 
+                  {% elif state_attr(config.entity, 'current_years') == None %}
+                    no year specified - 
+                  {% else %}
+                    {{ state_attr(config.entity, 'years_at_next_anniversary') }} yrs - 
+                  {% endif %}
+                  {{ as_timestamp(state_attr(config.entity, 'date')) | timestamp_custom('%m/%d/%Y') }}
       - type: entities
         title: Equipment
         show_header_toggle: false
