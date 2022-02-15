@@ -29,6 +29,10 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
     type: module
+  - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
+    type: module
+  - url: /hacsfiles/lovelace-mushroom/mushroom.js
+    type: module
 
 decluttering_templates:
   cam_small:
@@ -381,14 +385,13 @@ views:
               grid-template-areas: |
                 "cam1 cam2 cam3"
                 "cam4 cam5 cam6"
-                "cam7 cam8 cam9"
+                "cam7 cam8 ."
             "(min-width: 1000px)":
               grid-template-areas: |
                 "cam1 cam2"
                 "cam3 cam4"
                 "cam5 cam6"
                 "cam7 cam8"
-                "cam9 ."
             "all":
               grid-template-areas: |
                 "cam1"
@@ -399,14 +402,14 @@ views:
                 "cam6"
                 "cam7"
                 "cam8"
-                "cam9"
         cards:
           - type: custom:frigate-card
-            camera_entity: camera.driveway
-            live:
-              provider: webrtc
-              webrtc:
-                entity: camera.driveway_rtsp
+            cameras:
+              - camera_entity: camera.driveway
+                webrtc:
+                  entity: camera.driveway_rtsp
+            event_gallery:
+              min_columns: 5
             view_layout:
               grid-area: cam1
             elements:
@@ -424,53 +427,62 @@ views:
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
-            camera_entity: camera.deck
-            live:
-              provider: webrtc
-              webrtc:
-                entity: camera.deck_rtsp
+            cameras:
+              - camera_entity: camera.deck
+                webrtc:
+                  entity: camera.deck_rtsp
+            event_gallery:
+              min_columns: 5
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
-            camera_entity: camera.deckstairs
-            live:
-              provider: webrtc
-              webrtc:
-                entity: camera.deckstairs_rtsp
+            cameras:
+              - camera_entity: camera.deckstairs
+                webrtc:
+                  entity: camera.deckstairs_rtsp
+              - camera_entity: camera.deck
+                webrtc:
+                  entity: camera.deck_rtsp
+            event_gallery:
+              min_columns: 5
             view_layout:
               grid-area: cam4
           - type: custom:frigate-card
-            camera_entity: camera.doorbell
-            live:
-              provider: webrtc
-              webrtc:
-                entity: camera.front_door_live
+            cameras:
+              - camera_entity: camera.doorbell
+                webrtc:
+                  entity: camera.front_door_live
+            event_gallery:
+              min_columns: 5
             view_layout:
               grid-area: cam5
           - type: custom:frigate-card
-            camera_entity: camera.garage
-            live:
-              provider: webrtc
-              webrtc:
-                entity: camera.garage_rtsp
+            cameras:
+              - camera_entity: camera.garage
+                webrtc:
+                  entity: camera.garage_rtsp
+            event_gallery:
+              min_columns: 5
             view_layout:
               grid-area: cam6
           - type: custom:frigate-card
-            camera_entity: camera.kitchen
-            live:
-              provider: webrtc
-              webrtc:
-                entity: camera.kitchen_rtsp
+            cameras:
+              - camera_entity: camera.kitchen
+                webrtc:
+                  entity: camera.kitchen_rtsp
+            event_gallery:
+              min_columns: 5
             view_layout:
               grid-area: cam7
-          - type: custom:frigate-card
-            camera_entity: camera.loft
-            live:
-              provider: webrtc
-              webrtc:
-                entity: camera.loft_rtsp
-            view_layout:
-              grid-area: cam8
+          # - type: custom:frigate-card
+          #   cameras:
+          #     - camera_entity: camera.loft
+          #       webrtc:
+          #         entity: camera.loft_rtsp
+          #   event_gallery:
+          #     min_columns: 5
+          #   view_layout:
+          #     grid-area: cam8
           - type: picture-glance
             camera_image: camera.daisy
             title: Daisy
@@ -478,7 +490,7 @@ views:
               - switch.pulte_planning_center_lauras_office
               - light.pulte_planning_center_lamp
             view_layout:
-              grid-area: cam9
+              grid-area: cam8
 
   ##########################################
   # MUSIC TAB
@@ -486,231 +498,20 @@ views:
   - title: Music
     id: music
     icon: mdi:music
+    panel: true
     cards:
-      - type: custom:mini-media-player
-        entity: media_player.deck
-        hide:
-          power: true
-          icon: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.garage
-              name: garage
-            - entity_id: media_player.guest_bathroom
-              name: guest bath
-            - entity_id: media_player.gym
-              name: gym
-            - entity_id: media_player.kitchen
-              name: kitchen
-            - entity_id: media_player.laundry
-              name: laundry
-            - entity_id: media_player.master
-              name: master
-            - entity_id: media_player.portable
-              name: portable
-            - entity_id: media_player.workshop
-              name: workshop
-      - type: custom:mini-media-player
-        entity: media_player.garage
-        hide:
-          power: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.deck
-              name: deck
-            - entity_id: media_player.guest_bathroom
-              name: guest bath
-            - entity_id: media_player.gym
-              name: gym
-            - entity_id: media_player.kitchen
-              name: kitchen
-            - entity_id: media_player.laundry
-              name: laundry
-            - entity_id: media_player.master
-              name: master
-            - entity_id: media_player.portable
-              name: portable
-            - entity_id: media_player.workshop
-              name: workshop
-      - type: custom:mini-media-player
-        entity: media_player.guest_bathroom
-        hide:
-          power: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.deck
-              name: deck
-            - entity_id: media_player.garage
-              name: garage
-            - entity_id: media_player.gym
-              name: gym
-            - entity_id: media_player.kitchen
-              name: kitchen
-            - entity_id: media_player.laundry
-              name: laundry
-            - entity_id: media_player.master
-              name: master
-            - entity_id: media_player.portable
-              name: portable
-            - entity_id: media_player.workshop
-              name: workshop
-      - type: custom:mini-media-player
-        entity: media_player.gym
-        hide:
-          power: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.deck
-              name: deck
-            - entity_id: media_player.garage
-              name: garage
-            - entity_id: media_player.guest_bathroom
-              name: guest bath
-            - entity_id: media_player.kitchen
-              name: kitchen
-            - entity_id: media_player.laundry
-              name: laundry
-            - entity_id: media_player.master
-              name: master
-            - entity_id: media_player.portable
-              name: portable
-            - entity_id: media_player.workshop
-              name: workshop
-      - type: custom:mini-media-player
-        entity: media_player.kitchen
-        hide:
-          power: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.deck
-              name: deck
-            - entity_id: media_player.garage
-              name: garage
-            - entity_id: media_player.guest_bathroom
-              name: guest bath
-            - entity_id: media_player.gym
-              name: gym
-            - entity_id: media_player.laundry
-              name: laundry
-            - entity_id: media_player.master
-              name: master
-            - entity_id: media_player.portable
-              name: portable
-            - entity_id: media_player.workshop
-              name: workshop
-      - type: custom:mini-media-player
-        entity: media_player.laundry
-        hide:
-          power: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.deck
-              name: deck
-            - entity_id: media_player.garage
-              name: garage
-            - entity_id: media_player.guest_bathroom
-              name: guest bath
-            - entity_id: media_player.gym
-              name: gym
-            - entity_id: media_player.kitchen
-              name: kitchen
-            - entity_id: media_player.master
-              name: master
-            - entity_id: media_player.portable
-              name: portable
-            - entity_id: media_player.workshop
-              name: workshop
-      - type: custom:mini-media-player
-        entity: media_player.master
-        hide:
-          power: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.deck
-              name: deck
-            - entity_id: media_player.garage
-              name: garage
-            - entity_id: media_player.guest_bathroom
-              name: guest bath
-            - entity_id: media_player.gym
-              name: gym
-            - entity_id: media_player.kitchen
-              name: kitchen
-            - entity_id: media_player.laundry
-              name: laundry
-            - entity_id: media_player.portable
-              name: portable
-            - entity_id: media_player.workshop
-              name: workshop
-      - type: custom:mini-media-player
-        entity: media_player.portable
-        hide:
-          power: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.deck
-              name: deck
-            - entity_id: media_player.garage
-              name: garage
-            - entity_id: media_player.guest_bathroom
-              name: guest bath
-            - entity_id: media_player.gym
-              name: gym
-            - entity_id: media_player.kitchen
-              name: kitchen
-            - entity_id: media_player.laundry
-              name: laundry
-            - entity_id: media_player.master
-              name: master
-            - entity_id: media_player.workshop
-              name: workshop
-      - type: custom:mini-media-player
-        entity: media_player.workshop
-        hide:
-          power: true
-        speaker_group:
-          platform: sonos
-          show_group_count: true
-          entities:
-            - entity_id: media_player.deck
-              name: deck
-            - entity_id: media_player.garage
-              name: garage
-            - entity_id: media_player.guest_bathroom
-              name: guest bath
-            - entity_id: media_player.gym
-              name: gym
-            - entity_id: media_player.kitchen
-              name: kitchen
-            - entity_id: media_player.laundry
-              name: laundry
-            - entity_id: media_player.master
-              name: master
-            - entity_id: media_player.portable
-              name: portable
-      - type: entities
-        title: Google Home
-        show_header_toggle: false
+      - type: custom:custom-sonos-card
+        name: Sonos
         entities:
-          - media_player.basement_googlehome
-          - media_player.office_googlehome
-          - media_player.main_display
+          - media_player.deck
+          # - media_player.garage
+          - media_player.guest_bathroom
+          - media_player.gym
+          - media_player.kitchen
+          - media_player.laundry
+          - media_player.master
+          - media_player.portable
+          # - media_player.workshop
   ##########################################
   # TV TAB
   ##########################################
