@@ -142,20 +142,6 @@ views:
                 variables:
                   - icon: mdi:car
                   - entity_id: script.video_garage
-      - type: entities
-        show_name: false
-        show_header_toggle: false
-        entities:
-          - entity: sensor.eth_average
-            type: custom:multiple-entity-row
-            name: crypto
-            icon: mdi:ethereum
-            entities:
-              - entity: switch.mine_crypto
-                name: mine
-                toggle: true
-              - entity: sensor.eth_success_ratio
-                name: success
       - type: picture-glance
         camera_image: camera.driveway
         title: Exterior
@@ -483,14 +469,14 @@ views:
           #     min_columns: 5
           #   view_layout:
           #     grid-area: cam8
-          - type: picture-glance
-            camera_image: camera.daisy
-            title: Daisy
-            entities:
-              - switch.pulte_planning_center_lauras_office
-              - light.pulte_planning_center_lamp
-            view_layout:
-              grid-area: cam8
+          # - type: picture-glance
+          #   camera_image: camera.daisy
+          #   title: Daisy
+          #   entities:
+          #     - switch.pulte_planning_center_lauras_office
+          #     - light.pulte_planning_center_lamp
+          #   view_layout:
+          #     grid-area: cam8
 
   ##########################################
   # MUSIC TAB
@@ -893,3 +879,21 @@ views:
             - group: group.upstairs_motions
         sort:
           method: name
+  ##########################################
+  # AUTOMATION PAGE
+  ##########################################
+  - title: AUTOMATION
+    id: automation
+    icon: mdi:progress-wrench
+    cards:
+      - type: "custom:auto-entities"
+        show_empty: true
+        card:
+          title: Automations
+          type: entities
+          show_header_toggle: true
+        sort:
+          method: name
+        filter:
+          include:
+            - entity_id: "/automation.*/"

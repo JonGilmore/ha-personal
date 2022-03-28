@@ -21,6 +21,14 @@ frigate_driveway_notifier:
   name: Frigate Driveway Notifier
   initial: true
   icon: mdi:cctv
+frigate_deckstairs_notifier:
+  name: Frigate Deckstairs Notifier
+  initial: true
+  icon: mdi:cctv
+frigate_deck_notifier:
+  name: Frigate Deck Notifier
+  initial: true
+  icon: mdi:cctv
 frigate_kitchen_notifier:
   name: Frigate Kitchen Notifier
   initial: true
