@@ -9,3 +9,72 @@
       - service: notify.telegram_jon
         data:
           message: 'Low battery warning for: {{sensors|replace("_"," ")}}'
+- id: '1648402830457'
+  alias: HASPone Core functionality
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Core_Functionality.yaml
+    input:
+      page3font_select: 6 - Noto Sans 32
+      haspdevice: ae955aeac0c115b35fab9dc0beaa69ab
+      page1text: one
+      page2font_select: 6 - Noto Sans 32
+      page2text: two
+      page3text: three
+- id: '1648402948134'
+  alias: HASPone p[x].b[y] displays a clock
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Clock.yaml
+    input:
+      ycen_select: 1 - Centered
+      haspdevice: ae955aeac0c115b35fab9dc0beaa69ab
+- id: '1648414342638'
+  alias: HASPone Theme Light on Dark
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Theme_Light_on_Dark.yaml
+    input:
+      haspdevice: ae955aeac0c115b35fab9dc0beaa69ab
+- id: '1648414777931'
+  alias: HASPone dim the display screen after a specified period of inactivity
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Dim_Screen_on_Idle.yaml
+    input:
+      haspdevice: ae955aeac0c115b35fab9dc0beaa69ab
+- id: '1648414914084'
+  alias: HASPone p[7].b[all] displays an alarm control panel
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Alarm_Control_page7.yaml
+    input:
+      b15armservice: alarm_arm_night
+      haspdevice: ae955aeac0c115b35fab9dc0beaa69ab
+      alarmpanel: alarm_control_panel.house
+- id: '1648415448169'
+  alias: HASPone p[x].b[y] displays the state or attribute value of an entity
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Display_Entity_State_or_Attribute.yaml
+    input:
+      ycen_select: 1 - Centered
+      haspdevice: ae955aeac0c115b35fab9dc0beaa69ab
+      selected_entity: light.office_cans
+      haspbutton: 5
+      xcen_select: 1 - Centered
+      title_case: true
+      prefix: 'office - '
+- id: '1648415622595'
+  alias: HASPone p[x].b[y] performs an action when pressed
+  description: ''
+  use_blueprint:
+    path: HASwitchPlate/hasp_Perform_Action.yaml
+    input:
+      haspdevice: ae955aeac0c115b35fab9dc0beaa69ab
+      haspbutton: 5
+      selected_action:
+      - service: light.toggle
+        data: {}
+        target:
+          entity_id: light.office_cans
