@@ -1,7 +1,7 @@
 jon_home:
   zone: home
   devices:
-    - device_tracker.jons_iphone
+    - device_tracker.pixel5
   unit_of_measurement: m
 laura_home:
   zone: home
