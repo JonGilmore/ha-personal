@@ -15,6 +15,22 @@
     - platform: event
       event_type: telegram_callback
       event_data:
+        command: "/mutefrigatedeckstairs60"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigatedeckstairsday"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigatedeck60"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigatedeckday"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
         command: "/mutefrigatekitchen60"
     - platform: event
       event_type: telegram_callback
@@ -46,6 +62,30 @@
             - delay: "00:60:00"
             - service: input_boolean.turn_on
               entity_id: input_boolean.frigate_kitchen_notifier
+        - conditions: "{{ trigger.event.data.command == '\/mutefrigatedeckstairs60' }}"
+          sequence:
+            - service: telegram_bot.answer_callback_query
+              data_template:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Disabling notifications for {{ trigger }} for 60min"
+                show_alert: true
+            - service: input_boolean.turn_off
+              entity_id: input_boolean.frigate_deckstairs_notifier
+            - delay: "00:60:00"
+            - service: input_boolean.turn_on
+              entity_id: input_boolean.frigate_deckstairs_notifier
+        - conditions: "{{ trigger.event.data.command == '\/mutefrigatedeck60' }}"
+          sequence:
+            - service: telegram_bot.answer_callback_query
+              data_template:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Disabling notifications for {{ trigger }} for 60min"
+                show_alert: true
+            - service: input_boolean.turn_off
+              entity_id: input_boolean.frigate_deck_notifier
+            - delay: "00:60:00"
+            - service: input_boolean.turn_on
+              entity_id: input_boolean.frigate_deck_notifier
         - conditions: "{{ trigger.event.data.command == '\/mutefrigatekitchenday' }}"
           sequence:
             - service: telegram_bot.answer_callback_query
@@ -54,7 +94,25 @@
                 message: "Disabling notifications for {{ trigger }} for the remainder of the day"
                 show_alert: true
             - service: input_boolean.turn_off
-              entity_id: input_boolean.frigate_driveway_notifier
+              entity_id: input_boolean.frigate_kitchen_notifier
+        - conditions: "{{ trigger.event.data.command == '\/mutefrigatedeckstairsday' }}"
+          sequence:
+            - service: telegram_bot.answer_callback_query
+              data_template:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Disabling notifications for {{ trigger }} for the remainder of the day"
+                show_alert: true
+            - service: input_boolean.turn_off
+              entity_id: input_boolean.frigate_deckstairs_notifier
+        - conditions: "{{ trigger.event.data.command == '\/mutefrigatedeckday' }}"
+          sequence:
+            - service: telegram_bot.answer_callback_query
+              data_template:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Disabling notifications for {{ trigger }} for the remainder of the day"
+                show_alert: true
+            - service: input_boolean.turn_off
+              entity_id: input_boolean.frigate_deck_notifier
       default:
         - service: telegram_bot.answer_callback_query
           data_template:
@@ -120,7 +178,6 @@
       topic: frigate/events
   condition:
     - "{{ trigger.payload_json['type'] == 'end' }}"
-    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_driveway_sentry_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
     - condition: state # make sure notifications havent been paused from an actionable notification
       entity_id: input_boolean.frigate_driveway_notifier
       state: "on"
@@ -153,6 +210,7 @@
         inline_keyboard:
           - "60m:/mutefrigatedriveway60, Rest of day:/mutefrigatedrivewayday"
         caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+    - delay: 90
 #########################################
 - alias: "Frigate: kitchen video notification"
   id: "Frigate: kitchen video notification"
@@ -163,7 +221,6 @@
   condition:
     - "{{ trigger.payload_json['type'] == 'end' }}"
     - "{{ trigger.payload_json['after']['has_clip'] == true }}"
-    - "{{ ( as_timestamp(now()) - as_timestamp(state_attr('automation.frigate_kitchen_video_notification', 'last_triggered')) |int(0) ) > 90 }}" # rate limit
     - condition: state # make sure notifications havent been paused from an actionable notification
       entity_id: input_boolean.frigate_kitchen_notifier
       state: "on"
@@ -193,3 +250,80 @@
         inline_keyboard:
           - "60m:/mutefrigatekitchen60, Rest of day:/mutefrigatekitchenday"
         caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+    - delay: 90
+#########################################
+- alias: "Frigate: deckstairs video notification"
+  id: "Frigate: deckstairs video notification"
+  description: "if Jons away or were asleep - send a video of the deckstairs"
+  trigger:
+    - platform: mqtt
+      topic: frigate/events
+  condition:
+    - "{{ trigger.payload_json['type'] == 'end' }}"
+    - condition: state # make sure notifications havent been paused from an actionable notification
+      entity_id: input_boolean.frigate_deckstairs_notifier
+      state: "on"
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "off"
+    - condition: or # only deckstairs camera
+      conditions:
+        - "{{ trigger.payload_json['after']['camera'] == 'deckstairs' }}"
+        - "{{ trigger.payload_json['before']['camera'] == 'deckstairs' }}"
+  variables:
+    camera: "{{ trigger.payload_json['after']['camera'] }}"
+  action:
+    - service: shell_command.download_file
+      data_template:
+        url: "http://192.168.45.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
+        download: "/share/{{camera}}.mp4"
+    - service: shell_command.trim_video
+      data_template:
+        duration: "00:00:10"
+        clip: "/share/{{camera}}.mp4"
+        path: "/share/trimmed-{{camera}}.mp4"
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/share/trimmed-{{camera}}.mp4"
+        inline_keyboard:
+          - "60m:/mutefrigatedeckstairs60, Rest of day:/mutefrigatedeckstairsday"
+        caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+    - delay: 45
+#########################################
+- alias: "Frigate: deck video notification"
+  id: "Frigate: deck video notification"
+  description: "if Jons away or were asleep - send a video of the deck"
+  trigger:
+    - platform: mqtt
+      topic: frigate/events
+  condition:
+    - "{{ trigger.payload_json['type'] == 'end' }}"
+    - condition: state # make sure notifications havent been paused from an actionable notification
+      entity_id: input_boolean.frigate_deck_notifier
+      state: "on"
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "off"
+    - condition: or # only deck camera
+      conditions:
+        - "{{ trigger.payload_json['after']['camera'] == 'deck' }}"
+        - "{{ trigger.payload_json['before']['camera'] == 'deck' }}"
+  variables:
+    camera: "{{ trigger.payload_json['after']['camera'] }}"
+  action:
+    - service: shell_command.download_file
+      data_template:
+        url: "http://192.168.45.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
+        download: "/share/{{camera}}.mp4"
+    - service: shell_command.trim_video
+      data_template:
+        duration: "00:00:10"
+        clip: "/share/{{camera}}.mp4"
+        path: "/share/trimmed-{{camera}}.mp4"
+    - service: telegram_bot.send_video
+      data_template:
+        file: "/share/trimmed-{{camera}}.mp4"
+        inline_keyboard:
+          - "60m:/mutefrigatedeck60, Rest of day:/mutefrigatedeckday"
+        caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+    - delay: 45

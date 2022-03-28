@@ -94,12 +94,6 @@ sleepiq:
   username: !secret sleep_usr
   password: !secret sleep_pwd
 
-nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
-  project_id: !secret nest_project_id
-  subscriber_id: !secret nest_subscriber_id
-
 lutron:
   host: !secret rr_ip
   username: !secret rr_usr
@@ -211,6 +205,6 @@ sonos:
       - 192.168.45.149
 media_source:
 
-cast:
-  media_player:
-    - host: 192.168.45.45
+# cast:
+#   media_player:
+#     - host: 192.168.45.45

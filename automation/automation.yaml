@@ -578,6 +578,8 @@
       entity_id:
         - input_boolean.frigate_driveway_notifier
         - input_boolean.frigate_kitchen_notifier
+        - input_boolean.frigate_deckstairs_notifier
+        - input_boolean.frigate_deck_notifier
     - choose: # check the garage doors & notify
         conditions:
           condition: or
@@ -939,6 +941,8 @@
         - binary_sensor.rain_sensor
         - input_boolean.frigate_driveway_notifier
         - input_boolean.frigate_kitchen_notifier
+        - input_boolean.frigate_deckstairs_notifier
+        - input_boolean.frigate_deck_notifier
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state
