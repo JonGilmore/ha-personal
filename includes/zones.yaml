@@ -5,12 +5,6 @@
   radius: 300
   icon: mdi:home
 
-- name: work-jon
-  latitude: !secret work_jon_lat
-  longitude: !secret work_jon_long
-  radius: 300
-  icon: mdi:briefcase
-
 - name: cabin
   latitude: !secret cabin_lat
   longitude: !secret cabin_long

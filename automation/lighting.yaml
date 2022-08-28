@@ -1,0 +1,113 @@
+---
+#########################################
+- alias: "Automatic Lighting: motion light template"
+  id: "Automatic Lighting: motion light template"
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_office_pir
+        - binary_sensor.elkm1_lounge_pir
+        - binary_sensor.elkm1_back_kitchen_pir
+        - binary_sensor.elkm1_kitchen_pir
+        - binary_sensor.elkm1_main_bath_pir
+        - binary_sensor.elkm1_gym_pir
+      id: pir-on
+      to: "on"
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_office_pir
+        - binary_sensor.elkm1_lounge_pir
+        - binary_sensor.elkm1_back_kitchen_pir
+        - binary_sensor.elkm1_kitchen_pir
+        - binary_sensor.elkm1_main_bath_pir
+        - binary_sensor.elkm1_gym_pir
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 10
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - condition: state
+              entity_id: input_boolean.block_all_motion_lights
+              state: "off"
+          sequence:
+            - choose:
+                - conditions: []
+                  sequence:
+                    - service: homeassistant.turn_on
+                      data_template:
+                        entity_id: >
+                          {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                            light.office_art
+                          {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
+                            switch.bar_cabinets
+                          {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
+                            switch.back_kitchen_cabinets
+                          {% elif trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
+                            switch.kitchen_cabinets
+                          {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
+                            light.gym_cans
+                          {% endif %}
+        - conditions:
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - service: homeassistant.turn_off
+              data_template:
+                entity_id: >
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                    light.office_art
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
+                    switch.bar_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
+                    switch.back_kitchen_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
+                    switch.kitchen_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
+                    light.gym_cans
+                  {% endif %}
+#########################################
+- alias: "Automatic Lighting: driveway/frontyard person detected & dark out - driveway lights on"
+  id: "Automatic Lighting: driveway/frontyard person detected & dark out - driveway lights on"
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.driveway_person_motion
+        - binary_sensor.frontyard_person_motion
+      id: pir-on
+      to: "on"
+    - platform: state
+      entity_id:
+        - binary_sensor.driveway_person_motion
+        - binary_sensor.frontyard_person_motion
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 15
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - condition: state
+              entity_id: sensor.period_of_day
+              state: ["night", "dusk"]
+          sequence:
+            - choose:
+                - conditions: []
+                  sequence:
+                    - service: homeassistant.turn_on
+                      entity_id: switch.exterior_cans
+        - conditions:
+            - condition: trigger
+              id: pir-off
+            - condition: state
+              entity_id: input_boolean.exterior_cans_auto_blocker
+              state: "off"
+          sequence:
+            - service: homeassistant.turn_off
+              entity_id: switch.exterior_cans
