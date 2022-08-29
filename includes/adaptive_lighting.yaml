@@ -1,35 +1,20 @@
-# - name: master
-#   min_brightness: 20
-#   min_color_temp: 2700
-#   max_color_temp: 5100
-#   lights:
-#     - switch.lauras_lamp_lifx
-#     - light.jons_lamp_lifx
-#     - light.master_bath_toekick
-# - name: master2
-#   min_brightness: 5
-#   min_color_temp: 2700
-#   max_color_temp: 5100
-#   lights:
-#     - light.master_entry_lamp
-#     - light.sitting_room_lamp
-# - name: master bath
-#   min_brightness: 40
-#   min_color_temp: 2700
-#   max_color_temp: 5100
-#   lights:
-#     - light.master_toilet_fixture
-#     - light.master_bedroom_fixtures
-# - name: gym
-#   min_brightness: 5
-#   max_brightness: 80
-#   min_color_temp: 2700
-#   max_color_temp: 5100
-#   lights:
-#     - light.gym_cans
-# - name: office
-#   max_brightness: 80
-#   min_color_temp: 2700
-#   max_color_temp: 5100
-#   lights:
-#     - light.office_cans
+- name: main bath
+  min_brightness: 40
+  min_color_temp: 2700
+  max_color_temp: 5100
+  lights:
+    - light.main_bathroom_toekick
+    - light.main_bathroom_sconces
+- name: gym
+  min_brightness: 5
+  max_brightness: 90
+  min_color_temp: 2700
+  max_color_temp: 5100
+  lights:
+    - light.gym_cans
+- name: office
+  max_brightness: 90
+  min_color_temp: 2700
+  max_color_temp: 5100
+  lights:
+    - light.office_cans

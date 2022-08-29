@@ -110,7 +110,7 @@ telegram_bot:
 ####################################################
 #                     Includes                     #
 ####################################################
-# adaptive_lighting: !include includes/adaptive_lighting.yaml
+adaptive_lighting: !include includes/adaptive_lighting.yaml
 # alert: !include includes/alerts.yaml
 automation: !include automations.yaml
 automation yaml: !include_dir_merge_list automation
