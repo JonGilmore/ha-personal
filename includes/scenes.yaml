@@ -1,0 +1,7 @@
+---
+- name: Sunset
+  entities:
+    switch.exterior_landscape_lights:
+      state: "on"
+    switch.exterior_cans:
+      state: "on"

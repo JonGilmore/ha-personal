@@ -3,8 +3,8 @@ block_all_motion_lights:
   name: Block All Motion Lights
 motion_lights:
   name: Motion Lights
-master_blinds_run_once:
-  name: Master Blinds Once
+main_bed_blinds_run_once:
+  name: Main Bed Blinds Once
 sunset_run_once:
   name: Sunset Run Once
 morning_lights_run_once:
@@ -21,19 +21,21 @@ frigate_driveway_notifier:
   name: Frigate Driveway Notifier
   initial: true
   icon: mdi:cctv
-frigate_deckstairs_notifier:
-  name: Frigate Deckstairs Notifier
+frigate_grilldeck_notifier:
+  name: Frigate Grilldeck Notifier
   initial: true
   icon: mdi:cctv
 frigate_deck_notifier:
   name: Frigate Deck Notifier
   initial: true
   icon: mdi:cctv
-frigate_kitchen_notifier:
-  name: Frigate Kitchen Notifier
+frigate_frontyard_notifier:
+  name: Frigate Frontyard Notifier
   initial: true
-  icon: mdi:knife
-master_override:
+  icon: mdi:cctv
+main_bed_override:
   name: Master Lights Override
 driveway_sentry:
   name: Driveway Sentry Mode
+exterior_cans_auto_blocker:
+  name: Exterior Cans Auto Blocker

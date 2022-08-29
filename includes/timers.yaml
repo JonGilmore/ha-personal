@@ -1,6 +1,0 @@
----
-front_door_motion_timer:
-  duration: "00:10:00"
-daisy_cam_timer:
-  icon: mdi:dog
-  duration: "00:45:00"

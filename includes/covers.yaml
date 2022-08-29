@@ -1,21 +1,21 @@
----
-- platform: template
-  covers:
-    garage_momentary_single:
-      value_template: "{{ states.sensor.single_garage.state == 'Violated' }}"
-      friendly_name: Single Garage
-      open_cover:
-        service: scene.turn_on
-        entity_id: scene.single_garage_op
-      close_cover:
-        service: scene.turn_on
-        entity_id: scene.single_garage_cl
-    garage_momentary_double:
-      value_template: "{{ states.sensor.double_garage.state == 'Violated' }}"
-      friendly_name: Double Garage
-      open_cover:
-        service: scene.turn_on
-        entity_id: scene.double_garage_op
-      close_cover:
-        service: scene.turn_on
-        entity_id: scene.double_garage_cl
+# ---
+# - platform: template
+#   covers:
+#     garage_momentary_single:
+#       value_template: "{{ states.sensor.elkm1_single_garage.state == 'Violated' }}"
+#       friendly_name: Single Garage
+#       open_cover:
+#         service: scene.turn_on
+#         entity_id: scene.single_garage_op
+#       close_cover:
+#         service: scene.turn_on
+#         entity_id: scene.single_garage_cl
+#     garage_momentary_double:
+#       value_template: "{{ states.sensor.elkm1_double_garage.state == 'Violated' }}"
+#       friendly_name: Double Garage
+#       open_cover:
+#         service: scene.turn_on
+#         entity_id: scene.double_garage_op
+#       close_cover:
+#         service: scene.turn_on
+#         entity_id: scene.double_garage_cl

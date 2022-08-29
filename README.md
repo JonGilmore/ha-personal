@@ -2,6 +2,14 @@
 
 Here's an overview of my Home Assistant configuration as well as the devices that are used in it.
 
+## Temporary Setup
+
+```
+docker exec -it homeassistant bash
+pip uninstall pylutron-caseta
+pip install --upgrade --force-reinstall --no-deps --no-cache-dir git+https://github.com/jongilmore/pylutron-caseta@ra3
+```
+
 ## Lovelace
 
 ![Lovelace](https://raw.githubusercontent.com/JonGilmore/ha-personal/master/images/lovelace0.png)

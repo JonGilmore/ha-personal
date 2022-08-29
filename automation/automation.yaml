@@ -1,162 +1,168 @@
 ---
-#########################################
-- alias: "Security: line crossing template - telegram & tv notify"
-  id: "Security: line crossing template - telegram & tv notify"
-  description: "When something crosses a line on the driveway or porch, notify via telegram and LG TV"
-  trigger:
-    - platform: state
-      entity_id:
-        - binary_sensor.driveway_line_crossing
-        - binary_sensor.front_door_line_crossing
-      to: "on"
-  action:
-    - service: notify.living_room_tv
-      data_template:
-        message: "{{ trigger.to_state.attributes.friendly_name }} detected"
-    - service: notify.telegram_jon
-      data_template:
-        title: "{{ trigger.to_state.attributes.friendly_name }}"
-        message: "{{ trigger.to_state.attributes.friendly_name }}"
-        data:
-          photo:
-            url: >
-              {% if trigger.entity_id == 'binary_sensor.driveway_line_crossing' %}
-                {{ states.sensor.hik_driveway_pic.state }}
-              {% elif trigger.entity_id == 'binary_sensor.front_door_line_crossing' %}
-                {{ states.sensor.db_pic.state }}
-              {% endif %}
-#########################################
-- alias: "Security: front door line crossing or doorbell rang"
-  id: "Security: front door line crossing or doorbell rang"
-  description: "When its dark out - foyer and exterior lights on - handles both occupied & unoccupied states"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.front_door_line_crossing
-      to: "on"
-    - platform: event
-      event_type: doorbird_front_door_doorbell
-  condition:
-    - condition: state
-      entity_id: binary_sensor.light_inside
-      state: "off"
-    - condition: sun
-      after: sunset
-      after_offset: "-1:00:00"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: switch.exterior_foyer, switch.exterior_cans
-    - choose:
-        - conditions: "{{ is_state('binary_sensor.alarm_occupancy_status', 'on') }}"
-          sequence:
-            - service: script.popup_camera
-              data:
-                deviceID: "wallpanel"
-                camera: "camera.front_door_live"
-      default:
-        - delay: "00:10:00"
-        - service: homeassistant.turn_off
-          entity_id: switch.exterior_foyer
-#########################################
-- alias: "Security: doorbell rang"
-  id: "Security: doorbell rang"
-  description: "send telegram & if master sonos is playing announce the doorbell & play video stream on the main display"
-  trigger:
-    - platform: event
-      event_type: doorbird_front_door_doorbell
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "doorbell rang"
-        message: "doorbell rang"
-        data:
-          photo:
-            url: "{{ states.sensor.db_pic.state }}"
-    - choose: # if master sonos is playing, interrupt it for an announcement
-        - conditions: "{{ is_state('media_player.master', 'playing') }}"
-          sequence:
-            - service: script.sonos_say
-              data:
-                sonos_entity: media_player.master
-                volume: 0.5
-                message: "doorbell rang!"
-                delay: "00:00:03"
-    - service: media_player.play_media
-      data_template:
-        entity_id: media_player.main_display
-        media_content_id: "https://ha.gilmore.cloud:8123{{ states.camera.front_door_live.attributes.entity_picture }}"
-        media_content_type: image/jpg
-    - delay: "00:00:30"
-    - service: media_player.turn_off
-      data:
-        entity_id: media_player.main_display
+# #########################################
+# - alias: "Security: line crossing template - telegram & tv notify"
+#   id: "Security: line crossing template - telegram & tv notify"
+#   description: "When something crosses a line on the driveway or porch, notify via telegram and LG TV"
+#   trigger:
+#     - platform: state
+#       entity_id:
+#         - binary_sensor.driveway_line_crossing
+#         - binary_sensor.front_door_line_crossing
+#       to: "on"
+#   action:
+#     - service: notify.living_room_tv
+#       data_template:
+#         message: "{{ trigger.to_state.attributes.friendly_name }} detected"
+#     - service: notify.telegram_jon
+#       data_template:
+#         title: "{{ trigger.to_state.attributes.friendly_name }}"
+#         message: "{{ trigger.to_state.attributes.friendly_name }}"
+#         data:
+#           photo:
+#             url: >
+#               {% if trigger.entity_id == 'binary_sensor.driveway_line_crossing' %}
+#                 {{ states.sensor.hik_driveway_pic.state }}
+#               {% elif trigger.entity_id == 'binary_sensor.front_door_line_crossing' %}
+#                 {{ states.sensor.db_pic.state }}
+#               {% endif %}
+# #########################################
+# - alias: "Security: front door line crossing or doorbell rang"
+#   id: "Security: front door line crossing or doorbell rang"
+#   description: "When its dark out - foyer and exterior lights on - handles both occupied & unoccupied states"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.front_door_line_crossing
+#       to: "on"
+#     - platform: event
+#       event_type: doorbird_front_door_doorbell
+#   condition:
+#     - condition: state
+#       entity_id: binary_sensor.light_inside
+#       state: "off"
+#     - condition: sun
+#       after: sunset
+#       after_offset: "-1:00:00"
+#   action:
+#     - service: homeassistant.turn_on
+#       entity_id: switch.exterior_foyer, switch.exterior_cans
+#     - choose:
+#         - conditions: "{{ is_state('binary_sensor.alarm_occupancy_status', 'on') }}"
+#           sequence:
+#             - service: script.popup_camera
+#               data:
+#                 deviceID: "wallpanel"
+#                 camera: "camera.front_door_live"
+#       default:
+#         - delay: "00:10:00"
+#         - service: homeassistant.turn_off
+#           entity_id: switch.exterior_foyer
+# #########################################
+# - alias: "Security: doorbell rang"
+#   id: "Security: doorbell rang"
+#   description: "send telegram & if master sonos is playing announce the doorbell & play video stream on the main display"
+#   trigger:
+#     - platform: event
+#       event_type: doorbird_front_door_doorbell
+#   action:
+#     - service: notify.telegram_jon
+#       data_template:
+#         title: "doorbell rang"
+#         message: "doorbell rang"
+#         data:
+#           photo:
+#             url: "{{ states.sensor.db_pic.state }}"
+#     - choose: # if master sonos is playing, interrupt it for an announcement
+#         - conditions: "{{ is_state('media_player.master', 'playing') }}"
+#           sequence:
+#             - service: script.sonos_say
+#               data:
+#                 sonos_entity: media_player.master
+#                 volume: 0.5
+#                 message: "doorbell rang!"
+#                 delay: "00:00:03"
+#     - service: media_player.play_media
+#       data_template:
+#         entity_id: media_player.main_display
+#         media_content_id: "https://ha.gilmore.cloud:8123{{ states.camera.front_door_live.attributes.entity_picture }}"
+#         media_content_type: image/jpg
+#     - delay: "00:00:30"
+#     - service: media_player.turn_off
+#       data:
+#         entity_id: media_player.main_display
 #########################################
 - alias: "Automatic Lighting: deck person & dark out - turn deck lights on"
   id: "Automatic Lighting: deck person & dark out - turn deck lights on"
+  mode: restart
   trigger:
     - platform: numeric_state
       entity_id:
         - sensor.deck_person
-        - sensor.deckstairs_person
+        - sensor.grilldeck_person
       above: 0
   condition:
     - condition: state
       entity_id: sensor.period_of_day
-      state: "night"
+      state:
+        - "night"
+        - "dusk"
   action:
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_deck_on
+    - service: homeassistant.turn_on
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'sensor.deck_person' %}
+            switch.deck, switch.deck_posts
+          {% elif trigger.entity_id == 'sensor.grilldeck_person' %}
+            switch.grill_deck, switch.exterior_landscape_lights, switch.deck_posts
+          {% endif %}
+    - delay: "00:20:00"
+    - service: homeassistant.turn_off
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'sensor.deck_person' %}
+            switch.deck, switch.deck_posts
+          {% elif trigger.entity_id == 'sensor.grilldeck_person' %}
+            switch.grill_deck, switch.exterior_landscape_lights, switch.deck_posts
+          {% endif %}
 #########################################
 - alias: "Automatic Lighting: deck lights on when deck door opens"
   id: "Automatic Lighting: deck lights on when deck door opens"
   trigger:
     - platform: state
-      entity_id: binary_sensor.sunroom_pir
+      entity_id: binary_sensor.elkm1_sunroom_pir
       to: "on"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.light_inside
-      state: "off"
+  # condition:
+  #   - condition: state
+  #     entity_id: binary_sensor.light_inside
+  #     state: "off"
   action:
     - wait_for_trigger:
         - platform: state
-          entity_id: sensor.deck_door
+          entity_id: sensor.elkm1_deck_door
+          to: "Violated"
+      timeout: 20
+      continue_on_timeout: false
+    - service: homeassistant.turn_on
+      entity_id: switch.deck_lights
+#########################################
+- alias: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
+  id: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_mudroom_pir
+      to: "on"
+  # condition:
+  #   - condition: state
+  #     entity_id: binary_sensor.light_inside
+  #     state: "off"
+  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id: sensor.elkm1_deck_door
           to: "Violated"
       timeout: 15
       continue_on_timeout: false
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_deck_on
-#########################################
-- alias: "Automatic Lighting: garage person/motion detected & dark out - garage lights on"
-  id: "Automatic Lighting: garage person/motion detected & dark out - garage lights on"
-  trigger:
-    - platform: numeric_state
-      entity_id: sensor.garage_person
-      above: 0
-    - platform: state
-      entity_id: binary_sensor.garage_motion
-      to: "on"
-  condition:
-    - condition: state
-      entity_id: sensor.period_of_day
-      state: "night"
-  action:
     - service: homeassistant.turn_on
-      entity_id: light.mudroom_garage_lights
-- alias: "Automatic Lighting: garage lights off when no person detected for 15min"
-  id: "Automatic Lighting: garage lights off when no person detected for 15min"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.garage_motion
-      to: "off"
-      for:
-        minutes: 15
-  condition:
-    - condition: state
-      entity_id: light.mudroom_garage_lights
-      state: "on"
-  action:
-    - service: homeassistant.turn_off
-      entity_id: light.mudroom_garage_lights
+      entity_id: switch.grill_deck_light
 #########################################
 - alias: "Wake Mode: done sleeping & HVAC fan off & recirculation pump on"
   id: "Wake Mode: done sleeping & HVAC fan off & recirculation pump on"
@@ -167,215 +173,84 @@
       from: "on"
       to: "off"
   action:
-    - service: climate.set_fan_mode
-      data:
-        entity_id:
-          - climate.basement_thermostat
-          - climate.main_thermostat
-          - climate.upstairs_thermostat
-        fan_mode: "auto"
+    # - service: climate.set_fan_mode
+    #   data:
+    #     entity_id:
+    #       - climate.basement_thermostat
+    #       - climate.main_thermostat
+    #       - climate.upstairs_thermostat
+    #     fan_mode: "auto"
     - service: homeassistant.turn_on
       entity_id: switch.equipment_room_recirculation_pump
-    - choose:
-        conditions:
-          - condition: state
-            entity_id: binary_sensor.light_inside
-            state: "off"
-          - condition: or
-            conditions:
-              - condition: template
-                value_template: '{{ now().strftime("%m")|int > 10 }}'
-              - condition: template
-                value_template: '{{ now().strftime("%m")|int < 4 }}'
-        sequence:
-          - service: homeassistant.turn_on
-            entity_id: switch.sunroom_sunroom_lamp, switch.great_room_lamp
+    # - choose:
+    #     conditions:
+    #       - condition: state
+    #         entity_id: binary_sensor.light_inside
+    #         state: "off"
+    #       - condition: or
+    #         conditions:
+    #           - condition: template
+    #             value_template: '{{ now().strftime("%m")|int > 10 }}'
+    #           - condition: template
+    #             value_template: '{{ now().strftime("%m")|int < 4 }}'
+    #     sequence:
+    #       - service: homeassistant.turn_on
+    #         entity_id: switch.sunroom_sunroom_lamp, switch.great_room_lamp
+# ########################################
+# - alias: "Day Mode: turn off wake mode morning lamps"
+#   id: "Day Mode: turn off wake mode morning lamps"
+#   description: "only trigger between 6am and 10am"
+#   trigger:
+#     - platform: sun
+#       event: sunrise
+#       offset: "+01:00:00"
+#   condition:
+#     - condition: time
+#       after: "6:00:00"
+#       before: "10:00:00"
+#   action:
+#     - service: homeassistant.turn_off
+#       entity_id: switch.sunroom_sunroom_lamp, switch.great_room_lamp
+# ########################################
+# - alias: "Automatic Lighting: motion light template - scenes"
+#   id: "Automatic Lighting: motion light template - scenes"
+#   description: "Template to turn off basement & kitchen & deck"
+#   trigger:
+#     # - platform: state
+#     #   entity_id: sensor.elkm1_kitchen_pir
+#     #   from: "Violated"
+#     #   to: "Normal"
+#     #   for:
+#     #     minutes: 15
+#     - platform: state
+#       entity_id: binary_sensor.basement_motions
+#       to: "off"
+#       for:
+#         minutes: 45
+#     - platform: state
+#       entity_id: sensor.deck_person
+#       to: "0"
+#       for:
+#         minutes: 15
+#   # condition:
+#   #   - condition: state
+#   #     entity_id: input_boolean.block_all_motion_lights
+#   #     state: "off"
+#   #   - condition: state
+#   #     entity_id: binary_sensor.light_inside
+#   #     state: "off"
+#   action:
+#     - service: scene.turn_on
+#       data_template:
+#         entity_id: >
+#           {% set trigger_entity = trigger.entity_id %}
+#           {% if trigger_entity == 'sensor.elkm1_kitchen_pir' %}
+#             scene.equipment_room_enclosure_device_001_ph_kitchen_off
+#           {% elif trigger_entity == 'binary_sensor.basement_motions' %}
+#             scene.equipment_room_enclosure_device_001_ph_basement_off
+#           {% endif %}
 ########################################
-- alias: "Day Mode: turn off wake mode morning lamps"
-  id: "Day Mode: turn off wake mode morning lamps"
-  description: "only trigger between 6am and 10am"
-  trigger:
-    - platform: sun
-      event: sunrise
-      offset: "+01:00:00"
-  condition:
-    - condition: time
-      after: "6:00:00"
-      before: "10:00:00"
-  action:
-    - service: homeassistant.turn_off
-      entity_id: switch.sunroom_sunroom_lamp, switch.great_room_lamp
-#########################################
-- alias: "Automatic Lighting: motion light template"
-  id: "Automatic Lighting: motion light template"
-  description: "template for foyer & basement & bar & master toilet & evelyns lamp & storage & master toekick & office desk & gym"
-  trigger:
-    - platform: state
-      entity_id:
-        - sensor.foyer_pir
-        - sensor.basement_pir
-        - sensor.bar_pir
-        - sensor.storage_pir
-        - sensor.kitchen_pir
-      to: "Violated"
-    - platform: state
-      entity_id:
-        # - binary_sensor.evelyns_room_occupied
-        - binary_sensor.master_bedroom_occupancy
-        - binary_sensor.office_occupancy
-        - binary_sensor.gym_occupancy
-        - binary_sensor.loft_occupied
-      to: "on"
-    - platform: state
-      entity_id:
-        - sensor.foyer_pir
-        - sensor.basement_pir
-        - sensor.bar_pir
-        - sensor.storage_pir
-        - sensor.kitchen_pir
-      to: "Normal"
-      for:
-        minutes: 10
-    - platform: state
-      entity_id:
-        - binary_sensor.master_bedroom_occupancy
-        - binary_sensor.gym_occupancy
-        - binary_sensor.office_occupancy
-        - binary_sensor.loft_occupied
-      to: "off"
-      for:
-        minutes: 4
-    - platform: state
-      entity_id: binary_sensor.evelyns_room_occupied
-      to: "off"
-      for:
-        minutes: 20
-  # condition:
-  #   - condition: state
-  #     entity_id: input_boolean.block_all_motion_lights
-  #     state: "off"
-  #   - condition: state
-  #     entity_id: binary_sensor.light_inside
-  #     state: "off"
-  action:
-    service_template: >
-      {% if trigger.to_state.state in ['Violated', 'on'] %}homeassistant.turn_on
-      {% else %}homeassistant.turn_off{% endif %}
-    data_template:
-      entity_id: >
-        {% set trigger_entity = trigger.entity_id %}
-        {% if trigger_entity == 'sensor.foyer_pir' %}
-          switch.exterior_foyer
-        {% elif trigger_entity == 'sensor.basement_pir' %}
-          switch.basement_main
-        {% elif trigger_entity == 'sensor.bar_pir' %}
-          switch.basement_bar_cabinets
-        {% elif trigger_entity == 'binary_sensor.evelyns_room_occupied' %}
-          light.evelyns_room_lamp
-        {% elif trigger_entity == 'sensor.storage_pir' %}
-          switch.basement_storage_lights
-        {% elif trigger_entity == 'sensor.kitchen_pir' %}
-          switch.kitchen_cabinets
-        {% elif trigger_entity == 'binary_sensor.master_bedroom_occupancy' %}
-          light.master_bath_toekick
-        {% elif trigger_entity == 'binary_sensor.office_occupancy' %}
-          switch.office_lights
-        {% elif trigger_entity == 'binary_sensor.gym_occupancy' %}
-          light.gym_cans
-        {% elif trigger_entity == 'binary_sensor.loft_occupied' %}
-          light.loft_lamp
-        {% endif %}
-########################################
-- alias: "Automatic Lighting: mbr lighting template - on"
-  id: "Automatic Lighting: mbr lighting template - on"
-  description: "dont trigger this between midnight and 6:00am"
-  trigger:
-    - platform: state
-      entity_id:
-        - binary_sensor.master_entry_pir
-        - binary_sensor.sitting_room_pir
-      to: "on"
-  condition:
-    - condition: state
-      entity_id: input_boolean.master_override
-      state: "off"
-    - condition: time
-      before: "23:59:59"
-      after: "06:00:00"
-  action:
-    - service: homeassistant.turn_on
-      data_template:
-        entity_id: >
-          {% if trigger.entity_id == 'binary_sensor.master_entry_pir' %}
-            light.master_entry_lamp
-          {% elif trigger.entity_id == 'binary_sensor.sitting_room_pir' %}
-            light.sitting_room_lamp
-          {% endif %}
-########################################
-- alias: "Automatic Lighting: mbr lighting template - off"
-  id: "Automatic Lighting: mbr lighting template - off"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.master_entry_pir
-      to: "off"
-      for:
-        minutes: 7
-    - platform: state
-      entity_id: binary_sensor.sitting_room_pir
-      to: "off"
-      for:
-        minutes: 15
-  action:
-    - service: homeassistant.turn_off
-      data_template:
-        entity_id: >
-          {% if trigger.entity_id == 'binary_sensor.master_entry_pir' %}
-            light.master_entry_lamp
-          {% elif trigger.entity_id == 'binary_sensor.sitting_room_pir' %}
-            light.sitting_room_lamp
-          {% endif %}
-########################################
-- alias: "Automatic Lighting: motion light template - scenes"
-  id: "Automatic Lighting: motion light template - scenes"
-  description: "Template to turn off basement & kitchen & deck"
-  trigger:
-    - platform: state
-      entity_id: sensor.kitchen_pir
-      from: "Violated"
-      to: "Normal"
-      for:
-        minutes: 15
-    - platform: state
-      entity_id: binary_sensor.basement_motions
-      from: "on"
-      to: "off"
-      for:
-        minutes: 15
-    - platform: state
-      entity_id: sensor.deck_person
-      to: "0"
-      for:
-        minutes: 15
-  # condition:
-  #   - condition: state
-  #     entity_id: input_boolean.block_all_motion_lights
-  #     state: "off"
-  #   - condition: state
-  #     entity_id: binary_sensor.light_inside
-  #     state: "off"
-  action:
-    - service: scene.turn_on
-      data_template:
-        entity_id: >
-          {% set trigger_entity = trigger.entity_id %}
-          {% if trigger_entity == 'sensor.kitchen_pir' %}
-            scene.equipment_room_enclosure_device_001_ph_kitchen_off
-          {% elif trigger_entity == 'binary_sensor.basement_motions' %}
-            scene.equipment_room_enclosure_device_001_ph_basement_off
-          {% elif trigger_entity == 'sensor.deck_person' %}
-            scene.equipment_room_enclosure_device_001_ph_deck_off
-          {% endif %}
-########################################
+# TODO: check into this...
 - alias: "Automatic Lighting: enable motion light boolean 2hours before sunset & disable 2hour after sunrise"
   id: "Automatic Lighting: enable motion light boolean 2hours before sunset & disable 2hour after sunrise"
   trigger:
@@ -411,126 +286,26 @@
       for:
         minutes: 20
   action:
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
-########################################
-- alias: "Automatic Lighting: backyard party lights"
-  id: "Automatic Lighting: backyard party lights"
-  trigger:
-    - platform: state
-      entity_id: sensor.basement_door
-      to: "Violated"
-  condition:
-    - condition: state
-      entity_id: input_boolean.party
-      state: "on"
-  action:
-    - service: scene.turn_on
-      entity_id:
-        - scene.basement_keypad_theater
-        - scene.basement_keypad_bar
-#########################################
-- alias: "Automatic Lighting: basement lights on after stairs motion"
-  id: "Automatic Lighting: basement lights on after stairs motion"
-  trigger:
-    - platform: state
-      entity_id: sensor.basement_stairs_pir
-      to: "Violated"
-  action:
-    - wait_for_trigger:
-        - platform: state
-          entity_id: sensor.bar_pir
-          to: "Violated"
-      timeout: 10
-      continue_on_timeout: false
-    - service: homeassistant.turn_on
-      entity_id: switch.basement_main
-#########################################
-- alias: "Automatic Lighting: toilet off when bathroom off"
-  id: "Automatic Lighting: toilet off when bathroom off"
-  trigger:
-    - platform: state
-      entity_id: switch.master_bedroom_sitting_keypad_bathroom_led
-      to: "off"
-  condition:
-    condition: or
-    conditions:
-      - condition: state
-        entity_id: light.master_toilet_fixture
-        state: "on"
-      - condition: state
-        entity_id: switch.master_toilet_toilet_fan
-        state: "on"
-  action:
+    # - service: scene.turn_on
+    #   entity_id: scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
     - service: homeassistant.turn_off
-      entity_id:
-        - light.master_toilet_fixture
-        - switch.master_toilet_toilet_fan
-#########################################
-- alias: "Automatic Lighting: fishtank lights"
-  id: "Automatic Lighting: fishtank lights"
-  trigger:
-    - platform: time
-      at: "07:30:00"
-    - platform: time
-      at: "22:00:00"
-  action:
-    - service_template: >
-        {% if now().strftime("%H") | int > 20 %}homeassistant.turn_off
-        {% else %}homeassistant.turn_on{% endif %}
-      entity_id: switch.switch2
-#########################################
-# Close master blinds if its dusk upon 1st motion on the entry only 1 time (after 1hr before sunset)
-- alias: "Blinds: master blinds at dusk & only runs once (and after 1hr before sunset)"
-  id: "Blinds: master blinds at dusk & only runs once (and after 1hr before sunset)"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.master_entry_pir
-      to: "on"
-  condition:
-    - condition: state
-      entity_id: input_boolean.master_blinds_run_once
-      state: "off"
-    - condition: sun
-      after: sunset
-      after_offset: "-1:00:00"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.master_half
-    - service: homeassistant.turn_on
-      entity_id: input_boolean.master_blinds_run_once
-#########################################
-- alias: "Blinds: close master blinds at sunset"
-  id: "Blinds: close master blinds at sunset"
-  trigger:
-    - platform: sun
-      event: sunset
-  action:
-    - service: scene.turn_on
-      entity_id: scene.master_closed
-    - service: homeassistant.turn_on
-      entity_id: input_boolean.master_blinds_run_once
-#########################################
-- alias: "Blinds: open master blinds in the morning (after 45min of unoccupied bed)"
-  id: "Blinds: open master blinds in the morning (after 45min of unoccupied bed)"
-  trigger:
-    - platform: state
-      entity_id: sensor.master_bed_people
-      to: "nobody"
-      for:
-        minutes: 45
-  condition:
-    - condition: state
-      entity_id: input_boolean.master_blinds_run_once
-      state: "on"
-    - condition: time
-      before: "11:00:00"
-      after: "06:00:00"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.master_half
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.master_blinds_run_once
+      entity_id: group.all_lights
+# ########################################
+# - alias: "Automatic Lighting: backyard party lights"
+#   id: "Automatic Lighting: backyard party lights"
+#   trigger:
+#     - platform: state
+#       entity_id: sensor.elkm1_patio_door
+#       to: "Violated"
+#   condition:
+#     - condition: state
+#       entity_id: input_boolean.party
+#       state: "on"
+#   action:
+#     - service: scene.turn_on
+#       entity_id:
+#         - scene.basement_keypad_theater
+#         - scene.basement_keypad_bar
 #########################################
 - alias: "Utility: reset run-once variables - noon and 8am"
   id: "Utility: reset run-once variables - noon and 8am"
@@ -545,6 +320,15 @@
         - input_boolean.sunset_run_once
         - input_boolean.driveway_sentry
 #########################################
+- alias: "Utility: exterior can auto blocker reset"
+  id: "Utility: exterior can auto blocker reset"
+  trigger:
+    - platform: time
+      at: "22:00:00"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.exterior_cans_auto_blocker
+#########################################
 - alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   description: "also check garage doors and locks - notify if they are open or unlocked"
@@ -553,25 +337,29 @@
       entity_id: binary_sensor.sleep_status
       to: "on"
   action:
-    - service: scene.turn_on
-      data_template:
-        entity_id: >
-          {% if is_state('input_boolean.guests', 'on') %}
-            scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
-          {% else %}
-            scene.equipment_room_enclosure_device_001_ph_all_but_master
-          {% endif %}
-    - service: climate.set_fan_mode
-      data:
-        entity_id:
-          - climate.basement_thermostat
-          - climate.main_thermostat
-          - climate.upstairs_thermostat
-        fan_mode: "on"
-    - service: webostv.command
-      data:
-        entity_id: media_player.living_room_tv
-        command: "system/turnOff"
+    - service: homeassistant.turn_off
+      entity_id: group.all_lights
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.exterior_cans_auto_blocker
+    # - service: scene.turn_on
+    #   data_template:
+    #     entity_id: >
+    #       {% if is_state('input_boolean.guests', 'on') %}
+    #         scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
+    #       {% else %}
+    #         scene.equipment_room_enclosure_device_001_ph_all_but_master
+    #       {% endif %}
+    # - service: climate.set_fan_mode
+    #   data:
+    #     entity_id:
+    #       - climate.basement_thermostat
+    #       - climate.main_thermostat
+    #       - climate.upstairs_thermostat
+    #     fan_mode: "on"
+    # - service: webostv.command
+    #   data:
+    #     entity_id: media_player.living_room_tv
+    #     command: "system/turnOff"
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
     - service: input_boolean.turn_on
@@ -585,32 +373,32 @@
           condition: or
           conditions:
             - condition: state
-              entity_id: sensor.double_garage
+              entity_id: sensor.elkm1_double_garage
               state: "Violated"
             - condition: state
-              entity_id: sensor.single_garage
+              entity_id: sensor.elkm1_single_garage
               state: "Violated"
         sequence:
           - service: notify.telegram_jon
             data_template:
               title: "Garage Door is Open!"
               message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
-    - choose: # check the locks & notify
-        conditions:
-          condition: or
-          conditions:
-            - condition: state
-              entity_id: lock.front_door_lock
-              state: "unlocked"
-            - condition: state
-              entity_id: lock.garage_door_lock
-              state: "unlocked"
-        sequence:
-          - service: notify.telegram_jon
-            data_template:
-              title: "{{ states.sensor.doors_unlocked_number.state }} door(s) UNLOCKED!"
-              message: "Locking {{ states.sensor.doors_unlocked.state }}"
-          - service: script.lock_doors
+    # - choose: # check the locks & notify
+    #     conditions:
+    #       condition: or
+    #       conditions:
+    #         - condition: state
+    #           entity_id: lock.front_door_lock
+    #           state: "unlocked"
+    #         - condition: state
+    #           entity_id: lock.garage_door_lock
+    #           state: "unlocked"
+    #     sequence:
+    #       - service: notify.telegram_jon
+    #         data_template:
+    #           title: "{{ states.sensor.doors_unlocked_number.state }} door(s) UNLOCKED!"
+    #           message: "Locking {{ states.sensor.doors_unlocked.state }}"
+    #       - service: script.lock_doors
 #########################################
 - alias: "Away Mode: turn the HVAC fans on & recirculation pump & tvs off"
   id: "Away Mode: turn the HVAC fans on & recirculation pump & tvs off"
@@ -620,22 +408,23 @@
       entity_id: binary_sensor.alarm_occupancy_status
       to: "off"
   action:
-    - service: climate.set_fan_mode
-      data:
-        entity_id:
-          - climate.basement_thermostat
-          - climate.main_thermostat
-          - climate.upstairs_thermostat
-        fan_mode: "on"
+    # - service: climate.set_fan_mode
+    #   data:
+    #     entity_id:
+    #       - climate.basement_thermostat
+    #       - climate.main_thermostat
+    #       - climate.upstairs_thermostat
+    #     fan_mode: "on"
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
-    - service: script.tvs_off
+    # - service: script.tvs_off
     - choose: # if its light inside, turn off all lights
         - conditions: "{{ is_state('binary_sensor.light_inside', 'on') }}"
           sequence:
-            - service: scene.turn_on
-              entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
-
+            - service: homeassistant.turn_off
+              entity_id: group.all_lights
+            # - service: scene.turn_on
+            #   entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
 #########################################
 - alias: "Home Mode: return home & turn the HVAC fans off & the recirculation pump on & stop daisy cam timer"
   id: "Home Mode: return home & turn the HVAC fans off & the recirculation pump on & stop daisy cam timer"
@@ -644,26 +433,24 @@
       entity_id: binary_sensor.alarm_occupancy_status
       to: "on"
   action:
-    - service: climate.set_fan_mode
-      data:
-        entity_id:
-          - climate.basement_thermostat
-          - climate.main_thermostat
-          - climate.upstairs_thermostat
-        fan_mode: "auto"
+    # - service: climate.set_fan_mode
+    #   data:
+    #     entity_id:
+    #       - climate.basement_thermostat
+    #       - climate.main_thermostat
+    #       - climate.upstairs_thermostat
+    #     fan_mode: "auto"
     - service: homeassistant.turn_on
       entity_id: switch.equipment_room_recirculation_pump
-    - service: timer.cancel
-      entity_id: timer.daisy_cam_timer
 ########################################
 - alias: "Night Mode: turn on sunset lights at dark or sunset"
   id: "Night Mode: turn on sunset lights at dark or sunset"
   trigger:
-    - platform: state
-      entity_id: binary_sensor.light_inside
-      to: "off"
-      for:
-        minutes: 5
+    # - platform: state
+    #   entity_id: binary_sensor.light_inside
+    #   to: "off"
+    #   for:
+    #     minutes: 5
     - platform: sun
       event: sunset
   condition:
@@ -672,72 +459,71 @@
       state: "off"
     - condition: time
       after: "15:30:00"
-    - condition: state
-      entity_id: input_boolean.motion_lights
-      state: "on"
   action:
     - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_sunset1
+      entity_id: scene.sunset
     - service: homeassistant.turn_on
-      entity_id: input_boolean.sunset_run_once
-########################################
-- alias: "Night Mode: turn on sunset2 lights at ten min after sunset"
-  id: "Night Mode: turn on sunset2 lights at ten min after sunset"
-  trigger:
-    - platform: sun
-      event: sunset
-      offset: "00:10:00"
-  action:
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_sunset2
-########################################
-- alias: "Fans: turn on master fan at night (if AC is on)"
-  id: "Fans: turn on master fan at night (if AC is on)"
-  trigger:
-    - platform: time
-      at: "20:00:00"
-  condition:
-    - condition: state
-      entity_id: climate.main_thermostat
-      state: cool
-    - condition: state
-      entity_id: binary_sensor.vacation_status
-      state: "off"
-  action:
-    - service: light.turn_on
-      data:
-        entity_id: light.master_bedroom_master_fan
-        brightness_pct: 50
-########################################
-- alias: "Fans: turn off master fan in the morning"
-  id: "Fans: turn off master fan in the morning"
-  trigger:
-    - platform: time
-      at: "09:00:00"
-  action:
-    - service: light.turn_off
-      entity_id: light.master_bedroom_master_fan
-#########################################
-- alias: "Away Mode: check the front door lock when leaving"
-  id: "Away Mode: check the front door lock when leaving"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.vacation_status
-      to: "on"
-    - platform: state
-      entity_id: sensor.armed_status
-      to: "armed_away"
-  condition:
-    - condition: state
-      entity_id: lock.front_door_lock
-      state: "unlocked"
-  action:
-    - service: notify.telegram_jon
-      data:
-        title: "Front Door is UNLOCKED!"
-        message: "Locking the front door"
-    - service: lock.lock
-      entity_id: lock.front_door_lock
+      entity_id:
+        - input_boolean.sunset_run_once
+        - input_boolean.exterior_cans_auto_blocker
+# ########################################
+# - alias: "Night Mode: turn on sunset2 lights at ten min after sunset"
+#   id: "Night Mode: turn on sunset2 lights at ten min after sunset"
+#   trigger:
+#     - platform: sun
+#       event: sunset
+#       offset: "00:10:00"
+#   action:
+#     - service: scene.turn_on
+#       entity_id: scene.equipment_room_enclosure_device_001_ph_sunset2
+# ########################################
+# - alias: "Fans: turn on master fan at night (if AC is on)"
+#   id: "Fans: turn on master fan at night (if AC is on)"
+#   trigger:
+#     - platform: time
+#       at: "20:00:00"
+#   condition:
+#     - condition: state
+#       entity_id: climate.main_thermostat
+#       state: cool
+#     - condition: state
+#       entity_id: binary_sensor.vacation_status
+#       state: "off"
+#   action:
+#     - service: light.turn_on
+#       data:
+#         entity_id: light.master_bedroom_master_fan
+#         brightness_pct: 50
+# ########################################
+# - alias: "Fans: turn off master fan in the morning"
+#   id: "Fans: turn off master fan in the morning"
+#   trigger:
+#     - platform: time
+#       at: "09:00:00"
+#   action:
+#     - service: light.turn_off
+#       entity_id: light.master_bedroom_master_fan
+# #########################################
+# - alias: "Away Mode: check the front door lock when leaving"
+#   id: "Away Mode: check the front door lock when leaving"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.vacation_status
+#       to: "on"
+#     - platform: state
+#       entity_id: sensor.armed_status
+#       to: "armed_away"
+#   condition:
+#     - condition: state
+#       entity_id: lock.front_door_lock
+#       state: "unlocked"
+#   action:
+#     - service: notify.telegram_jon
+#       data:
+#         title: "Front Door is UNLOCKED!"
+#         message: "Locking the front door"
+#     - service: lock.lock
+#       entity_id: lock.front_door_lock
 #########################################
 - alias: "HVAC: winter indoor humidity check & see if its below the high threshold"
   id: "HVAC: winter indoor humidity check & see if its below the high threshold"
@@ -778,48 +564,33 @@
       data:
         entity_id:
           - switch.equipment_room_recirculation_pump
-          - switch.water_main_shut_off
+          # - switch.water_main_shut_off
     - service: notify.telegram_jon
       data:
         title: "Water Leak!"
         message: "HomeAssistant detected a water leak"
-#########################################
-- alias: "Security: dog walker here between 9:30-2pm (while the alarm is not disarmed)"
-  id: "Security: dog walker here between 9:30-2pm (while the alarm is not disarmed)"
-  trigger:
-    - platform: state
-      entity_id: sensor.garage_door
-      to: "Violated"
-  condition:
-    - condition: template
-      value_template: "{{ not is_state('sensor.armed_status', 'disarmed') }}"
-    - condition: time
-      before: "14:00:00"
-      after: "09:30:00"
-  action:
-    - service: script.video_daisy
-#########################################
-- alias: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
-  id: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
-  trigger:
-    - platform: state
-      entity_id: sensor.alarm_state
-      to: "fire_alarm"
-  action:
-    - service: input_boolean.turn_on
-      entity_id: input_boolean.alarm_notifier
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_fire
-    - service: lock.unlock
-      data:
-        entity_id:
-          - lock.garage_door_lock
-          - lock.front_door_lock
-    - service: script.alarm
-    - service: notify.mobile_app_lauras_iphone
-      data:
-        title: "Fire alarm active"
-        message: "check the alarm, fire detected"
+# #########################################
+# - alias: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
+#   id: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
+#   trigger:
+#     - platform: state
+#       entity_id: sensor.alarm_state
+#       to: "fire_alarm"
+#   action:
+#     - service: input_boolean.turn_on
+#       entity_id: input_boolean.alarm_notifier
+#     - service: scene.turn_on
+#       entity_id: scene.equipment_room_enclosure_device_001_ph_fire
+#     - service: lock.unlock
+#       data:
+#         entity_id:
+#           - lock.garage_door_lock
+#           - lock.front_door_lock
+#     - service: script.alarm
+#     - service: notify.mobile_app_lauras_iphone
+#       data:
+#         title: "Fire alarm active"
+#         message: "check the alarm, fire detected"
 #########################################
 - alias: "Alarm: burglar active & lights on & send videos & repeat notifications"
   id: "Alarm: burglar active & lights on & send videos & repeat notifications"
@@ -848,59 +619,6 @@
     - service: input_boolean.turn_off
       entity_id: input_boolean.alarm_notifier
 #########################################
-# - alias: "Daisy: daisy cam photo every 45 minutes when armed away and kennel closed"
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.alarm_occupancy_status
-#       to: "off"
-#   condition:
-#     - condition: state
-#       entity_id: binary_sensor.daisy_contact
-#       state: "off"
-#     - condition: state
-#       entity_id: binary_sensor.vacation_status
-#       state: "off"
-#   action:
-#     - service: timer.start
-#       entity_id: timer.daisy_cam_timer
-# - alias: "Daisy: daisy timer completed"
-#   trigger:
-#     - platform: event
-#       event_type: timer.finished
-#       event_data:
-#         entity_id: timer.daisy_cam_timer
-#   condition:
-#     - condition: state
-#       entity_id: binary_sensor.alarm_occupancy_status
-#       state: "off"
-#     - condition: state
-#       entity_id: binary_sensor.daisy_contact
-#       state: "off"
-#   action:
-#     - service: script.video_daisy
-#     - service: timer.start
-#       entity_id: timer.daisy_cam_timer
-########################################
-- alias: "Fans: patio fan off"
-  id: "Fans: patio fan off"
-  trigger:
-    - platform: time
-      at: "00:00:00"
-    - platform: time
-      at: "03:00:00"
-    - platform: time
-      at: "05:00:00"
-    - platform: time
-      at: "07:00:00"
-    - platform: state
-      entity_id: fan.patio_fan
-      to: "on"
-      for:
-        minutes: 60
-  action:
-    - service: homeassistant.turn_off
-      entity_id: fan.patio_fan
-#########################################
 - alias: "Security: Elk Alarm trouble notification"
   id: "Security: Elk Alarm trouble notification"
   trigger:
@@ -913,24 +631,24 @@
     - service: notify.telegram_jon
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-#########################################
-- alias: "Work: victorops notification - notify"
-  id: "Work: victorops notification - notify"
-  description: "if its not daytime and Jon is home, also turn on his lamp"
-  trigger:
-    - platform: template
-      value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel_5_last_notification.attributes['package'] }}"
-  action:
-    - service: notify.telegram_jon
-      data:
-        message: "ALERT! Work page: {{ states.sensor.pixel_5_last_notification.attributes['android.text'] }}"
-    - choose:
-        - conditions: "{{ not is_state('sensor.period_of_day', 'day') and is_state('person.jon', 'home') }}"
-          sequence:
-            - service: lifx.set_state
-              data:
-                entity_id: light.jons_lamp_lifx
-                power: true
+# #########################################
+# - alias: "Work: victorops notification - notify"
+#   id: "Work: victorops notification - notify"
+#   description: "if its not daytime and Jon is home, also turn on his lamp"
+#   trigger:
+#     - platform: template
+#       value_template: "{{ 'com.victorops.androidclient' in states.sensor.pixel_5_last_notification.attributes['package'] }}"
+#   action:
+#     - service: notify.telegram_jon
+#       data:
+#         message: "ALERT! Work page: {{ states.sensor.pixel_5_last_notification.attributes['android.text'] }}"
+#     - choose:
+#         - conditions: "{{ not is_state('sensor.period_of_day', 'day') and is_state('person.jon', 'home') }}"
+#           sequence:
+#             - service: lifx.set_state
+#               data:
+#                 entity_id: light.jons_lamp_lifx
+#                 power: true
 #########################################
 - alias: "Utility: general notifications"
   id: "Utility: general notifications"
@@ -945,82 +663,82 @@
         - input_boolean.frigate_deck_notifier
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
+    # - platform: state
+    #   entity_id:
+    #     - binary_sensor.office_multi_tamper
+    #     - binary_sensor.kitchen_fridge_door_tamper
+    #     - binary_sensor.home_assistant_versions_update_available
+    #   to: "on"
+    # - platform: numeric_state
+    #   entity_id: sensor.computer_multi_temperature_measurement
+    #   above: 105
+    #   for:
+    #     minutes: 5
+    # - platform: numeric_state
+    #   entity_id:
+    #     - sensor.bar_fridge_temperature
+    #     - sensor.kitchen_fridge_temperature
+    #   above: 46
+    #   for:
+    #     minutes: 20
+    # - platform: numeric_state
+    #   entity_id:
+    #     - sensor.bar_fridge_temperature
+    #     - sensor.kitchen_fridge_temperature
+    #   below: 30
+    #   for:
+    #     minutes: 20
+    # - platform: numeric_state
+    #   entity_id:
+    #     - sensor.bar_freezer_temperature
+    #     - sensor.kitchen_freezer_temperature
+    #   above: 5
+    #   for:
+    #     minutes: 20
+    # - platform: numeric_state
+    #   entity_id:
+    #     - sensor.bar_freezer_temperature
+    #     - sensor.kitchen_freezer_temperature
+    #   below: -8
+    #   for:
+    #     minutes: 20
     - platform: state
-      entity_id:
-        - binary_sensor.office_multi_tamper
-        - binary_sensor.kitchen_fridge_door_tamper
-        - binary_sensor.updater
-      to: "on"
-    - platform: numeric_state
-      entity_id: sensor.computer_multi_temperature_measurement
-      above: 105
-      for:
-        minutes: 5
-    - platform: numeric_state
-      entity_id:
-        - sensor.bar_fridge_temperature
-        - sensor.kitchen_fridge_temperature
-      above: 46
-      for:
-        minutes: 20
-    - platform: numeric_state
-      entity_id:
-        - sensor.bar_fridge_temperature
-        - sensor.kitchen_fridge_temperature
-      below: 30
-      for:
-        minutes: 20
-    - platform: numeric_state
-      entity_id:
-        - sensor.bar_freezer_temperature
-        - sensor.kitchen_freezer_temperature
-      above: 5
-      for:
-        minutes: 20
-    - platform: numeric_state
-      entity_id:
-        - sensor.bar_freezer_temperature
-        - sensor.kitchen_freezer_temperature
-      below: -8
-      for:
-        minutes: 20
-    - platform: state
-      entity_id: sensor.elkm1
+      entity_id: sensor.elkm1_elkm1
       to: "Disconnected"
     - platform: numeric_state
       entity_id:
-        - sensor.basement_keypad
-        - sensor.master_entry_temperature
+        - sensor.elkm1_workshop_keypad
+        # - sensor.master_entry_temperature
       above: 84
       for:
         minutes: 15
     - platform: numeric_state
       entity_id:
-        - sensor.basement_keypad
-        - sensor.master_entry_temperature
+        - sensor.elkm1_workshop_keypad
+        # - sensor.master_entry_temperature
       below: 55
       for:
         minutes: 15
-    - platform: state
-      entity_id:
-        - binary_sensor.washer_wash_completed
-        - binary_sensor.dryer_dry_completed
-      from: "off"
-      to: "on"
+    # - platform: state
+    #   entity_id:
+    #     - binary_sensor.washer_wash_completed
+    #     - binary_sensor.dryer_dry_completed
+    #   from: "off"
+    #   to: "on"
   action:
     - service: notify.telegram_jon
       data_template:
         message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-#########################################
-- alias: "Utility: UPS notifications"
-  id: "Utility: UPS notifications"
-  trigger:
-    - platform: event
-      event_type: nut.ups_event
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        message: "{{ trigger.event.data.notify_msg }}"
+# #########################################
+# - alias: "Utility: UPS notifications"
+#   id: "Utility: UPS notifications"
+#   trigger:
+#     - platform: event
+#       event_type: nut.ups_event
+#   action:
+#     - service: notify.telegram_jon
+#       data_template:
+#         message: "{{ trigger.event.data.notify_msg }}"
 #########################################
 - alias: "Notification: important date (birthday & anniversary)"
   id: "Notification: important date (birthday & anniversary)"
@@ -1035,36 +753,36 @@
           {% for state in states if (('birthday' in state.entity_id or 'anniversary' in state.entity_id) and state.state | int == 14) %}
           {{state.name}}
           {% endfor %}
-#########################################
-- alias: "Utility: create all groups"
-  id: "Utility: create all groups"
-  trigger:
-    - platform: homeassistant
-      event: start
-  action:
-    - service: script.group_set
-      data_template:
-        object_id: all_locks
-        name: All Locks
-        types: "lock"
-#########################################
-- alias: "Presence: office speakers on/off with presence"
-  id: "Presence: office speakers on/off with presence"
-  initial_state: false
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.office_occupancy
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.office_occupancy
-      to: "off"
-      for:
-        minutes: 21
-  action:
-    - service_template: >
-        {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
-        {% else %}homeassistant.turn_off{% endif %}
-      entity_id: switch.office_speakers
+# #########################################
+# - alias: "Utility: create all groups"
+#   id: "Utility: create all groups"
+#   trigger:
+#     - platform: homeassistant
+#       event: start
+#   action:
+#     - service: script.group_set
+#       data_template:
+#         object_id: all_locks
+#         name: All Locks
+#         types: "lock"
+# #########################################
+# - alias: "Presence: office speakers on/off with presence"
+#   id: "Presence: office speakers on/off with presence"
+#   initial_state: false
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.office_occupancy
+#       to: "on"
+#     - platform: state
+#       entity_id: binary_sensor.office_occupancy
+#       to: "off"
+#       for:
+#         minutes: 21
+#   action:
+#     - service_template: >
+#         {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
+#         {% else %}homeassistant.turn_off{% endif %}
+#       entity_id: switch.office_speakers
 #########################################
 - alias: "Work: wfh turn off recirculation pump"
   id: "Work: wfh turn off recirculation pump"
@@ -1112,35 +830,35 @@
       default:
         - service: homeassistant.turn_off
           entity_id: alert.garage_door_double
-#########################################
-- alias: "iOS Actions: toggle garage - single"
-  id: "iOS Actions: toggle garage - single"
-  trigger:
-    - platform: event
-      event_type: ios.action_fired
-      event_data:
-        actionID: 532EF4B0-E0F8-490D-B4C4-C4006A3469E0
-        actionName: Single Garage
-        sourceDeviceID: lauras_iphone
-        sourceDeviceName: Lauras iPhone
-        sourceDevicePermanentID: !secret ios_id
-        triggerSource: widget
-  action:
-    - service: homeassistant.toggle
-      entity_id: cover.garage_momentary_single
-#########################################
-- alias: "iOS Actions: unlock front door"
-  id: "iOS Actions: unlock front door"
-  trigger:
-    - platform: event
-      event_type: ios.action_fired
-      event_data:
-        actionID: 07C1C12C-F623-49CA-942A-2299B7B2EA0F
-        actionName: Unlock Front
-        sourceDeviceID: lauras_iphone
-        sourceDeviceName: Lauras iPhone
-        sourceDevicePermanentID: !secret ios_id
-        triggerSource: widget
-  action:
-    - service: lock.unlock
-      entity_id: lock.front_door_lock
+# #########################################
+# - alias: "iOS Actions: toggle garage - single"
+#   id: "iOS Actions: toggle garage - single"
+#   trigger:
+#     - platform: event
+#       event_type: ios.action_fired
+#       event_data:
+#         actionID: 532EF4B0-E0F8-490D-B4C4-C4006A3469E0
+#         actionName: Single Garage
+#         sourceDeviceID: lauras_iphone
+#         sourceDeviceName: Lauras iPhone
+#         sourceDevicePermanentID: !secret ios_id
+#         triggerSource: widget
+#   action:
+#     - service: homeassistant.toggle
+#       entity_id: cover.garage_momentary_single
+# #########################################
+# - alias: "iOS Actions: unlock front door"
+#   id: "iOS Actions: unlock front door"
+#   trigger:
+#     - platform: event
+#       event_type: ios.action_fired
+#       event_data:
+#         actionID: 07C1C12C-F623-49CA-942A-2299B7B2EA0F
+#         actionName: Unlock Front
+#         sourceDeviceID: lauras_iphone
+#         sourceDeviceName: Lauras iPhone
+#         sourceDevicePermanentID: !secret ios_id
+#         triggerSource: widget
+#   action:
+#     - service: lock.unlock
+#       entity_id: lock.front_door_lock

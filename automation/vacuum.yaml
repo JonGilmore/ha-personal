@@ -1,21 +1,21 @@
----
-#########################################
-- alias: "Vacuum: start cleaning kitchen"
-  id: "Vacuum: start cleaning kitchen"
-  trigger:
-    - platform: state
-      entity_id: input_select.vacuum_room
-      from: "Select Input"
-  action:
-    - service_template: >
-        {% if trigger.to_state.state == 'foyer' %}
-          script.vacuum_foyer
-        {% elif trigger.to_state.state == 'kitchen' %}
-          script.vacuum_kitchen
-        {% endif %}
-      data_template:
-        zone_ids: "{{ trigger.to_state.state }}"
-    - service: input_select.select_option
-      entity_id: input_select.vacuum_room
-      data_template:
-        option: "Select Input"
+# ---
+# #########################################
+# - alias: "Vacuum: start cleaning kitchen"
+#   id: "Vacuum: start cleaning kitchen"
+#   trigger:
+#     - platform: state
+#       entity_id: input_select.vacuum_room
+#       from: "Select Input"
+#   action:
+#     - service_template: >
+#         {% if trigger.to_state.state == 'foyer' %}
+#           script.vacuum_foyer
+#         {% elif trigger.to_state.state == 'kitchen' %}
+#           script.vacuum_kitchen
+#         {% endif %}
+#       data_template:
+#         zone_ids: "{{ trigger.to_state.state }}"
+#     - service: input_select.select_option
+#       entity_id: input_select.vacuum_room
+#       data_template:
+#         option: "Select Input"

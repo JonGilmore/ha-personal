@@ -7,8 +7,8 @@ homeassistant:
   unit_system: imperial
   currency: USD
   time_zone: !secret ha_tz
-  external_url: !secret ext_hass_url
-  internal_url: !secret int_hass_url
+  # external_url: !secret ext_hass_url
+  # internal_url: !secret int_hass_url
   customize: !include customize.yaml
   packages: !include_dir_named packages
   allowlist_external_dirs:
@@ -18,20 +18,12 @@ homeassistant:
   media_dirs:
     local: /media
 energy:
-
-utility_meter:
-  energy:
-    source: sensor.aeotec_hem_energy_meter
-    cycle: monthly
-
 http:
   use_x_forwarded_for: true
   trusted_proxies:
     - 172.30.33.0/24
   login_attempts_threshold: 3
   ip_ban_enabled: false
-updater:
-  reporting: false
 tts:
   - platform: google_translate
     service_name: google_say
@@ -46,23 +38,30 @@ frontend:
   themes: !include_dir_merge_named themes/
 lovelace:
   mode: yaml
+  dashboards:
+    wallpanel-dashboard:
+      mode: yaml
+      title: Wallpanel
+      icon: mdi:time
+      show_in_sidebar: true
+      filename: wallpanel.yaml
 system_health:
 
-influxdb:
-  host: localhost
-  username: !secret influx_usr
-  password: !secret influx_pwd
-  database: !secret influx_db
-  include:
-    domains:
-      - sensor
-      - binary_sensor
-      - climate
-      - device_tracker
-      - lock
-    entities:
-      - switch.equipment_room_recirculation_pump
-      - switch.water_main_shut_off
+# influxdb:
+#   host: localhost
+#   username: !secret influx_usr
+#   password: !secret influx_pwd
+#   database: !secret influx_db
+#   include:
+#     domains:
+#       - sensor
+#       - binary_sensor
+#       - climate
+#       - device_tracker
+#       - lock
+#     entities:
+#       - switch.equipment_room_recirculation_pump
+#       - switch.water_main_shut_off
 
 weather:
   - platform: darksky
@@ -74,15 +73,15 @@ elkm1:
   area:
     exclude: [2-8]
   zone:
-    exclude: [17-24, 29-32, 41-208]
+    exclude: [33-208]
   output:
-    exclude: [1-8, 11-208]
+    exclude: [1-208]
   counter:
     exclude: [2-64]
   keypad:
-    include: [1-5]
+    include: [1-3]
   task:
-    include: [1-4]
+    enabled: false
   thermostat:
     enabled: false
   plc:
@@ -90,14 +89,11 @@ elkm1:
   setting:
     enabled: false
 
-sleepiq:
-  username: !secret sleep_usr
-  password: !secret sleep_pwd
-
-lutron:
-  host: !secret rr_ip
-  username: !secret rr_usr
-  password: !secret rr_pwd
+lutron_caseta:
+  - host: !secret ra3_ip
+    keyfile: caseta.key
+    certfile: caseta.crt
+    ca_certs: caseta-bridge.crt
 
 notify:
   - name: telegram_jon
@@ -114,15 +110,14 @@ telegram_bot:
 ####################################################
 #                     Includes                     #
 ####################################################
-adaptive_lighting: !include includes/adaptive_lighting.yaml
-alert: !include includes/alerts.yaml
+# adaptive_lighting: !include includes/adaptive_lighting.yaml
+# alert: !include includes/alerts.yaml
 automation: !include automations.yaml
 automation yaml: !include_dir_merge_list automation
 binary_sensor: !include includes/binary_sensors.yaml
 camera: !include includes/cameras.yaml
 climate: !include includes/climate.yaml
 cover: !include includes/covers.yaml
-device_tracker: !include includes/device_tracker.yaml
 # fan: !include includes/fans.yaml
 group: !include includes/groups.yaml
 input_boolean: !include includes/input_booleans.yaml
@@ -130,18 +125,29 @@ input_select: !include includes/input_selects.yaml
 intent_script: !include includes/intent_scripts.yaml
 proximity: !include includes/proximity.yaml
 rest_command: !include includes/rest_commands.yaml
+scene: !include includes/scenes.yaml
 script: !include includes/scripts.yaml
 sensor: !include includes/sensors.yaml
 shell_command: !include includes/shell_commands.yaml
 switch: !include includes/switches.yaml
 template: !include includes/template.yaml
-timer: !include includes/timers.yaml
 zone: !include includes/zones.yaml
 
 logger:
   default: error
   logs:
     custom_components.localtuya.common: fatal
+    homeassistant.components.lutron_caseta: debug
+    pylutron_caseta: debug
+
+panel_custom:
+  - name: panel_supervisor
+    sidebar_title: Supervisor Add-ons
+    sidebar_icon: mdi:home-assistant
+    url_path: hassio/dashboard
+    module_url: /api/hassio/app/entrypoint.js
+    embed_iframe: true
+    require_admin: true
 
 history:
 websocket_api:
@@ -152,59 +158,33 @@ person:
 config:
 hassio:
 map:
-discovery:
-  ignore:
-    - axis
-    - homekit
+# discovery:
+#   ignore:
+#     - axis
+#     - homekit
 
 speedtestdotnet:
   scan_interval:
     minutes: 121
 
-webostv:
-  - host: !secret lg_living_room
-    name: Living Room TV
-    turn_on_action:
-      service: wake_on_lan.send_magic_packet
-      data:
-        mac: "a8:23:fe:0c:92:af"
-    customize:
-      sources:
-        - youtubetv
-        - netflix
-
 mobile_app:
 
-browser_mod:
-  prefix: "browser_"
-  devices:
-    c427d3b2-52fa9681:
-      name: jons_macbook
-    06bc0513-a22e88bf:
-      name: jons_pixel
+# browser_mod:
+#   prefix: "browser_"
+#   devices:
+#     c427d3b2-52fa9681:
+#       name: jons_macbook
+#     06bc0513-a22e88bf:
+#       name: jons_pixel
 
-lifx:
-  light:
-    - broadcast: 192.168.45.181
-    - broadcast: 192.168.45.182
-    - broadcast: 192.168.45.183
-    - broadcast: 192.168.45.184
+# lifx:
+#   light:
+#     - broadcast: 192.168.45.181
+#     - broadcast: 192.168.45.182
+#     - broadcast: 192.168.45.183
+#     - broadcast: 192.168.45.184
 
-sonos:
-  media_player:
-    hosts:
-      - 192.168.45.140
-      - 192.168.45.141
-      - 192.168.45.142
-      - 192.168.45.143
-      - 192.168.45.144
-      - 192.168.45.145
-      - 192.168.45.146
-      - 192.168.45.147
-      - 192.168.45.148
-      - 192.168.45.149
 media_source:
-
 # cast:
 #   media_player:
 #     - host: 192.168.45.45

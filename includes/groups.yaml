@@ -2,432 +2,306 @@
 exterior_lights:
   name: Exterior Lights
   entities:
+    - switch.exterior_rear_outlet
+    - light.deck
+    - switch.deck_posts
     - switch.exterior_cans
-    - light.exterior_deck
-    - switch.exterior_light
-    - switch.exterior_lights
-    - switch.exterior_outlets
-    - light.exterior_patio
-    - switch.exterior_posts
-    - switch.exterior_uplights
-    - light.mudroom_garage_lights
-    - switch.exterior_light
+    - switch.grill_deck_light
+    - switch.exterior_landscape_lights
+    - light.patio_cans
+    - switch.exterior_roof_outlets
+    - switch.workshop_exterior
 
 interior_lights:
   name: Interior Lights
   entities:
-    - light.basement_bar
-    - switch.basement_bar_cabinets
-    - switch.basement_bathroom_fan
-    - switch.basement_bathroom_shower
-    - switch.basement_main
-    - switch.basement_stair_treads
-    - switch.basement_stairs
-    - switch.basement_storage_lights
-    - light.basement_theater
-    - light.basement_theater_front_lamp
-    - light.evelyns_room_lamp
-    - light.evelyns_room_cans
-    - light.evelyns_room_fan
-    - light.dining_room_cans
-    - light.dining_room_chandelier
-    - switch.exterior_foyer
-    - switch.great_room_cabinets
-    - light.great_room_great_room_cans
-    - switch.great_room_lamp
+    - switch.back_kitchen_cabinets
+    - light.back_kitchen_lights
+    - switch.bar_cabinets
+    - light.basement_hall
+    - light.basement_stairs
+    - light.bedroom_2_cans
+    - light.bedroom_3_cans
+    - light.bonus_cans
+    - light.evelyns_cans
+    - light.evelyns_lamp
+    - switch.foyer_lights
+    - switch.garage_hex_lights
+    - switch.garage_lights
+    - light.great_room_cabinets
+    - light.great_room_cans
     - light.gym_cans
-    - switch.jack_and_jill_fan
     - switch.jack_and_jill_light
-    - switch.jack_and_jill_lights
+    - light.jons_lamp
     - switch.kitchen_cabinets
-    - light.kitchen_sunroom
-    - light.kitchen_table
-    - switch.laundry_light
-    - light.loft_cans
-    - light.loft_lamp
-    - switch.master_bedroom_entry
-    - switch.master_bedroom_fan
-    - light.master_toilet_fixture
-    - light.master_bedroom_fixtures
-    - light.jons_lamp_lifx
-    - switch.master_bedroom_lauras_lamp
-    - light.master_bedroom_master_cans
-    - light.master_bedroom_master_fan
-    - switch.master_bedroom_shower
-    - light.master_bedroom_sitting_cans
-    - switch.master_toilet_toilet_fan
-    - light.master_bedroom_tub
-    - switch.mudroom_kitchen_cans
-    - switch.mudroom_kitchen_pendants
-    - switch.mudroom_mudroom
-    - light.nook_cans
+    - light.kitchen_cans
+    - light.kitchen_dining_art
+    - light.kitchen_dining_cans
+    - light.kitchen_dining_chandelier
+    - switch.kitchen_hall
+    - light.kitchen_pendants
+    - switch.kitchen_toekick
+    - light.laundry_cabinets
+    - switch.lauras_lamp
+    - light.library_cabinets
+    - switch.library_lamp
+    - light.library_light
+    - light.lounge_cans
+    - light.main_bathroom_cans
+    - light.main_bathroom_chandelier
+    - light.main_bathroom_sconces
+    - light.main_bathroom_toekick
+    - light.main_bathroom_tub
+    - light.main_bedroom_cans
+    - light.main_bedroom_hall
+    - light.media_room_cabinets
+    - light.media_room_cans
+    - switch.mudroom_lamp
+    - switch.mudroom_lights
+    - light.office_art
     - light.office_cans
-    - switch.office_lights
+    - switch.office_hall
+    - light.stairs_chandelier
+    - light.stairs_sconces
+    - light.sunroom_cans
+    - light.upstairs_hall
+    - switch.workshop_lights
+    - switch.main_bathroom_fan
     - switch.powder_room_fan
-    - switch.powder_room_hall_light
-    - light.princess_cans
-    - light.princess_fan
-    - switch.princess_light
-    - switch.princess_shower
-    - switch.princess_toilet_fan
-    - light.pulte_planning_center_lamp
-    - switch.pulte_planning_center_lauras_office
-    - light.second_bedroom_cans
-    - light.second_bedroom_fan
-    - switch.sunroom_sunroom_lamp
-    - switch.upstairs_hall_hall
-    - switch.upstairs_hall_main_stairs
-    - switch.upstairs_hall_treads
-    - switch.office_speakers
-    - switch.christmas_tree
-    - light.master_bath_toekick
+    - switch.equipment_room_recirculation_pump
+
 
 all_lights:
   name: All Lights
   entities:
-    - light.basement_bar
-    - switch.basement_bar_cabinets
-    - switch.basement_bathroom_fan
-    - switch.basement_bathroom_shower
-    - switch.basement_main
-    - switch.basement_stair_treads
-    - switch.basement_stairs
-    - switch.basement_storage_lights
-    - light.basement_theater
-    - light.basement_theater_front_lamp
-    - light.evelyns_room_lamp
-    - light.evelyns_room_cans
-    - light.evelyns_room_fan
-    - light.dining_room_cans
-    - light.dining_room_chandelier
+    - switch.back_kitchen_cabinets
+    - light.back_kitchen_lights
+    - switch.bar_cabinets
+    - light.basement_hall
+    - light.basement_stairs
+    - light.bedroom_2_cans
+    - light.bedroom_3_cans
+    - light.bonus_cans
+    - switch.deck_lights
+    - switch.deck_posts
+    - light.evelyns_cans
+    - light.evelyns_lamp
     - switch.exterior_cans
-    - light.exterior_deck
-    - switch.exterior_foyer
-    - switch.exterior_light
-    - switch.exterior_lights
-    - switch.exterior_outlets
-    - light.exterior_patio
-    - switch.exterior_posts
-    - switch.exterior_uplights
-    - switch.great_room_cabinets
-    - light.great_room_great_room_cans
-    - switch.great_room_lamp
+    - switch.exterior_landscape_lights
+    - switch.foyer_lights
+    - switch.garage_hex_lights
+    - switch.garage_lights
+    - light.great_room_cabinets
+    - light.great_room_cans
+    - switch.grill_deck_light
     - light.gym_cans
-    - switch.jack_and_jill_fan
     - switch.jack_and_jill_light
-    - switch.jack_and_jill_lights
+    - light.jons_lamp
     - switch.kitchen_cabinets
-    - light.kitchen_sunroom
-    - light.kitchen_table
-    - switch.laundry_light
-    - light.loft_cans
-    - light.loft_lamp
-    - switch.master_bedroom_entry
-    - switch.master_bedroom_fan
-    - light.master_toilet_fixture
-    - light.master_bedroom_fixtures
-    - light.sitting_room_lamp
-    - light.master_entry_lamp
-    - light.lauras_lamp_lifx
-    - light.jons_lamp_lifx
-    - switch.master_bedroom_lauras_lamp
-    - light.master_bedroom_master_cans
-    - light.master_bedroom_master_fan
-    - switch.master_bedroom_shower
-    - light.master_bedroom_sitting_cans
-    - switch.master_toilet_toilet_fan
-    - light.master_bedroom_tub
-    - light.mudroom_garage_lights
-    - switch.mudroom_kitchen_cans
-    - switch.mudroom_kitchen_pendants
-    - switch.mudroom_mudroom
-    - light.nook_cans
+    - light.kitchen_cans
+    - light.kitchen_dining_art
+    - light.kitchen_dining_cans
+    - light.kitchen_dining_chandelier
+    - switch.kitchen_hall
+    - light.kitchen_pendants
+    - switch.kitchen_toekick
+    - light.laundry_cabinets
+    - switch.lauras_lamp
+    - light.library_cabinets
+    - switch.library_lamp
+    - light.library_light
+    - light.lounge_cans
+    - light.main_bathroom_cans
+    - light.main_bathroom_chandelier
+    - light.main_bathroom_sconces
+    - light.main_bathroom_toekick
+    - light.main_bathroom_tub
+    - light.main_bedroom_cans
+    - light.main_bedroom_hall
+    - light.media_room_cabinets
+    - light.media_room_cans
+    - switch.mudroom_lamp
+    - switch.mudroom_lights
+    - light.office_art
     - light.office_cans
-    - switch.office_lights
+    - switch.office_hall
+    - light.patio_cans
+    - light.stairs_chandelier
+    - light.stairs_sconces
+    - light.sunroom_cans
+    - light.upstairs_hall
+    - switch.workshop_exterior
+    - switch.workshop_lights
+    - switch.exterior_rear_outlet
+    - switch.exterior_roof_outlets
+    - switch.main_bathroom_fan
     - switch.powder_room_fan
-    - switch.powder_room_hall_light
-    - light.princess_cans
-    - light.princess_fan
-    - switch.princess_light
-    - switch.princess_shower
-    - switch.princess_toilet_fan
-    - light.pulte_planning_center_lamp
-    - switch.pulte_planning_center_lauras_office
-    - light.second_bedroom_cans
-    - light.second_bedroom_fan
-    - switch.sunroom_sunroom_lamp
-    - switch.upstairs_hall_hall
-    - switch.upstairs_hall_main_stairs
-    - switch.upstairs_hall_treads
-    - switch.office_speakers
-    - switch.christmas_tree
-    - light.master_bath_toekick
+    - switch.equipment_room_recirculation_pump
     - fan.patio_fan
 
 basement_lights:
   name: Basement Lights
   entities:
-    - light.basement_bar
-    - switch.basement_bar_cabinets
-    - switch.basement_bathroom_shower
-    - switch.basement_main
-    - switch.basement_stair_treads
-    - switch.basement_stairs
-    - switch.basement_storage_lights
-    - light.basement_theater
-    - light.basement_theater_front_lamp
+    - switch.bar_cabinets
+    - light.basement_hall
+    - light.basement_stairs
     - light.gym_cans
-    - light.nook_cans
+    - light.lounge_cans
+    - switch.office_hall
+    - switch.workshop_lights
+    - light.media_room_cabinets
+    - light.media_room_cans
+    - light.office_art
+    - light.office_cans
 
 main_floor_lights:
   name: Main Floor Lights
   entities:
-    - light.dining_room_cans
-    - light.dining_room_chandelier
-    - switch.exterior_foyer
-    - switch.great_room_cabinets
-    - light.great_room_great_room_cans
-    - switch.great_room_lamp
+    - switch.back_kitchen_cabinets
+    - light.back_kitchen_lights
+    - light.great_room_cabinets
+    - light.great_room_cans
     - switch.kitchen_cabinets
-    - light.kitchen_sunroom
-    - light.kitchen_table
-    - switch.laundry_light
-    - light.mudroom_garage_lights
-    - switch.mudroom_kitchen_cans
-    - switch.mudroom_kitchen_pendants
-    - switch.mudroom_mudroom
-    - light.office_cans
-    - switch.office_lights
-    - switch.powder_room_hall_light
-    - light.pulte_planning_center_lamp
-    - switch.pulte_planning_center_lauras_office
-    - switch.sunroom_sunroom_lamp
-    - switch.pantry
-    - light.living_room_lifx
-    - light.sunroom_lifx
+    - light.kitchen_cans
+    - light.kitchen_dining_art
+    - light.kitchen_dining_cans
+    - light.kitchen_dining_chandelier
+    - switch.kitchen_hall
+    - light.kitchen_pendants
+    - switch.kitchen_toekick
+    - light.library_cabinets
+    - switch.library_lamp
+    - light.library_light
+    - light.stairs_chandelier
+    - light.stairs_sconces
+    - light.sunroom_cans
+    - switch.mudroom_lamp
+    - switch.mudroom_lights
+    - switch.powder_room_fan
+    - light.stairs_chandelier
+    - light.stairs_sconces
 
 upstairs_lights:
   name: Upstairs Lights
   entities:
-    - light.evelyns_room_cans
+    - light.bedroom_2_cans
+    - light.bedroom_3_cans
+    - light.bonus_cans
+    - light.evelyns_cans
+    - light.evelyns_lamp
     - switch.jack_and_jill_light
-    - switch.jack_and_jill_lights
-    - light.loft_cans
-    - light.loft_lamp
-    - switch.master_bedroom_entry
-    - light.master_toilet_fixture
-    - light.master_bedroom_fixtures
-    - switch.master_bedroom_lauras_lamp
-    - light.master_bedroom_master_cans
-    - switch.master_bedroom_shower
-    - light.master_bedroom_sitting_cans
-    - light.master_bedroom_tub
-    - light.princess_cans
-    - switch.princess_light
-    - switch.princess_shower
-    - light.second_bedroom_cans
-    - switch.upstairs_hall_hall
-    - switch.upstairs_hall_main_stairs
-    - switch.upstairs_hall_treads
-    - switch.master_closet
-    - light.evelyns_room_lamp
-    - light.sitting_room_lamp
-    - light.master_entry_lamp
-    - light.lauras_lamp_lifx
-    - light.jons_lamp_lifx
-    - light.master_bath_toekick
+    - light.jons_lamp
+    - light.laundry_cabinets
+    - switch.lauras_lamp
+    - light.main_bathroom_cans
+    - light.main_bathroom_chandelier
+    - light.main_bathroom_sconces
+    - light.main_bathroom_toekick
+    - light.main_bathroom_tub
+    - light.main_bedroom_cans
+    - light.main_bedroom_hall
+    - light.stairs_chandelier
+    - light.stairs_sconces
+    - light.upstairs_hall
+    - switch.main_bathroom_fan
 
 all_fans:
   name: All Fans
   entities:
     - fan.patio_fan
-    - switch.basement_bathroom_fan
-    - switch.basement_fan
-    - switch.powder_room_fan
-    - light.princess_fan
-    - switch.princess_toilet_fan
-    - light.second_bedroom_fan
-    - switch.jack_and_jill_fan
-    - light.evelyns_room_fan
-    - switch.master_bedroom_fan
-    - light.master_bedroom_master_fan
-    - switch.master_toilet_toilet_fan
-    - fan.portable_fan
 
-sunset:
-  name: Sunset Lights
-  entities:
-    - switch.exterior_cans
-    - switch.exterior_uplights
-    - switch.great_room_lamp
-    - switch.sunroom_sunroom_lamp
+# sunset:
+#   name: Sunset Lights
+#   entities:
+#     - switch.exterior_cans
+#     - switch.exterior_uplights
+#     - switch.great_room_lamp
+#     - switch.sunroom_sunroom_lamp
 
-christmasLights:
-  name: Christmas Lights
-  entities:
-    - switch.exterior_light
-    - switch.exterior_outlets
-    - switch.sunroom_xmas_tree
-    - switch.christmas_tree
+# christmasLights:
+#   name: Christmas Lights
+#   entities:
 
-christmasTrees:
-  name: Christmas Trees
-  entities:
-    - switch.sunroom_xmas_tree
-    - switch.christmas_tree
+# christmasTrees:
+#   name: Christmas Trees
+#   entities:
 
-garmin:
-  name: garmin
-  entities:
-    - switch.exterior_cans
-    - cover.garage_momentary_single
-    - cover.garage_momentary_double
-    - lock.front_door_lock
+# garmin:
+#   name: garmin
+#   entities:
 
 main_doors:
   name: Main Doors
   entities:
-    - binary_sensor.front_door
-    - binary_sensor.garage_door
-    - binary_sensor.deck_door
+    - binary_sensor.elkm1_front_door
+    - binary_sensor.elkm1_garage_door
+    - binary_sensor.elkm1_deck_door
+    - binary_sensor.elkm1_grilldeck_door
 
-basement_door:
-  name: Basement Door
+basement_doors:
+  name: Basement Doors
   entities:
-    - binary_sensor.basement_door
+    - binary_sensor.elkm1_patio_door
+    - binary_sensor.elkm1_workshop_door
 
 garage_lights:
   name: Garage Lights
   entities:
-    - light.mudroom_garage_lights
+    - switch.garage_hex_lights
+    - switch.garage_lights
 
 garage_doors:
   name: Garage Doors
   entities:
-    - cover.garage_momentary_single
-    - cover.garage_momentary_double
+    - sensor.elkm1_single_garage
+    - sensor.elkm1_double_garage
 
-exterior_doors:
-  name: Exterior Doors
-  entities:
-    - binary_sensor.basement_door
-    - binary_sensor.front_door
-    - binary_sensor.garage_door
-    - binary_sensor.deck_door
-    - cover.garage_momentary_single
-    - cover.garage_momentary_double
+# exterior_doors:
+#   name: Exterior Doors
+#   entities:
 
 main_motions:
   name: Main Floor Motions
   entities:
-    - binary_sensor.foyer_pir
-    - binary_sensor.kitchen_pir
-    - binary_sensor.office_multi_motion
-    - binary_sensor.mudroom_occupancy
-    - binary_sensor.laundry_occupancy
-    - binary_sensor.sunroom_pir
-    - binary_sensor.powder_room_hall_occupancy
+    - sensor.elkm1_back_kitchen_pir
+    - sensor.elkm1_foyer_pir
+    - sensor.elkm1_great_room_pir
+    - sensor.elkm1_kitchen_pir
+    - sensor.elkm1_library_pir
+    - sensor.elkm1_mudroom_pir
+    - sensor.elkm1_sunroom_pir
 
 upstairs_motions:
   name: Upstairs Motions
   entities:
-    - binary_sensor.sitting_room_pir
-    - binary_sensor.master_entry_pir
-    - binary_sensor.master_toilet_occupancy
-    - binary_sensor.evelyns_room_occupancy
-    - binary_sensor.master_bedroom_occupancy
-    - binary_sensor.loft_multi_motion
-    - binary_sensor.kerui_pir
-    - binary_sensor.evelyn_multi_motion
+    - sensor.elkm1_bonus_hall_pir
+    - sensor.elkm1_laundry_pir
+    - sensor.elkm1_main_bath_pir
+    - sensor.elkm1_main_bed_pir
+    - sensor.elkm1_second_hall_pir
 
 basement_motions:
   name: Basement Motions
   entities:
-    - binary_sensor.basement_pir
-    - binary_sensor.workshop_pir
-    - binary_sensor.basement_stairs_pir
-    - binary_sensor.storage_pir
-    - binary_sensor.gym_occupancy
-    - binary_sensor.basement_occupancy
-    - binary_sensor.bar_pir
-    - binary_sensor.basement_multi_motion
+    - sensor.elkm1_basmnt_stair_pir
+    - sensor.elkm1_gym_pir
+    - sensor.elkm1_lounge_pir
+    - sensor.elkm1_office_pir
+    - sensor.elkm1_workshop_pir
 
 exterior_motions:
   name: Exterior Motions
   entities:
-    - binary_sensor.deck_person_motion
-    - binary_sensor.deckstairs_person_motion
-    - binary_sensor.doorbell_person_motion
-    - binary_sensor.driveway_person_motion
-    - binary_sensor.garage_person_motion
-    - binary_sensor.driveway_bicycle_motion
-    - binary_sensor.driveway_car_motion
-    - binary_sensor.driveway_cat_motion
-    - binary_sensor.driveway_dog_motion
-    - binary_sensor.driveway_motorcycle_motion
-    - binary_sensor.driveway_truck_motion
+    - sensor.elkm1_garage_pir
 
-driveway_motion:
-  name: Driveway Motion
-  entities:
-    - binary_sensor.driveway_bicycle_motion
-    - binary_sensor.driveway_car_motion
-    - binary_sensor.driveway_cat_motion
-    - binary_sensor.driveway_dog_motion
-    - binary_sensor.driveway_motorcycle_motion
-    - binary_sensor.driveway_person_motion
-    - binary_sensor.driveway_truck_motion
+# main_floor_covers:
+#   name: Main Floor Covers
+#   entities:
 
-windows:
-  name: All Windows
-  entities:
-    - binary_sensor.dining_window_1
-    - binary_sensor.dining_window_2
-    - binary_sensor.office_window_1
-    - binary_sensor.office_window_2
-    - binary_sensor.bsmt_window_1
-    - binary_sensor.bsmt_window_2
-    - binary_sensor.gym_window_1
-    - binary_sensor.gym_window_2
+# upstairs_covers:
+#   name: Upstairs Covers
+#   entities:
 
-main_windows:
-  name: Main Floor Windows
-  entities:
-    - binary_sensor.dining_window_1
-    - binary_sensor.dining_window_2
-    - binary_sensor.office_window_1
-    - binary_sensor.office_window_2
-
-basement_windows:
-  name: Basement Windows
-  entities:
-    - binary_sensor.bsmt_window_1
-    - binary_sensor.bsmt_window_2
-    - binary_sensor.gym_window_1
-    - binary_sensor.gym_window_2
-
-main_floor_covers:
-  name: Main Floor Covers
-  entities:
-    - cover.office_1
-    - cover.dr1
-    - cover.lr
-    - cover.ppc
-    - cover.sunroom_1
-    - cover.sunroom_2
-    - cover.sunroom_3
-    - cover.sunroom_4
-    - cover.sunroom_5
-    - cover.sunroom_6
-    - cover.gr_1
-    - cover.gr_2
-    - cover.gr_3
-
-upstairs_covers:
-  name: Upstairs Covers
-  entities:
-    - cover.mb1
-    - cover.mb2
-    - cover.mb3
-    - cover.mb4
-    - cover.mb5
+# basement_covers:
+#   name: Basement Covers
+#   entities:

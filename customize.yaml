@@ -17,7 +17,7 @@ switch.master_bedroom_entry:
   friendly_name: Master Entry
 light.jons_lamp_lifx:
   friendly_name: Jons Lamp
-light.lauras_lamp_lifx:
+switch.lauras_lamp_lifx:
   friendly_name: Lauras Lamp
 light.master_bedroom_sitting_cans:
   friendly_name: Master Sitting Cans
@@ -43,7 +43,7 @@ light.master_bedroom_master_cans:
   friendly_name: Master Cans
 light.master_bedroom_master_fan:
   friendly_name: Master Fan
-light.mudroom_garage_lights:
+switch.garage:
   friendly_name: Garage Lights
 switch.mudroom_kitchen_cans:
   friendly_name: Kitchen Cans
@@ -77,10 +77,6 @@ switch.basement_fan:
   friendly_name: Workshop Fan
 sensor.bsmt_temperature:
   friendly_name: Freeze Alarm
-sensor.ctr_beep:
-  friendly_name: Beep Status
-switch.front_door_light_on:
-  friendly_name: Doorbird IR
 sensor.dark_sky_daytime_high_temperature_0d:
   friendly_name: Today's High
 sensor.dark_sky_temperature:
@@ -149,19 +145,3 @@ scene.equipment_room_enclosure_device_001_ph_fire:
   friendly_name: fire scene
 scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off:
   friendly_name: main lower exterior off
-##################################
-# battery customizations
-sensor.jon_battery:
-  battery_alert_disabled: true
-sensor.lauras_iphone_battery:
-  battery_alert_disabled: true
-sensor.battery_state:
-  battery_alert_disabled: true
-sensor.basement_tablet_battery:
-  battery_alert_disabled: true
-sensor.lauras_iphone_battery_level:
-  battery_alert_disabled: true
-sensor.j_dt_battery_remaining:
-  battery_alert_disabled: true
-sensor.j_dt_battery_level:
-  battery_alert_disabled: true

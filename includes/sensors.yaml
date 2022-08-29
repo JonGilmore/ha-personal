@@ -1,32 +1,24 @@
 ---
-# Get the mean value of the different humidity sensors
 - platform: min_max
   name: House Humidity
   round_digits: 0
   type: mean
   entity_ids:
     - sensor.office_multi_relative_humidity_measurement
-    - sensor.basement_multi_relative_humidity_measurement
-    - sensor.evelyn_multi_relative_humidity_measurement
-    - sensor.loft_multi_relative_humidity_measurement
-    - sensor.gym_humidity
-    - sensor.nursery_humidity
-    - sensor.master_entry_humidity
     - sensor.sunroom_humidity
 
-# Template Sensors
 - platform: template
   sensors:
     armed_status:
-      value_template: '{{ states.alarm_control_panel.house.attributes["armed_status"] }}'
+      value_template: '{{ states.alarm_control_panel.elkm1_area_1.attributes["armed_status"] }}'
       friendly_name: "House Armed Status"
       unique_id: armed_status
     arm_up_state:
-      value_template: '{{ states.alarm_control_panel.house.attributes["arm_up_state"] }}'
+      value_template: '{{ states.alarm_control_panel.elkm1_area_1.attributes["arm_up_state"] }}'
       friendly_name: "House Arm Up State"
       unique_id: arm_up_state
     alarm_state:
-      value_template: '{{ states.alarm_control_panel.house.attributes["alarm_state"] }}'
+      value_template: '{{ states.alarm_control_panel.elkm1_area_1.attributes["alarm_state"] }}'
       friendly_name: "House Alarm State"
       unique_id: alarm_state
     alarm_trouble:
@@ -35,37 +27,37 @@
       unique_id: alarm_trouble
     garage_double_state:
       value_template: >-
-        {% if states.sensor.double_garage.state == 'Normal' %}closed
-        {% elif states.sensor.double_garage.state == 'Violated' %}open
+        {% if states.sensor.elkm1_double_garage.state == 'Normal' %}closed
+        {% elif states.sensor.elkm1_double_garage.state == 'Violated' %}open
         {% else %}unknown{% endif %}
       friendly_name: "Garage Double State"
       unique_id: garage_double_state
     garage_single_state:
       value_template: >-
-        {% if states.sensor.single_garage.state == 'Normal' %}closed
-        {% elif states.sensor.single_garage.state == 'Violated' %}open
+        {% if states.sensor.elkm1_single_garage.state == 'Normal' %}closed
+        {% elif states.sensor.elkm1_single_garage.state == 'Violated' %}open
         {% else %}unknown{% endif %}
       friendly_name: "Garage Single State"
       unique_id: garage_single_state
-    garage_temperature:
-      value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
-      friendly_name: "Garage Temperature"
-      device_class: temperature
-      unique_id: garage_temperature
+    # garage_temperature:
+    #   value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
+    #   friendly_name: "Garage Temperature"
+    #   device_class: temperature
+    #   unique_id: garage_temperature
     sun_elevation:
       value_template: '{{ states.sun.sun.attributes["elevation"] }}'
       friendly_name: "sun elevation"
       unique_id: sun_elevation
-    garage_fridge_power:
-      value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
-      friendly_name: "Garage Fridge Power"
-      device_class: power
-      unique_id: garage_fridge_power
-    garage_fridge_energy:
-      value_template: '{{ states.switch.garage_fridge.attributes["today_energy_kwh"] }}'
-      friendly_name: "Garage Fridge Energy"
-      device_class: power
-      unique_id: garage_fridge_energy
+    # garage_fridge_power:
+    #   value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
+    #   friendly_name: "Garage Fridge Power"
+    #   device_class: power
+    #   unique_id: garage_fridge_power
+    # garage_fridge_energy:
+    #   value_template: '{{ states.switch.garage_fridge.attributes["today_energy_kwh"] }}'
+    #   friendly_name: "Garage Fridge Energy"
+    #   device_class: power
+    #   unique_id: garage_fridge_energy
     sensor_count:
       friendly_name: "Number of Sensors"
       value_template: >
@@ -115,32 +107,6 @@
       friendly_name: Number of People Home
       value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
       unique_id: people_home_number
-    db_pic:
-      value_template: !secret db_pic
-    hik_driveway_pic:
-      value_template: !secret hik_driveway_pic
-    hik_deck_pic:
-      value_template: !secret hik_deck_pic
-    hik_deckstairs_pic:
-      value_template: !secret hik_deckstairs_pic
-    hik_daisy_pic:
-      value_template: !secret hik_daisy_pic
-    camera_garage_pic:
-      value_template: !secret camera_garage_pic
-    cam_driveway_vid:
-      value_template: !secret cam_driveway_vid
-    cam_deck_vid:
-      value_template: !secret cam_deck_vid
-    cam_deckstairs_vid:
-      value_template: !secret cam_deckstairs_vid
-    cam_daisy_vid:
-      value_template: !secret cam_daisy_vid
-    cam_garage_vid:
-      value_template: !secret cam_garage_vid
-    cam_doorbell_vid:
-      value_template: !secret cam_doorbell_vid
-    cam_kitchen_vid:
-      value_template: !secret cam_kitchen_vid
 
 # DARK SKY
 - platform: darksky
@@ -229,64 +195,64 @@
       device_class: humidity
 
 # HVAC tracking
-- platform: history_stats
-  name: daily hvac heat on time
-  entity_id: binary_sensor.hvac_heat
-  state: "on"
-  type: time
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-- platform: history_stats
-  name: daily hvac heat on count
-  entity_id: binary_sensor.hvac_heat
-  state: "on"
-  type: count
-  end: "{{ now() }}"
-  duration:
-    hours: 24
+# - platform: history_stats
+#   name: daily hvac heat on time
+#   entity_id: binary_sensor.hvac_heat
+#   state: "on"
+#   type: time
+#   end: "{{ now() }}"
+#   duration:
+#     hours: 24
+# - platform: history_stats
+#   name: daily hvac heat on count
+#   entity_id: binary_sensor.hvac_heat
+#   state: "on"
+#   type: count
+#   end: "{{ now() }}"
+#   duration:
+#     hours: 24
 
-- platform: history_stats
-  name: daily hvac ac on time
-  entity_id: binary_sensor.hvac_ac
-  state: "on"
-  type: time
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-- platform: history_stats
-  name: daily hvac ac on count
-  entity_id: binary_sensor.hvac_ac
-  state: "on"
-  type: count
-  end: "{{ now() }}"
-  duration:
-    hours: 24
+# - platform: history_stats
+#   name: daily hvac ac on time
+#   entity_id: binary_sensor.hvac_ac
+#   state: "on"
+#   type: time
+#   end: "{{ now() }}"
+#   duration:
+#     hours: 24
+# - platform: history_stats
+#   name: daily hvac ac on count
+#   entity_id: binary_sensor.hvac_ac
+#   state: "on"
+#   type: count
+#   end: "{{ now() }}"
+#   duration:
+#     hours: 24
 
-- platform: history_stats
-  name: daily hvac on time
-  entity_id: binary_sensor.hvac
-  state: "on"
-  type: time
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-- platform: history_stats
-  name: daily hvac on count
-  entity_id: binary_sensor.hvac
-  state: "on"
-  type: count
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-- platform: history_stats
-  name: daily hvac duty cycle
-  entity_id: binary_sensor.hvac
-  state: "on"
-  type: ratio
-  end: "{{ now() }}"
-  duration:
-    hours: 24
+# - platform: history_stats
+#   name: daily hvac on time
+#   entity_id: binary_sensor.hvac
+#   state: "on"
+#   type: time
+#   end: "{{ now() }}"
+#   duration:
+#     hours: 24
+# - platform: history_stats
+#   name: daily hvac on count
+#   entity_id: binary_sensor.hvac
+#   state: "on"
+#   type: count
+#   end: "{{ now() }}"
+#   duration:
+#     hours: 24
+# - platform: history_stats
+#   name: daily hvac duty cycle
+#   entity_id: binary_sensor.hvac
+#   state: "on"
+#   type: ratio
+#   end: "{{ now() }}"
+#   duration:
+#     hours: 24
 
 # LOAD SENSORS
 # - platform: template
@@ -305,10 +271,6 @@
 #         or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}one
 #         {% else %} nobody {% endif %}
 #       friendly_name: "Master Bed People"
-
-- platform: version
-  name: HA Version
-  scan_interval: 86400
 
 - platform: websocket_api
 
@@ -347,58 +309,58 @@
 #     - ups.status
 
 # rtl_433 sensors
-- platform: mqtt
-  name: Nursery Temperature
-  state_topic: "rtl_433/Acurite-Tower/4303"
-  unit_of_measurement: "°F"
-  value_template: "{{ value_json.temperature_F }}"
-- platform: mqtt
-  name: Nursery Humidity
-  state_topic: "rtl_433/Acurite-Tower/4303"
-  unit_of_measurement: "%"
-  value_template: "{{ value_json.humidity }}"
-- platform: mqtt
-  name: Gym Temperature
-  state_topic: "rtl_433/Acurite-Tower/14641"
-  unit_of_measurement: "°F"
-  value_template: "{{ value_json.temperature_F }}"
-- platform: mqtt
-  name: Gym Humidity
-  state_topic: "rtl_433/Acurite-Tower/14641"
-  unit_of_measurement: "%"
-  value_template: "{{ value_json.humidity }}"
-- platform: mqtt
-  name: Kitchen Freezer Temperature
-  state_topic: "rtl_433/Acurite-986/15488"
-  unit_of_measurement: "°F"
-  value_template: "{{ value_json.temperature_F }}"
-- platform: mqtt
-  name: Kitchen Fridge Temperature
-  state_topic: "rtl_433/Acurite-986/37649"
-  unit_of_measurement: "°F"
-  value_template: "{{ value_json.temperature_F }}"
-- platform: mqtt
-  name: Bar Freezer Temperature
-  state_topic: "rtl_433/Acurite-986/50597"
-  unit_of_measurement: "°F"
-  value_template: "{{ value_json.temperature_F }}"
-- platform: mqtt
-  name: Bar Fridge Temperature
-  state_topic: "rtl_433/Acurite-986/17933"
-  unit_of_measurement: "°F"
-  value_template: "{{ value_json.temperature_F }}"
+# - platform: mqtt
+#   name: Nursery Temperature
+#   state_topic: "rtl_433/Acurite-Tower/4303"
+#   unit_of_measurement: "°F"
+#   value_template: "{{ value_json.temperature_F }}"
+# - platform: mqtt
+#   name: Nursery Humidity
+#   state_topic: "rtl_433/Acurite-Tower/4303"
+#   unit_of_measurement: "%"
+#   value_template: "{{ value_json.humidity }}"
+# - platform: mqtt
+#   name: Gym Temperature
+#   state_topic: "rtl_433/Acurite-Tower/14641"
+#   unit_of_measurement: "°F"
+#   value_template: "{{ value_json.temperature_F }}"
+# - platform: mqtt
+#   name: Gym Humidity
+#   state_topic: "rtl_433/Acurite-Tower/14641"
+#   unit_of_measurement: "%"
+#   value_template: "{{ value_json.humidity }}"
+# - platform: mqtt
+#   name: Kitchen Freezer Temperature
+#   state_topic: "rtl_433/Acurite-986/15488"
+#   unit_of_measurement: "°F"
+#   value_template: "{{ value_json.temperature_F }}"
+# - platform: mqtt
+#   name: Kitchen Fridge Temperature
+#   state_topic: "rtl_433/Acurite-986/37649"
+#   unit_of_measurement: "°F"
+#   value_template: "{{ value_json.temperature_F }}"
+# - platform: mqtt
+#   name: Bar Freezer Temperature
+#   state_topic: "rtl_433/Acurite-986/50597"
+#   unit_of_measurement: "°F"
+#   value_template: "{{ value_json.temperature_F }}"
+# - platform: mqtt
+#   name: Bar Fridge Temperature
+#   state_topic: "rtl_433/Acurite-986/17933"
+#   unit_of_measurement: "°F"
+#   value_template: "{{ value_json.temperature_F }}"
 
 # rtl_915 sensors
-- platform: mqtt
-  name: Water Meter
-  state_topic: "rtl_915/SCM_/68242959"
-  unit_of_measurement: "Gallons"
-  value_template: "{{ value_json.Consumption }}"
-- platform: mqtt
-  name: Gas Meter
-  state_topic: "rtl_915/ERT-SCM/48150945"
-  unit_of_measurement: "M3"
-  value_template: "{{ value_json.consumption_data }}"
+# - platform: mqtt
+#   name: Water Meter
+#   state_topic: "rtl_915/SCM_/68242959"
+#   unit_of_measurement: "Gallons"
+#   value_template: "{{ value_json.Consumption }}"
+# - platform: mqtt
+#   name: Gas Meter
+#   state_topic: "rtl_915/ERT-SCM/48150945"
+#   unit_of_measurement: "M3"
+#   value_template: "{{ value_json.consumption_data }}"
 
 - platform: time_date
   display_options:
@@ -540,19 +502,19 @@
         {%- endfor %}
 
     #THERMOSTAT TEMPLATES
-    main_status:
-      friendly_name: Main Floor Status
-      value_template: >-
-        {{ state_attr('climate.main_floor', 'current_temperature') | round | int }}° / {{ state_attr('climate.main_floor', 'current_humidity') | round | int }}% humidity
-    upstairs_status:
-      friendly_name: Upstairs Status
-      value_template: >-
-        {{ state_attr('climate.upstairs', 'current_temperature') | round | int }}° / {{ state_attr('climate.upstairs', 'current_humidity') | round | int }}% humidity
-    familyroom_temperature:
-      friendly_name: Family Room Temperature
-      value_template: >-
-        {{ states('sensor.family_room_temperature') | round | int }}°
-    diningroom_temperature:
-      friendly_name: Dining Room Temperature
-      value_template: >-
-        {{ states('sensor.dining_room_temperature') | round | int }}°
+    # main_status:
+    #   friendly_name: Main Floor Status
+    #   value_template: >-
+    #     {{ state_attr('climate.main_floor', 'current_temperature') | round | int }}° / {{ state_attr('climate.main_floor', 'current_humidity') | round | int }}% humidity
+    # upstairs_status:
+    #   friendly_name: Upstairs Status
+    #   value_template: >-
+    #     {{ state_attr('climate.upstairs', 'current_temperature') | round | int }}° / {{ state_attr('climate.upstairs', 'current_humidity') | round | int }}% humidity
+    # familyroom_temperature:
+    #   friendly_name: Family Room Temperature
+    #   value_template: >-
+    #     {{ states('sensor.family_room_temperature') | round | int }}°
+    # diningroom_temperature:
+    #   friendly_name: Dining Room Temperature
+    #   value_template: >-
+    #     {{ states('sensor.dining_room_temperature') | round | int }}°

@@ -1,57 +1,57 @@
----
-# fully kiosk
-- platform: command_line
-  switches:
-    basement_tablet_screen:
-      command_on: !secret basement_tablet_screen_on
-      command_off: !secret basement_tablet_screen_off
-      command_state: !secret basement_tablet_screen_state
-      value_template: "{{ value == 'on' }}"
-      friendly_name: basement tablet screen
-- platform: command_line
-  switches:
-    macbook_power:
-      command_off: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jongilmore@192.168.45.43 "/usr/bin/pmset sleepnow"
-      command_state: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jongilmore@192.168.45.43 "true"
-      friendly_name: Macbook Power
-- platform: command_line
-  switches:
-    mine_crypto:
-      command_on: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh start"
-      command_off: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh stop"
-      command_state: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh state"
-      friendly_name: Mine Crypto
-### `mine.sh` looks like this on my crypto mining rig
-# #!/bin/bash
-# pid=$(ps aux | grep '[l]olMiner' | awk '{print $2}')
-# app="lolminer"
+# ---
+# # fully kiosk
+# - platform: command_line
+#   switches:
+#     basement_tablet_screen:
+#       command_on: !secret basement_tablet_screen_on
+#       command_off: !secret basement_tablet_screen_off
+#       command_state: !secret basement_tablet_screen_state
+#       value_template: "{{ value == 'on' }}"
+#       friendly_name: basement tablet screen
+# - platform: command_line
+#   switches:
+#     macbook_power:
+#       command_off: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jongilmore@192.168.45.43 "/usr/bin/pmset sleepnow"
+#       command_state: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jongilmore@192.168.45.43 "true"
+#       friendly_name: Macbook Power
+# - platform: command_line
+#   switches:
+#     mine_crypto:
+#       command_on: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh start"
+#       command_off: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh stop"
+#       command_state: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/.ssh/id_ed25519 jay@192.168.45.68 "/home/jay/mine.sh state"
+#       friendly_name: Mine Crypto
+# ### `mine.sh` looks like this on my crypto mining rig
+# # #!/bin/bash
+# # pid=$(ps aux | grep '[l]olMiner' | awk '{print $2}')
+# # app="lolminer"
 
-# function start {
-#     # perform GPU tuning/etc here
-#     sudo /root/setup.sh
-#     if state; then
-#         echo "$app is already running: $pid"
-#         exit 0
-#     else
-#         echo "starting $app..."
-#         cd Downloads/1.29/
-#         ./mine_eth.sh &>logs/eth.log &
-#     fi
-# }
+# # function start {
+# #     # perform GPU tuning/etc here
+# #     sudo /root/setup.sh
+# #     if state; then
+# #         echo "$app is already running: $pid"
+# #         exit 0
+# #     else
+# #         echo "starting $app..."
+# #         cd Downloads/1.29/
+# #         ./mine_eth.sh &>logs/eth.log &
+# #     fi
+# # }
 
-# function stop {
-#     if state; then
-#         echo "$app running, stopping $pid"
-#         kill $pid
-#         sudo shutdown -h now
-#     else
-#         echo "$app already stopped"
-#         exit 0
-#     fi
-# }
+# # function stop {
+# #     if state; then
+# #         echo "$app running, stopping $pid"
+# #         kill $pid
+# #         sudo shutdown -h now
+# #     else
+# #         echo "$app already stopped"
+# #         exit 0
+# #     fi
+# # }
 
-# function state {
-#     ps aux | grep '[l]olMiner' >/dev/null
-# }
+# # function state {
+# #     ps aux | grep '[l]olMiner' >/dev/null
+# # }
 
-# "$@"
+# # "$@"

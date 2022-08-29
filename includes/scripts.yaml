@@ -1,83 +1,83 @@
 ---
-#############################
-# 10 second videos
-video_driveway:
-  alias: "driveway video"
-  sequence:
-    - service: shell_command.cam_driveway_vid
-      data:
-        filename: /tmp/driveway.mp4
-    - delay:
-        seconds: 12
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/tmp/driveway.mp4"
-video_daisy:
-  alias: "Daisy video"
-  sequence:
-    - service: shell_command.cam_daisy_vid
-      data:
-        filename: /tmp/daisy.mp4
-    - delay:
-        seconds: 13
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/tmp/daisy.mp4"
-video_deck:
-  alias: "deck video"
-  sequence:
-    - service: shell_command.cam_deck_vid
-      data:
-        filename: /tmp/deck.mp4
-    - delay:
-        seconds: 12
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/tmp/deck.mp4"
-video_deckstairs:
-  alias: "deckstairs video"
-  sequence:
-    - service: shell_command.cam_deckstairs_vid
-      data:
-        filename: /tmp/deckstairs.mp4
-    - delay:
-        seconds: 12
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/tmp/deckstairs.mp4"
-video_garage:
-  alias: "garage video"
-  sequence:
-    - service: shell_command.cam_garage_vid
-      data:
-        filename: /tmp/garage.mp4
-    - delay:
-        seconds: 12
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/tmp/garage.mp4"
-video_kitchen:
-  alias: "kitchen video"
-  sequence:
-    - service: shell_command.cam_kitchen_vid
-      data:
-        filename: /tmp/kitchen.mp4
-    - delay:
-        seconds: 12
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/tmp/kitchen.mp4"
-video_doorbell:
-  alias: "doorbell video"
-  sequence:
-    - service: shell_command.cam_doorbell_vid
-      data:
-        filename: /tmp/doorbell.mp4
-    - delay:
-        seconds: 12
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/tmp/doorbell.mp4"
+# #############################
+# # 10 second videos
+# video_driveway:
+#   alias: "driveway video"
+#   sequence:
+#     - service: shell_command.cam_driveway_vid
+#       data:
+#         filename: /tmp/driveway.mp4
+#     - delay:
+#         seconds: 12
+#     - service: telegram_bot.send_video
+#       data_template:
+#         file: "/tmp/driveway.mp4"
+# video_daisy:
+#   alias: "Daisy video"
+#   sequence:
+#     - service: shell_command.cam_daisy_vid
+#       data:
+#         filename: /tmp/daisy.mp4
+#     - delay:
+#         seconds: 13
+#     - service: telegram_bot.send_video
+#       data_template:
+#         file: "/tmp/daisy.mp4"
+# video_deck:
+#   alias: "deck video"
+#   sequence:
+#     - service: shell_command.cam_deck_vid
+#       data:
+#         filename: /tmp/deck.mp4
+#     - delay:
+#         seconds: 12
+#     - service: telegram_bot.send_video
+#       data_template:
+#         file: "/tmp/deck.mp4"
+# video_deckstairs:
+#   alias: "deckstairs video"
+#   sequence:
+#     - service: shell_command.cam_deckstairs_vid
+#       data:
+#         filename: /tmp/deckstairs.mp4
+#     - delay:
+#         seconds: 12
+#     - service: telegram_bot.send_video
+#       data_template:
+#         file: "/tmp/deckstairs.mp4"
+# video_garage:
+#   alias: "garage video"
+#   sequence:
+#     - service: shell_command.cam_garage_vid
+#       data:
+#         filename: /tmp/garage.mp4
+#     - delay:
+#         seconds: 12
+#     - service: telegram_bot.send_video
+#       data_template:
+#         file: "/tmp/garage.mp4"
+# video_kitchen:
+#   alias: "kitchen video"
+#   sequence:
+#     - service: shell_command.cam_kitchen_vid
+#       data:
+#         filename: /tmp/kitchen.mp4
+#     - delay:
+#         seconds: 12
+#     - service: telegram_bot.send_video
+#       data_template:
+#         file: "/tmp/kitchen.mp4"
+# video_doorbell:
+#   alias: "doorbell video"
+#   sequence:
+#     - service: shell_command.cam_doorbell_vid
+#       data:
+#         filename: /tmp/doorbell.mp4
+#     - delay:
+#         seconds: 12
+#     - service: telegram_bot.send_video
+#       data_template:
+#         file: "/tmp/doorbell.mp4"
 
 alarm:
   alias: "alarm"
@@ -112,362 +112,153 @@ alarm_loop:
     - service: script.turn_on
       entity_id: script.alarm
 
-lock_doors:
-  alias: "lock doors"
-  sequence:
-    - service: lock.lock
-      data:
-        entity_id:
-          - lock.garage_door_lock
-          - lock.front_door_lock
-
-send_videos:
-  alias: "send videos"
-  sequence:
-    - service: script.turn_on
-      entity_id:
-        - script.video_driveway
-        - script.video_doorbell
-        - script.video_kitchen
-
-tvs_off:
-  alias: "all tvs off"
-  sequence:
-    - service: media_player.turn_off
-      entity_id:
-        - media_player.roku_master_tv
-        - media_player.roku_gym_tv
-    - service: webostv.command
-      data:
-        entity_id: media_player.living_room_tv
-        command: "system/turnOff"
-
-group_set:
-  alias: Create groups with enhanced include/exclude statements
-  sequence:
-    - service: group.set
-      data_template:
-        object_id: "{{ object_id }}"
-        name: "{{ name or object_id }}"
-        icon: "{{ icon or '' }}"
-        all: "{{ all or False }}"
-        entities: >-
-          {# ENTITIES #}
-          {% set ns = namespace(entities =
-                          (entities.split(',') if entities is string else entities or [])) %}
-          {# TYPES #}
-          {% for type in (types.split(',')     if types    is string else types or []) %}
-          {% set ns.entities = ns.entities + (expand(states[type]) | map(attribute="entity_id") | list) %}
-          {% endfor %}
-          {# INCLUDE #}
-          {% for group in (include.split(',')  if include  is string else include  or []) %}
-          {% set ns.entities = ns.entities +               states.group[group|regex_replace('^.*\.')].attributes.entity_id  | list %}
-          {% endfor %}
-          {# EXCLUDE #}
-          {% for group in (exclude.split(',')  if exclude  is string else exclude  or []) %}
-          {% set ns.entities = ns.entities | reject('in',  states.group[group|regex_replace('^.*\.')].attributes.entity_id) | list %}
-          {% endfor %}
-          {# OUTPUT #}
-          {{ ns.entities|join(',') }}
-
-popup_camera:
-  sequence:
-    - service: browser_mod.command
-      data_template:
-        command: more-info
-        entity_id: "{{ camera }}"
-        deviceID:
-          - "{{ deviceID }}"
-
-set_temperature:
-  sequence:
-    - service: climate.set_temperature
-      data_template:
-        entity_id: "{{ entity_id }}"
-        temperature: "{{ temperature }}"
-        hvac_mode: "{{ mode }}"
-
-sonos_say:
-  sequence:
-    - service: sonos.snapshot
-      data_template:
-        entity_id: "{{ sonos_entity }}"
-    - service: sonos.unjoin
-      data_template:
-        entity_id: "{{ sonos_entity }}"
-    - service: media_player.volume_set
-      data_template:
-        entity_id: "{{ sonos_entity }}"
-        volume_level: "{{ volume }}"
-    - service: tts.google_say
-      data_template:
-        entity_id: "{{ sonos_entity }}"
-        message: "{{ message }}"
-    - delay: "{{ delay }}"
-    - service: sonos.restore
-      data_template:
-        entity_id: "{{ sonos_entity }}"
-
-vacuum_kitchen:
-  sequence:
-    - service: vacuum.send_command
-      data:
-        entity_id: "vacuum.main_dwayne"
-        command: "zoned_cleanup"
-        params:
-          "zone_ids": ["kitchen"]
-
-vacuum_foyer:
-  sequence:
-    - service: vacuum.send_command
-      data:
-        entity_id: "vacuum.main_dwayne"
-        command: "zoned_cleanup"
-        params:
-          "zone_ids": ["foyer"]
-
-window_status:
-  sequence:
-    - service: tts.google_say
-      entity_id: media_player.kitchen
-      data_template:
-        message: |
-          {% set open_doors = states | selectattr('entity_id', 'in', state_attr('group.windows','entity_id')) | selectattr('state','in',['on','open','Violated']) | map(attribute='name') | list %}
-          {% set open_windows = '\n'.join(open_doors) %}
-          The following windows are open:
-          {{ open_windows }}
-        cache: false
-
-jon_meeting:
-  sequence:
-    - service: tts.google_say
-      entity_id: media_player.kitchen
-      data_template:
-        message: |
-          {% if is_state("binary_sensor.macbook_pro_camera_in_use", "on") -%}
-            Jon is probably in a meeting right now.
-          {%- else -%}
-            Jon doesn't appear to be in a meeting right now
-          {%- endif %}
-        cache: false
-
-# scan_bt:
-#   mode: "queued"
-#   description: |
-#     Manages the right kind of BT scan. Departure scan if everybody is home, or
-#     there was motion in the vestibule. Arrival scan if nobody is home or there
-#     was no motion in the vestibule or hall. Arrival then departure if we are unsure
+# lock_doors:
+#   alias: "lock doors"
 #   sequence:
-#     - choose:
-#         #################### ####################
-#         # Everybody away
-#         - conditions:
-#             # Everybody is away - this can only be an arrival
-#             - condition: state
-#               entity_id: binary_sensor.anybody_home
-#               state: "off"
-#           sequence:
-#             - service: notify.logfile
-#               data_template:
-#                 message: "Arrival scan because nobody is home"
-#             - service: script.scan_bt_arrive
-#         #################### ####################
-#         # Everybody is home
-#         - conditions:
-#             # Nobody is away - this can only be a departure
-#             - condition: state
-#               entity_id: binary_sensor.anybody_home
-#               state: "on"
-#           sequence:
-#             - service: notify.logfile
-#               data_template:
-#                 message: "Departure scan because everybody is home"
-#             - service: script.scan_bt_depart
-#         #################### ####################
-#         # Far garage door open, near one closed, motion in the vestibule
-#         - conditions:
-#             # If the far garage door is open, and the near one is closed, we're likely going to the bike
-#             - condition: state
-#               entity_id: binary_sensor.pi3_garage_closed_bike_sensor
-#               state: "on"
-#             - condition: state
-#               entity_id: binary_sensor.pi3_garage_closed_car_sensor
-#               state: "off"
-#             # Something happen in the vestibule recently
-#             - condition: or
-#               conditions:
-#                 - condition: state
-#                   entity_id: binary_sensor.vestibule_multi_occupancy
-#                   state: "on"
-#                 - condition: not
-#                   conditions:
-#                     - condition: state
-#                       entity_id: binary_sensor.vestibule_multi_occupancy
-#                       state: "off"
-#                       for: "00:02:00"
-#           sequence:
-#             # Check for departure, then check for arrival (just in case)
-#             - service: notify.logfile
-#               data_template:
-#                 message: "Do nothing because of motion in the vestibule, and the bike door is open"
-#         #################### ####################
-#         - conditions:
-#             # Something happen in the vestibule recently
-#             - condition: or
-#               conditions:
-#                 - condition: state
-#                   entity_id: binary_sensor.vestibule_multi_occupancy
-#                   state: "on"
-#                 - condition: not
-#                   conditions:
-#                     - condition: state
-#                       entity_id: binary_sensor.vestibule_multi_occupancy
-#                       state: "off"
-#                       for: "00:02:00"
-#           sequence:
-#             # Check for departure, then check for arrival (just in case)
-#             - service: notify.logfile
-#               data_template:
-#                 message: "Departure (then arrival) scan because of motion in the vestibule (and both garage doors are closed)"
-#             - service: script.scan_bt_depart
-#             - service: script.scan_bt_arrive
-#         #################### ####################
-#         # No motion inside
-#         - conditions:
-#             # Nothing happened recently inside
-#             - condition: state
-#               entity_id: binary_sensor.vestibule_multi_occupancy
-#               state: "off"
-#           sequence:
-#             - service: notify.logfile
-#               data_template:
-#                 message: "Arrival scan because there was no motion in the vestibule"
-#             - service: script.scan_bt_arrive
-#         #################### ####################
-#         # Car door is open already
-#         - conditions:
-#             # Garage door is open already
-#             - condition: state
-#               entity_id: binary_sensor.pi3_garage_closed_car_sensor
-#               state: "on"
-#               for: "00:00:01"
-#           sequence:
-#             - service: notify.logfile
-#               data_template:
-#                 message: "Arrival scan because the garage door is open"
-#             - service: script.scan_bt_arrive
-#       #################### ####################
-#       # Mixed bag situation unclear, do it all
-#       default:
-#         - service: notify.logfile
-#           data_template:
-#             message: "Departure then arrival scan because we have no idea"
-#         - service: script.scan_bt_arrive
-#         - service: script.scan_bt_depart
+#     - service: lock.lock
+#       data:
+#         entity_id:
+#           - lock.garage_door_lock
+#           - lock.front_door_lock
 
-scan_bt_arrive:
-  sequence:
-    - wait_template: "{{ is_state('script.scan_bt_depart', 'off') }}"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/arrive
-    - delay: "00:00:10"
-    - condition: state # Stop if everybody is home
-      entity_id: binary_sensor.anybody_away
-      state: "off"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/arrive
-    - delay: "00:00:30"
-    - condition: state # Stop if everybody is home
-      entity_id: binary_sensor.anybody_away
-      state: "off"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/arrive
+# send_videos:
+#   alias: "send videos"
+#   sequence:
+#     - service: script.turn_on
+#       entity_id:
+#         - script.video_driveway
+#         - script.video_doorbell
+#         - script.video_kitchen
 
-scan_bt_depart_new:
-  sequence:
-    - wait_template: "{{ is_state('script.scan_bt_arrive', 'off') }}"
-    - delay: "00:00:10"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
-    - delay: "00:00:35"
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
-    - delay: "00:01:05"
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - delay: "00:02:05"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - delay: "00:01:05"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
+# tvs_off:
+#   alias: "all tvs off"
+#   sequence:
+#     - service: media_player.turn_off
+#       entity_id:
+#         - media_player.roku_master_tv
+#         - media_player.roku_gym_tv
+#     - service: webostv.command
+#       data:
+#         entity_id: media_player.living_room_tv
+#         command: "system/turnOff"
 
-scan_bt_depart:
-  sequence:
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/arrive
-    - delay: "00:00:10"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
-    - delay: "00:00:20"
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - delay: "00:01:00"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - delay: "00:02:00"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
-    - condition: state # Stop if everybody is away
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - delay: "00:02:00"
-    - service: mqtt.publish
-      data:
-        topic: monitor/scan/depart
+# group_set:
+#   alias: Create groups with enhanced include/exclude statements
+#   sequence:
+#     - service: group.set
+#       data_template:
+#         object_id: "{{ object_id }}"
+#         name: "{{ name or object_id }}"
+#         icon: "{{ icon or '' }}"
+#         all: "{{ all or False }}"
+#         entities: >-
+#           {# ENTITIES #}
+#           {% set ns = namespace(entities =
+#                           (entities.split(',') if entities is string else entities or [])) %}
+#           {# TYPES #}
+#           {% for type in (types.split(',')     if types    is string else types or []) %}
+#           {% set ns.entities = ns.entities + (expand(states[type]) | map(attribute="entity_id") | list) %}
+#           {% endfor %}
+#           {# INCLUDE #}
+#           {% for group in (include.split(',')  if include  is string else include  or []) %}
+#           {% set ns.entities = ns.entities +               states.group[group|regex_replace('^.*\.')].attributes.entity_id  | list %}
+#           {% endfor %}
+#           {# EXCLUDE #}
+#           {% for group in (exclude.split(',')  if exclude  is string else exclude  or []) %}
+#           {% set ns.entities = ns.entities | reject('in',  states.group[group|regex_replace('^.*\.')].attributes.entity_id) | list %}
+#           {% endfor %}
+#           {# OUTPUT #}
+#           {{ ns.entities|join(',') }}
 
-master_off:
-  alias: "master off"
-  sequence:
-    - service: homeassistant.turn_off
-      entity_id:
-        - light.master_entry_lamp
-        - light.sitting_room_lamp
-        - light.jons_lamp_lifx
-        - light.lauras_lamp_lifx
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_master_off
+# popup_camera:
+#   sequence:
+#     - service: browser_mod.command
+#       data_template:
+#         command: more-info
+#         entity_id: "{{ camera }}"
+#         deviceID:
+#           - "{{ deviceID }}"
+
+# set_temperature:
+#   sequence:
+#     - service: climate.set_temperature
+#       data_template:
+#         entity_id: "{{ entity_id }}"
+#         temperature: "{{ temperature }}"
+#         hvac_mode: "{{ mode }}"
+
+# sonos_say:
+#   sequence:
+#     - service: sonos.snapshot
+#       data_template:
+#         entity_id: "{{ sonos_entity }}"
+#     - service: sonos.unjoin
+#       data_template:
+#         entity_id: "{{ sonos_entity }}"
+#     - service: media_player.volume_set
+#       data_template:
+#         entity_id: "{{ sonos_entity }}"
+#         volume_level: "{{ volume }}"
+#     - service: tts.google_say
+#       data_template:
+#         entity_id: "{{ sonos_entity }}"
+#         message: "{{ message }}"
+#     - delay: "{{ delay }}"
+#     - service: sonos.restore
+#       data_template:
+#         entity_id: "{{ sonos_entity }}"
+
+# vacuum_kitchen:
+#   sequence:
+#     - service: vacuum.send_command
+#       data:
+#         entity_id: "vacuum.main_dwayne"
+#         command: "zoned_cleanup"
+#         params:
+#           "zone_ids": ["kitchen"]
+
+# vacuum_foyer:
+#   sequence:
+#     - service: vacuum.send_command
+#       data:
+#         entity_id: "vacuum.main_dwayne"
+#         command: "zoned_cleanup"
+#         params:
+#           "zone_ids": ["foyer"]
+
+# window_status:
+#   sequence:
+#     - service: tts.google_say
+#       entity_id: media_player.kitchen
+#       data_template:
+#         message: |
+#           {% set open_doors = states | selectattr('entity_id', 'in', state_attr('group.windows','entity_id')) | selectattr('state','in',['on','open','Violated']) | map(attribute='name') | list %}
+#           {% set open_windows = '\n'.join(open_doors) %}
+#           The following windows are open:
+#           {{ open_windows }}
+#         cache: false
+
+# jon_meeting:
+#   sequence:
+#     - service: tts.google_say
+#       entity_id: media_player.kitchen
+#       data_template:
+#         message: |
+#           {% if is_state("binary_sensor.macbook_pro_camera_in_use", "on") -%}
+#             Jon is probably in a meeting right now.
+#           {%- else -%}
+#             Jon doesn't appear to be in a meeting right now
+#           {%- endif %}
+#         cache: false
+
+# master_off:
+#   alias: "master off"
+#   sequence:
+#     - service: homeassistant.turn_off
+#       entity_id:
+#         - light.master_entry_lamp
+#         - light.sitting_room_lamp
+#         - light.jons_lamp_lifx
+#         - switch.lauras_lamp_lifx
+#     - service: scene.turn_on
+#       entity_id: scene.equipment_room_enclosure_device_001_ph_master_off

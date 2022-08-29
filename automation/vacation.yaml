@@ -1,7 +1,7 @@
 ---
 #########################################
-- alias: "Vacation Mode: while on vacation & turn off all lights at 23:30"
-  id: "Vacation Mode: while on vacation & turn off all lights at 23:30"
+- alias: "Vacation Mode: turn off all lights at 23:30"
+  id: "Vacation Mode: turn off all lights at 23:30"
   trigger:
     - platform: time
       at: "23:30:00"
@@ -10,127 +10,129 @@
       entity_id: binary_sensor.vacation_status
       state: "on"
   action:
-    - service: scene.turn_on
-      entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
-#########################################
-- alias: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
-  id: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.vacation_status
-      to: "on"
-  condition:
-    - condition: template
-      value_template: "{{ not is_state('climate.main_thermostat', 'heat') }}"
-  action:
-    - service: climate.set_temperature
-      data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
-          - climate.basement_thermostat
-        temperature: 85
-        hvac_mode: cool
-    # - service: water_heater.econet_add_vacation
-    #   data:
-    #     entity_id: water_heater.heat_pump_water_heater_gen_4
-    #     end_date: "{{ (now().strftime('%s') | float + (10080*60)) }}"
     - service: homeassistant.turn_off
-      entity_id: switch.equipment_room_recirculation_pump
-    - service: notify.telegram_jon
-      data:
-        title: "Ran vacation (summer) mode: on!"
-        message: "set back temps, turned off recirc pump, set vacation mode on water heater"
-#########################################
-- alias: "Vacation Mode: return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
-  id: "Vacation Mode: return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.vacation_status
-      to: "off"
-  condition:
-    - condition: template
-      value_template: "{{ not is_state('climate.main_thermostat', 'heat') }}"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: switch.water_main_shut_off
-    # - service: water_heater.econet_delete_vacation
-    #   entity_id: water_heater.heat_pump_water_heater_gen_4
-    - service: climate.set_temperature
-      data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
-          - climate.basement_thermostat
-        temperature: 77
-        hvac_mode: cool
-    - service: notify.telegram_jon
-      data:
-        title: "Ran vacation mode (summer): off!"
-        message: "turned on water main, set temps to normal, turned on recirc pump, removed vacation mode on water heater"
-#########################################
-- alias: "Vacation Mode: winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump"
-  id: "Vacation Mode: winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.vacation_status
-      to: "on"
-  condition:
-    - condition: state
-      entity_id: climate.main_thermostat
-      state: "heat"
-  action:
+      entity_id: group.all_lights
     - service: homeassistant.turn_off
-      entity_id: switch.water_main_shut_off
-    - service: climate.set_temperature
-      data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
-          - climate.basement_thermostat
-        temperature: 62
-        hvac_mode: heat
-    - service: climate.set_temperature
-      data:
-        entity_id:
-          - climate.garage_thermostat
-        temperature: 42
-        hvac_mode: heat
-    # - service: water_heater.econet_add_vacation
-    #   data:
-    #     entity_id: water_heater.heat_pump_water_heater_gen_4
-    #     end_date: "{{ (now().strftime('%s') | float + (10080*60)) }}"
-    - service: homeassistant.turn_off
-      entity_id: switch.equipment_room_recirculation_pump
-    - service: notify.telegram_jon
-      data:
-        title: "Ran vacation (winter) mode: on!"
-        message: "set back temps, turned off recirc pump, set vacation mode on water heater,turned off water main"
-#########################################
-- alias: "Vacation Mode: return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
-  id: "Vacation Mode: return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.vacation_status
-      to: "off"
-  condition:
-    - condition: state
-      entity_id: climate.main_thermostat
-      state: "heat"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: switch.water_main_shut_off
-    # - service: water_heater.econet_delete_vacation
-    #   entity_id: water_heater.heat_pump_water_heater_gen_4
-    - service: climate.set_temperature
-      data:
-        entity_id:
-          - climate.upstairs_thermostat
-          - climate.main_thermostat
-          - climate.basement_thermostat
-        temperature: 70
-        hvac_mode: heat
-    - service: notify.telegram_jon
-      data:
-        title: "Ran vacation mode (winter): off!"
-        message: "turned on water main, set temps to normal, turned on recirc pump, removed vacation mode on water heater"
+      entity_id: input_boolean.exterior_cans_auto_blocker
+# #########################################
+# - alias: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
+#   id: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.vacation_status
+#       to: "on"
+#   condition:
+#     - condition: template
+#       value_template: "{{ not is_state('climate.main_thermostat', 'heat') }}"
+#   action:
+#     - service: climate.set_temperature
+#       data:
+#         entity_id:
+#           - climate.upstairs_thermostat
+#           - climate.main_thermostat
+#           - climate.basement_thermostat
+#         temperature: 85
+#         hvac_mode: cool
+#     # - service: water_heater.econet_add_vacation
+#     #   data:
+#     #     entity_id: water_heater.heat_pump_water_heater_gen_4
+#     #     end_date: "{{ (now().strftime('%s') | float + (10080*60)) }}"
+#     - service: homeassistant.turn_off
+#       entity_id: switch.equipment_room_recirculation_pump
+#     - service: notify.telegram_jon
+#       data:
+#         title: "Ran vacation (summer) mode: on!"
+#         message: "set back temps, turned off recirc pump, set vacation mode on water heater"
+# #########################################
+# - alias: "Vacation Mode: return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
+#   id: "Vacation Mode: return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.vacation_status
+#       to: "off"
+#   condition:
+#     - condition: template
+#       value_template: "{{ not is_state('climate.main_thermostat', 'heat') }}"
+#   action:
+#     - service: homeassistant.turn_on
+#       entity_id: switch.water_main_shut_off
+#     # - service: water_heater.econet_delete_vacation
+#     #   entity_id: water_heater.heat_pump_water_heater_gen_4
+#     - service: climate.set_temperature
+#       data:
+#         entity_id:
+#           - climate.upstairs_thermostat
+#           - climate.main_thermostat
+#           - climate.basement_thermostat
+#         temperature: 77
+#         hvac_mode: cool
+#     - service: notify.telegram_jon
+#       data:
+#         title: "Ran vacation mode (summer): off!"
+#         message: "turned on water main, set temps to normal, turned on recirc pump, removed vacation mode on water heater"
+# #########################################
+# - alias: "Vacation Mode: winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump"
+#   id: "Vacation Mode: winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.vacation_status
+#       to: "on"
+#   condition:
+#     - condition: state
+#       entity_id: climate.main_thermostat
+#       state: "heat"
+#   action:
+#     - service: homeassistant.turn_off
+#       entity_id: switch.water_main_shut_off
+#     - service: climate.set_temperature
+#       data:
+#         entity_id:
+#           - climate.upstairs_thermostat
+#           - climate.main_thermostat
+#           - climate.basement_thermostat
+#         temperature: 62
+#         hvac_mode: heat
+#     - service: climate.set_temperature
+#       data:
+#         entity_id:
+#           - climate.garage_thermostat
+#         temperature: 42
+#         hvac_mode: heat
+#     # - service: water_heater.econet_add_vacation
+#     #   data:
+#     #     entity_id: water_heater.heat_pump_water_heater_gen_4
+#     #     end_date: "{{ (now().strftime('%s') | float + (10080*60)) }}"
+#     - service: homeassistant.turn_off
+#       entity_id: switch.equipment_room_recirculation_pump
+#     - service: notify.telegram_jon
+#       data:
+#         title: "Ran vacation (winter) mode: on!"
+#         message: "set back temps, turned off recirc pump, set vacation mode on water heater,turned off water main"
+# #########################################
+# - alias: "Vacation Mode: return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
+#   id: "Vacation Mode: return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
+#   trigger:
+#     - platform: state
+#       entity_id: binary_sensor.vacation_status
+#       to: "off"
+#   condition:
+#     - condition: state
+#       entity_id: climate.main_thermostat
+#       state: "heat"
+#   action:
+#     - service: homeassistant.turn_on
+#       entity_id: switch.water_main_shut_off
+#     # - service: water_heater.econet_delete_vacation
+#     #   entity_id: water_heater.heat_pump_water_heater_gen_4
+#     - service: climate.set_temperature
+#       data:
+#         entity_id:
+#           - climate.upstairs_thermostat
+#           - climate.main_thermostat
+#           - climate.basement_thermostat
+#         temperature: 70
+#         hvac_mode: heat
+#     - service: notify.telegram_jon
+#       data:
+#         title: "Ran vacation mode (winter): off!"
+#         message: "turned on water main, set temps to normal, turned on recirc pump, removed vacation mode on water heater"

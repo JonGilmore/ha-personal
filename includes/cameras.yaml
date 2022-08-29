@@ -1,30 +1,25 @@
 ---
-- platform: mjpeg
-  mjpeg_url: http://192.168.45.116:80/Streaming/Channels/2/preview
-  name: Front Door
-  username: admin
-  password: !secret hik_pwd
-- platform: mjpeg
-  mjpeg_url: http://192.168.45.111:80/Streaming/Channels/2/preview
-  name: Daisy
-  username: admin
-  password: !secret hik_pwd
-
 - platform: ffmpeg
-  input: !secret kitchen_rtsp
-  name: kitchen-rtsp
+  input: !secret workshop-rtsp
+  name: workshop-rtsp
 - platform: ffmpeg
-  input: !secret driveway_rtsp
-  name: driveway-rtsp
-- platform: ffmpeg
-  input: !secret deck_rtsp
+  input: !secret deck-rtsp
   name: deck-rtsp
 - platform: ffmpeg
-  input: !secret garage_rtsp
+  input: !secret frontyard-rtsp
+  name: frontyard-rtsp
+- platform: ffmpeg
+  input: !secret garage-rtsp
   name: garage-rtsp
 - platform: ffmpeg
-  input: !secret deckstairs_rtsp
-  name: deckstairs-rtsp
+  input: !secret grilldeck-rtsp
+  name: grilldeck-rtsp
 - platform: ffmpeg
-  input: !secret loft_rtsp
-  name: loft-rtsp
+  input: !secret mudroom-rtsp
+  name: mudroom-rtsp
+- platform: ffmpeg
+  input: !secret driveway-rtsp
+  name: driveway-rtsp
+- platform: ffmpeg
+  input: !secret patio-rtsp
+  name: patio-rtsp
