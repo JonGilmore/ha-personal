@@ -262,3 +262,21 @@ alarm_loop:
 #         - switch.lauras_lamp_lifx
 #     - service: scene.turn_on
 #       entity_id: scene.equipment_room_enclosure_device_001_ph_master_off
+
+send_dynamic_notification:
+  alias: "send dynamic notification"
+  sequence:
+    - service: notify.mobile_app_pixel5
+    # - service: notify.mobile_app_macbook_pro
+      data:
+        message: "{{ message }}"
+        title: "{{ title }}"
+        data:
+          channel: "{{ channel }}"
+          clickAction: "{{ video }}"
+          tag: "{{ notifTag }}"
+          group: "{{ group }}"
+          image: '{% if (importance == "default" and video != null) -%} {{ null }} {%- else-%} {{ image }} {%- endif %}'
+          video: '{% if (importance == "default" and video != null) -%} {{ video }} {%- else-%} {{ null }} {%- endif %}'
+          notification_icon: "{{ notifIcon }}"
+          importance: "{{ importance }}"

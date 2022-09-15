@@ -3,168 +3,139 @@
 - alias: "Frigate: disable notifications because of user interaction"
   id: "Frigate: disable notifications because of user interaction"
   description: "options to mute notifications for 60m or the rest of the day"
+  mode: parallel
+  max: 10
   trigger:
     - platform: event
       event_type: telegram_callback
       event_data:
         command: "/mutefrigatedriveway60"
+      variables:
+        location: driveway
+        time: "60"
     - platform: event
       event_type: telegram_callback
       event_data:
         command: "/mutefrigatedrivewayday"
+      variables:
+        location: driveway
+        time: day
     - platform: event
       event_type: telegram_callback
       event_data:
         command: "/mutefrigategrilldeck60"
+      variables:
+        location: grilldeck
+        time: "60"
     - platform: event
       event_type: telegram_callback
       event_data:
         command: "/mutefrigategrilldeckday"
+      variables:
+        location: grilldeck
+        time: day
     - platform: event
       event_type: telegram_callback
       event_data:
         command: "/mutefrigatedeck60"
+      variables:
+        location: deck
+        time: "60"
     - platform: event
       event_type: telegram_callback
       event_data:
         command: "/mutefrigatedeckday"
+      variables:
+        location: deck
+        time: day
     - platform: event
       event_type: telegram_callback
       event_data:
         command: "/mutefrigatefrontyard60"
+      variables:
+        location: frontyard
+        time: "60"
     - platform: event
       event_type: telegram_callback
       event_data:
         command: "/mutefrigatefrontyardday"
+      variables:
+        location: frontyard
+        time: day
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigatepatio60"
+      variables:
+        location: patio
+        time: "60"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigatepatioday"
+      variables:
+        location: patio
+        time: day
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigateworkshop60"
+      variables:
+        location: workshop
+        time: "60"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigateworkshopday"
+      variables:
+        location: workshop
+        time: day
   action:
-    - choose:
-        - conditions: "{{ trigger.event.data.command == '\/mutefrigatedriveway60' }}"
+    - choose: # mute the appropriate frigate boolean, and optionally unmute 60m later depending on whats been selected
+        - conditions: "{{ trigger.event.data.command == '\/mutefrigate' ~ location ~ time }}"
           sequence:
             - service: telegram_bot.answer_callback_query
               data_template:
                 callback_query_id: "{{ trigger.event.data.id }}"
-                message: "Disabling notifications for {{ trigger }} for 60min"
+                message: "Disabling notifications for {{ trigger }} for {{time}}"
                 show_alert: true
             - service: input_boolean.turn_off
-              entity_id: input_boolean.frigate_driveway_notifier
-            - delay: "00:60:00"
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.frigate_driveway_notifier
-        - conditions: "{{ trigger.event.data.command == '\/mutefrigatefrontyard60' }}"
-          sequence:
-            - service: telegram_bot.answer_callback_query
               data_template:
-                callback_query_id: "{{ trigger.event.data.id }}"
-                message: "Disabling notifications for {{ trigger }} for 60min"
-                show_alert: true
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.frigate_frontyard_notifier
-            - delay: "00:60:00"
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.frigate_frontyard_notifier
-        - conditions: "{{ trigger.event.data.command == '\/mutefrigategrilldeck60' }}"
-          sequence:
-            - service: telegram_bot.answer_callback_query
-              data_template:
-                callback_query_id: "{{ trigger.event.data.id }}"
-                message: "Disabling notifications for {{ trigger }} for 60min"
-                show_alert: true
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.frigate_grilldeck_notifier
-            - delay: "00:60:00"
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.frigate_grilldeck_notifier
-        - conditions: "{{ trigger.event.data.command == '\/mutefrigatedeck60' }}"
-          sequence:
-            - service: telegram_bot.answer_callback_query
-              data_template:
-                callback_query_id: "{{ trigger.event.data.id }}"
-                message: "Disabling notifications for {{ trigger }} for 60min"
-                show_alert: true
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.frigate_deck_notifier
-            - delay: "00:60:00"
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.frigate_deck_notifier
-        - conditions: "{{ trigger.event.data.command == '\/mutefrigatefrontyardday' }}"
-          sequence:
-            - service: telegram_bot.answer_callback_query
-              data_template:
-                callback_query_id: "{{ trigger.event.data.id }}"
-                message: "Disabling notifications for {{ trigger }} for the remainder of the day"
-                show_alert: true
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.frigate_frontyard_notifier
-        - conditions: "{{ trigger.event.data.command == '\/mutefrigategrilldeckday' }}"
-          sequence:
-            - service: telegram_bot.answer_callback_query
-              data_template:
-                callback_query_id: "{{ trigger.event.data.id }}"
-                message: "Disabling notifications for {{ trigger }} for the remainder of the day"
-                show_alert: true
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.frigate_grilldeck_notifier
-        - conditions: "{{ trigger.event.data.command == '\/mutefrigatedeckday' }}"
-          sequence:
-            - service: telegram_bot.answer_callback_query
-              data_template:
-                callback_query_id: "{{ trigger.event.data.id }}"
-                message: "Disabling notifications for {{ trigger }} for the remainder of the day"
-                show_alert: true
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.frigate_deck_notifier
+                entity_id: input_boolean.frigate_{{location}}_notifier
+            - choose:
+                - conditions: "{{time == '60'}}"
+                  sequence:
+                    - delay: "00:60:00"
+                    - service: input_boolean.turn_on
+                      data_template:
+                        entity_id: input_boolean.frigate_{{location}}_notifier
+              default: []
       default:
-        - service: telegram_bot.answer_callback_query
+        - service: system_log.write
           data_template:
-            callback_query_id: "{{ trigger.event.data.id }}"
-            message: "Disabling notifications for {{ trigger }} for the remainder of the day"
-            show_alert: true
-        - service: input_boolean.turn_off
-          entity_id: input_boolean.frigate_driveway_notifier
+            message: "Damnit, defaulting: {{ trigger.event.data.command == '\/mutefrigate' ~ location ~ time }} && {{ mutefrigate ~ location ~ time }} && variable values: {{ location ~ time }} && {{trigger}}"
+            level: error
 #########################################
-- alias: "Frigate: driveway person arrival"
-  id: "Frigate: driveway person arrival"
-  mode: restart
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.driveway_far_person_motion
-      to: "on"
-  action:
-    - wait_for_trigger:
-        - platform: state
-          entity_id: binary_sensor.driveway_near_person_motion
-          to: "on"
-      timeout: 20
-      continue_on_timeout: false
-    - service: telegram_bot.send_photo
-      data:
-        url: http://192.168.30.137/cgi-bin/snapshot.cgi?1
-        authentication: digest
-        username: admin
-        password: !secret dahua-pwd
-#########################################
-# - alias: "Frigate: driveway departure"
-#   id: "Frigate: driveway departure"
+# - alias: "Frigate: driveway person arrival"
+#   id: "Frigate: driveway person arrival"
+#   # mode: restart
 #   trigger:
 #     - platform: state
-#       entity_id:
-#         - binary_sensor.near_car_motion
-#         - binary_sensor.near_person_motion
+#       entity_id: binary_sensor.driveway_far_person_motion
 #       to: "on"
 #   action:
 #     - wait_for_trigger:
 #         - platform: state
-#           entity_id:
-#             - binary_sensor.far_person_motion
-#             - binary_sensor.far_car_motion
+#           entity_id: binary_sensor.driveway_near_person_motion
 #           to: "on"
 #       timeout: 20
 #       continue_on_timeout: false
-#     - choose: # between the hours of 6-8am, turn on driveway sentry mode
-#         - conditions: "{{ now().strftime('%H')|int > 6 and now().strftime('%H')|int < 8 }}"
-#           sequence:
-#             - service: homeassistant.turn_on
-#               entity_id: input_boolean.driveway_sentry
+#     - service: telegram_bot.send_photo
+#       data:
+#         url: http://192.168.31.137/cgi-bin/snapshot.cgi?1
+#         authentication: digest
+#         username: admin
+#         password: !secret dahua-pwd
 #########################################
 - alias: "Frigate: driveway video notification"
   id: "Frigate: driveway video notification"
@@ -172,40 +143,57 @@
   trigger:
     - platform: mqtt
       topic: frigate/events
+      id: frigate-event
+      payload: driveway
+      value_template: '{{ value_json["after"]["camera"] }}'
+      variables:
+        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
+        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
+        camera: "{{ trigger.payload_json['after']['camera'] }}"
+        id: "{{ trigger.payload_json['after']['id'] }}"
+        label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
-    - "{{ trigger.payload_json['type'] == 'end' }}"
-    - condition: state # make sure notifications havent been paused from an actionable notification
-      entity_id: input_boolean.frigate_driveway_notifier
-      state: "on"
-    # - condition: state
-    #   entity_id: input_boolean.driveway_sentry
-    #   state: "on"
-    - condition: state
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - condition: or # only driveway camera
-      conditions:
-        - "{{ trigger.payload_json['after']['camera'] == 'driveway' }}"
-        - "{{ trigger.payload_json['before']['camera'] == 'driveway' }}"
-  variables:
-    camera: "{{ trigger.payload_json['after']['camera'] }}"
+    - "{{ is_state('input_boolean.frigate_driveway_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
+    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
-    # download & trim the clip in case its really long, save to a static file
-    - service: shell_command.download_file
-      data_template:
-        url: "http://192.168.30.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
-        download: "/share/{{camera}}.mp4"
-    - service: shell_command.trim_video
-      data_template:
-        duration: "00:00:10"
-        clip: "/share/{{camera}}.mp4"
-        path: "/share/trimmed-{{camera}}.mp4"
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/share/trimmed-{{camera}}.mp4"
-        inline_keyboard:
-          - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
-        caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: frigate-event
+          sequence:
+            # Send the initial notification with snapshot and info.
+            - service: telegram_bot.send_photo
+              data:
+                url: https://ha.gilmore.cloud/api/frigate/notifications/{{trigger.payload_json['after']['id']}}/snapshot.jpg
+            - repeat:
+                until: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                sequence:
+                  - wait_for_trigger:
+                      - platform: mqtt
+                        topic: frigate/events
+                        payload: "{{ id }}"
+                        value_template: "{{ value_json['after']['id'] }}"
+                    continue_on_timeout: false
+                    timeout: "00:02:00"
+                  - condition: template
+                    value_template: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                  # download & trim the clip in case its really long, save to a static file
+                  - service: shell_command.download_file
+                    data_template:
+                      url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
+                      download: "/share/{{camera}}.mp4"
+                  - service: shell_command.trim_video
+                    data_template:
+                      duration: "00:00:10"
+                      clip: "/share/{{camera}}.mp4"
+                      path: "/share/trimmed-{{camera}}.mp4"
+                  - service: telegram_bot.send_video
+                    data_template:
+                      file: "/share/trimmed-{{camera}}.mp4"
+                      inline_keyboard:
+                        - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
+                      caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+      default: []
     - delay: 90
 #########################################
 - alias: "Frigate: frontyard video notification"
@@ -214,37 +202,57 @@
   trigger:
     - platform: mqtt
       topic: frigate/events
+      id: frigate-event
+      payload: frontyard
+      value_template: '{{ value_json["after"]["camera"] }}'
+      variables:
+        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
+        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
+        camera: "{{ trigger.payload_json['after']['camera'] }}"
+        id: "{{ trigger.payload_json['after']['id'] }}"
+        label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
-    - "{{ trigger.payload_json['type'] == 'end' }}"
-    - condition: state # make sure notifications havent been paused from an actionable notification
-      entity_id: input_boolean.frigate_frontyard_notifier
-      state: "on"
-    - condition: state
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - condition: or # only frontyard camera
-      conditions:
-        - "{{ trigger.payload_json['after']['camera'] == 'frontyard' }}"
-        - "{{ trigger.payload_json['before']['camera'] == 'frontyard' }}"
-  variables:
-    camera: "{{ trigger.payload_json['after']['camera'] }}"
+    - "{{ is_state('input_boolean.frigate_frontyard_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
+    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
-    # download & trim the clip in case its really long, save to a static file
-    - service: shell_command.download_file
-      data_template:
-        url: "http://192.168.30.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
-        download: "/share/{{camera}}.mp4"
-    - service: shell_command.trim_video
-      data_template:
-        duration: "00:00:10"
-        clip: "/share/{{camera}}.mp4"
-        path: "/share/trimmed-{{camera}}.mp4"
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/share/trimmed-{{camera}}.mp4"
-        inline_keyboard:
-          - "60m:/mutefrigatefrontyard60, Rest of day:/mutefrigatefrontyardday"
-        caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: frigate-event
+          sequence:
+            # Send the initial notification with snapshot and info.
+            - service: telegram_bot.send_photo
+              data:
+                url: https://ha.gilmore.cloud/api/frigate/notifications/{{trigger.payload_json['after']['id']}}/snapshot.jpg
+            - repeat:
+                until: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                sequence:
+                  - wait_for_trigger:
+                      - platform: mqtt
+                        topic: frigate/events
+                        payload: "{{ id }}"
+                        value_template: "{{ value_json['after']['id'] }}"
+                    continue_on_timeout: false
+                    timeout: "00:02:00"
+                  - condition: template
+                    value_template: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                  # download & trim the clip in case its really long, save to a static file
+                  - service: shell_command.download_file
+                    data_template:
+                      url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
+                      download: "/share/{{camera}}.mp4"
+                  - service: shell_command.trim_video
+                    data_template:
+                      duration: "00:00:10"
+                      clip: "/share/{{camera}}.mp4"
+                      path: "/share/trimmed-{{camera}}.mp4"
+                  - service: telegram_bot.send_video
+                    data_template:
+                      file: "/share/trimmed-{{camera}}.mp4"
+                      inline_keyboard:
+                        - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
+                      caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+      default: []
     - delay: 90
 #########################################
 - alias: "Frigate: grilldeck video notification"
@@ -253,36 +261,57 @@
   trigger:
     - platform: mqtt
       topic: frigate/events
+      id: frigate-event
+      payload: grilldeck
+      value_template: '{{ value_json["after"]["camera"] }}'
+      variables:
+        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
+        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
+        camera: "{{ trigger.payload_json['after']['camera'] }}"
+        id: "{{ trigger.payload_json['after']['id'] }}"
+        label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
-    - "{{ trigger.payload_json['type'] == 'end' }}"
-    - condition: state # make sure notifications havent been paused from an actionable notification
-      entity_id: input_boolean.frigate_grilldeck_notifier
-      state: "on"
-    - condition: state
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - condition: or # only grilldeck camera
-      conditions:
-        - "{{ trigger.payload_json['after']['camera'] == 'grilldeck' }}"
-        - "{{ trigger.payload_json['before']['camera'] == 'grilldeck' }}"
-  variables:
-    camera: "{{ trigger.payload_json['after']['camera'] }}"
+    - "{{ is_state('input_boolean.frigate_grilldeck_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
+    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
-    - service: shell_command.download_file
-      data_template:
-        url: "http://192.168.30.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
-        download: "/share/{{camera}}.mp4"
-    - service: shell_command.trim_video
-      data_template:
-        duration: "00:00:10"
-        clip: "/share/{{camera}}.mp4"
-        path: "/share/trimmed-{{camera}}.mp4"
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/share/trimmed-{{camera}}.mp4"
-        inline_keyboard:
-          - "60m:/mutefrigategrilldeck60, Rest of day:/mutefrigategrilldeckday"
-        caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: frigate-event
+          sequence:
+            # Send the initial notification with snapshot and info.
+            - service: telegram_bot.send_photo
+              data:
+                url: https://ha.gilmore.cloud/api/frigate/notifications/{{trigger.payload_json['after']['id']}}/snapshot.jpg
+            - repeat:
+                until: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                sequence:
+                  - wait_for_trigger:
+                      - platform: mqtt
+                        topic: frigate/events
+                        payload: "{{ id }}"
+                        value_template: "{{ value_json['after']['id'] }}"
+                    continue_on_timeout: false
+                    timeout: "00:02:00"
+                  - condition: template
+                    value_template: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                  # download & trim the clip in case its really long, save to a static file
+                  - service: shell_command.download_file
+                    data_template:
+                      url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
+                      download: "/share/{{camera}}.mp4"
+                  - service: shell_command.trim_video
+                    data_template:
+                      duration: "00:00:10"
+                      clip: "/share/{{camera}}.mp4"
+                      path: "/share/trimmed-{{camera}}.mp4"
+                  - service: telegram_bot.send_video
+                    data_template:
+                      file: "/share/trimmed-{{camera}}.mp4"
+                      inline_keyboard:
+                        - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
+                      caption: "{{ label }} detected. Mute?"
+      default: []
     - delay: 45
 #########################################
 - alias: "Frigate: deck video notification"
@@ -291,70 +320,173 @@
   trigger:
     - platform: mqtt
       topic: frigate/events
+      id: frigate-event
+      payload: deck
+      value_template: '{{ value_json["after"]["camera"] }}'
+      variables:
+        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
+        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
+        camera: "{{ trigger.payload_json['after']['camera'] }}"
+        id: "{{ trigger.payload_json['after']['id'] }}"
+        label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
-    - "{{ trigger.payload_json['type'] == 'end' }}"
-    - condition: state # make sure notifications havent been paused from an actionable notification
-      entity_id: input_boolean.frigate_deck_notifier
-      state: "on"
-    - condition: state
-      entity_id: binary_sensor.anybody_home
-      state: "off"
-    - condition: or # only deck camera
-      conditions:
-        - "{{ trigger.payload_json['after']['camera'] == 'deck' }}"
-        - "{{ trigger.payload_json['before']['camera'] == 'deck' }}"
-  variables:
-    camera: "{{ trigger.payload_json['after']['camera'] }}"
+    - "{{ is_state('input_boolean.frigate_deck_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
+    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
-    - service: shell_command.download_file
-      data_template:
-        url: "http://192.168.30.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
-        download: "/share/{{camera}}.mp4"
-    - service: shell_command.trim_video
-      data_template:
-        duration: "00:00:10"
-        clip: "/share/{{camera}}.mp4"
-        path: "/share/trimmed-{{camera}}.mp4"
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/share/trimmed-{{camera}}.mp4"
-        inline_keyboard:
-          - "60m:/mutefrigatedeck60, Rest of day:/mutefrigatedeckday"
-        caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: frigate-event
+          sequence:
+            # Send the initial notification with snapshot and info.
+            - service: telegram_bot.send_photo
+              data:
+                url: https://ha.gilmore.cloud/api/frigate/notifications/{{trigger.payload_json['after']['id']}}/snapshot.jpg
+            - repeat:
+                until: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                sequence:
+                  - wait_for_trigger:
+                      - platform: mqtt
+                        topic: frigate/events
+                        payload: "{{ id }}"
+                        value_template: "{{ value_json['after']['id'] }}"
+                    continue_on_timeout: false
+                    timeout: "00:02:00"
+                  - condition: template
+                    value_template: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                  # download & trim the clip in case its really long, save to a static file
+                  - service: shell_command.download_file
+                    data_template:
+                      url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
+                      download: "/share/{{camera}}.mp4"
+                  - service: shell_command.trim_video
+                    data_template:
+                      duration: "00:00:10"
+                      clip: "/share/{{camera}}.mp4"
+                      path: "/share/trimmed-{{camera}}.mp4"
+                  - service: telegram_bot.send_video
+                    data_template:
+                      file: "/share/trimmed-{{camera}}.mp4"
+                      inline_keyboard:
+                        - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
+                      caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+      default: []
     - delay: 45
 #########################################
-# - alias: "Frigate: mudroom video notification"
-#   id: "Frigate: mudroom video notification"
-#   description: "if Jons away - send a video of the mudroom"
-#   trigger:
-#     - platform: mqtt
-#       topic: frigate/events
-#   condition:
-#     - "{{ trigger.payload_json['type'] == 'end' }}"
-#     - condition: state
-#       entity_id: binary_sensor.anybody_home
-#       state: "off"
-#     - condition: or # only mudroom camera
-#       conditions:
-#         - "{{ trigger.payload_json['after']['camera'] == 'mudroom' }}"
-#         - "{{ trigger.payload_json['before']['camera'] == 'mudroom' }}"
-#   variables:
-#     camera: "{{ trigger.payload_json['after']['camera'] }}"
-#   action:
-#     # download & trim the clip in case its really long, save to a static file
-#     - service: shell_command.download_file
-#       data_template:
-#         url: "http://192.168.30.249:5005/api/events/{{trigger.payload_json['after']['id']}}/clip.mp4"
-#         download: "/share/{{camera}}.mp4"
-#     - service: shell_command.trim_video
-#       data_template:
-#         duration: "00:00:10"
-#         clip: "/share/{{camera}}.mp4"
-#         path: "/share/trimmed-{{camera}}.mp4"
-#     - service: telegram_bot.send_video
-#       data_template:
-#         file: "/share/trimmed-{{camera}}.mp4"
-#         inline_keyboard:
-#           - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
-#         caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
-#     - delay: 60
+- alias: "Frigate: patio video notification"
+  id: "Frigate: patio video notification"
+  description: "if Jons away or were asleep - send a video of the patio"
+  trigger:
+    - platform: mqtt
+      topic: frigate/events
+      id: frigate-event
+      payload: patio
+      value_template: '{{ value_json["after"]["camera"] }}'
+      variables:
+        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
+        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
+        camera: "{{ trigger.payload_json['after']['camera'] }}"
+        id: "{{ trigger.payload_json['after']['id'] }}"
+        label: "{{ trigger.payload_json['after']['label'] }}"
+  condition:
+    - "{{ is_state('input_boolean.frigate_patio_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
+    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: frigate-event
+          sequence:
+            # Send the initial notification with snapshot and info.
+            - service: telegram_bot.send_photo
+              data:
+                url: https://ha.gilmore.cloud/api/frigate/notifications/{{trigger.payload_json['after']['id']}}/snapshot.jpg
+            - repeat:
+                until: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                sequence:
+                  - wait_for_trigger:
+                      - platform: mqtt
+                        topic: frigate/events
+                        payload: "{{ id }}"
+                        value_template: "{{ value_json['after']['id'] }}"
+                    continue_on_timeout: false
+                    timeout: "00:02:00"
+                  - condition: template
+                    value_template: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                  # download & trim the clip in case its really long, save to a static file
+                  - service: shell_command.download_file
+                    data_template:
+                      url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
+                      download: "/share/{{camera}}.mp4"
+                  - service: shell_command.trim_video
+                    data_template:
+                      duration: "00:00:10"
+                      clip: "/share/{{camera}}.mp4"
+                      path: "/share/trimmed-{{camera}}.mp4"
+                  - service: telegram_bot.send_video
+                    data_template:
+                      file: "/share/trimmed-{{camera}}.mp4"
+                      inline_keyboard:
+                        - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
+                      caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+      default: []
+    - delay: 45
+#########################################
+- alias: "Frigate: workshop video notification"
+  id: "Frigate: workshop video notification"
+  description: "if Jons away or were asleep - send a video of the workshop"
+  trigger:
+    - platform: mqtt
+      topic: frigate/events
+      id: frigate-event
+      payload: workshop
+      value_template: '{{ value_json["after"]["camera"] }}'
+      variables:
+        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
+        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
+        camera: "{{ trigger.payload_json['after']['camera'] }}"
+        id: "{{ trigger.payload_json['after']['id'] }}"
+        label: "{{ trigger.payload_json['after']['label'] }}"
+  condition:
+    - "{{ is_state('input_boolean.frigate_workshop_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
+    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: frigate-event
+          sequence:
+            # Send the initial notification with snapshot and info.
+            - service: telegram_bot.send_photo
+              data:
+                url: https://ha.gilmore.cloud/api/frigate/notifications/{{trigger.payload_json['after']['id']}}/snapshot.jpg
+            - repeat:
+                until: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                sequence:
+                  - wait_for_trigger:
+                      - platform: mqtt
+                        topic: frigate/events
+                        payload: "{{ id }}"
+                        value_template: "{{ value_json['after']['id'] }}"
+                    continue_on_timeout: false
+                    timeout: "00:02:00"
+                  - condition: template
+                    value_template: "{{ wait.trigger.payload_json['type'] == 'end' }}"
+                  # download & trim the clip in case its really long, save to a static file
+                  - service: shell_command.download_file
+                    data_template:
+                      url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
+                      download: "/share/{{camera}}.mp4"
+                  - service: shell_command.trim_video
+                    data_template:
+                      duration: "00:00:10"
+                      clip: "/share/{{camera}}.mp4"
+                      path: "/share/trimmed-{{camera}}.mp4"
+                  - service: telegram_bot.send_video
+                    data_template:
+                      file: "/share/trimmed-{{camera}}.mp4"
+                      inline_keyboard:
+                        - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
+                      caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
+      default: []
+    - delay: 45

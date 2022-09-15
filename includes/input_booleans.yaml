@@ -33,9 +33,19 @@ frigate_frontyard_notifier:
   name: Frigate Frontyard Notifier
   initial: true
   icon: mdi:cctv
+frigate_patio_notifier:
+  name: Frigate Patio Notifier
+  initial: true
+  icon: mdi:cctv
+frigate_workshop_notifier:
+  name: Frigate Workshop Notifier
+  initial: true
+  icon: mdi:cctv
 main_bed_override:
   name: Master Lights Override
 driveway_sentry:
   name: Driveway Sentry Mode
 exterior_cans_auto_blocker:
   name: Exterior Cans Auto Blocker
+exterior_lights_block:
+  name: Exterior Lights Block
