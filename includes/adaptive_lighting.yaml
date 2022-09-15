@@ -18,3 +18,9 @@
   max_color_temp: 5100
   lights:
     - light.office_cans
+- name: lounge
+  max_brightness: 90
+  min_color_temp: 2700
+  max_color_temp: 5100
+  lights:
+    - light.lounge_cans

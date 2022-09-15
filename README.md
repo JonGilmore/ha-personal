@@ -7,7 +7,7 @@ Here's an overview of my Home Assistant configuration as well as the devices tha
 ```
 docker exec -it homeassistant bash
 pip uninstall pylutron-caseta
-pip install --upgrade --force-reinstall --no-deps --no-cache-dir git+https://github.com/jongilmore/pylutron-caseta@ra3
+pip install --upgrade --force-reinstall --no-deps --no-cache-dir git+https://github.com/danaues/pylutron-caseta@testing
 ```
 
 ## Lovelace

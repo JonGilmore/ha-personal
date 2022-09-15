@@ -1,7 +1,41 @@
 ---
-- name: Sunset
+- name: Sunset On
   entities:
-    switch.exterior_landscape_lights:
-      state: "on"
-    switch.exterior_cans:
-      state: "on"
+    switch.exterior_landscape_lights: "on"
+    switch.exterior_cans: "on"
+    switch.deck_posts: "on"
+- name: Exterior Lights On
+  entities:
+    switch.exterior_landscape_lights: "on"
+    switch.exterior_cans: "on"
+    switch.deck_posts: "on"
+    switch.deck_lights: "on"
+    switch.grill_deck_light: "on"
+    switch.workshop_exterior: "on"
+    light.patio_cans: "on"
+- name: Exterior Except Sunset On
+  entities:
+    switch.deck_lights: "on"
+    switch.grill_deck_light: "on"
+    switch.workshop_exterior: "on"
+    light.patio_cans: "on"
+- name: Sunset Off
+  entities:
+    switch.exterior_landscape_lights: "off"
+    switch.exterior_cans: "off"
+    switch.deck_posts: "off"
+- name: Exterior Lights Off
+  entities:
+    switch.exterior_landscape_lights: "off"
+    switch.exterior_cans: "off"
+    switch.deck_posts: "off"
+    switch.deck_lights: "off"
+    switch.grill_deck_light: "off"
+    switch.workshop_exterior: "off"
+    light.patio_cans: "off"
+- name: Exterior Except Sunset Off
+  entities:
+    switch.deck_lights: "off"
+    switch.grill_deck_light: "off"
+    switch.workshop_exterior: "off"
+    light.patio_cans: "off"

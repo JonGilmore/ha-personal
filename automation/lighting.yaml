@@ -6,21 +6,17 @@
   trigger:
     - platform: state
       entity_id:
-        - binary_sensor.elkm1_office_pir
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_back_kitchen_pir
         - binary_sensor.elkm1_kitchen_pir
-        - binary_sensor.elkm1_main_bath_pir
         - binary_sensor.elkm1_gym_pir
       id: pir-on
       to: "on"
     - platform: state
       entity_id:
-        - binary_sensor.elkm1_office_pir
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_back_kitchen_pir
         - binary_sensor.elkm1_kitchen_pir
-        - binary_sensor.elkm1_main_bath_pir
         - binary_sensor.elkm1_gym_pir
       id: pir-off
       to: "off"
@@ -31,9 +27,8 @@
         - conditions:
             - condition: trigger
               id: pir-on
-            - condition: state
-              entity_id: input_boolean.block_all_motion_lights
-              state: "off"
+            - "{{ is_state('input_boolean.block_all_motion_lights', 'off') }}"
+            - "{{ is_state('binary_sensor.dark_out', 'on') }}"
           sequence:
             - choose:
                 - conditions: []
@@ -93,9 +88,9 @@
         - conditions:
             - condition: trigger
               id: pir-on
-            - condition: state
-              entity_id: sensor.period_of_day
-              state: ["night", "dusk"]
+            - "{{ is_state('input_boolean.block_all_motion_lights', 'off') }}"
+            - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+            # - "{{ not is_state('sensor.period_of_day', 'day') }}"
           sequence:
             - choose:
                 - conditions: []
@@ -105,9 +100,7 @@
         - conditions:
             - condition: trigger
               id: pir-off
-            - condition: state
-              entity_id: input_boolean.exterior_cans_auto_blocker
-              state: "off"
+            - "{{ is_state('input_boolean.exterior_cans_auto_blocker', 'off') }}"
           sequence:
             - service: homeassistant.turn_off
               entity_id: switch.exterior_cans

@@ -90,79 +90,124 @@
 #       data:
 #         entity_id: media_player.main_display
 #########################################
-- alias: "Automatic Lighting: deck person & dark out - turn deck lights on"
-  id: "Automatic Lighting: deck person & dark out - turn deck lights on"
+- alias: "Automatic Lighting: exterior person & dark out - toggle exterior lights"
+  id: "Automatic Lighting: exterior person & dark out - toggle exterior lights"
   mode: restart
   trigger:
-    - platform: numeric_state
-      entity_id:
-        - sensor.deck_person
-        - sensor.grilldeck_person
-      above: 0
+    - platform: state
+      entity_id: binary_sensor.exterior_person
+      id: pir-on
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.exterior_person
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 20
   condition:
-    - condition: state
-      entity_id: sensor.period_of_day
-      state:
-        - "night"
-        - "dusk"
+    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+    - "{{ is_state('input_boolean.exterior_lights_block', 'off') }}"
   action:
-    - service: homeassistant.turn_on
-      data_template:
-        entity_id: >
-          {% if trigger.entity_id == 'sensor.deck_person' %}
-            switch.deck, switch.deck_posts
-          {% elif trigger.entity_id == 'sensor.grilldeck_person' %}
-            switch.grill_deck, switch.exterior_landscape_lights, switch.deck_posts
-          {% endif %}
-    - delay: "00:20:00"
-    - service: homeassistant.turn_off
-      data_template:
-        entity_id: >
-          {% if trigger.entity_id == 'sensor.deck_person' %}
-            switch.deck, switch.deck_posts
-          {% elif trigger.entity_id == 'sensor.grilldeck_person' %}
-            switch.grill_deck, switch.exterior_landscape_lights, switch.deck_posts
-          {% endif %}
+    - choose:
+        - conditions: # if exterior person detected, turn on all exterior lights
+            - condition: trigger
+              id: pir-on
+          sequence:
+            - service: scene.turn_on
+              entity_id: scene.exterior_lights_on
+        - conditions: # if its after 11pm, turn em all off, else turn exterior_except_sunset lights off
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - choose:
+                - conditions:
+                    - condition: time
+                      after: "23:00:00"
+                      before: "07:00:00"
+                  sequence:
+                    - service: scene.turn_on
+                      entity_id: scene.exterior_lights_off
+              default:
+                - service: scene.turn_on
+                  entity_id: scene.exterior_except_sunset_off
 #########################################
 - alias: "Automatic Lighting: deck lights on when deck door opens"
   id: "Automatic Lighting: deck lights on when deck door opens"
+  mode: restart
   trigger:
     - platform: state
       entity_id: binary_sensor.elkm1_sunroom_pir
       to: "on"
-  # condition:
-  #   - condition: state
-  #     entity_id: binary_sensor.light_inside
-  #     state: "off"
+  condition:
+    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
   action:
     - wait_for_trigger:
         - platform: state
           entity_id: sensor.elkm1_deck_door
           to: "Violated"
-      timeout: 20
+      timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
       entity_id: switch.deck_lights
 #########################################
+- alias: "Automatic Lighting: patio lights on when patio door opens"
+  id: "Automatic Lighting: patio lights on when patio door opens"
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_lounge_pir
+      to: "on"
+  condition:
+    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id: sensor.elkm1_patio_door
+          to: "Violated"
+      timeout: 30
+      continue_on_timeout: false
+    - service: homeassistant.turn_on
+      entity_id: light.patio_cans
+#########################################
+- alias: "Automatic Lighting: workshop lights on when workshop door opens"
+  id: "Automatic Lighting: workshop lights on when workshop door opens"
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_workshop_pir
+      to: "on"
+  condition:
+    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id: sensor.elkm1_workshop_door
+          to: "Violated"
+      timeout: 30
+      continue_on_timeout: false
+    - service: homeassistant.turn_on
+      entity_id: switch.workshop_exterior
+#########################################
 - alias: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
   id: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
+  mode: restart
   trigger:
     - platform: state
       entity_id: binary_sensor.elkm1_mudroom_pir
       to: "on"
-  # condition:
-  #   - condition: state
-  #     entity_id: binary_sensor.light_inside
-  #     state: "off"
+  condition:
+    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
   action:
     - wait_for_trigger:
         - platform: state
           entity_id: sensor.elkm1_deck_door
           to: "Violated"
-      timeout: 15
+      timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: switch.grill_deck_light
+      entity_id:
+        - switch.grill_deck_light
+        - switch.deck_posts
 #########################################
 - alias: "Wake Mode: done sleeping & HVAC fan off & recirculation pump on"
   id: "Wake Mode: done sleeping & HVAC fan off & recirculation pump on"
@@ -307,27 +352,47 @@
 #         - scene.basement_keypad_theater
 #         - scene.basement_keypad_bar
 #########################################
-- alias: "Utility: reset run-once variables - noon and 8am"
-  id: "Utility: reset run-once variables - noon and 8am"
+- alias: "Utility: generic time based triggers"
+  id: "Utility: generic time based triggers"
   trigger:
     - platform: time
       at: "12:00:00"
     - platform: time
       at: "8:00:01"
-  action:
-    - service: homeassistant.turn_off
-      entity_id:
-        - input_boolean.sunset_run_once
-        - input_boolean.driveway_sentry
-#########################################
-- alias: "Utility: exterior can auto blocker reset"
-  id: "Utility: exterior can auto blocker reset"
-  trigger:
+    - platform: time
+      at: "5:00:00"
+      id: 5am
     - platform: time
       at: "22:00:00"
+      id: 10pm
+    - platform: time
+      at: "23:00:00"
+      id: 11pm
   action:
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.exterior_cans_auto_blocker
+    - choose: # only at 5am
+        - conditions:
+            - condition: trigger
+              id: 5am
+          sequence:
+            - service: cover.open_cover
+              entity_id: cover.library_shade
+        - conditions: # only at 10pm
+            - condition: trigger
+              id: 10pm
+          sequence:
+            - service: homeassistant.turn_off
+              entity_id: input_boolean.exterior_cans_auto_blocker
+        - conditions: # only at 11pm
+            - condition: trigger
+              id: 11pm
+          sequence:
+            - service: scene.turn_on
+              entity_id: scene.exterior_lights_off
+      default: # at noon and 8am
+        - service: homeassistant.turn_off
+          entity_id:
+            - input_boolean.sunset_run_once
+            - input_boolean.driveway_sentry
 #########################################
 - alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
@@ -364,10 +429,12 @@
       entity_id: switch.equipment_room_recirculation_pump
     - service: input_boolean.turn_on
       entity_id:
-        - input_boolean.frigate_driveway_notifier
-        - input_boolean.frigate_kitchen_notifier
-        - input_boolean.frigate_deckstairs_notifier
         - input_boolean.frigate_deck_notifier
+        - input_boolean.frigate_driveway_notifier
+        - input_boolean.frigate_frontyard_notifier
+        - input_boolean.frigate_grilldeck_notifier
+        - input_boolean.frigate_patio_notifier
+        - input_boolean.frigate_workshop_notifier
     - choose: # check the garage doors & notify
         conditions:
           condition: or
@@ -446,11 +513,11 @@
 - alias: "Night Mode: turn on sunset lights at dark or sunset"
   id: "Night Mode: turn on sunset lights at dark or sunset"
   trigger:
-    # - platform: state
-    #   entity_id: binary_sensor.light_inside
-    #   to: "off"
-    #   for:
-    #     minutes: 5
+    - platform: state
+      entity_id: binary_sensor.dark_out
+      to: "on"
+      for:
+        minutes: 10
     - platform: sun
       event: sunset
   condition:
@@ -461,11 +528,13 @@
       after: "15:30:00"
   action:
     - service: scene.turn_on
-      entity_id: scene.sunset
+      entity_id: scene.sunset_on
     - service: homeassistant.turn_on
       entity_id:
         - input_boolean.sunset_run_once
         - input_boolean.exterior_cans_auto_blocker
+    - service: cover.close_cover
+      entity_id: cover.library_shade
 # ########################################
 # - alias: "Night Mode: turn on sunset2 lights at ten min after sunset"
 #   id: "Night Mode: turn on sunset2 lights at ten min after sunset"
