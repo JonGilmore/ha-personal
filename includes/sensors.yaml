@@ -4,8 +4,7 @@
   round_digits: 0
   type: mean
   entity_ids:
-    - sensor.office_multi_relative_humidity_measurement
-    - sensor.sunroom_humidity
+    - sensor.aeotec_multipurpose_sensor_relative_humidity_measurement
 
 - platform: template
   sensors:
@@ -108,42 +107,6 @@
       value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
       unique_id: people_home_number
 
-# DARK SKY
-- platform: darksky
-  api_key: !secret darksky_api
-  forecast:
-    - 0
-    - 1
-    - 2
-  monitored_conditions:
-    - summary
-    - icon
-    - nearest_storm_distance
-    - nearest_storm_bearing
-    - precip_type
-    - precip_intensity
-    - precip_probability
-    - temperature
-    - apparent_temperature
-    - dew_point
-    - wind_speed
-    - wind_bearing
-    - cloud_cover
-    - humidity
-    - pressure
-    - visibility
-    - ozone
-    - minutely_summary
-    - hourly_summary
-    - daily_summary
-    - temperature_high
-    - temperature_low
-    - apparent_temperature_high
-    - apparent_temperature_low
-    - precip_intensity_max
-    - sunrise_time
-    - sunset_time
-
 # # # DARKNESS SENSORS
 - platform: template
   sensors:
@@ -175,21 +138,21 @@
   sensors:
     target_humidity_max_winter:
       value_template: >-
-        {% if   states.sensor.dark_sky_temperature.state | int < -20 %}25
-        {% elif states.sensor.dark_sky_temperature.state | int < -10 %}30
-        {% elif states.sensor.dark_sky_temperature.state | int <   0 %}35
-        {% elif states.sensor.dark_sky_temperature.state | int <  10 %}40
-        {% elif states.sensor.dark_sky_temperature.state | int <  20 %}45
+        {% if   states.sensor.current_temperature.state | int < -20 %}25
+        {% elif states.sensor.current_temperature.state | int < -10 %}30
+        {% elif states.sensor.current_temperature.state | int <   0 %}35
+        {% elif states.sensor.current_temperature.state | int <  10 %}40
+        {% elif states.sensor.current_temperature.state | int <  20 %}45
         {% else %} 55 {% endif %}
       friendly_name: "Target Humidity - Max"
       device_class: humidity
     target_humidity_min_winter:
       value_template: >-
-        {% if   states.sensor.dark_sky_temperature.state | int < -20 %}15
-        {% elif states.sensor.dark_sky_temperature.state | int < -10 %}20
-        {% elif states.sensor.dark_sky_temperature.state | int <   0 %}25
-        {% elif states.sensor.dark_sky_temperature.state | int <  10 %}30
-        {% elif states.sensor.dark_sky_temperature.state | int <  20 %}35
+        {% if   states.sensor.current_temperature.state | int < -20 %}15
+        {% elif states.sensor.current_temperature.state | int < -10 %}20
+        {% elif states.sensor.current_temperature.state | int <   0 %}25
+        {% elif states.sensor.current_temperature.state | int <  10 %}30
+        {% elif states.sensor.current_temperature.state | int <  20 %}35
         {% else %} 40 {% endif %}
       friendly_name: "Target Humidity - Min"
       device_class: humidity
@@ -378,92 +341,28 @@
     # WEATHER TEMPLATES
     current_temperature:
       friendly_name: Current Temperature
-      value_template: >-
-        {{ states('sensor.dark_sky_temperature') | round | int }}°
+      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'temperature') }}°"
     current_feels:
       friendly_name: Current Feels Like
-      value_template: >-
-        feels like {{ states('sensor.dark_sky_apparent_temperature') | round | int }}°
+      value_template: "feels like {{ states('sensor.tomorrow_io_home_feels_like') }}°"
     cloud_cover:
       friendly_name: Cloud Cover
-      value_template: >-
-        current cloud cover is {{ states('sensor.dark_sky_cloud_coverage') | round | int }}%
-    nearest_storm:
-      friendly_name: Nearest Storm
-      value_template: >-
-        nearest storm is {{ states('sensor.dark_sky_nearest_storm_distance') }} mi. away
-    forecast_summary:
-      friendly_name: Forecast
-      value_template: >-
-        {{ states('sensor.dark_sky_minutely_summary') }}
+      value_template: "{{ states('sensor.tomorrow_io_home_cloud_cover') | round | int }}"
     current_humidity:
       friendly_name: Current Humidity
-      value_template: >-
-        {{ states('sensor.dark_sky_humidity') | round | int }}%
+      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}%"
     daily_high:
       friendly_name: Today's High
-      value_template: >-
-        {{ states('sensor.dark_sky_daily_high_temperature_0d') | round | int }}°
+      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].temperature }}°"
     daily_low:
       friendly_name: Today's Low
-      value_template: >-
-        {{ states('sensor.dark_sky_daily_low_temperature_0d') | round | int }}°
-    precipitation:
-      friendly_name: Precipitation Detected
-      value_template: >-
-        {{ states('sensor.dark_sky_precip') | regex_replace(find='unknown', replace='none', ignorecase=true) }} detected
+      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].templow }}°"
     precipitation_amount:
       friendly_name: Precipitation Amount
-      value_template: >-
-        {{ states('sensor.dark_sky_precip_intensity') | round(2, 'ceil') }} in. per hour
+      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation }}"
     precipitation_prob:
       friendly_name: Precipitation Probability
-      value_template: >-
-        probability: {{ states('sensor.dark_sky_precip_probability') | round | int }}%
-    sunrise_today:
-      friendly_name: "Sunrise Today"
-      value_template: "{% set state = states('sensor.dark_sky_sunrise_0d') %}
-        {{ strptime(state, '%Y-%m-%d %H:%M:%S')
-        .replace(tzinfo=utcnow().tzinfo).astimezone(now().tzinfo) .strftime('%I:%M %p') }}"
-    sunrise_tomorrow:
-      friendly_name: "Sunrise Tomorrow"
-      value_template: "{% set state = states('sensor.dark_sky_sunrise_1d') %}
-        {{ strptime(state, '%Y-%m-%d %H:%M:%S')
-        .replace(tzinfo=utcnow().tzinfo).astimezone(now().tzinfo) .strftime('%I:%M %p') }}"
-    sunset_today:
-      friendly_name: "Sunset Today"
-      value_template: "{% set state = states('sensor.dark_sky_sunset_0d') %}
-        {{ strptime(state, '%Y-%m-%d %H:%M:%S')
-        .replace(tzinfo=utcnow().tzinfo).astimezone(now().tzinfo) .strftime('%I:%M %p') }}"
-    sunset_tomorrow:
-      friendly_name: "Sunset Tomorrow"
-      value_template: "{% set state = states('sensor.dark_sky_sunset_1d') %}
-        {{ strptime(state, '%Y-%m-%d %H:%M:%S')
-        .replace(tzinfo=utcnow().tzinfo).astimezone(now().tzinfo) .strftime('%I:%M %p') }}"
-    # AIR QUALITY TEMPLATES
-    today_aqi:
-      entity_id: sensor.u_s_air_quality_index
-      friendly_name: "Today's AQI"
-      value_template: >-
-        {{ states('sensor.u_s_air_quality_index') }}
-    today_allergy:
-      entity_id: sensor.allergy_index_today
-      friendly_name: "Today's Allergy Index"
-      value_template: >-
-        {{ states('sensor.allergy_index_today') }}
-    allergy_trend:
-      friendly_name: "Allergy Trend"
-      value_template: >-
-        {{ state_attr('sensor.allergy_index_forecasted_average', 'trend') }}
-    allergy_level:
-      friendly_name: "Allergy Level"
-      value_template: >-
-        {{ state_attr('sensor.allergy_index_today', 'rating') }}
-    current_uv:
-      entity_id: sensor.current_uv_index
-      friendly_name: "Current UV Index"
-      value_template: >-
-        {{ states('sensor.current_uv_index') | round (1, 'common') }}
+      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int  }}%"
 
     # TIME AND DATE TEMPLATES
     today_text:

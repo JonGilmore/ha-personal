@@ -98,7 +98,7 @@ views:
             view_layout:
               grid-area: three
           - type: weather-forecast
-            entity: weather.dark_sky
+            entity: weather.tomorrow_io_home_daily
             view_layout:
               grid-area: four
           - type: entities

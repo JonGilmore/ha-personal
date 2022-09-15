@@ -113,30 +113,14 @@
     anybody_home:
       friendly_name: "Anybody Home"
       device_class: presence
-      entity_id:
-        - person.jon
-        - person.laura
       value_template: >-
-        {% set ns = namespace(found=false) %}
-        {% for state in states.person %}
-          {% if state.state == 'home' %}
-            {% set ns.found = true %}
-          {% endif %}
-        {% endfor %}
-        {{ns.found}}
+        {{ states.person.jon.state == "home"
+        and states.person.laura.state == "home" }}
     anybody_away:
       friendly_name: "Anybody Away"
-      entity_id:
-        - person.jon
-        - person.laura
       value_template: >-
-        {% set ns = namespace(found=false) %}
-        {% for state in states.person %}
-          {% if state.state != 'home' %}
-            {% set ns.found = true %}
-          {% endif %}
-        {% endfor %}
-        {{ns.found}}
+        {{ states.person.jon.state != "home"
+        or states.person.laura.state != "home" }}
     #     hvac:
     #       friendly_name: "hvac status"
     #       value_template: >-
@@ -179,6 +163,17 @@
     #       value_template: >-
     #         {{ states.binary_sensor.loft_person_motion.state == "on"
     #         or states.binary_sensor.loft_multi_motion.state == "on" }}
+    exterior_person:
+      device_class: occupancy
+      friendly_name: "Exterior Person"
+      value_template: >-
+        {{ states('binary_sensor.deck_person_motion') == "on"
+        or states('binary_sensor.doorbell_person_motion') == "on"
+        or states('binary_sensor.driveway_person_motion') == "on"
+        or states('binary_sensor.frontyard_person_motion') == "on"
+        or states('binary_sensor.grilldeck_person_motion') == "on"
+        or states('binary_sensor.patio_person_motion') == "on"
+        or states('binary_sensor.workshop_person_motion') == "on" }}
     main_bedroom_occupied:
       device_class: occupancy
       friendly_name: "Main Bedroom Occupied"
@@ -196,44 +191,44 @@
 
 - platform: workday
   country: US
-# - platform: bayesian
-#   name: great room dark
-#   prior: 0.5
-#   probability_threshold: 0.84
-#   observations:
-#     - entity_id: sensor.dark_sky_cloud_coverage
-#       prob_given_true: 0.75
-#       platform: numeric_state
-#       above: 90
-#     - entity_id: sensor.main_tv_lux
-#       prob_given_true: 0.90
-#       platform: numeric_state
-#       below: 110
-#     # - entity_id: sensor.whole_house_luminance_sensor_main
-#     #   prob_given_true: 0.95
-#     #   platform: numeric_state
-#     #   below: 100
-#     # - entity_id: 'sensor.bathroom_luminance_sensor_main'
-#     #   prob_given_true: 0.95
-#     #   platform: numeric_state
-#     #   below: 100
-#     - entity_id: sensor.sun_elevation
-#       prob_given_true: 0.6
-#       platform: numeric_state
-#       below: 20
-#     - entity_id: sensor.sun_elevation
-#       prob_given_true: 0.75
-#       platform: numeric_state
-#       below: 10
-#     - entity_id: sensor.sun_elevation
-#       prob_given_true: 0.85
-#       platform: numeric_state
-#       below: 5
-#     - entity_id: sun.sun
-#       prob_given_true: 1
-#       platform: state
-#       to_state: "below_horizon"
 
+- platform: bayesian
+  name: dark out?
+  prior: 0.5
+  probability_threshold: 0.84
+  observations:
+    - entity_id: sensor.cloud_cover
+      prob_given_true: 0.75
+      platform: numeric_state
+      above: 90
+    # - entity_id: sensor.main_tv_lux
+    #   prob_given_true: 0.90
+    #   platform: numeric_state
+    #   below: 110
+    # - entity_id: sensor.whole_house_luminance_sensor_main
+    #   prob_given_true: 0.95
+    #   platform: numeric_state
+    #   below: 100
+    # - entity_id: 'sensor.bathroom_luminance_sensor_main'
+    #   prob_given_true: 0.95
+    #   platform: numeric_state
+    #   below: 100
+    - entity_id: sensor.sun_elevation
+      prob_given_true: 0.6
+      platform: numeric_state
+      below: 20
+    - entity_id: sensor.sun_elevation
+      prob_given_true: 0.75
+      platform: numeric_state
+      below: 10
+    - entity_id: sensor.sun_elevation
+      prob_given_true: 0.85
+      platform: numeric_state
+      below: 5
+    - entity_id: sun.sun
+      prob_given_true: 1
+      platform: state
+      to_state: "below_horizon"
 # - platform: bayesian
 #   name: office occupancy
 #   prior: 0.5

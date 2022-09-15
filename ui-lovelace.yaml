@@ -73,7 +73,7 @@ views:
             entities:
               - entity: alarm_control_panel.elkm1_area_1
       - type: weather-forecast
-        entity: weather.dark_sky
+        entity: weather.tomorrow_io_home_daily
       - type: vertical-stack
         cards:
           # - type: entities
@@ -106,7 +106,7 @@ views:
                     entity_id: entity
               - entity: lock.workshop_lock
                 type: "custom:button-card"
-                name: front lock
+                name: workshop lock
                 tap_action:
                   action: call-service
                   service: '[[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]'
@@ -649,7 +649,7 @@ views:
         camera_image: camera.driveway
         title: Exterior
         entities:
-          - scene.sunset
+          - scene.sunset_on
       - type: entities
         title: Host Stats
         show_header_toggle: false
@@ -665,40 +665,188 @@ views:
           - input_boolean.motion_lights
           - input_boolean.guests
           - input_boolean.party
-      - type: custom:mini-graph-card
-        name: Internet
-        icon: mdi:server
-        entities:
-          - entity: sensor.speedtest_download
-            name: download
-            show_state: true
-          - entity: sensor.speedtest_ping
-            name: ping
-            show_state: true
-          - entity: sensor.speedtest_upload
-            name: upload
-            show_state: true
-      - type: "custom:battery-state-card"
-        title: Batteries < 60%
-        sort_by_level: "asc"
-        tap_action: more-info
-        secondary_info: last_updated
-        filter:
-          include:
-            - name: entity_id
-              value: "*battery*"
-            - name: attributes.device_class
-              value: battery
-          exclude:
-            - name: state
-              value: 40
-              operator: ">"
-            - name: entity_id
-              value: "automation.*"
-            - name: state
-              value: "/Off|Good|Not Charging|Discharging/"
-            - name: entity_id
-              value: "*temp*"
+      # - type: custom:mini-graph-card
+      #   name: Internet
+      #   icon: mdi:server
+      #   entities:
+      #     - entity: sensor.speedtest_download
+      #       name: download
+      #       show_state: true
+      #     - entity: sensor.speedtest_ping
+      #       name: ping
+      #       show_state: true
+      #     - entity: sensor.speedtest_upload
+      #       name: upload
+      #       show_state: true
+      # - type: "custom:battery-state-card"
+      #   title: Batteries < 60%
+      #   sort_by_level: "asc"
+      #   tap_action: more-info
+      #   secondary_info: last_updated
+      #   filter:
+      #     include:
+      #       - name: entity_id
+      #         value: "*battery*"
+      #       - name: attributes.device_class
+      #         value: battery
+      #     exclude:
+      #       - name: state
+      #         value: 40
+      #         operator: ">"
+      #       - name: entity_id
+      #         value: "automation.*"
+      #       - name: state
+      #         value: "/Off|Good|Not Charging|Discharging/"
+      #       - name: entity_id
+      #         value: "*temp*"
+      - type: custom:vertical-layout
+        layout:
+          max_cols: 4
+        cards:
+          - type: custom:stack-in-card
+            cards:
+              - type: entities
+                title: Severe Weather Alerts
+                show_header_toggle: false
+                entities: sensor.nws_alerts_hennepin_county
+              - type: conditional
+                conditions:
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "0"
+                card:
+                  type: markdown
+                  content: >
+                    ---
+
+                    # NWS First Active Alert
+                      {% if state_attr('sensor.nws_alerts_hennepin_county', 'title') != None and state_attr('sensor.nws_alerts_hennepin_county', 'title').split(' - ')[0] is defined  %}
+                        
+                    ## {{ states.sensor.nws_alerts_hennepin_county.attributes.title.split(' - ')[0] }}
+
+                      {{ state_attr('sensor.nws_alerts_hennepin_county', 'display_desc').split('\n\n-\n\n')[0] }}
+
+                      {% else %}
+                        none
+                      {% endif %}
+              - type: conditional
+                conditions:
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "0"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "1"
+                card:
+                  type: markdown
+                  content: >
+                    ---
+
+                    # NWS Second Active Alert
+                    {% if state_attr('sensor.nws_alerts_hennepin_county', 'title').split(' - ')[1] is defined %}
+
+                    ## {{ states.sensor.nws_alerts_hennepin_county.attributes.title.split(' - ')[1] }}
+
+                      {{ state_attr('sensor.nws_alerts_hennepin_county', 'display_desc').split('\n\n-\n\n')[1] }}
+
+                    {% else %}
+                      none
+                    {% endif %}
+              - type: conditional
+                conditions:
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "0"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "1"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "2"
+                card:
+                  type: markdown
+                  content: >
+                    ---
+
+                    # NWS Third Active Alert
+                    {% if state_attr('sensor.nws_alerts_hennepin_county', 'title').split(' - ')[2] is defined %}
+
+                    ## {{ states.sensor.nws_alerts_hennepin_county.attributes.title.split(' - ')[2] }}
+
+                      {{ state_attr('sensor.nws_alerts_hennepin_county', 'display_desc').split('\n\n-\n\n')[2] }}
+
+                    {% else %}
+                      none
+                    {% endif %}
+              - type: conditional
+                conditions:
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "0"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "1"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "2"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "3"
+                card:
+                  type: markdown
+                  content: >
+                    ---
+
+                    # NWS Fourth Active Alert
+                    {% if state_attr('sensor.nws_alerts_hennepin_county', 'title').split(' - ')[3] is defined %}
+
+                    ## {{ states.sensor.nws_alerts_hennepin_county.attributes.title.split(' - ')[3] }}
+
+                      {{ state_attr('sensor.nws_alerts_hennepin_county', 'display_desc').split('\n\n-\n\n')[3] }}
+
+                    {% else %}
+                      none
+                    {% endif %}
+              - type: conditional
+                conditions:
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "0"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "1"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "2"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "3"
+                  - entity: sensor.nws_alerts_hennepin_county
+                    state_not: "4"
+                card:
+                  type: markdown
+                  content: >
+                    ---
+
+                    # NWS Fifth Active Alert
+                    {% if state_attr('sensor.nws_alerts_hennepin_county', 'title').split(' - ')[4] is defined %}
+
+                    ## {{ states.sensor.nws_alerts_hennepin_county.attributes.title.split(' - ')[4] }}
+
+                      {{ state_attr('sensor.nws_alerts_hennepin_county', 'display_desc').split('\n\n-\n\n')[4] }}
+
+                    {% else %}
+                      none
+                    {% endif %}
+
+              - type: entities
+                title: NWS Alerts History
+                show_header_toggle: false
+                state_color: true
+                entities:
+                  - variable.nws_alerts_event_ids
+                  - type: custom:entity-attributes-card
+                    heading_name: Name
+                    heading_state: State
+                    entity: variable.nws_alerts_event_ids
+                    filter:
+                      include:
+                        - variable.nws_alerts_event_ids.history_1
+                        - variable.nws_alerts_event_ids.history_2
+                        - variable.nws_alerts_event_ids.history_3
+                        - variable.nws_alerts_event_ids.history_4
+                        - variable.nws_alerts_event_ids.history_5
+                        - variable.nws_alerts_event_ids.history_6
+                        - variable.nws_alerts_event_ids.history_7
+                        - variable.nws_alerts_event_ids.history_8
+                        - variable.nws_alerts_event_ids.history_9
+                        - variable.nws_alerts_event_ids.history_10
   ##########################################
   # MOBILE TAB
   ##########################################

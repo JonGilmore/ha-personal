@@ -7,8 +7,8 @@ homeassistant:
   unit_system: imperial
   currency: USD
   time_zone: !secret ha_tz
-  # external_url: !secret ext_hass_url
-  # internal_url: !secret int_hass_url
+  external_url: !secret ext_hass_url
+  internal_url: !secret int_hass_url
   customize: !include customize.yaml
   packages: !include_dir_named packages
   allowlist_external_dirs:
@@ -17,6 +17,7 @@ homeassistant:
     - "/share"
   media_dirs:
     local: /media
+cloud:
 energy:
 http:
   use_x_forwarded_for: true
@@ -32,7 +33,7 @@ recorder:
   purge_keep_days: 21
   exclude:
     entity_globs:
-      - sensor.dark_sky*
+      - sensor.sensor.tomorrow_io*
       - sensor.pixel*
 frontend:
   themes: !include_dir_merge_named themes/
