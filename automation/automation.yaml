@@ -123,7 +123,7 @@
                 - conditions:
                     - condition: time
                       after: "23:00:00"
-                      before: "07:00:00"
+                      before: "10:00:00"
                   sequence:
                     - service: scene.turn_on
                       entity_id: scene.exterior_lights_off
@@ -356,12 +356,24 @@
   id: "Utility: generic time based triggers"
   trigger:
     - platform: time
-      at: "12:00:00"
-    - platform: time
-      at: "8:00:01"
-    - platform: time
       at: "5:00:00"
       id: 5am
+    - platform: time
+      at: "7:00:00"
+      id: 7am
+    - platform: time
+      at: "8:00:00"
+    - platform: time
+      at: "09:00:00"
+      id: 9am
+    - platform: time
+      at: "10:00:00"
+      id: 10am
+    - platform: time
+      at: "12:00:00"
+    - platform: time
+      at: "16:30:00"
+      id: 430pm
     - platform: time
       at: "22:00:00"
       id: 10pm
@@ -369,20 +381,60 @@
       at: "23:00:00"
       id: 11pm
   action:
-    - choose: # only at 5am
+    - choose:
         - conditions:
             - condition: trigger
               id: 5am
           sequence:
             - service: cover.open_cover
               entity_id: cover.library_shade
-        - conditions: # only at 10pm
+        - conditions:
+            - condition: trigger
+              id: 7am
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                title: "Important date closing in!"
+                message: >
+                  {% for state in states if (('birthday' in state.entity_id or 'anniversary' in state.entity_id) and state.state | int == 14) %}
+                  {{state.name}}
+                  {% endfor %}
+        - conditions:
+            - condition: trigger
+              id: 9am
+            - condition: state
+              entity_id: binary_sensor.workday_sensor
+              state: "on"
+          sequence:
+            - service: homeassistant.turn_off
+              entity_id: switch.equipment_room_recirculation_pump
+        - conditions:
+            - condition: trigger
+              id: 10am
+            - or:
+                - "{{ ( states.sensor.house_humidity.state  ) > ( states.sensor.target_humidity_max_winter.state ) }}"
+                - "{{ ( states.sensor.house_humidity.state  ) < ( states.sensor.target_humidity_min_winter.state ) }}"
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                title: "Humidity Warning!"
+                message: "Humidity in the house is: {{ states.sensor.house_humidity.state }}"
+        - conditions:
+            - condition: trigger
+              id: 430pm
+            - condition: state
+              entity_id: binary_sensor.anybody_home
+              state: "on"
+          sequence:
+            - service: homeassistant.turn_on
+              entity_id: switch.equipment_room_recirculation_pump
+        - conditions:
             - condition: trigger
               id: 10pm
           sequence:
             - service: homeassistant.turn_off
               entity_id: input_boolean.exterior_cans_auto_blocker
-        - conditions: # only at 11pm
+        - conditions:
             - condition: trigger
               id: 11pm
           sequence:
@@ -594,34 +646,6 @@
 #     - service: lock.lock
 #       entity_id: lock.front_door_lock
 #########################################
-- alias: "HVAC: winter indoor humidity check & see if its below the high threshold"
-  id: "HVAC: winter indoor humidity check & see if its below the high threshold"
-  trigger:
-    - platform: time
-      at: "10:00:00"
-  condition:
-    - condition: template
-      value_template: "{{ ( states.sensor.house_humidity.state  ) > ( states.sensor.target_humidity_max_winter.state ) }}"
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "Humidity Warning!"
-        message: "Humidity in the house is too high: {{ states.sensor.house_humidity.state }}"
-#########################################
-- alias: "HVAC: winter indoor humidity check & see if its above the low threshold"
-  id: "HVAC: winter indoor humidity check & see if its above the low threshold"
-  trigger:
-    - platform: time
-      at: "10:01:00"
-  condition:
-    - condition: template
-      value_template: "{{ ( states.sensor.house_humidity.state  ) < ( states.sensor.target_humidity_min_winter.state ) }}"
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "Humidity Warning!"
-        message: "Humidity in the house is too low: {{ states.sensor.house_humidity.state }}"
-#########################################
 - alias: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
   id: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
   trigger:
@@ -725,7 +749,7 @@
     - platform: state
       entity_id:
         - sensor.public_ip
-        - binary_sensor.rain_sensor
+        # - binary_sensor.rain_sensor
         - input_boolean.frigate_driveway_notifier
         - input_boolean.frigate_kitchen_notifier
         - input_boolean.frigate_deckstairs_notifier
@@ -808,20 +832,6 @@
 #     - service: notify.telegram_jon
 #       data_template:
 #         message: "{{ trigger.event.data.notify_msg }}"
-#########################################
-- alias: "Notification: important date (birthday & anniversary)"
-  id: "Notification: important date (birthday & anniversary)"
-  trigger:
-    - platform: time
-      at: "07:00:00"
-  action:
-    - service: notify.telegram_jon
-      data_template:
-        title: "Important date closing in!"
-        message: >
-          {% for state in states if (('birthday' in state.entity_id or 'anniversary' in state.entity_id) and state.state | int == 14) %}
-          {{state.name}}
-          {% endfor %}
 # #########################################
 # - alias: "Utility: create all groups"
 #   id: "Utility: create all groups"
@@ -852,32 +862,6 @@
 #         {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
 #         {% else %}homeassistant.turn_off{% endif %}
 #       entity_id: switch.office_speakers
-#########################################
-- alias: "Work: wfh turn off recirculation pump"
-  id: "Work: wfh turn off recirculation pump"
-  trigger:
-    - platform: time
-      at: "09:00:00"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.workday_sensor
-      state: "on"
-  action:
-    - service: homeassistant.turn_off
-      entity_id: switch.equipment_room_recirculation_pump
-#########################################
-- alias: "Work: wfh turn on recirculation pump (only when somebody is home)"
-  id: "Work: wfh turn on recirculation pump (only when somebody is home)"
-  trigger:
-    - platform: time
-      at: "16:30:00"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.anybody_home
-      state: "on"
-  action:
-    - service: homeassistant.turn_on
-      entity_id: switch.equipment_room_recirculation_pump
 #########################################
 - alias: "Notification: acknowledge garage open"
   id: "Notification: acknowledge garage open"
