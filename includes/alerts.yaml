@@ -1,7 +1,7 @@
 # ---
 # garage_door_single:
 #   name: single garage is open
-#   entity_id: cover.garage_momentary_single
+#   entity_id: cover.single_garage_door
 #   state: "open"
 #   repeat:
 #     - 20
@@ -18,7 +18,7 @@
 #     - telegram_jon
 # garage_door_double:
 #   name: double garage is open
-#   entity_id: cover.garage_momentary_double
+#   entity_id: cover.double_garage_door
 #   state: "open"
 #   repeat:
 #     - 20

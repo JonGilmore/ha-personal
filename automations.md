@@ -317,7 +317,7 @@
 
 ### [Toggle garage - single](https://github.com/jongilmore/ha-personal/blob/9175fbeb7293328fffd6b4dd00a8e726802c42de/automation/automation.yaml#L1116)
 *which uses:*
--   [cover.garage_momentary_single](https://github.com/jongilmore/ha-personal/blob/9175fbeb7293328fffd6b4dd00a8e726802c42de/includes/covers.yaml#L4)
+-   [cover.single_garage_door](https://github.com/jongilmore/ha-personal/blob/9175fbeb7293328fffd6b4dd00a8e726802c42de/includes/covers.yaml#L4)
 
 ### [Unlock front door](https://github.com/jongilmore/ha-personal/blob/9175fbeb7293328fffd6b4dd00a8e726802c42de/automation/automation.yaml#L1132)
 *which uses:*
@@ -421,7 +421,7 @@
   Leave `home` zone with the single garage open, send a photo notification & prompt to close
 
 *which uses:*
--   [cover.garage_momentary_single](https://github.com/jongilmore/ha-personal/blob/9175fbeb7293328fffd6b4dd00a8e726802c42de/includes/covers.yaml#L4)
+-   [cover.single_garage_door](https://github.com/jongilmore/ha-personal/blob/9175fbeb7293328fffd6b4dd00a8e726802c42de/includes/covers.yaml#L4)
 
 ### [House unoccupied](https://github.com/jongilmore/ha-personal/blob/9175fbeb7293328fffd6b4dd00a8e726802c42de/automation/location.yaml#L50)
   if we leave - turn on detection and snapshots

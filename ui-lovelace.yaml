@@ -76,24 +76,24 @@ views:
         entity: weather.tomorrow_io_home_daily
       - type: vertical-stack
         cards:
-          # - type: entities
-          #   show_name: false
-          #   show_header_toggle: false
-          #   entities:
-          #     - entity: binary_sensor.garage_doors
-          #       type: custom:multiple-entity-row
-          #       name: Garage
-          #       show_state: false
-          #       secondary_info: last-changed
-          #       entities:
-          #         - entity: cover.garage_momentary_single
-          #           name: single
-          #           tap_action:
-          #             action: toggle
-          #         - entity: cover.garage_momentary_double
-          #           name: double
-          #           tap_action:
-          #             action: toggle
+          - type: entities
+            show_name: false
+            show_header_toggle: false
+            entities:
+              - entity: binary_sensor.garage_doors
+                type: custom:multiple-entity-row
+                name: Garage
+                show_state: false
+                secondary_info: last-changed
+                entities:
+                  - entity: cover.single_garage_door
+                    name: single
+                    tap_action:
+                      action: toggle
+                  - entity: cover.double_garage_door
+                    name: double
+                    tap_action:
+                      action: toggle
           - type: horizontal-stack
             cards:
               - entity: lock.garage_lock

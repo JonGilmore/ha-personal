@@ -1,54 +1,34 @@
-# ---
-# #########################################
-# - alias: "Location Awareness: leave home & single garage open"
-#   id: "Location Awareness: leave home & single garage open"
-#   description: "Leave `home` zone with the single garage open, send a photo notification & prompt to close"
-#   trigger:
-#     - platform: state
-#       entity_id: cover.garage_momentary_single
-#       to: "open"
-#   action:
-#     - wait_for_trigger:
-#         - platform: state
-#           entity_id: person.jon
-#           from: "home"
-#       timeout: 1800
-#       continue_on_timeout: false
-#     - service: notify.telegram_jon
-#       data_template:
-#         message: "placeholder"
-#         data:
-#           inline_keyboard:
-#             - "Yes:/closegarage_single, No:/do_nothing"
-#           photo:
-#             - url: !secret camera_garage_pic
-#               caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
-# #########################################
-# # - alias: "Location Awareness: leave home & double garage open"
-# #   description: "Leave `home` zone with the double garage open, send a photo notification & prompt to close"
-# #   trigger:
-# #     - platform: state
-# #       entity_id: cover.garage_momentary_double
-# #       to: "open"
-# #   action:
-# #     - wait_for_trigger:
-# #         - platform: state
-# #           entity_id: person.jon
-# #           from: "home"
-# #       timeout: 1800
-# #       continue_on_timeout: false
-# #     - service: notify.telegram_jon
-# #       data_template:
-# #         message: "placeholder"
-# #         data:
-# #           inline_keyboard:
-# #             - "Yes:/closegarage_double, No:/do_nothing"
-# #           photo:
-# #             - url: !secret camera_garage_pic
-# #               caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
+---
+#########################################
+- alias: "Location: leave home & either garage open"
+  id: "Location: leave home & either garage open"
+  description: "Leave `home` zone with either garage open, send a photo notification & prompt to close"
+  trigger:
+    - platform: state
+      entity_id:
+        - cover.single_garage_door
+        - cover.double_garage_door
+      to: "open"
+  action:
+    - wait_for_trigger:
+        - platform: state
+          entity_id: person.jon
+          from: "home"
+      timeout: 1800
+      continue_on_timeout: false
+    - service: telegram_bot.send_photo
+      data_template:
+        file: "/config/www/garage-snapshot.jpg"
+        inline_keyboard: >
+          {% if trigger.entity_id == 'cover.single_garage_door' %}
+            Yes:/closegarage_single, No:/do_nothing
+          {% elif trigger.entity_id == 'cover.double_garage_door' %}
+            Yes:/closegarage_double, No:/do_nothing
+          {% endif %}
+        caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
 # #########################################
 # # alarm_occupancy_status switches to off (were away), then turn ON detection and snapshots
-# - alias: "Location Awareness: house unoccupied"
+# - alias: "Location: house unoccupied"
 #   description: "if we leave - turn on detection and snapshots"
 #   trigger:
 #     - platform: state
