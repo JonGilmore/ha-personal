@@ -12,8 +12,6 @@
   action:
     - service: homeassistant.turn_off
       entity_id: group.all_lights
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.exterior_cans_auto_blocker
 # #########################################
 # - alias: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
 #   id: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"

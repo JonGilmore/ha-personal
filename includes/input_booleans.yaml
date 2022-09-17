@@ -45,7 +45,5 @@ main_bed_override:
   name: Master Lights Override
 driveway_sentry:
   name: Driveway Sentry Mode
-exterior_cans_auto_blocker:
-  name: Exterior Cans Auto Blocker
 exterior_lights_block:
   name: Exterior Lights Block

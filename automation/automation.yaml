@@ -375,9 +375,6 @@
       at: "16:30:00"
       id: 430pm
     - platform: time
-      at: "22:00:00"
-      id: 10pm
-    - platform: time
       at: "23:00:00"
       id: 11pm
   action:
@@ -430,12 +427,6 @@
               entity_id: switch.equipment_room_recirculation_pump
         - conditions:
             - condition: trigger
-              id: 10pm
-          sequence:
-            - service: homeassistant.turn_off
-              entity_id: input_boolean.exterior_cans_auto_blocker
-        - conditions:
-            - condition: trigger
               id: 11pm
           sequence:
             - service: scene.turn_on
@@ -456,8 +447,6 @@
   action:
     - service: homeassistant.turn_off
       entity_id: group.all_lights
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.exterior_cans_auto_blocker
     # - service: scene.turn_on
     #   data_template:
     #     entity_id: >
@@ -584,7 +573,6 @@
     - service: homeassistant.turn_on
       entity_id:
         - input_boolean.sunset_run_once
-        - input_boolean.exterior_cans_auto_blocker
     - service: cover.close_cover
       entity_id: cover.library_shade
 # ########################################
