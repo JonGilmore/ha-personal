@@ -883,35 +883,59 @@
       default:
         - service: homeassistant.turn_off
           entity_id: alert.garage_door_double
-# #########################################
-# - alias: "iOS Actions: toggle garage - single"
-#   id: "iOS Actions: toggle garage - single"
-#   trigger:
-#     - platform: event
-#       event_type: ios.action_fired
-#       event_data:
-#         actionID: 532EF4B0-E0F8-490D-B4C4-C4006A3469E0
-#         actionName: Single Garage
-#         sourceDeviceID: lauras_iphone
-#         sourceDeviceName: Lauras iPhone
-#         sourceDevicePermanentID: !secret ios_id
-#         triggerSource: widget
-#   action:
-#     - service: homeassistant.toggle
-#       entity_id: cover.garage_momentary_single
-# #########################################
-# - alias: "iOS Actions: unlock front door"
-#   id: "iOS Actions: unlock front door"
-#   trigger:
-#     - platform: event
-#       event_type: ios.action_fired
-#       event_data:
-#         actionID: 07C1C12C-F623-49CA-942A-2299B7B2EA0F
-#         actionName: Unlock Front
-#         sourceDeviceID: lauras_iphone
-#         sourceDeviceName: Lauras iPhone
-#         sourceDevicePermanentID: !secret ios_id
-#         triggerSource: widget
-#   action:
-#     - service: lock.unlock
-#       entity_id: lock.front_door_lock
+#########################################
+- alias: "Garage: telegram door close"
+  id: "Garage: telegram door close"
+  trigger:
+    - platform: event
+      id: single
+      event_type: telegram_callback
+      event_data:
+        data: "/closegarage_single"
+    - platform: event
+      id: double
+      event_type: telegram_callback
+      event_data:
+        data: "/closegarage_double"
+  action:
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: "{{ trigger.event.data.id }}"
+        message: "Closing the {{ trigger.id }} garage!"
+        show_alert: true
+    - choose:
+        - conditions: "{{ trigger.id == 'single' }}"
+          sequence:
+            - service: cover.close_cover
+              entity_id: cover.single_garage_door
+        - conditions: "{{ trigger.id == 'double' }}"
+          sequence:
+            - service: cover.close_cover
+              entity_id: cover.double_garage_door
+#########################################
+- alias: "Garage: either door is open for 10min & notify"
+  id: "Garage: either door is open for 10min & notify"
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.elkm1_single_garage
+        - sensor.elkm1_double_garage
+      to: "Violated"
+      for:
+        minutes: 10
+  action:
+    - service: camera.snapshot
+      data:
+        filename: /config/www/garage-snapshot.jpg
+      target:
+        entity_id: camera.garage
+    - service: telegram_bot.send_photo
+      data_template:
+        file: "/config/www/garage-snapshot.jpg"
+        inline_keyboard: >
+          {% if trigger.entity_id == 'sensor.elkm1_single_garage' %}
+            Yes:/closegarage_single, No:/do_nothing
+          {% elif trigger.entity_id == 'sensor.elkm1_double_garage' %}
+            Yes:/closegarage_double, No:/do_nothing
+          {% endif %}
+        caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
