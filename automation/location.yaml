@@ -18,7 +18,7 @@
       continue_on_timeout: false
     - service: telegram_bot.send_photo
       data_template:
-        file: "/config/www/garage-snapshot.jpg"
+        url: "http://192.168.30.249:5005/api/garage/latest.jpg"
         inline_keyboard: >
           {% if trigger.entity_id == 'cover.single_garage_door' %}
             Yes:/closegarage_single, No:/do_nothing

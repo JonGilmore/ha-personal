@@ -97,7 +97,7 @@
             - service: telegram_bot.answer_callback_query
               data_template:
                 callback_query_id: "{{ trigger.event.data.id }}"
-                message: "Disabling notifications for {{ trigger }} for {{time}}"
+                message: "Disabling notifications for {{ trigger.id }} for {{ time }}"
                 show_alert: true
             - service: input_boolean.turn_off
               data_template:
@@ -132,10 +132,7 @@
 #       continue_on_timeout: false
 #     - service: telegram_bot.send_photo
 #       data:
-#         url: http://192.168.31.137/cgi-bin/snapshot.cgi?1
-#         authentication: digest
-#         username: admin
-#         password: !secret dahua-pwd
+#         url: "http://192.168.30.249:5005/api/driveway/latest.jpg"
 #########################################
 - alias: "Frigate: driveway video notification"
   id: "Frigate: driveway video notification"
