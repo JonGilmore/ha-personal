@@ -66,11 +66,6 @@ system_health:
 #       - switch.equipment_room_recirculation_pump
 #       - switch.water_main_shut_off
 
-weather:
-  - platform: darksky
-    api_key: !secret darksky_api
-    mode: daily
-
 elkm1:
   host: !secret url_elk
   area:
@@ -114,7 +109,7 @@ telegram_bot:
 #                     Includes                     #
 ####################################################
 adaptive_lighting: !include includes/adaptive_lighting.yaml
-# alert: !include includes/alerts.yaml
+alert: !include includes/alerts.yaml
 automation: !include automations.yaml
 automation yaml: !include_dir_merge_list automation
 binary_sensor: !include includes/binary_sensors.yaml
@@ -140,8 +135,8 @@ logger:
   default: error
   logs:
     custom_components.localtuya.common: fatal
-    homeassistant.components.lutron_caseta: debug
-    pylutron_caseta: debug
+    # homeassistant.components.lutron_caseta: debug
+    # pylutron_caseta: debug
 
 panel_custom:
   - name: panel_supervisor

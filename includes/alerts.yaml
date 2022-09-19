@@ -1,35 +1,32 @@
-# ---
-# garage_door_single:
-#   name: single garage is open
-#   entity_id: cover.single_garage_door
-#   state: "open"
-#   repeat:
-#     - 20
-#     - 60
-#   can_acknowledge: true
-#   skip_first: true
-#   data:
-#     inline_keyboard:
-#       - "Yes:/closegarage_single, Ignore:/ack_garagesingle"
-#     photo:
-#       - url: !secret camera_garage_pic
-#         caption: "Single garage open. Close?"
-#   notifiers:
-#     - telegram_jon
-# garage_door_double:
-#   name: double garage is open
-#   entity_id: cover.double_garage_door
-#   state: "open"
-#   repeat:
-#     - 20
-#     - 60
-#   can_acknowledge: true
-#   skip_first: true
-#   data:
-#     inline_keyboard:
-#       - "Yes:/closegarage_double, Ignore:/ack_garagedouble"
-#     photo:
-#       - url: !secret camera_garage_pic
-#         caption: "Double garage open. Close?"
-#   notifiers:
-#     - telegram_jon
+---
+garage_door_single:
+  name: "Single garage is open. Close it?"
+  entity_id: binary_sensor.elkm1_single_garage
+  state: "on"
+  repeat:
+    - 30
+    - 60
+  can_acknowledge: true
+  skip_first: true
+  data:
+    url: "http://192.168.30.249:5005/api/garage/latest.jpg" # TODO: this does not appear to work inside of an alert
+    inline_keyboard:
+      - "Yes:/closegarage_single, Ignore:/ignore_garagesingle"
+  notifiers:
+    - telegram_jon
+garage_door_double:
+  name: "Double garage is open. Close it?"
+  entity_id: binary_sensor.elkm1_double_garage
+  state: "on"
+  repeat:
+    - 30
+    - 60
+  can_acknowledge: true
+  skip_first: true
+  data:
+    url: "http://192.168.30.249:5005/api/garage/latest.jpg"
+    inline_keyboard:
+      - "Yes:/closegarage_double, Ignore:/ignore_garagedouble"
+  notifiers:
+    - telegram_jon
+  
