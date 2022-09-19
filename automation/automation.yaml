@@ -409,13 +409,13 @@
             - condition: trigger
               id: 10am
             - or:
-                - "{{ ( states.sensor.house_humidity.state  ) > ( states.sensor.target_humidity_max_winter.state ) }}"
-                - "{{ ( states.sensor.house_humidity.state  ) < ( states.sensor.target_humidity_min_winter.state ) }}"
+                - "{{ states('sensor.house_humidity') > states('sensor.target_humidity_max_winter') }}"
+                - "{{ states('sensor.house_humidity') < states('sensor.target_humidity_min_winter') }}"
           sequence:
             - service: notify.telegram_jon
               data_template:
                 title: "Humidity Warning!"
-                message: "Humidity in the house is: {{ states.sensor.house_humidity.state }}"
+                message: "Humidity in the house is: {{ states('sensor.house_humidity') }}"
         - conditions:
             - condition: trigger
               id: 430pm
