@@ -9,42 +9,28 @@
 - platform: template
   sensors:
     armed_status:
-      value_template: '{{ states.alarm_control_panel.elkm1_area_1.attributes["armed_status"] }}'
+      value_template: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') }}"
       friendly_name: "House Armed Status"
       unique_id: armed_status
     arm_up_state:
-      value_template: '{{ states.alarm_control_panel.elkm1_area_1.attributes["arm_up_state"] }}'
+      value_template: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'arm_up_state') }}"
       friendly_name: "House Arm Up State"
       unique_id: arm_up_state
     alarm_state:
-      value_template: '{{ states.alarm_control_panel.elkm1_area_1.attributes["alarm_state"] }}'
+      value_template: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'alarm_state') }}"
       friendly_name: "House Alarm State"
       unique_id: alarm_state
     alarm_trouble:
-      value_template: '{{ states.sensor.elkm1.attributes["system_trouble_status"] }}'
+      value_template: "{{ state_attr('sensor.elkm1_elkm1', 'system_trouble_status') }}"
       friendly_name: "Alarm Trouble"
       unique_id: alarm_trouble
-    garage_double_state:
-      value_template: >-
-        {% if states.sensor.elkm1_double_garage.state == 'Normal' %}closed
-        {% elif states.sensor.elkm1_double_garage.state == 'Violated' %}open
-        {% else %}unknown{% endif %}
-      friendly_name: "Garage Double State"
-      unique_id: garage_double_state
-    garage_single_state:
-      value_template: >-
-        {% if states.sensor.elkm1_single_garage.state == 'Normal' %}closed
-        {% elif states.sensor.elkm1_single_garage.state == 'Violated' %}open
-        {% else %}unknown{% endif %}
-      friendly_name: "Garage Single State"
-      unique_id: garage_single_state
     # garage_temperature:
     #   value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
     #   friendly_name: "Garage Temperature"
     #   device_class: temperature
     #   unique_id: garage_temperature
     sun_elevation:
-      value_template: '{{ states.sun.sun.attributes["elevation"] }}'
+      value_template: "{{ state_attr('sun.sun', 'elevation') }}"
       friendly_name: "sun elevation"
       unique_id: sun_elevation
     # garage_fridge_power:
@@ -138,21 +124,21 @@
   sensors:
     target_humidity_max_winter:
       value_template: >-
-        {% if   states.sensor.current_temperature.state | int < -20 %}25
-        {% elif states.sensor.current_temperature.state | int < -10 %}30
-        {% elif states.sensor.current_temperature.state | int <   0 %}35
-        {% elif states.sensor.current_temperature.state | int <  10 %}40
-        {% elif states.sensor.current_temperature.state | int <  20 %}45
+        {% if   state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -20 %}25
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -10 %}30
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <   0 %}35
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  10 %}40
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  20 %}45
         {% else %} 55 {% endif %}
       friendly_name: "Target Humidity - Max"
       device_class: humidity
     target_humidity_min_winter:
       value_template: >-
-        {% if   states.sensor.current_temperature.state | int < -20 %}15
-        {% elif states.sensor.current_temperature.state | int < -10 %}20
-        {% elif states.sensor.current_temperature.state | int <   0 %}25
-        {% elif states.sensor.current_temperature.state | int <  10 %}30
-        {% elif states.sensor.current_temperature.state | int <  20 %}35
+        {% if   state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -20 %}15
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -10 %}20
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <   0 %}25
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  10 %}30
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  20 %}35
         {% else %} 40 {% endif %}
       friendly_name: "Target Humidity - Min"
       device_class: humidity

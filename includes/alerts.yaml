@@ -29,4 +29,3 @@ garage_door_double:
       - "Yes:/closegarage_double, Ignore:/ignore_garagedouble"
   notifiers:
     - telegram_jon
-  

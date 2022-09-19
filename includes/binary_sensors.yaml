@@ -1,111 +1,105 @@
 ---
 - platform: template
   sensors:
-    main_ipad_motions:
-      friendly_name: "Main iPad Motions"
-      device_class: motion
-      value_template: >-
-        {{ states.sensor.elkm1_foyer_pir.state == "Violated"
-        or states.sensor.elkm1_kitchen_pir.state == "Violated" }}
     basement_motions:
       friendly_name: "Basement Motions"
       device_class: motion
       value_template: >-
-        {{ states.sensor.elkm1_basmnt_stair_pir.state == "Violated"
-        or states.sensor.elkm1_gym_pir.state == "Violated"
-        or states.sensor.elkm1_lounge_pir.state == "Violated"
-        or states.sensor.elkm1_office_pir.state == "Violated"
-        or states.sensor.elkm1_workshop_pir.state == "Violated" }}
+        {{ states('sensor.elkm1_basmnt_stair_pir') == "Violated"
+        or states('sensor.elkm1_gym_pir') == "Violated"
+        or states('sensor.elkm1_lounge_pir') == "Violated"
+        or states('sensor.elkm1_office_pir') == "Violated"
+        or states('sensor.elkm1_workshop_pir') == "Violated" }}
     main_motions:
       friendly_name: "Main Motions"
       device_class: motion
       value_template: >-
-        {{ states.sensor.elkm1_back_kitchen_pir.state == "Violated"
-        or states.sensor.elkm1_foyer_pir.state == "Violated"
-        or states.sensor.elkm1_great_room_pir.state == "Violated"
-        or states.sensor.elkm1_kitchen_pir.state == "Violated"
-        or states.sensor.elkm1_library_pir.state == "Violated"
-        or states.sensor.elkm1_mudroom_pir.state == "Violated"
-        or states.sensor.elkm1_sunroom_pir.state == "Violated" }}
+        {{ states('sensor.elkm1_back_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_foyer_pir') == "Violated"
+        or states('sensor.elkm1_great_room_pir') == "Violated"
+        or states('sensor.elkm1_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_library_pir') == "Violated"
+        or states('sensor.elkm1_mudroom_pir') == "Violated"
+        or states('sensor.elkm1_sunroom_pir') == "Violated" }}
     upstairs_motions:
       friendly_name: "Upstairs Motions"
       device_class: motion
       value_template: >-
-        {{ states.sensor.elkm1_bonus_hall_pir.state == "Violated"
-        or states.sensor.elkm1_laundry_pir.state == "Violated"
-        or states.sensor.elkm1_main_bath_pir.state == "Violated"
-        or states.sensor.elkm1_main_bed_pir.state == "Violated"
-        or states.sensor.elkm1_second_hall_pir.state == "Violated" }}
+        {{ states('sensor.elkm1_bonus_hall_pir') == "Violated"
+        or states('sensor.elkm1_laundry_pir') == "Violated"
+        or states('sensor.elkm1_main_bath_pir') == "Violated"
+        or states('sensor.elkm1_main_bed_pir') == "Violated"
+        or states('sensor.elkm1_second_hall_pir') == "Violated" }}
     exterior_motions:
       friendly_name: "Exterior Motions"
       device_class: motion
       value_template: >-
-        {{ states.sensor.elkm1_garage_pir.state == "Violated" }}
+        {{ states('sensor.elkm1_garage_pir') == "Violated" }}
     all_motions:
       friendly_name: "All Motions"
       device_class: motion
       value_template: >-
-        {{ states.sensor.elkm1_basmnt_stair_pir.state == "Violated"
-        or states.sensor.elkm1_gym_pir.state == "Violated"
-        or states.sensor.elkm1_lounge_pir.state == "Violated"
-        or states.sensor.elkm1_office_pir.state == "Violated"
-        or states.sensor.elkm1_workshop_pir.state == "Violated"
-        or states.sensor.elkm1_back_kitchen_pir.state == "Violated"
-        or states.sensor.elkm1_foyer_pir.state == "Violated"
-        or states.sensor.elkm1_great_room_pir.state == "Violated"
-        or states.sensor.elkm1_kitchen_pir.state == "Violated"
-        or states.sensor.elkm1_library_pir.state == "Violated"
-        or states.sensor.elkm1_mudroom_pir.state == "Violated"
-        or states.sensor.elkm1_sunroom_pir.state == "Violated"
-        or states.sensor.elkm1_bonus_hall_pir.state == "Violated"
-        or states.sensor.elkm1_laundry_pir.state == "Violated"
-        or states.sensor.elkm1_main_bath_pir.state == "Violated"
-        or states.sensor.elkm1_main_bed_pir.state == "Violated"
-        or states.sensor.elkm1_second_hall_pir.state == "Violated"
-        or states.sensor.elkm1_garage_pir.state == "Violated" }}
+        {{ states('sensor.elkm1_basmnt_stair_pir') == "Violated"
+        or states('sensor.elkm1_gym_pir') == "Violated"
+        or states('sensor.elkm1_lounge_pir') == "Violated"
+        or states('sensor.elkm1_office_pir') == "Violated"
+        or states('sensor.elkm1_workshop_pir') == "Violated"
+        or states('sensor.elkm1_back_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_foyer_pir') == "Violated"
+        or states('sensor.elkm1_great_room_pir') == "Violated"
+        or states('sensor.elkm1_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_library_pir') == "Violated"
+        or states('sensor.elkm1_mudroom_pir') == "Violated"
+        or states('sensor.elkm1_sunroom_pir') == "Violated"
+        or states('sensor.elkm1_bonus_hall_pir') == "Violated"
+        or states('sensor.elkm1_laundry_pir') == "Violated"
+        or states('sensor.elkm1_main_bath_pir') == "Violated"
+        or states('sensor.elkm1_main_bed_pir') == "Violated"
+        or states('sensor.elkm1_second_hall_pir') == "Violated"
+        or states('sensor.elkm1_garage_pir') == "Violated" }}
     garage_doors:
       friendly_name: "Garage Doors"
       device_class: garage_door
       value_template: >-
-        {{ states.sensor.elkm1_double_garage.state == "Violated"
-        or states.sensor.elkm1_single_garage.state == "Violated" }}
+        {{ states('sensor.elkm1_double_garage') == "Violated"
+        or states('sensor.elkm1_single_garage') == "Violated" }}
     house_doors:
       friendly_name: "House Doors"
       device_class: door
       value_template: >-
-        {{ states.sensor.elkm1_front_door.state == "Violated"
-        or states.sensor.elkm1_garage_door.state == "Violated"
-        or states.sensor.elkm1_patio_door.state == "Violated"
-        or states.sensor.elkm1_workshop_door.state == "Violated"
-        or states.sensor.elkm1_grilldeck_door.state == "Violated"
-        or states.sensor.elkm1_deck_door.state == "Violated" }}
+        {{ states('sensor.elkm1_front_door') == "Violated"
+        or states('sensor.elkm1_garage_door') == "Violated"
+        or states('sensor.elkm1_patio_door') == "Violated"
+        or states('sensor.elkm1_workshop_door') == "Violated"
+        or states('sensor.elkm1_grilldeck_door') == "Violated"
+        or states('sensor.elkm1_deck_door') == "Violated" }}
     moisture_sensors:
       friendly_name: "Moisture Sensors"
       device_class: moisture
       value_template: >-
-        {{ states.sensor.elkm1_basement_bath_wb.state == "Violated"
-        or states.sensor.elkm1_powder_wb.state == "Violated"
-        or states.sensor.elkm1_upstairs_west_wb.state == "Violated"
-        or states.sensor.elkm1_upstairs_west_wb_2.state == "Violated" }}
+        {{ states('sensor.elkm1_basement_bath_wb') == "Violated"
+        or states('sensor.elkm1_powder_wb') == "Violated"
+        or states('sensor.elkm1_upstairs_west_wb') == "Violated"
+        or states('sensor.elkm1_upstairs_west_wb_2') == "Violated" }}
     vacation_status:
       friendly_name: "Vacation?"
       device_class: occupancy
-      value_template: "{{ states.alarm_control_panel.elkm1_area_1.attributes['armed_status'] == 'armed_to_vacation' }}"
+      value_template: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_vacation' }}"
     alarm_occupancy_status:
       friendly_name: "Occupied-Alarm?"
       device_class: occupancy
       value_template: >-
-        {{ not (states.alarm_control_panel.elkm1_area_1.attributes["armed_status"] == "armed_to_vacation"
-        or states.alarm_control_panel.elkm1_area_1.attributes["armed_status"] == "armed_away") }}
+        {{ not (state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_vacation'
+        or state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_away') }}
     sleep_status:
       friendly_name: "Sleeping?"
       value_template: >-
-        {{ states.alarm_control_panel.elkm1_area_1.attributes["armed_status"] == "armed_to_night_instant"
-        or states.alarm_control_panel.elkm1_area_1.attributes["armed_status"] == "armed_to_night" }}
+        {{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_night_instant'
+        or state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_night' }}
     light_inside:
       friendly_name: "light inside?"
       device_class: light
-      value_template: "{{ states.sensor.main_tv_lux.state | int > 110 }}"
+      value_template: "{{ states('sensor.main_tv_lux') | int > 110 }}"
     #     light_inside_master:
     #       friendly_name: "light inside master?"
     #       device_class: light
@@ -114,13 +108,13 @@
       friendly_name: "Anybody Home"
       device_class: presence
       value_template: >-
-        {{ states.person.jon.state == "home"
-        and states.person.laura.state == "home" }}
+        {{ states('person.jon') == 'home'
+        and states('person.laura') == 'home' }}
     anybody_away:
       friendly_name: "Anybody Away"
       value_template: >-
-        {{ states.person.jon.state != "home"
-        or states.person.laura.state != "home" }}
+        {{ states('person.jon') != 'home'
+        or states('person.laura') != 'home' }}
     #     hvac:
     #       friendly_name: "hvac status"
     #       value_template: >-
@@ -178,8 +172,8 @@
       device_class: occupancy
       friendly_name: "Main Bedroom Occupied"
       value_template: >-
-        {{ states.sensor.elkm1_main_bath_pir.state == "Violated"
-        or states.sensor.elkm1_main_bed_pir.state == "Violated" }}
+        {{ states('sensor.elkm1_main_bath_pir') == "Violated"
+        or states('sensor.elkm1_main_bed_pir') == "Violated" }}
     christmas_season:
       value_template: >
         {% set today = states('sensor.date').split('-') %}
