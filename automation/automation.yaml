@@ -388,14 +388,28 @@
         - conditions:
             - condition: trigger
               id: 7am
+            - "{{ is_state('sensor.events_week', 'True') }}"
           sequence:
-            - service: notify.telegram_jon
+            - service: telegram_bot.send_message
               data_template:
-                title: "Important date closing in!"
-                message: >
-                  {% for state in states if (('birthday' in state.entity_id or 'anniversary' in state.entity_id) and state.state | int == 14) %}
-                  {{state.name}}
-                  {% endfor %}
+                title: "*Important date closing in!*"
+                message: >-
+                  {%- set ns = namespace(a=[]) -%}
+                  {%- for item in expand(integration_entities('anniversaries')) -%}
+                  {%- set days = [item.state | int] | min -%}
+                  {%- set next = item.attributes.get('years_at_next_anniversary') -%}
+                  {%- set date = item.attributes.get('date') -%}
+                  {%- if days == 7 %}
+                  {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
+                  {%- endif -%}
+                  {%- endfor -%}
+                  {%- for item in ns.a | sort(attribute='r') -%}
+                  {%- set name, next, date = item.n, item.x, item.d %}
+
+                  _{{name}}_ {%- if next %} ({{next}}) {%- endif %} - {{date}}
+
+                  {%- endfor -%}
+                parse_mode: markdown
         - conditions:
             - condition: trigger
               id: 9am

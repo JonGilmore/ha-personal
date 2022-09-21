@@ -100,10 +100,6 @@
       friendly_name: "light inside?"
       device_class: light
       value_template: "{{ states('sensor.main_tv_lux') | int > 110 }}"
-    #     light_inside_master:
-    #       friendly_name: "light inside master?"
-    #       device_class: light
-    #       value_template: "{{ states.sensor.sitting_room_lux.state | int > 30 }}"
     anybody_home:
       friendly_name: "Anybody Home"
       device_class: presence
