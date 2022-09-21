@@ -379,13 +379,13 @@
       id: 11pm
   action:
     - choose:
-        - conditions:
+        - conditions: # 5am, open the library shade
             - condition: trigger
               id: 5am
           sequence:
             - service: cover.open_cover
               entity_id: cover.library_shade
-        - conditions:
+        - conditions: # 7am and if there is an event 7 days out, send a message
             - condition: trigger
               id: 7am
             - "{{ is_state('sensor.events_week', 'True') }}"
@@ -410,7 +410,7 @@
 
                   {%- endfor -%}
                 parse_mode: markdown
-        - conditions:
+        - conditions: # 9am turn off the recirc pump (assuming its a workday)
             - condition: trigger
               id: 9am
             - condition: state
@@ -419,7 +419,7 @@
           sequence:
             - service: homeassistant.turn_off
               entity_id: switch.equipment_room_recirculation_pump
-        - conditions:
+        - conditions: # 10am check the house humidity level
             - condition: trigger
               id: 10am
             - or:
@@ -430,7 +430,7 @@
               data_template:
                 title: "Humidity Warning!"
                 message: "Humidity in the house is: {{ states('sensor.house_humidity') }}"
-        - conditions:
+        - conditions: # 4:30pm and if anybody is home, turn on the recirc pump
             - condition: trigger
               id: 430pm
             - condition: state
@@ -439,13 +439,13 @@
           sequence:
             - service: homeassistant.turn_on
               entity_id: switch.equipment_room_recirculation_pump
-        - conditions:
+        - conditions: # 11pm turn off the exterior lights
             - condition: trigger
               id: 11pm
           sequence:
             - service: scene.turn_on
               entity_id: scene.exterior_lights_off
-      default: # at noon and 8am
+      default: # at noon and 8am, turn off the sunset run once and driveway sentry
         - service: homeassistant.turn_off
           entity_id:
             - input_boolean.sunset_run_once
