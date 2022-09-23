@@ -6,143 +6,41 @@
   entity_ids:
     - sensor.aeotec_multipurpose_sensor_relative_humidity_measurement
 
-- platform: template
-  sensors:
-    armed_status:
-      value_template: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') }}"
-      friendly_name: "House Armed Status"
-      unique_id: armed_status
-    arm_up_state:
-      value_template: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'arm_up_state') }}"
-      friendly_name: "House Arm Up State"
-      unique_id: arm_up_state
-    alarm_state:
-      value_template: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'alarm_state') }}"
-      friendly_name: "House Alarm State"
-      unique_id: alarm_state
-    alarm_trouble:
-      value_template: "{{ state_attr('sensor.elkm1_elkm1', 'system_trouble_status') }}"
-      friendly_name: "Alarm Trouble"
-      unique_id: alarm_trouble
-    # garage_temperature:
-    #   value_template: '{{ states.climate.garage_thermostat.attributes["current_temperature"] }}'
-    #   friendly_name: "Garage Temperature"
-    #   device_class: temperature
-    #   unique_id: garage_temperature
-    sun_elevation:
-      value_template: "{{ state_attr('sun.sun', 'elevation') }}"
-      friendly_name: "sun elevation"
-      unique_id: sun_elevation
-    # garage_fridge_power:
-    #   value_template: '{{ states.switch.garage_fridge.attributes["current_power_w"] }}'
-    #   friendly_name: "Garage Fridge Power"
-    #   device_class: power
-    #   unique_id: garage_fridge_power
-    # garage_fridge_energy:
-    #   value_template: '{{ states.switch.garage_fridge.attributes["today_energy_kwh"] }}'
-    #   friendly_name: "Garage Fridge Energy"
-    #   device_class: power
-    #   unique_id: garage_fridge_energy
-    sensor_count:
-      friendly_name: "Number of Sensors"
-      value_template: >
-        {%- set domains = ['sensor'] -%}
-        {%- for domain in domains -%}
-          {%- for item in states[domain] -%}
-            {% if loop.first %}
-              {{loop.length}}
-            {% endif %}
-          {%- endfor -%}
-        {%- endfor -%}
-      unique_id: sensor_count
-    lights_on_number:
-      friendly_name: Lights On
-      unit_of_measurement: "On"
-      value_template: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
-      unique_id: lights_on_number
-    doors_locked:
-      friendly_name: Doors Locked
-      value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='name')| list|join(', ') }}"
-      unique_id: doors_locked
-    doors_locked_entities:
-      friendly_name: Doors Locked Entities
-      value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='entity_id')| list|join(', ') }}"
-      unique_id: doors_locked_entities
-    doors_locked_number:
-      friendly_name: Number of Doors Locked
-      value_template: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|length }}"
-      unique_id: doors_locked_number
-    doors_unlocked:
-      friendly_name: Doors Unlocked
-      value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
-      unique_id: doors_unlocked
-    doors_unlocked_entities:
-      friendly_name: Doors Unlocked Entities
-      value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='entity_id')| list|join(', ') }}"
-      unique_id: doors_unlocked_entities
-    doors_unlocked_number:
-      friendly_name: Number of Doors Unlocked
-      value_template: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|length }}"
-      unique_id: doors_unlocked_number
-    people_home:
-      friendly_name: People Home
-      value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|map(attribute='name')| list|join(', ') }}"
-      unique_id: people_home
-    people_home_number:
-      friendly_name: Number of People Home
-      value_template: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
-      unique_id: people_home_number
+- platform: websocket_api
+- platform: season
+- platform: uptime
 
-# # # DARKNESS SENSORS
-- platform: template
-  sensors:
-    period_of_day:
-      friendly_name: "period of the day"
-      value_template: >-
-        {% set elevation = state_attr('sun.sun', 'elevation') %}
-        {% set rising = state_attr('sun.sun', 'rising') %}
-        {%- if elevation <= -12 -%}
-          night
-        {%- elif -12 < elevation <= -6 -%}
-          {{ 'dawn' if rising else 'dusk' }}
-        {%- else -%}
-          day
-        {%- endif -%}
-      icon_template: >-
-        {% set elevation = state_attr('sun.sun', 'elevation') %}
-        {% set rising = state_attr('sun.sun', 'rising') %}
-        {%- if elevation <= -12 -%}
-          mdi:weather-night
-        {%- elif -12 < elevation <= -6 -%}
-          mdi:weather-sunset-{{ 'up' if rising else 'down' }}
-        {% else %}
-          mdi:weather-sunny
-        {% endif %}
+- platform: command_line
+  name: Public IP
+  command: "dig +short myip.opendns.com @resolver1.opendns.com"
+  scan_interval: 1800
 
-# Target Humidity States
-- platform: template
-  sensors:
-    target_humidity_max_winter:
-      value_template: >-
-        {% if   state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -20 %}25
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -10 %}30
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <   0 %}35
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  10 %}40
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  20 %}45
-        {% else %} 55 {% endif %}
-      friendly_name: "Target Humidity - Max"
-      device_class: humidity
-    target_humidity_min_winter:
-      value_template: >-
-        {% if   state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -20 %}15
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -10 %}20
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <   0 %}25
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  10 %}30
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  20 %}35
-        {% else %} 40 {% endif %}
-      friendly_name: "Target Humidity - Min"
-      device_class: humidity
+- platform: command_line
+  name: CPU Temperature
+  command: "cat /sys/class/thermal/thermal_zone2/temp"
+  value_template: "{{ value | multiply(0.001) | round(2) }}"
+  unit_of_measurement: "°C"
+  scan_interval: 600
 
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /
+    - type: memory_use_percent
+    - type: load_1m
+    - type: load_5m
+    - type: load_15m
+    - type: last_boot
+
+- platform: time_date
+  display_options:
+    - "time"
+    - "date"
+    - "date_time"
+    - "date_time_iso"
+    - "time_date"
+    - "time_utc"
+    - "beat"
 # HVAC tracking
 # - platform: history_stats
 #   name: daily hvac heat on time
@@ -202,49 +100,6 @@
 #   end: "{{ now() }}"
 #   duration:
 #     hours: 24
-
-# LOAD SENSORS
-# - platform: template
-#   sensors:
-#     master_bed_occupied:
-#       value_template: >-
-#         {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
-#         or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}occupied
-#         {% else %} unoccupied {% endif %}
-#       friendly_name: "Master Bed Occupied"
-#     master_bed_people:
-#       value_template: >-
-#         {% if (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
-#         and (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}both
-#         {% elif (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed.state == "on")
-#         or (states.binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed.state == "on") %}one
-#         {% else %} nobody {% endif %}
-#       friendly_name: "Master Bed People"
-
-- platform: websocket_api
-
-- platform: command_line
-  name: Public IP
-  command: "dig +short myip.opendns.com @resolver1.opendns.com"
-  scan_interval: 1800
-
-- platform: command_line
-  name: CPU Temperature
-  command: "cat /sys/class/thermal/thermal_zone2/temp"
-  value_template: "{{ value | multiply(0.001) | round(2) }}"
-  unit_of_measurement: "°C"
-  scan_interval: 600
-
-- platform: systemmonitor
-  resources:
-    - type: disk_use_percent
-      arg: /
-    - type: memory_use_percent
-    - type: load_1m
-    - type: load_5m
-    - type: load_15m
-    - type: last_boot
-- platform: uptime
 
 # - platform: nut
 #   name: "TrippLite"
@@ -311,73 +166,20 @@
 #   unit_of_measurement: "M3"
 #   value_template: "{{ value_json.consumption_data }}"
 
-- platform: time_date
-  display_options:
-    - "time"
-    - "date"
-    - "date_time"
-    - "date_time_iso"
-    - "time_date"
-    - "time_utc"
-    - "beat"
-- platform: season
-
-- platform: template
-  sensors:
-    # WEATHER TEMPLATES
-    current_temperature:
-      friendly_name: Current Temperature
-      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'temperature') }}°"
-    current_feels:
-      friendly_name: Current Feels Like
-      value_template: "feels like {{ states('sensor.tomorrow_io_home_feels_like') }}°"
-    cloud_cover:
-      friendly_name: Cloud Cover
-      value_template: "{{ states('sensor.tomorrow_io_home_cloud_cover') | round | int }}"
-    current_humidity:
-      friendly_name: Current Humidity
-      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}%"
-    daily_high:
-      friendly_name: Today's High
-      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].temperature }}°"
-    daily_low:
-      friendly_name: Today's Low
-      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].templow }}°"
-    precipitation_amount:
-      friendly_name: Precipitation Amount
-      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation }}"
-    precipitation_prob:
-      friendly_name: Precipitation Probability
-      value_template: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int  }}%"
-
-    # TIME AND DATE TEMPLATES
-    today_text:
-      entity_id: sensor.date
-      friendly_name: "Today is"
-      value_template: "{{ now().strftime('%A / %B %d') }}"
-    today_clock:
-      entity_id: sensor.time
-      friendly_name: "Today is"
-      value_template: "{{ now().strftime('%A / %B %d / %I:%M %p') }}"
-    clock:
-      entity_id: sensor.time
-      friendly_name: "Time is"
-      value_template: "{{ now().strftime('%I:%M %p') }}"
-
-    #THERMOSTAT TEMPLATES
-    # main_status:
-    #   friendly_name: Main Floor Status
-    #   value_template: >-
-    #     {{ state_attr('climate.main_floor', 'current_temperature') | round | int }}° / {{ state_attr('climate.main_floor', 'current_humidity') | round | int }}% humidity
-    # upstairs_status:
-    #   friendly_name: Upstairs Status
-    #   value_template: >-
-    #     {{ state_attr('climate.upstairs', 'current_temperature') | round | int }}° / {{ state_attr('climate.upstairs', 'current_humidity') | round | int }}% humidity
-    # familyroom_temperature:
-    #   friendly_name: Family Room Temperature
-    #   value_template: >-
-    #     {{ states('sensor.family_room_temperature') | round | int }}°
-    # diningroom_temperature:
-    #   friendly_name: Dining Room Temperature
-    #   value_template: >-
-    #     {{ states('sensor.dining_room_temperature') | round | int }}°
+#THERMOSTAT TEMPLATES
+# main_status:
+#   friendly_name: Main Floor Status
+#   value_template: >-
+#     {{ state_attr('climate.main_floor', 'current_temperature') | round | int }}° / {{ state_attr('climate.main_floor', 'current_humidity') | round | int }}% humidity
+# upstairs_status:
+#   friendly_name: Upstairs Status
+#   value_template: >-
+#     {{ state_attr('climate.upstairs', 'current_temperature') | round | int }}° / {{ state_attr('climate.upstairs', 'current_humidity') | round | int }}% humidity
+# familyroom_temperature:
+#   friendly_name: Family Room Temperature
+#   value_template: >-
+#     {{ states('sensor.family_room_temperature') | round | int }}°
+# diningroom_temperature:
+#   friendly_name: Dining Room Temperature
+#   value_template: >-
+#     {{ states('sensor.dining_room_temperature') | round | int }}°

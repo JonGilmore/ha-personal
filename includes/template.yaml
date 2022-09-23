@@ -1,11 +1,10 @@
 - binary_sensor:
     - name: "Has Unavailable States"
+      unique_id: has_unavailable_state
       state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
-
-- sensor:
     - name: Events Today
       unique_id: events_today
-      state: >- # state is `on` when there is an event in the next 0 days
+      state: >- # state is `on` when there is an event today
         {{ expand(integration_entities('anniversaries')) | selectattr('state') | map(attribute='state') | list | sort | map('int') | sort | min == 0 }}
       attributes:
         events: >-
@@ -18,13 +17,15 @@
           {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
           {%- endif -%}
           {%- endfor -%}
+          [
           {%- for item in ns.a | sort(attribute='r') -%}
-          {%- set name, next, date = item.n, item.x, item.d %}
-          {{name}} {%- if next %} ({{next}}) {%- endif %} - {{date}}
+          {%- set name, next, date, days = item.n, item.x, item.d, item.r %}
+          {"name": "{{name}}","date": "{{date}}",{%- if next %}"years": {{next}},{%- endif %}"days": {{days}}},
           {%- endfor -%}
+          ]
     - name: Events Tomorrow
       unique_id: events_tomorrow
-      state: >- # state is `on` when there is an event in the next 1 days
+      state: >- # state is `on` when there is an event tomorrow
         {{ expand(integration_entities('anniversaries')) | selectattr('state') | map(attribute='state') | list | sort | map('int') | sort | min == 1 }}
       attributes:
         events: >-
@@ -37,10 +38,12 @@
           {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
           {%- endif -%}
           {%- endfor -%}
+          [
           {%- for item in ns.a | sort(attribute='r') -%}
-          {%- set name, next, date = item.n, item.x, item.d %}
-          {{name}} {%- if next %} ({{next}}) {%- endif %} - {{date}}
+          {%- set name, next, date, days = item.n, item.x, item.d, item.r %}
+          {"name": "{{name}}","date": "{{date}}",{%- if next %}"years": {{next}},{%- endif %}"days": {{days}}},
           {%- endfor -%}
+          ]
     - name: Events in the Next Week
       unique_id: events_in_the_next_week
       state: >- # state is `on` when there is an event in the next 7 days
@@ -52,14 +55,16 @@
           {%- set days = [item.state | int] | min -%}
           {%- set next = item.attributes.get('years_at_next_anniversary') -%}
           {%- set date = item.attributes.get('date') -%}
-          {%- if days == 7 %}
+          {%- if days < 7 %}
           {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
           {%- endif -%}
           {%- endfor -%}
+          [
           {%- for item in ns.a | sort(attribute='r') -%}
-          {%- set name, next, date = item.n, item.x, item.d %}
-          {{name}} {%- if next %} ({{next}}) {%- endif %} - {{date}}
+          {%- set name, next, date, days = item.n, item.x, item.d, item.r %}
+          {"name": "{{name}}","date": "{{date}}",{%- if next %}"years": {{next}},{%- endif %}"days": {{days}}},
           {%- endfor -%}
+          ]
     - name: Events in the Next Thirty Days
       unique_id: events_in_the_next_thirty_days
       state: >- # state is `on` when there is an event in the next 30 days
@@ -75,7 +80,304 @@
           {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
           {%- endif -%}
           {%- endfor -%}
+          [
           {%- for item in ns.a | sort(attribute='r') -%}
-          {%- set name, next, date = item.n, item.x, item.d %}
-          {{name}} {%- if next %} ({{next}}) {%- endif %} - {{date}}
+          {%- set name, next, date, days = item.n, item.x, item.d, item.r %}
+          {"name": "{{name}}","date": "{{date}}",{%- if next %}"years": {{next}},{%- endif %}"days": {{days}}},
           {%- endfor -%}
+          ]
+    - name: "Bed Occupancy"
+      icon: mdi:bed
+      unique_id: bed_occupancy
+      device_class: occupancy
+      state: >-
+        {{ states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == 'on'
+        or states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == 'on' }}
+      attributes:
+        sleeping: >-
+          {% if states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "on"
+          and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "on" %}both
+          {% elif states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "on"
+          and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "off" %}jon
+          {% elif states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "off"
+          and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "on" %}laura
+          {% else %}unoccupied{% endif %}
+    - name: "Basement Motions"
+      unique_id: basement_motions
+      device_class: motion
+      state: >-
+        {{ states('sensor.elkm1_basmnt_stair_pir') == "Violated"
+        or states('sensor.elkm1_gym_pir') == "Violated"
+        or states('sensor.elkm1_lounge_pir') == "Violated"
+        or states('sensor.elkm1_office_pir') == "Violated"
+        or states('sensor.elkm1_workshop_pir') == "Violated" }}
+    - name: "Main Motions"
+      unique_id: main_motions
+      device_class: motion
+      state: >-
+        {{ states('sensor.elkm1_back_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_foyer_pir') == "Violated"
+        or states('sensor.elkm1_great_room_pir') == "Violated"
+        or states('sensor.elkm1_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_library_pir') == "Violated"
+        or states('sensor.elkm1_mudroom_pir') == "Violated"
+        or states('sensor.elkm1_sunroom_pir') == "Violated" }}
+    - name: "Upstairs Motions"
+      unique_id: upstairs_motions
+      device_class: motion
+      state: >-
+        {{ states('sensor.elkm1_bonus_hall_pir') == "Violated"
+        or states('sensor.elkm1_laundry_pir') == "Violated"
+        or states('sensor.elkm1_main_bath_pir') == "Violated"
+        or states('sensor.elkm1_main_bed_pir') == "Violated"
+        or states('sensor.elkm1_second_hall_pir') == "Violated" }}
+    - name: "Exterior Motions"
+      unique_id: exterior_motions
+      device_class: motion
+      state: >-
+        {{ states('sensor.elkm1_garage_pir') == "Violated" }}
+    - name: "All Motions"
+      unique_id: all_motions
+      device_class: motion
+      state: >-
+        {{ states('sensor.elkm1_basmnt_stair_pir') == "Violated"
+        or states('sensor.elkm1_gym_pir') == "Violated"
+        or states('sensor.elkm1_lounge_pir') == "Violated"
+        or states('sensor.elkm1_office_pir') == "Violated"
+        or states('sensor.elkm1_workshop_pir') == "Violated"
+        or states('sensor.elkm1_back_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_foyer_pir') == "Violated"
+        or states('sensor.elkm1_great_room_pir') == "Violated"
+        or states('sensor.elkm1_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_library_pir') == "Violated"
+        or states('sensor.elkm1_mudroom_pir') == "Violated"
+        or states('sensor.elkm1_sunroom_pir') == "Violated"
+        or states('sensor.elkm1_bonus_hall_pir') == "Violated"
+        or states('sensor.elkm1_laundry_pir') == "Violated"
+        or states('sensor.elkm1_main_bath_pir') == "Violated"
+        or states('sensor.elkm1_main_bed_pir') == "Violated"
+        or states('sensor.elkm1_second_hall_pir') == "Violated"
+        or states('sensor.elkm1_garage_pir') == "Violated" }}
+    - name: "Garage Doors"
+      unique_id: garage_doors
+      device_class: garage_door
+      state: >-
+        {{ states('sensor.elkm1_double_garage') == "Violated"
+        or states('sensor.elkm1_single_garage') == "Violated" }}
+    - name: "House Doors"
+      unique_id: house_doors
+      device_class: door
+      state: >-
+        {{ states('sensor.elkm1_front_door') == "Violated"
+        or states('sensor.elkm1_garage_door') == "Violated"
+        or states('sensor.elkm1_patio_door') == "Violated"
+        or states('sensor.elkm1_workshop_door') == "Violated"
+        or states('sensor.elkm1_grilldeck_door') == "Violated"
+        or states('sensor.elkm1_deck_door') == "Violated" }}
+    - name: "Moisture Sensors"
+      unique_id: moisture_sensors
+      device_class: moisture
+      state: >-
+        {{ states('sensor.elkm1_basement_bath_wb') == "Violated"
+        or states('sensor.elkm1_powder_wb') == "Violated"
+        or states('sensor.elkm1_upstairs_west_wb') == "Violated"
+        or states('sensor.elkm1_upstairs_west_wb_2') == "Violated" }}
+    - name: "Vacation?"
+      unique_id: vacation
+      device_class: occupancy
+      state: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_vacation' }}"
+    - name: "Occupied-Alarm?"
+      unique_id: occupied_alarm
+      device_class: occupancy
+      state: >-
+        {{ not (state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_vacation'
+        or state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_away') }}
+    - name: "Sleeping?"
+      unique_id: sleeping
+      state: >-
+        {{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_night_instant'
+        or state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_night' }}
+    - name: "light inside?"
+      unique_id: light_inside
+      device_class: light
+      state: "{{ states('sensor.main_tv_lux') | int > 110 }}"
+    - name: "Anybody Home"
+      unique_id: anybody_home
+      device_class: presence
+      state: >-
+        {{ states('person.jon') == 'home'
+        and states('person.laura') == 'home' }}
+    - name: "Anybody Away"
+      unique_id: anybody_away
+      state: >-
+        {{ states('person.jon') != 'home'
+        or states('person.laura') != 'home' }}
+    - name: "Exterior Person"
+      unique_id: exterior_person
+      device_class: occupancy
+      state: >-
+        {{ states('binary_sensor.deck_person_occupancy') == "on"
+        or states('binary_sensor.doorbell_person_occupancy') == "on"
+        or states('binary_sensor.driveway_person_occupancy') == "on"
+        or states('binary_sensor.frontyard_person_occupancy') == "on"
+        or states('binary_sensor.grilldeck_person_occupancy') == "on"
+        or states('binary_sensor.patio_person_occupancy') == "on"
+        or states('binary_sensor.workshop_person_occupancy') == "on" }}
+    - name: "Main Bedroom Occupied"
+      unique_id: main_bedroom_occupied
+      device_class: occupancy
+      state: >-
+        {{ states('sensor.elkm1_main_bath_pir') == "Violated"
+        or states('sensor.elkm1_main_bed_pir') == "Violated" }}
+    - name: "Christmas Season"
+      unique_id: christmas_season
+      state: >
+        {% set today = states('sensor.date').split('-') %}
+        {% set month = today[1]|int %}
+        {% set day = today[2]|int %}
+        {{ month == 11 and day >= 23
+        or month == 12
+        or month == 1 and day <= 6 }}
+
+- sensor:
+    - name: "Bed Occupancy"
+      icon: mdi:bed
+      unique_id: bed_occupancy_sensor
+      state: >-
+        {% if states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "on"
+        and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "on" %}both
+        {% elif states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "on"
+        and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "off" %}jon
+        {% elif states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "off"
+        and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "on" %}laura
+        {% else %}unoccupied{% endif %}
+    - name: "Armed Status"
+      unique_id: armed_status
+      state: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') }}"
+    - name: "Arm Up State"
+      unique_id: arm_up_state
+      state: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'arm_up_state') }}"
+    - name: "Alarm State"
+      unique_id: alarm_state
+      state: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'alarm_state') }}"
+    - name: "Alarm Trouble"
+      unique_id: alarm_trouble
+      state: "{{ state_attr('sensor.elkm1_elkm1', 'system_trouble_status') }}"
+    - name: "sun elevation"
+      state: "{{ state_attr('sun.sun', 'elevation') }}"
+      unique_id: sun_elevation
+    - name: "Number of Sensors"
+      unique_id: number_of_sensors
+      state: >
+        {%- set domains = ['sensor'] -%}
+        {%- for domain in domains -%}
+          {%- for item in states[domain] -%}
+            {% if loop.first %}
+              {{loop.length}}
+            {% endif %}
+          {%- endfor -%}
+        {%- endfor -%}
+      unique_id: sensor_count
+    - name: "Lights On"
+      unit_of_measurement: "On"
+      state: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
+      unique_id: lights_on_number
+    - name: "Doors Locked"
+      state: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='name')| list|join(', ') }}"
+      unique_id: doors_locked
+    - name: "Doors Locked Entities"
+      state: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='entity_id')| list|join(', ') }}"
+      unique_id: doors_locked_entities
+    - name: "Number of Doors Locked"
+      state: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|length }}"
+      unique_id: doors_locked_number
+    - name: "Doors Unlocked"
+      state: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
+      unique_id: doors_unlocked
+    - name: "Doors Unlocked Entities"
+      state: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='entity_id')| list|join(', ') }}"
+      unique_id: doors_unlocked_entities
+    - name: "Number of Doors Unlocked"
+      state: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|length }}"
+      unique_id: doors_unlocked_number
+    - name: "People Home"
+      state: "{{ states.person|selectattr('state', 'equalto', 'home')|list|map(attribute='name')| list|join(', ') }}"
+      unique_id: people_home
+    - name: "Number of People Home"
+      state: "{{ states.person|selectattr('state', 'equalto', 'home')|list|length }}"
+      unique_id: people_home_number
+    - name: "period of day"
+      unique_id: period_of_day
+      state: >-
+        {% set elevation = state_attr('sun.sun', 'elevation') %}
+        {% set rising = state_attr('sun.sun', 'rising') %}
+        {%- if elevation <= -12 -%}
+          night
+        {%- elif -12 < elevation <= -6 -%}
+          {{ 'dawn' if rising else 'dusk' }}
+        {%- else -%}
+          day
+        {%- endif -%}
+      icon: >-
+        {% set elevation = state_attr('sun.sun', 'elevation') %}
+        {% set rising = state_attr('sun.sun', 'rising') %}
+        {%- if elevation <= -12 -%}
+          mdi:weather-night
+        {%- elif -12 < elevation <= -6 -%}
+          mdi:weather-sunset-{{ 'up' if rising else 'down' }}
+        {% else %}
+          mdi:weather-sunny
+        {% endif %}
+    - name: "target humidity max"
+      unique_id: target_humidity_max
+      device_class: humidity
+      state: >-
+        {% if   state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -20 %}25
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -10 %}30
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <   0 %}35
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  10 %}40
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  20 %}45
+        {% else %} 55 {% endif %}
+    - name: "target humidity min"
+      unique_id: target_humidity_min
+      device_class: humidity
+      state: >-
+        {% if   state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -20 %}15
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -10 %}20
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <   0 %}25
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  10 %}30
+        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  20 %}35
+        {% else %} 40 {% endif %}
+    - name: "Current Temperature"
+      unique_id: current_temperature
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'temperature') }}°"
+    - name: "Current Feels"
+      unique_id: current_feels
+      state: "feels like {{ states('sensor.tomorrow_io_home_feels_like') }}°"
+    - name: "Cloud Cover"
+      unique_id: cloud_cover
+      state: "{{ states('sensor.tomorrow_io_home_cloud_cover') | round | int }}"
+    - name: "Current Humidity"
+      unique_id: current_humidity
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}%"
+    - name: "daily_high"
+      unique_id: daily_high
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].temperature }}°"
+    - name: "Todays Low"
+      unique_id: todays_low
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].templow }}°"
+    - name: "Precipitation Amount"
+      unique_id: precipitation_amount
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation }}"
+    - name: "Precipitation Probability"
+      unique_id: precipitation_probability
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int  }}%"
+    - name: "Today Text"
+      unique_id: todays_text
+      state: "{{ now().strftime('%A / %B %d') }}"
+    - name: "Today clock"
+      unique_id: today_clock
+      state: "{{ now().strftime('%A / %B %d / %I:%M %p') }}"
+    - name: "Time Is"
+      unique_id: time_is
+      state: "{{ now().strftime('%I:%M %p') }}"

@@ -1,184 +1,4 @@
 ---
-- platform: template
-  sensors:
-    basement_motions:
-      friendly_name: "Basement Motions"
-      device_class: motion
-      value_template: >-
-        {{ states('sensor.elkm1_basmnt_stair_pir') == "Violated"
-        or states('sensor.elkm1_gym_pir') == "Violated"
-        or states('sensor.elkm1_lounge_pir') == "Violated"
-        or states('sensor.elkm1_office_pir') == "Violated"
-        or states('sensor.elkm1_workshop_pir') == "Violated" }}
-    main_motions:
-      friendly_name: "Main Motions"
-      device_class: motion
-      value_template: >-
-        {{ states('sensor.elkm1_back_kitchen_pir') == "Violated"
-        or states('sensor.elkm1_foyer_pir') == "Violated"
-        or states('sensor.elkm1_great_room_pir') == "Violated"
-        or states('sensor.elkm1_kitchen_pir') == "Violated"
-        or states('sensor.elkm1_library_pir') == "Violated"
-        or states('sensor.elkm1_mudroom_pir') == "Violated"
-        or states('sensor.elkm1_sunroom_pir') == "Violated" }}
-    upstairs_motions:
-      friendly_name: "Upstairs Motions"
-      device_class: motion
-      value_template: >-
-        {{ states('sensor.elkm1_bonus_hall_pir') == "Violated"
-        or states('sensor.elkm1_laundry_pir') == "Violated"
-        or states('sensor.elkm1_main_bath_pir') == "Violated"
-        or states('sensor.elkm1_main_bed_pir') == "Violated"
-        or states('sensor.elkm1_second_hall_pir') == "Violated" }}
-    exterior_motions:
-      friendly_name: "Exterior Motions"
-      device_class: motion
-      value_template: >-
-        {{ states('sensor.elkm1_garage_pir') == "Violated" }}
-    all_motions:
-      friendly_name: "All Motions"
-      device_class: motion
-      value_template: >-
-        {{ states('sensor.elkm1_basmnt_stair_pir') == "Violated"
-        or states('sensor.elkm1_gym_pir') == "Violated"
-        or states('sensor.elkm1_lounge_pir') == "Violated"
-        or states('sensor.elkm1_office_pir') == "Violated"
-        or states('sensor.elkm1_workshop_pir') == "Violated"
-        or states('sensor.elkm1_back_kitchen_pir') == "Violated"
-        or states('sensor.elkm1_foyer_pir') == "Violated"
-        or states('sensor.elkm1_great_room_pir') == "Violated"
-        or states('sensor.elkm1_kitchen_pir') == "Violated"
-        or states('sensor.elkm1_library_pir') == "Violated"
-        or states('sensor.elkm1_mudroom_pir') == "Violated"
-        or states('sensor.elkm1_sunroom_pir') == "Violated"
-        or states('sensor.elkm1_bonus_hall_pir') == "Violated"
-        or states('sensor.elkm1_laundry_pir') == "Violated"
-        or states('sensor.elkm1_main_bath_pir') == "Violated"
-        or states('sensor.elkm1_main_bed_pir') == "Violated"
-        or states('sensor.elkm1_second_hall_pir') == "Violated"
-        or states('sensor.elkm1_garage_pir') == "Violated" }}
-    garage_doors:
-      friendly_name: "Garage Doors"
-      device_class: garage_door
-      value_template: >-
-        {{ states('sensor.elkm1_double_garage') == "Violated"
-        or states('sensor.elkm1_single_garage') == "Violated" }}
-    house_doors:
-      friendly_name: "House Doors"
-      device_class: door
-      value_template: >-
-        {{ states('sensor.elkm1_front_door') == "Violated"
-        or states('sensor.elkm1_garage_door') == "Violated"
-        or states('sensor.elkm1_patio_door') == "Violated"
-        or states('sensor.elkm1_workshop_door') == "Violated"
-        or states('sensor.elkm1_grilldeck_door') == "Violated"
-        or states('sensor.elkm1_deck_door') == "Violated" }}
-    moisture_sensors:
-      friendly_name: "Moisture Sensors"
-      device_class: moisture
-      value_template: >-
-        {{ states('sensor.elkm1_basement_bath_wb') == "Violated"
-        or states('sensor.elkm1_powder_wb') == "Violated"
-        or states('sensor.elkm1_upstairs_west_wb') == "Violated"
-        or states('sensor.elkm1_upstairs_west_wb_2') == "Violated" }}
-    vacation_status:
-      friendly_name: "Vacation?"
-      device_class: occupancy
-      value_template: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_vacation' }}"
-    alarm_occupancy_status:
-      friendly_name: "Occupied-Alarm?"
-      device_class: occupancy
-      value_template: >-
-        {{ not (state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_vacation'
-        or state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_away') }}
-    sleep_status:
-      friendly_name: "Sleeping?"
-      value_template: >-
-        {{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_night_instant'
-        or state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') == 'armed_to_night' }}
-    light_inside:
-      friendly_name: "light inside?"
-      device_class: light
-      value_template: "{{ states('sensor.main_tv_lux') | int > 110 }}"
-    anybody_home:
-      friendly_name: "Anybody Home"
-      device_class: presence
-      value_template: >-
-        {{ states('person.jon') == 'home'
-        and states('person.laura') == 'home' }}
-    anybody_away:
-      friendly_name: "Anybody Away"
-      value_template: >-
-        {{ states('person.jon') != 'home'
-        or states('person.laura') != 'home' }}
-    #     hvac:
-    #       friendly_name: "hvac status"
-    #       value_template: >-
-    #         {{ states.climate.basement_thermostat.attributes['hvac_action'] != "idle"
-    #         or states.climate.main_thermostat.attributes['hvac_action'] != "idle"
-    #         or states.climate.upstairs_thermostat.attributes['hvac_action'] != "idle" }}
-    #     hvac_heat:
-    #       friendly_name: "hvac heat status"
-    #       value_template: >-
-    #         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "heating"
-    #         or states.climate.main_thermostat.attributes['hvac_action'] == "heating"
-    #         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "heating" }}
-    #     hvac_ac:
-    #       friendly_name: "hvac ac status"
-    #       value_template: >-
-    #         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "cooling"
-    #         or states.climate.main_thermostat.attributes['hvac_action'] == "cooling"
-    #         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "cooling" }}
-    #     all_sonos:
-    #       friendly_name: "all sonos media players"
-    #       value_template: >-
-    #         {{ states.media_player.deck.state == "playing"
-    #         or states.media_player.garage.state == "playing"
-    #         or states.media_player.guest_bathroom.state == "playing"
-    #         or states.media_player.gym.state == "playing"
-    #         or states.media_player.kitchen.state == "playing"
-    #         or states.media_player.laundry.state == "playing"
-    #         or states.media_player.master.state == "playing"
-    #         or states.media_player.portable.state == "playing"
-    #         or states.media_player.workshop.state == "playing" }}
-    #     evelyns_room_occupied:
-    #       device_class: occupancy
-    #       friendly_name: "Evelyns Room Occupied"
-    #       value_template: >-
-    #         {{ states.binary_sensor.evelyns_room_occupancy.state == "on"
-    #         or states.binary_sensor.evelyn_multi_motion.state == "on" }}
-    #     loft_occupied:
-    #       device_class: occupancy
-    #       friendly_name: "Loft Occupied"
-    #       value_template: >-
-    #         {{ states.binary_sensor.loft_person_motion.state == "on"
-    #         or states.binary_sensor.loft_multi_motion.state == "on" }}
-    exterior_person:
-      device_class: occupancy
-      friendly_name: "Exterior Person"
-      value_template: >-
-        {{ states('binary_sensor.deck_person_motion') == "on"
-        or states('binary_sensor.doorbell_person_motion') == "on"
-        or states('binary_sensor.driveway_person_motion') == "on"
-        or states('binary_sensor.frontyard_person_motion') == "on"
-        or states('binary_sensor.grilldeck_person_motion') == "on"
-        or states('binary_sensor.patio_person_motion') == "on"
-        or states('binary_sensor.workshop_person_motion') == "on" }}
-    main_bedroom_occupied:
-      device_class: occupancy
-      friendly_name: "Main Bedroom Occupied"
-      value_template: >-
-        {{ states('sensor.elkm1_main_bath_pir') == "Violated"
-        or states('sensor.elkm1_main_bed_pir') == "Violated" }}
-    christmas_season:
-      value_template: >
-        {% set today = states('sensor.date').split('-') %}
-        {% set month = today[1]|int %}
-        {% set day = today[2]|int %}
-        {{ month == 11 and day >= 23
-        or month == 12
-        or month == 1 and day <= 6 }}
-
 - platform: workday
   country: US
 
@@ -285,3 +105,48 @@
 #   value_template: "{{ value_json.state }}"
 #   payload_on: "motion"
 #   off_delay: 10
+
+# - platform: template
+#   sensors:
+#     hvac:
+#       friendly_name: "hvac status"
+#       value_template: >-
+#         {{ states.climate.basement_thermostat.attributes['hvac_action'] != "idle"
+#         or states.climate.main_thermostat.attributes['hvac_action'] != "idle"
+#         or states.climate.upstairs_thermostat.attributes['hvac_action'] != "idle" }}
+#     hvac_heat:
+#       friendly_name: "hvac heat status"
+#       value_template: >-
+#         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "heating"
+#         or states.climate.main_thermostat.attributes['hvac_action'] == "heating"
+#         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "heating" }}
+#     hvac_ac:
+#       friendly_name: "hvac ac status"
+#       value_template: >-
+#         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "cooling"
+#         or states.climate.main_thermostat.attributes['hvac_action'] == "cooling"
+#         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "cooling" }}
+#     all_sonos:
+#       friendly_name: "all sonos media players"
+#       value_template: >-
+#         {{ states.media_player.deck.state == "playing"
+#         or states.media_player.garage.state == "playing"
+#         or states.media_player.guest_bathroom.state == "playing"
+#         or states.media_player.gym.state == "playing"
+#         or states.media_player.kitchen.state == "playing"
+#         or states.media_player.laundry.state == "playing"
+#         or states.media_player.master.state == "playing"
+#         or states.media_player.portable.state == "playing"
+#         or states.media_player.workshop.state == "playing" }}
+#     evelyns_room_occupied:
+#       device_class: occupancy
+#       friendly_name: "Evelyns Room Occupied"
+#       value_template: >-
+#         {{ states.binary_sensor.evelyns_room_occupancy.state == "on"
+#         or states.binary_sensor.evelyn_multi_motion.state == "on" }}
+#     loft_occupied:
+#       device_class: occupancy
+#       friendly_name: "Loft Occupied"
+#       value_template: >-
+#         {{ states.binary_sensor.loft_person_motion.state == "on"
+#         or states.binary_sensor.loft_multi_motion.state == "on" }}
