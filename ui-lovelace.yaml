@@ -26,6 +26,8 @@ resources:
     type: module
   - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
     type: module
+  - url: /hacsfiles/lovelace-card-mod/card-mod.js
+    type: module
 
 decluttering_templates:
   cam_small:
@@ -296,28 +298,28 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-                webrtc:
+              - webrtc_card:
                   entity: camera.driveway_rtsp
             view_layout:
               grid-area: cam1
           - type: custom:frigate-card
             cameras:
-              - camera_entity: camera.a8105_e_0
-                webrtc:
+              - camera_entity: camera.doorbell
+              - webrtc_card:
                   entity: camera.a8105_e_0
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-                webrtc:
+              - webrtc_card:
                   entity: camera.frontyard_rtsp
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.garage
-                webrtc:
+              - webrtc_card:
                   entity: camera.garage_rtsp
             view_layout:
               grid-area: cam4
@@ -355,35 +357,35 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.deck
-                webrtc:
+              - webrtc_card:
                   entity: camera.deck_rtsp
             view_layout:
               grid-area: cam1
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.workshop
-                webrtc:
+              - webrtc_card:
                   entity: camera.workshop_rtsp
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.grilldeck
-                webrtc:
+              - webrtc_card:
                   entity: camera.grilldeck_rtsp
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.mudroom
-                webrtc:
+              - webrtc_card:
                   entity: camera.mudroom_rtsp
             view_layout:
               grid-area: cam4
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.patio
-                webrtc:
+              - webrtc_card:
                   entity: camera.patio_rtsp
             view_layout:
               grid-area: cam5
@@ -664,6 +666,50 @@ views:
           - input_boolean.motion_lights
           - input_boolean.guests
           - input_boolean.party
+      - type: markdown
+        content: '# {{ now().strftime(" %I:%M")}}'
+        card_mod:
+          style:
+            ha-markdown $: &ref_style |
+              h1 {
+                color: red;
+                text-align: center;
+                font: Roboto;
+                font-size: 2em;
+                font-weight: 400;
+              }
+      - type: "custom:auto-entities"
+        show_empty: true
+        # card:
+        #   title: Important Dates
+        #   type: entities
+        #   show_header_toggle: false
+        sort:
+          method: state
+          numeric: true
+        filter:
+          include:
+            - entity_id: "/(birthday|anniversary|holiday)/"
+              state: < 45
+        card:
+          # |:--- | ---:|
+          type: markdown
+          content: |
+            **Upcoming Events:**
+            &nbsp; |&nbsp;
+            |--- | ---|
+
+            {%- for ent in config.entities %}
+              **{{state_attr(ent.entity, 'friendly_name') }}** | *{{ states(ent.entity) }} days*
+              {{ as_timestamp(state_attr(ent.entity, 'date')) | timestamp_custom('%m/%d/%Y') }} | 
+              {%- if is_state(ent.entity, '0') -%}
+                {{ state_attr(ent.entity, 'current_years') }} yrs - 
+              {%- elif state_attr(ent.entity, 'current_years') == None %}
+              {%- else -%}
+                {{ state_attr(ent.entity, 'years_at_next_anniversary') }} yrs - 
+              {%- endif -%}
+            {%- endfor -%}
+
       # - type: custom:mini-graph-card
       #   name: Internet
       #   icon: mdi:server

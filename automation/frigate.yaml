@@ -121,12 +121,12 @@
 #   # mode: restart
 #   trigger:
 #     - platform: state
-#       entity_id: binary_sensor.driveway_far_person_motion
+#       entity_id: binary_sensor.driveway_far_person_occupancy
 #       to: "on"
 #   action:
 #     - wait_for_trigger:
 #         - platform: state
-#           entity_id: binary_sensor.driveway_near_person_motion
+#           entity_id: binary_sensor.driveway_near_person_occupancy
 #           to: "on"
 #       timeout: 20
 #       continue_on_timeout: false

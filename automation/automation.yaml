@@ -273,7 +273,7 @@
 #       for:
 #         minutes: 45
 #     - platform: state
-#       entity_id: sensor.deck_person
+#       entity_id: sensor.deck_person_count
 #       to: "0"
 #       for:
 #         minutes: 15
@@ -388,7 +388,8 @@
         - conditions: # 7am and if there is an event 7 days out, send a message
             - condition: trigger
               id: 7am
-            - "{{ is_state('sensor.events_week', 'True') }}"
+            # true when there is an event exactly 7 days from now
+            - "{{ expand(integration_entities('anniversaries')) | selectattr('state') | map(attribute='state') | list | sort | map('int') | sort | min == 7 }}"
           sequence:
             - service: telegram_bot.send_message
               data_template:
@@ -423,8 +424,8 @@
             - condition: trigger
               id: 10am
             - or:
-                - "{{ states('sensor.house_humidity') > states('sensor.target_humidity_max_winter') }}"
-                - "{{ states('sensor.house_humidity') < states('sensor.target_humidity_min_winter') }}"
+                - "{{ states('sensor.house_humidity') > states('sensor.target_humidity_max') }}"
+                - "{{ states('sensor.house_humidity') < states('sensor.target_humidity_min') }}"
           sequence:
             - service: notify.telegram_jon
               data_template:
@@ -450,6 +451,22 @@
           entity_id:
             - input_boolean.sunset_run_once
             - input_boolean.driveway_sentry
+#########################################
+- alias: "Night Mode: bed has either laura or both - turn off main & lower level lights"
+  id: "Night Mode: bed has either laura or both - turn off main & lower level lights"
+  trigger:
+    - platform: state
+      entity_id: sensor.bed_occupancy
+  condition:
+    - "{{ states('sensor.bed_occupancy') in ['laura', 'both'] }}"
+    - condition: time
+      after: "18:30:00"
+  action:
+    - service: homeassistant.turn_off
+      entity_id:
+        - group.basement_lights
+        - group.main_floor_lights
+        - switch.equipment_room_recirculation_pump
 #########################################
 - alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
@@ -518,7 +535,7 @@
     #     sequence:
     #       - service: notify.telegram_jon
     #         data_template:
-    #           title: "{{ states.sensor.doors_unlocked_number.state }} door(s) UNLOCKED!"
+    #           title: "{{ states.sensor.number_of_doors_unlocked.state }} door(s) UNLOCKED!"
     #           message: "Locking {{ states.sensor.doors_unlocked.state }}"
     #       - service: script.lock_doors
 #########################################
