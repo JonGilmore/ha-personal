@@ -19,6 +19,7 @@ homeassistant:
     local: /media
 cloud:
 energy:
+datadog:
 http:
   use_x_forwarded_for: true
   trusted_proxies:
