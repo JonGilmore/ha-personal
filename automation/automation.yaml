@@ -385,22 +385,22 @@
           sequence:
             - service: cover.open_cover
               entity_id: cover.library_shade
-        - conditions: # 7am and if there is an event 7 days out, send a message
+        - conditions: # 7am and if there is an event 7 days out OR today, send a message
             - condition: trigger
               id: 7am
-            # true when there is an event exactly 7 days from now
-            - "{{ expand(integration_entities('anniversaries')) | selectattr('state') | map(attribute='state') | list | sort | map('int') | sort | min == 7 }}"
+            # true when there is an event exactly today OR 7 days from now
+            - "{{ expand(integration_entities('anniversaries')) | selectattr('state', 'match', '^[0|7]$') | list |  map(attribute='state') | map('int') | list | length > 0 }}"
           sequence:
             - service: telegram_bot.send_message
               data_template:
-                title: "*Important date closing in!*"
+                title: "*Important Date Reminder!*"
                 message: >-
                   {%- set ns = namespace(a=[]) -%}
                   {%- for item in expand(integration_entities('anniversaries')) -%}
                   {%- set days = [item.state | int] | min -%}
                   {%- set next = item.attributes.get('years_at_next_anniversary') -%}
                   {%- set date = item.attributes.get('date') -%}
-                  {%- if days == 7 %}
+                  {%- if days in [0, 7] %}
                   {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
                   {%- endif -%}
                   {%- endfor -%}
@@ -427,9 +427,9 @@
                 - "{{ states('sensor.house_humidity') > states('sensor.target_humidity_max') }}"
                 - "{{ states('sensor.house_humidity') < states('sensor.target_humidity_min') }}"
           sequence:
-            - service: notify.telegram_jon
+            - service: telegram_bot.send_message
               data_template:
-                title: "Humidity Warning!"
+                title: "*Humidity Warning!*"
                 message: "Humidity in the house is: {{ states('sensor.house_humidity') }}"
         - conditions: # 4:30pm and if anybody is home, turn on the recirc pump
             - condition: trigger
