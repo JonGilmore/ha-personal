@@ -947,3 +947,14 @@
       data_template:
         url: "http://192.168.30.249:5005/api/garage/latest.jpg"
         caption: "🚗 Closing the {{ trigger.id }} garage!"
+#########################################
+- alias: "Test: webhook"
+  id: "Test: webhook"
+  trigger:
+    - platform: webhook
+      webhook_id: !secret pd_hook
+  action:
+    - service: system_log.write
+      data_template:
+        message: "LOGGING: {{ trigger.json }}"
+        level: error
