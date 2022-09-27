@@ -457,8 +457,8 @@
   trigger:
     - platform: state
       entity_id: sensor.bed_occupancy
+      to: both
   condition:
-    - "{{ states('sensor.bed_occupancy') in ['laura', 'both'] }}"
     - condition: time
       after: "18:30:00"
   action:
@@ -825,14 +825,12 @@
     - platform: numeric_state
       entity_id:
         - sensor.elkm1_workshop_keypad
-        # - sensor.master_entry_temperature
-      above: 84
+      above: 85
       for:
         minutes: 15
     - platform: numeric_state
       entity_id:
         - sensor.elkm1_workshop_keypad
-        # - sensor.master_entry_temperature
       below: 55
       for:
         minutes: 15
@@ -842,20 +840,22 @@
     #     - binary_sensor.dryer_dry_completed
     #   from: "off"
     #   to: "on"
+    - platform: event
+      event_type: nut.ups_event
+      id: nut_event
   action:
-    - service: notify.telegram_jon
-      data_template:
-        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-# #########################################
-# - alias: "Utility: UPS notifications"
-#   id: "Utility: UPS notifications"
-#   trigger:
-#     - platform: event
-#       event_type: nut.ups_event
-#   action:
-#     - service: notify.telegram_jon
-#       data_template:
-#         message: "{{ trigger.event.data.notify_msg }}"
+    - choose:
+        - conditions: # nut event
+            - condition: trigger
+              id: nut_event
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                message: "{{ trigger.event.data.notify_msg }}"
+      default:
+        - service: notify.telegram_jon
+          data_template:
+            message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
 # #########################################
 # - alias: "Utility: create all groups"
 #   id: "Utility: create all groups"
