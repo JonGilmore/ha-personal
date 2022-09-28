@@ -238,6 +238,20 @@
         {{ month == 11 and day >= 23
         or month == 12
         or month == 1 and day <= 6 }}
+    - name: All Sonos
+      unique_id: all_sonos
+      state: >-
+        {{ states('media_player.deck') == "playing"
+        or states('media_player.den') == "playing"
+        or states('media_player.gym') == "playing"
+        or states('media_player.kitchen') == "playing"
+        or states('media_player.living_room') == "playing"
+        or states('media_player.main_bathroom') == "playing"
+        or states('media_player.main_bedroom') == "playing"
+        or states('media_player.media_room') == "playing"
+        or states('media_player.office') == "playing"
+        or states('media_player.patio') == "playing"
+        or states('media_player.sunroom') == "playing" }}
 
 - sensor:
     - name: "Bed Occupancy"

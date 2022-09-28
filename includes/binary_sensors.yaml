@@ -126,18 +126,6 @@
 #         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "cooling"
 #         or states.climate.main_thermostat.attributes['hvac_action'] == "cooling"
 #         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "cooling" }}
-#     all_sonos:
-#       friendly_name: "all sonos media players"
-#       value_template: >-
-#         {{ states.media_player.deck.state == "playing"
-#         or states.media_player.garage.state == "playing"
-#         or states.media_player.guest_bathroom.state == "playing"
-#         or states.media_player.gym.state == "playing"
-#         or states.media_player.kitchen.state == "playing"
-#         or states.media_player.laundry.state == "playing"
-#         or states.media_player.master.state == "playing"
-#         or states.media_player.portable.state == "playing"
-#         or states.media_player.workshop.state == "playing" }}
 #     evelyns_room_occupied:
 #       device_class: occupancy
 #       friendly_name: "Evelyns Room Occupied"
