@@ -7,17 +7,33 @@
       at: "23:30:00"
   condition:
     - condition: state
-      entity_id: binary_sensor.vacation_status
+      entity_id: binary_sensor.vacation
       state: "on"
   action:
     - service: homeassistant.turn_off
       entity_id: group.all_lights
+#########################################
+- alias: "Vacation Mode: notify if a garage door opens"
+  id: "Vacation Mode: notify if a garage door opens"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.garage_doors
+      to: "on"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.vacation
+      state: "on"
+  action:
+    - service: telegram_bot.send_photo
+      data_template:
+        url: "http://192.168.30.249:5005/api/garage/latest.jpg"
+        caption: "One of the {{ trigger.to_state.attributes.friendly_name }} is open 💀"
 # #########################################
 # - alias: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
 #   id: "Vacation Mode: summer (main tstat isn't heating) & set temperatures back & set water heater to vacation & & turn off recirculation pump"
 #   trigger:
 #     - platform: state
-#       entity_id: binary_sensor.vacation_status
+#       entity_id: binary_sensor.vacation
 #       to: "on"
 #   condition:
 #     - condition: template
@@ -46,7 +62,7 @@
 #   id: "Vacation Mode: return from vacation (summer) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
 #   trigger:
 #     - platform: state
-#       entity_id: binary_sensor.vacation_status
+#       entity_id: binary_sensor.vacation
 #       to: "off"
 #   condition:
 #     - condition: template
@@ -73,7 +89,7 @@
 #   id: "Vacation Mode: winter time & close the main water valve & set temperatures back & set water heater to vacation & & turn off recirculation pump"
 #   trigger:
 #     - platform: state
-#       entity_id: binary_sensor.vacation_status
+#       entity_id: binary_sensor.vacation
 #       to: "on"
 #   condition:
 #     - condition: state
@@ -111,7 +127,7 @@
 #   id: "Vacation Mode: return from vacation (winter) & open the main water valve & remove the rheem water heater vacation hold & set temps back"
 #   trigger:
 #     - platform: state
-#       entity_id: binary_sensor.vacation_status
+#       entity_id: binary_sensor.vacation
 #       to: "off"
 #   condition:
 #     - condition: state
