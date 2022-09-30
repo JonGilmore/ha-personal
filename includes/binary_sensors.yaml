@@ -126,15 +126,3 @@
 #         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "cooling"
 #         or states.climate.main_thermostat.attributes['hvac_action'] == "cooling"
 #         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "cooling" }}
-#     evelyns_room_occupied:
-#       device_class: occupancy
-#       friendly_name: "Evelyns Room Occupied"
-#       value_template: >-
-#         {{ states.binary_sensor.evelyns_room_occupancy.state == "on"
-#         or states.binary_sensor.evelyn_multi_motion.state == "on" }}
-#     loft_occupied:
-#       device_class: occupancy
-#       friendly_name: "Loft Occupied"
-#       value_template: >-
-#         {{ states.binary_sensor.loft_person_motion.state == "on"
-#         or states.binary_sensor.loft_multi_motion.state == "on" }}
