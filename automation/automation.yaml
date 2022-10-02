@@ -1,94 +1,53 @@
 ---
-# #########################################
-# - alias: "Security: line crossing template - telegram & tv notify"
-#   id: "Security: line crossing template - telegram & tv notify"
-#   description: "When something crosses a line on the driveway or porch, notify via telegram and LG TV"
-#   trigger:
-#     - platform: state
-#       entity_id:
-#         - binary_sensor.driveway_line_crossing
-#         - binary_sensor.front_door_line_crossing
-#       to: "on"
-#   action:
-#     - service: notify.living_room_tv
-#       data_template:
-#         message: "{{ trigger.to_state.attributes.friendly_name }} detected"
-#     - service: notify.telegram_jon
-#       data_template:
-#         title: "{{ trigger.to_state.attributes.friendly_name }}"
-#         message: "{{ trigger.to_state.attributes.friendly_name }}"
-#         data:
-#           photo:
-#             url: >
-#               {% if trigger.entity_id == 'binary_sensor.driveway_line_crossing' %}
-#                 {{ states.sensor.hik_driveway_pic.state }}
-#               {% elif trigger.entity_id == 'binary_sensor.front_door_line_crossing' %}
-#                 {{ states.sensor.db_pic.state }}
-#               {% endif %}
-# #########################################
-# - alias: "Security: front door line crossing or doorbell rang"
-#   id: "Security: front door line crossing or doorbell rang"
-#   description: "When its dark out - foyer and exterior lights on - handles both occupied & unoccupied states"
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.front_door_line_crossing
-#       to: "on"
-#     - platform: event
-#       event_type: doorbird_front_door_doorbell
-#   condition:
-#     - condition: state
-#       entity_id: binary_sensor.light_inside
-#       state: "off"
-#     - condition: sun
-#       after: sunset
-#       after_offset: "-1:00:00"
-#   action:
-#     - service: homeassistant.turn_on
-#       entity_id: switch.exterior_foyer, switch.exterior_cans
-#     - choose:
-#         - conditions: "{{ is_state('binary_sensor.alarm_occupancy_status', 'on') }}"
-#           sequence:
-#             - service: script.popup_camera
-#               data:
-#                 deviceID: "wallpanel"
-#                 camera: "camera.front_door_live"
-#       default:
-#         - delay: "00:10:00"
-#         - service: homeassistant.turn_off
-#           entity_id: switch.exterior_foyer
-# #########################################
-# - alias: "Security: doorbell rang"
-#   id: "Security: doorbell rang"
-#   description: "send telegram & if master sonos is playing announce the doorbell & play video stream on the main display"
-#   trigger:
-#     - platform: event
-#       event_type: doorbird_front_door_doorbell
-#   action:
-#     - service: notify.telegram_jon
-#       data_template:
-#         title: "doorbell rang"
-#         message: "doorbell rang"
-#         data:
-#           photo:
-#             url: "{{ states.sensor.db_pic.state }}"
-#     - choose: # if master sonos is playing, interrupt it for an announcement
-#         - conditions: "{{ is_state('media_player.master', 'playing') }}"
-#           sequence:
-#             - service: script.sonos_say
-#               data:
-#                 sonos_entity: media_player.master
-#                 volume: 0.5
-#                 message: "doorbell rang!"
-#                 delay: "00:00:03"
-#     - service: media_player.play_media
-#       data_template:
-#         entity_id: media_player.main_display
-#         media_content_id: "https://ha.gilmore.cloud:8123{{ states.camera.front_door_live.attributes.entity_picture }}"
-#         media_content_type: image/jpg
-#     - delay: "00:00:30"
-#     - service: media_player.turn_off
-#       data:
-#         entity_id: media_player.main_display
+#########################################
+- alias: "Security: doorbell rang"
+  id: "Security: doorbell rang"
+  description: "send telegram message when the doorbell rings and announce it on the sonos"
+  trigger:
+    - type: connected
+      platform: device
+      device_id: 498618c4bb775b9d0a1963689f168ddb
+      entity_id: binary_sensor.a8105_e_0_call_button
+      domain: binary_sensor
+  action:
+    - service: media_player.play_media
+      target:
+        entity_id: media_player.kitchen
+      data:
+        media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+        media_content_type: provider
+      metadata:
+        title: ding dong - somebody is at the door
+        thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+        media_class: app
+        children_media_class:
+        navigateIds:
+          - {}
+          - media_content_type: app
+            media_content_id: media-source://tts
+          - media_content_type: provider
+            media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+    - service: media_player.play_media
+      target:
+        entity_id: media_player.office
+      data:
+        media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+        media_content_type: provider
+      metadata:
+        title: ding dong - somebody is at the door
+        thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+        media_class: app
+        children_media_class:
+        navigateIds:
+          - {}
+          - media_content_type: app
+            media_content_id: media-source://tts
+          - media_content_type: provider
+            media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+    - service: notify.telegram_jon
+      data:
+        message: doorbell just rang
+        title: Doorbell!
 #########################################
 - alias: "Automatic Lighting: exterior person & dark out - toggle exterior lights"
   id: "Automatic Lighting: exterior person & dark out - toggle exterior lights"
@@ -845,18 +804,6 @@
         - service: notify.telegram_jon
           data_template:
             message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
-# #########################################
-# - alias: "Utility: create all groups"
-#   id: "Utility: create all groups"
-#   trigger:
-#     - platform: homeassistant
-#       event: start
-#   action:
-#     - service: script.group_set
-#       data_template:
-#         object_id: all_locks
-#         name: All Locks
-#         types: "lock"
 # #########################################
 # - alias: "Presence: office speakers on/off with presence"
 #   id: "Presence: office speakers on/off with presence"

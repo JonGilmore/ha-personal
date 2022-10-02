@@ -130,45 +130,17 @@ lock_doors:
 #         - script.video_doorbell
 #         - script.video_kitchen
 
-# tvs_off:
-#   alias: "all tvs off"
-#   sequence:
-#     - service: media_player.turn_off
-#       entity_id:
-#         - media_player.roku_master_tv
-#         - media_player.roku_gym_tv
-#     - service: webostv.command
-#       data:
-#         entity_id: media_player.living_room_tv
-#         command: "system/turnOff"
-
-# group_set:
-#   alias: Create groups with enhanced include/exclude statements
-#   sequence:
-#     - service: group.set
-#       data_template:
-#         object_id: "{{ object_id }}"
-#         name: "{{ name or object_id }}"
-#         icon: "{{ icon or '' }}"
-#         all: "{{ all or False }}"
-#         entities: >-
-#           {# ENTITIES #}
-#           {% set ns = namespace(entities =
-#                           (entities.split(',') if entities is string else entities or [])) %}
-#           {# TYPES #}
-#           {% for type in (types.split(',')     if types    is string else types or []) %}
-#           {% set ns.entities = ns.entities + (expand(states[type]) | map(attribute="entity_id") | list) %}
-#           {% endfor %}
-#           {# INCLUDE #}
-#           {% for group in (include.split(',')  if include  is string else include  or []) %}
-#           {% set ns.entities = ns.entities +               states.group[group|regex_replace('^.*\.')].attributes.entity_id  | list %}
-#           {% endfor %}
-#           {# EXCLUDE #}
-#           {% for group in (exclude.split(',')  if exclude  is string else exclude  or []) %}
-#           {% set ns.entities = ns.entities | reject('in',  states.group[group|regex_replace('^.*\.')].attributes.entity_id) | list %}
-#           {% endfor %}
-#           {# OUTPUT #}
-#           {{ ns.entities|join(',') }}
+tvs_off:
+  alias: "all tvs off"
+  sequence:
+    - service: media_player.turn_off
+      entity_id:
+        - media_player.sunroom_tv
+        - media_player.office_tv
+        - media_player.gym_tv
+        - media_player.living_room_tv
+        - media_player.media_room_tv
+        - media_player.main_bedroom_tv
 
 # popup_camera:
 #   sequence:
@@ -251,8 +223,8 @@ lock_doors:
 #           {%- endif %}
 #         cache: false
 
-# master_off:
-#   alias: "master off"
+# main_bedroom_off:
+#   alias: "main bedroom off"
 #   sequence:
 #     - service: homeassistant.turn_off
 #       entity_id:
