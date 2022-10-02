@@ -522,22 +522,14 @@
             data_template:
               title: "Garage Door is Open!"
               message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
-    # - choose: # check the locks & notify
-    #     conditions:
-    #       condition: or
-    #       conditions:
-    #         - condition: state
-    #           entity_id: lock.front_door_lock
-    #           state: "unlocked"
-    #         - condition: state
-    #           entity_id: lock.garage_door_lock
-    #           state: "unlocked"
-    #     sequence:
-    #       - service: notify.telegram_jon
-    #         data_template:
-    #           title: "{{ states.sensor.number_of_doors_unlocked.state }} door(s) UNLOCKED!"
-    #           message: "Locking {{ states.sensor.doors_unlocked.state }}"
-    #       - service: script.lock_doors
+    - choose: # check the locks, notify & lock if unlocked
+        - conditions: "{{ states('sensor.doors_unlocked_number') | int > 0 }}"
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                title: "{{ states('sensor.doors_unlocked_number') }} door(s) UNLOCKED!"
+                message: "Locking {{ states('sensor.doors_unlocked') }}"
+            - service: script.lock_doors
 #########################################
 - alias: "Away Mode: turn the HVAC fans on & recirculation pump & tvs off"
   id: "Away Mode: turn the HVAC fans on & recirculation pump & tvs off"
@@ -643,27 +635,24 @@
 #   action:
 #     - service: light.turn_off
 #       entity_id: light.master_bedroom_master_fan
-# #########################################
-# - alias: "Away Mode: check the front door lock when leaving"
-#   id: "Away Mode: check the front door lock when leaving"
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.vacation_status
-#       to: "on"
-#     - platform: state
-#       entity_id: sensor.armed_status
-#       to: "armed_away"
-#   condition:
-#     - condition: state
-#       entity_id: lock.front_door_lock
-#       state: "unlocked"
-#   action:
-#     - service: notify.telegram_jon
-#       data:
-#         title: "Front Door is UNLOCKED!"
-#         message: "Locking the front door"
-#     - service: lock.lock
-#       entity_id: lock.front_door_lock
+#########################################
+- alias: "Away Mode: check the workshop lock when leaving"
+  id: "Away Mode: check the workshop lock when leaving"
+  trigger:
+    - platform: state
+      entity_id: sensor.armed_status
+      to: "armed_away"
+  condition:
+    - condition: state
+      entity_id: lock.workshop_lock
+      state: "unlocked"
+  action:
+    - service: notify.telegram_jon
+      data:
+        title: "Workshop is UNLOCKED!"
+        message: "Locking the workshop"
+    - service: lock.lock
+      entity_id: lock.workshop_lock
 #########################################
 - alias: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
   id: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
@@ -696,8 +685,8 @@
 #     - service: lock.unlock
 #       data:
 #         entity_id:
-#           - lock.garage_door_lock
-#           - lock.front_door_lock
+#           - lock.garage_lock
+#           - lock.workshop_lock
 #     - service: script.alarm
 #     - service: notify.mobile_app_lauras_iphone
 #       data:

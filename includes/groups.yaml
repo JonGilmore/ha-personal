@@ -70,7 +70,6 @@ interior_lights:
     - switch.powder_room_fan
     - switch.equipment_room_recirculation_pump
 
-
 all_lights:
   name: All Lights
   entities:
@@ -294,14 +293,42 @@ exterior_motions:
   entities:
     - sensor.elkm1_garage_pir
 
-# main_floor_covers:
-#   name: Main Floor Covers
-#   entities:
+all_shades:
+  name: all shades
+  entities:
+    - cover.great_room_shades
+    - cover.kitchen_shades
+    - cover.library_shade
+    - cover.lounge_shades
+    - cover.main_bathroom_shade
+    - cover.main_bedroom_shade
+    - cover.media_room_shades
+    - cover.office_shades
+    - cover.office_west_shade
+    - cover.stairs_shade
+    - cover.sunroom_door_shades
+    - cover.sunroom_west_shades
 
-# upstairs_covers:
-#   name: Upstairs Covers
-#   entities:
+main_floor_shades:
+  name: main floor shades
+  entities:
+    - cover.great_room_shades
+    - cover.kitchen_shades
+    - cover.library_shade
+    - cover.sunroom_door_shades
+    - cover.sunroom_west_shades
 
-# basement_covers:
-#   name: Basement Covers
-#   entities:
+upstairs_shades:
+  name: upstairs shades
+  entities:
+    - cover.main_bathroom_shade
+    - cover.main_bedroom_shade
+    - cover.stairs_shade
+
+basement_shades:
+  name: basement shades
+  entities:
+    - cover.lounge_shades
+    - cover.media_room_shades
+    - cover.office_shades
+    - cover.office_west_shade

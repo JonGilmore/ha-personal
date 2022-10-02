@@ -112,14 +112,14 @@ alarm_loop:
     - service: script.turn_on
       entity_id: script.alarm
 
-# lock_doors:
-#   alias: "lock doors"
-#   sequence:
-#     - service: lock.lock
-#       data:
-#         entity_id:
-#           - lock.garage_door_lock
-#           - lock.front_door_lock
+lock_doors:
+  alias: "lock doors"
+  sequence:
+    - service: lock.lock
+      data:
+        entity_id:
+          - lock.garage_lock
+          - lock.workshop_lock
 
 # send_videos:
 #   alias: "send videos"
@@ -267,7 +267,7 @@ send_dynamic_notification:
   alias: "send dynamic notification"
   sequence:
     - service: notify.mobile_app_pixel5
-    # - service: notify.mobile_app_macbook_pro
+      # - service: notify.mobile_app_macbook_pro
       data:
         message: "{{ message }}"
         title: "{{ title }}"
