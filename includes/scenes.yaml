@@ -39,3 +39,10 @@
     switch.grill_deck_light: "off"
     switch.workshop_exterior: "off"
     light.patio_cans: "off"
+- name: Chill On
+  entities:
+    light.kitchen_dining_art: "on"
+    switch.kitchen_toekick: "on"
+    light.library_cabinets: "on"
+    light.great_room_cabinets: "on"
+    light.kitchen_dining_chandelier: "on"
