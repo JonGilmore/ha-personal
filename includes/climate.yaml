@@ -1,0 +1,3 @@
+---
+platform: infinitude
+host: !secret hass_ip
