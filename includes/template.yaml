@@ -291,7 +291,6 @@
             {% endif %}
           {%- endfor -%}
         {%- endfor -%}
-      unique_id: sensor_count
     - name: "Lights On"
       unit_of_measurement: "On"
       state: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
