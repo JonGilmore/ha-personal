@@ -27,7 +27,7 @@
 #     - platform: time
 #       at: "23:00:00"
 #     - platform: state
-#       entity_id: binary_sensor.sleep_status
+#       entity_id: binary_sensor.sleeping
 #       from: "off"
 #       to: "on"
 #   condition:

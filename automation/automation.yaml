@@ -173,7 +173,7 @@
   description: "also checks if date is between Oct-May & turn on some lights"
   trigger:
     - platform: state
-      entity_id: binary_sensor.sleep_status
+      entity_id: binary_sensor.sleeping
       from: "on"
       to: "off"
   action:
@@ -432,7 +432,7 @@
   description: "also check garage doors and locks - notify if they are open or unlocked"
   trigger:
     - platform: state
-      entity_id: binary_sensor.sleep_status
+      entity_id: binary_sensor.sleeping
       to: "on"
   action:
     - service: homeassistant.turn_off
