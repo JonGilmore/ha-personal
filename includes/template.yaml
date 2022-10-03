@@ -394,3 +394,26 @@
     - name: "Time Is"
       unique_id: time_is
       state: "{{ now().strftime('%I:%M %p') }}"
+    # HVAC Sensors
+    - name: "Lower Level Temperature"
+      unique_id: lower_level_temperature
+      state: "{{ state_attr('climate.lower_level', 'current_temperature') }}"
+    - name: "Main Level Temperature"
+      unique_id: main_level_temperature
+      state: "{{ state_attr('climate.main_level', 'current_temperature') }}"
+    - name: "Upper Level Temperature"
+      unique_id: upper_level_temperature
+      state: "{{ state_attr('climate.upper_level', 'current_temperature') }}"
+    - name: "Lower Level Hold State"
+      unique_id: lower_level_hold_state
+      state: "{{ state_attr('climate.lower_level', 'hold_state') }}"
+    - name: "Main Level Hold State"
+      unique_id: main_level_hold_state
+      state: "{{ state_attr('climate.main_level', 'hold_state') }}"
+    - name: "Upper Level Hold State"
+      unique_id: upper_level_hold_state
+      state: "{{ state_attr('climate.upper_level', 'hold_state') }}"
+
+    - name: "Outdoor HVAC Temperature"
+      unique_id: outdoor_hvac_temperature
+      state: "{{ state_attr('climate.main_level', 'outdoor_temperature') }}"
