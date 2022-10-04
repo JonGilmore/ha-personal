@@ -647,11 +647,6 @@ views:
     id: maintenance
     icon: mdi:wrench
     cards:
-      - type: picture-glance
-        camera_image: camera.driveway
-        title: Exterior
-        entities:
-          - scene.sunset_on
       - type: entities
         title: Host Stats
         show_header_toggle: false
