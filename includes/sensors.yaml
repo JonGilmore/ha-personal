@@ -42,76 +42,64 @@
     - "time_utc"
     - "beat"
 # HVAC tracking
-# - platform: history_stats
-#   name: daily hvac heat on time
-#   entity_id: binary_sensor.hvac_heat
-#   state: "on"
-#   type: time
-#   end: "{{ now() }}"
-#   duration:
-#     hours: 24
-# - platform: history_stats
-#   name: daily hvac heat on count
-#   entity_id: binary_sensor.hvac_heat
-#   state: "on"
-#   type: count
-#   end: "{{ now() }}"
-#   duration:
-#     hours: 24
+- platform: history_stats
+  name: daily hvac heat on time
+  entity_id: binary_sensor.hvac_heat
+  state: "on"
+  type: time
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+- platform: history_stats
+  name: daily hvac heat on count
+  entity_id: binary_sensor.hvac_heat
+  state: "on"
+  type: count
+  end: "{{ now() }}"
+  duration:
+    hours: 24
 
-# - platform: history_stats
-#   name: daily hvac ac on time
-#   entity_id: binary_sensor.hvac_ac
-#   state: "on"
-#   type: time
-#   end: "{{ now() }}"
-#   duration:
-#     hours: 24
-# - platform: history_stats
-#   name: daily hvac ac on count
-#   entity_id: binary_sensor.hvac_ac
-#   state: "on"
-#   type: count
-#   end: "{{ now() }}"
-#   duration:
-#     hours: 24
+- platform: history_stats
+  name: daily hvac ac on time
+  entity_id: binary_sensor.hvac_ac
+  state: "on"
+  type: time
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+- platform: history_stats
+  name: daily hvac ac on count
+  entity_id: binary_sensor.hvac_ac
+  state: "on"
+  type: count
+  end: "{{ now() }}"
+  duration:
+    hours: 24
 
-# - platform: history_stats
-#   name: daily hvac on time
-#   entity_id: binary_sensor.hvac
-#   state: "on"
-#   type: time
-#   end: "{{ now() }}"
-#   duration:
-#     hours: 24
-# - platform: history_stats
-#   name: daily hvac on count
-#   entity_id: binary_sensor.hvac
-#   state: "on"
-#   type: count
-#   end: "{{ now() }}"
-#   duration:
-#     hours: 24
-# - platform: history_stats
-#   name: daily hvac duty cycle
-#   entity_id: binary_sensor.hvac
-#   state: "on"
-#   type: ratio
-#   end: "{{ now() }}"
-#   duration:
-#     hours: 24
-
-# - platform: nut
-#   name: "TrippLite"
-#   host: a0d7b954-nut
-#   username: !secret nut_usr
-#   password: !secret nut_pwd
-#   resources:
-#     - battery.charge
-#     - battery.runtime
-#     - ups.load
-#     - ups.status
-
+- platform: history_stats
+  name: daily hvac on time
+  entity_id: binary_sensor.hvac
+  state: "on"
+  type: time
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+- platform: history_stats
+  name: daily hvac on count
+  entity_id: binary_sensor.hvac
+  state: "on"
+  type: count
+  end: "{{ now() }}"
+  duration:
+    hours: 24
+- platform: history_stats
+  name: daily hvac duty cycle
+  entity_id: binary_sensor.hvac
+  state: "on"
+  type: ratio
+  end: "{{ now() }}"
+  duration:
+    hours: 24
 # rtl_433 sensors
 # - platform: mqtt
 #   name: Nursery Temperature

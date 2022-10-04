@@ -105,24 +105,3 @@
 #   value_template: "{{ value_json.state }}"
 #   payload_on: "motion"
 #   off_delay: 10
-
-# - platform: template
-#   sensors:
-#     hvac:
-#       friendly_name: "hvac status"
-#       value_template: >-
-#         {{ states.climate.basement_thermostat.attributes['hvac_action'] != "idle"
-#         or states.climate.main_thermostat.attributes['hvac_action'] != "idle"
-#         or states.climate.upstairs_thermostat.attributes['hvac_action'] != "idle" }}
-#     hvac_heat:
-#       friendly_name: "hvac heat status"
-#       value_template: >-
-#         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "heating"
-#         or states.climate.main_thermostat.attributes['hvac_action'] == "heating"
-#         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "heating" }}
-#     hvac_ac:
-#       friendly_name: "hvac ac status"
-#       value_template: >-
-#         {{ states.climate.basement_thermostat.attributes['hvac_action'] == "cooling"
-#         or states.climate.main_thermostat.attributes['hvac_action'] == "cooling"
-#         or states.climate.upstairs_thermostat.attributes['hvac_action'] == "cooling" }}

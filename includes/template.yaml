@@ -252,6 +252,24 @@
         or states('media_player.office') == "playing"
         or states('media_player.patio') == "playing"
         or states('media_player.sunroom') == "playing" }}
+    - name: HVAC
+      unique_id: hvac
+      state: >-
+        {{ states('sensor.lower_level_hvac_action') != "idle"
+        or states('sensor.main_level_hvac_action') != "idle"
+        or states('sensor.upper_level_hvac_action') != "idle" }}
+    - name: HVAC Heat
+      unique_id: hvac_heat
+      state: >-
+        {{ states('sensor.lower_level_hvac_action') == "heating"
+        or states('sensor.main_level_hvac_action') == "heating"
+        or states('sensor.upper_level_hvac_action') == "heating" }}
+    - name: HVAC AC
+      unique_id: hvac_ac
+      state: >-
+        {{ states('sensor.lower_level_hvac_action') == "cooling"
+        or states('sensor.main_level_hvac_action') == "cooling"
+        or states('sensor.upper_level_hvac_action') == "cooling" }}
 
 - sensor:
     - name: "Bed Occupancy"
@@ -363,10 +381,12 @@
         {% else %} 40 {% endif %}
     - name: "Current Temperature"
       unique_id: current_temperature
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'temperature') }}°"
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'temperature') }}"
+      unit_of_measurement: "°F"
     - name: "Current Feels"
       unique_id: current_feels
-      state: "feels like {{ states('sensor.tomorrow_io_home_feels_like') }}°"
+      state: "feels like {{ states('sensor.tomorrow_io_home_feels_like') }}"
+      unit_of_measurement: "°F"
     - name: "Cloud Cover"
       unique_id: cloud_cover
       state: "{{ states('sensor.tomorrow_io_home_cloud_cover') | round | int }}"
@@ -375,35 +395,38 @@
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}%"
     - name: "daily_high"
       unique_id: daily_high
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].temperature }}°"
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].temperature }}"
+      unit_of_measurement: "°F"
+      icon: mdi:thermometer
     - name: "Todays Low"
       unique_id: todays_low
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].templow }}°"
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].templow }}"
+      unit_of_measurement: "°F"
+      icon: mdi:thermometer
     - name: "Precipitation Amount"
       unique_id: precipitation_amount
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation }}"
     - name: "Precipitation Probability"
       unique_id: precipitation_probability
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int  }}%"
-    - name: "Today Text"
-      unique_id: todays_text
-      state: "{{ now().strftime('%A / %B %d') }}"
-    - name: "Today clock"
-      unique_id: today_clock
-      state: "{{ now().strftime('%A / %B %d / %I:%M %p') }}"
-    - name: "Time Is"
-      unique_id: time_is
-      state: "{{ now().strftime('%I:%M %p') }}"
-    # HVAC Sensors
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int }}%"
+    ############################
+    ## HVAC Sensors
     - name: "Lower Level Temperature"
       unique_id: lower_level_temperature
       state: "{{ state_attr('climate.lower_level', 'current_temperature') }}"
+      unit_of_measurement: "°F"
+      icon: mdi:thermometer
     - name: "Main Level Temperature"
       unique_id: main_level_temperature
       state: "{{ state_attr('climate.main_level', 'current_temperature') }}"
+      unit_of_measurement: "°F"
+      icon: mdi:thermometer
     - name: "Upper Level Temperature"
       unique_id: upper_level_temperature
       state: "{{ state_attr('climate.upper_level', 'current_temperature') }}"
+      unit_of_measurement: "°F"
+      icon: mdi:thermometer
+    ##
     - name: "Lower Level Hold State"
       unique_id: lower_level_hold_state
       state: "{{ state_attr('climate.lower_level', 'hold_state') }}"
@@ -413,7 +436,27 @@
     - name: "Upper Level Hold State"
       unique_id: upper_level_hold_state
       state: "{{ state_attr('climate.upper_level', 'hold_state') }}"
-
+    ##
+    - name: "Lower Level HVAC Action"
+      unique_id: lower_level_hvac_action
+      state: "{{ state_attr('climate.lower_level', 'hvac_action') }}"
+      icon: mdi:air-conditioner
+    - name: "Main Level HVAC Action"
+      unique_id: main_level_hvac_action
+      state: "{{ state_attr('climate.main_level', 'hvac_action') }}"
+      icon: mdi:air-conditioner
+    - name: "Upper Level HVAC Action"
+      unique_id: upper_level_hvac_action
+      state: "{{ state_attr('climate.upper_level', 'hvac_action') }}"
+      icon: mdi:air-conditioner
+    ##
     - name: "Outdoor HVAC Temperature"
       unique_id: outdoor_hvac_temperature
       state: "{{ state_attr('climate.main_level', 'outdoor_temperature') }}"
+      unit_of_measurement: "°F"
+    ##
+    - name: "HVAC Humidity"
+      unique_id: hvac_humidity
+      state: "{{ state_attr('climate.main_level', 'current_humidity') }}"
+      unit_of_measurement: "%"
+    ############################
