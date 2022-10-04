@@ -116,24 +116,6 @@
             message: "Damnit, defaulting: {{ trigger.event.data.command == '\/mutefrigate' ~ location ~ time }} && {{ mutefrigate ~ location ~ time }} && variable values: {{ location ~ time }} && {{trigger}}"
             level: error
 #########################################
-# - alias: "Frigate: driveway person arrival"
-#   id: "Frigate: driveway person arrival"
-#   # mode: restart
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.driveway_far_person_occupancy
-#       to: "on"
-#   action:
-#     - wait_for_trigger:
-#         - platform: state
-#           entity_id: binary_sensor.driveway_near_person_occupancy
-#           to: "on"
-#       timeout: 20
-#       continue_on_timeout: false
-#     - service: telegram_bot.send_photo
-#       data:
-#         url: "http://192.168.30.249:5005/api/driveway/latest.jpg"
-#########################################
 - alias: "Frigate: driveway video notification"
   id: "Frigate: driveway video notification"
   description: "if Jons away or were asleep - send a video of the driveway"
@@ -151,7 +133,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_driveway_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
     - choose:
         - conditions:
@@ -210,7 +192,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_frontyard_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
     - choose:
         - conditions:
@@ -269,7 +251,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_grilldeck_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
     - choose:
         - conditions:
@@ -328,7 +310,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_deck_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
     - choose:
         - conditions:
@@ -387,7 +369,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_patio_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
     - choose:
         - conditions:
@@ -446,7 +428,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_workshop_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    # - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
   action:
     - choose:
         - conditions:
