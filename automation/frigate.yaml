@@ -133,7 +133,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_driveway_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ states('person.jon') != 'home' }}"
   action:
     - choose:
         - conditions:
@@ -192,7 +192,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_frontyard_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ states('person.jon') != 'home' }}"
   action:
     - choose:
         - conditions:
@@ -251,7 +251,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_grilldeck_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ states('person.jon') != 'home' }}"
   action:
     - choose:
         - conditions:
@@ -310,7 +310,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_deck_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ states('person.jon') != 'home' }}"
   action:
     - choose:
         - conditions:
@@ -369,7 +369,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_patio_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ states('person.jon') != 'home' }}"
   action:
     - choose:
         - conditions:
@@ -428,7 +428,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_workshop_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    - "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+    - "{{ states('person.jon') != 'home' }}"
   action:
     - choose:
         - conditions:
