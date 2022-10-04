@@ -663,10 +663,9 @@ views:
         title: Toggles
         show_header_toggle: false
         entities:
-          - input_boolean.block_all_motion_lights
-          - input_boolean.motion_lights
+          - input_boolean.block_interior_motion_lights
+          - input_boolean.exterior_lights_block
           - input_boolean.guests
-          - input_boolean.party
       - type: markdown
         title: Automations Triggered
         content: |

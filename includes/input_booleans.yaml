@@ -1,8 +1,6 @@
 ---
-block_all_motion_lights:
-  name: Block All Motion Lights
-motion_lights:
-  name: Motion Lights
+block_interior_motion_lights:
+  name: Manual Block Interior Motion Lights
 main_bed_blinds_run_once:
   name: Main Bed Blinds Once
 sunset_run_once:
@@ -11,8 +9,6 @@ morning_lights_run_once:
   name: Morning Lights Run Once
 guests:
   name: Guests?
-party:
-  name: Party?
 alarm_notifier:
   name: Alarm Notifier
   initial: true

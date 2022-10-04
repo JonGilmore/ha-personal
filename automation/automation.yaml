@@ -238,7 +238,7 @@
 #         minutes: 15
 #   # condition:
 #   #   - condition: state
-#   #     entity_id: input_boolean.block_all_motion_lights
+#   #     entity_id: input_boolean.block_interior_motion_lights
 #   #     state: "off"
 #   #   - condition: state
 #   #     entity_id: binary_sensor.light_inside
@@ -253,22 +253,6 @@
 #           {% elif trigger_entity == 'binary_sensor.basement_motions' %}
 #             scene.equipment_room_enclosure_device_001_ph_basement_off
 #           {% endif %}
-########################################
-# TODO: check into this...
-- alias: "Automatic Lighting: enable motion light boolean 2hours before sunset & disable 2hour after sunrise"
-  id: "Automatic Lighting: enable motion light boolean 2hours before sunset & disable 2hour after sunrise"
-  trigger:
-    - platform: sun
-      event: sunset
-      offset: "-02:00:00"
-    - platform: sun
-      event: sunrise
-      offset: "+02:00:00"
-  action:
-    - service_template: >
-        {% if now().strftime("%H") | int > 12 %}homeassistant.turn_on
-        {% else %}homeassistant.turn_on{% endif %}
-      entity_id: input_boolean.motion_lights
 ########################################
 - alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
   id: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
@@ -294,22 +278,6 @@
     #   entity_id: scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
     - service: homeassistant.turn_off
       entity_id: group.all_lights
-# ########################################
-# - alias: "Automatic Lighting: backyard party lights"
-#   id: "Automatic Lighting: backyard party lights"
-#   trigger:
-#     - platform: state
-#       entity_id: sensor.elkm1_patio_door
-#       to: "Violated"
-#   condition:
-#     - condition: state
-#       entity_id: input_boolean.party
-#       state: "on"
-#   action:
-#     - service: scene.turn_on
-#       entity_id:
-#         - scene.basement_keypad_theater
-#         - scene.basement_keypad_bar
 #########################################
 - alias: "Utility: generic time based triggers"
   id: "Utility: generic time based triggers"

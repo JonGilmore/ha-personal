@@ -28,13 +28,13 @@
       id: pir-off
       to: "off"
       for:
-        minutes: 2
+        minutes: 3
   action:
     - choose:
         - conditions:
             - condition: trigger
               id: pir-on
-            - "{{ is_state('input_boolean.block_all_motion_lights', 'off') }}"
+            - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
             - "{{ is_state('binary_sensor.dark_out', 'on') }}"
           sequence:
             - choose:
