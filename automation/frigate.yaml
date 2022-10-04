@@ -133,7 +133,7 @@
         label: "{{ trigger.payload_json['after']['label'] }}"
   condition:
     - "{{ is_state('input_boolean.frigate_driveway_notifier', 'on') }}" # make sure notifications havent been paused from an actionable notification
-    - "{{ states('person.jon') != 'home' }}"
+    # - "{{ states('person.jon') != 'home' }}"
   action:
     - choose:
         - conditions:

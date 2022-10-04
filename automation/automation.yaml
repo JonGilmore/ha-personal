@@ -689,11 +689,12 @@
     - platform: state
       entity_id:
         - sensor.public_ip
-        # - binary_sensor.rain_sensor
-        - input_boolean.frigate_driveway_notifier
-        - input_boolean.frigate_kitchen_notifier
-        - input_boolean.frigate_deckstairs_notifier
         - input_boolean.frigate_deck_notifier
+        - input_boolean.frigate_driveway_notifier
+        - input_boolean.frigate_frontyard_notifier
+        - input_boolean.frigate_grilldeck_notifier
+        - input_boolean.frigate_patio_notifier
+        - input_boolean.frigate_workshop_notifier
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     # - platform: state
