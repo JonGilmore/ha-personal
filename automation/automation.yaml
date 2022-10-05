@@ -390,10 +390,7 @@
       after: "18:30:00"
   action:
     - service: homeassistant.turn_off
-      entity_id:
-        - group.basement_lights
-        - group.main_floor_lights
-        - switch.equipment_room_recirculation_pump
+      entity_id: group.all_lights_except_mainbedbath
 #########################################
 - alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
@@ -404,7 +401,7 @@
       to: "on"
   action:
     - service: homeassistant.turn_off
-      entity_id: group.all_lights
+      entity_id: group.all_lights_except_mainbedbath
     # - service: scene.turn_on
     #   data_template:
     #     entity_id: >
@@ -420,10 +417,7 @@
     #       - climate.main_thermostat
     #       - climate.upstairs_thermostat
     #     fan_mode: "on"
-    # - service: webostv.command
-    #   data:
-    #     entity_id: media_player.living_room_tv
-    #     command: "system/turnOff"
+    - service: script.tvs_off_except_mainbed
     - service: homeassistant.turn_off
       entity_id: switch.equipment_room_recirculation_pump
     - service: input_boolean.turn_on
@@ -458,48 +452,49 @@
                 message: "Locking {{ states('sensor.doors_unlocked') }}"
             - service: script.lock_doors
 #########################################
-- alias: "Away Mode: turn the HVAC fans on & recirculation pump & tvs off"
-  id: "Away Mode: turn the HVAC fans on & recirculation pump & tvs off"
-  description: "also if its still bright inside, turn off all lights"
+- alias: "Occupancy: leaving or arriving home"
+  id: "Occupancy: leaving or arriving home"
+  description: "check locks, lights, recirc pump"
   trigger:
     - platform: state
-      entity_id: binary_sensor.alarm_occupancy_status
+      entity_id: binary_sensor.occupied_alarm
       to: "off"
-  action:
-    # - service: climate.set_fan_mode
-    #   data:
-    #     entity_id:
-    #       - climate.basement_thermostat
-    #       - climate.main_thermostat
-    #       - climate.upstairs_thermostat
-    #     fan_mode: "on"
-    - service: homeassistant.turn_off
-      entity_id: switch.equipment_room_recirculation_pump
-    # - service: script.tvs_off
-    - choose: # if its light inside, turn off all lights
-        - conditions: "{{ is_state('binary_sensor.light_inside', 'on') }}"
-          sequence:
-            - service: homeassistant.turn_off
-              entity_id: group.all_lights
-            # - service: scene.turn_on
-            #   entity_id: scene.equipment_room_enclosure_device_001_ph_all_off
-#########################################
-- alias: "Home Mode: return home & turn the HVAC fans off & the recirculation pump on & stop daisy cam timer"
-  id: "Home Mode: return home & turn the HVAC fans off & the recirculation pump on & stop daisy cam timer"
-  trigger:
+      id: leaving
     - platform: state
-      entity_id: binary_sensor.alarm_occupancy_status
+      entity_id: binary_sensor.occupied_alarm
       to: "on"
+      id: arriving
   action:
-    # - service: climate.set_fan_mode
-    #   data:
-    #     entity_id:
-    #       - climate.basement_thermostat
-    #       - climate.main_thermostat
-    #       - climate.upstairs_thermostat
-    #     fan_mode: "auto"
-    - service: homeassistant.turn_on
-      entity_id: switch.equipment_room_recirculation_pump
+    - choose:
+        - conditions: "{{ trigger.id == 'leaving' }}"
+          sequence: # leaving home
+            - service: notify.telegram_jon
+              data:
+                message: "leaving, checking the locks, lights, recirc pump"
+            - service: homeassistant.turn_off
+              entity_id: switch.equipment_room_recirculation_pump
+            - service: script.tvs_off
+            - choose: # if its light inside, turn off all lights
+                - conditions: "{{ is_state('binary_sensor.light_inside', 'on') }}"
+                  sequence:
+                    - service: homeassistant.turn_off
+                      entity_id: group.all_lights
+            - choose: # if the workshop is unlocked, notify & lock
+                - conditions: "{{ is_state('lock.workshop_lock', 'unlocked') }}"
+                  sequence:
+                    - service: notify.telegram_jon
+                      data:
+                        title: "Workshop is UNLOCKED!"
+                        message: "Locking the workshop"
+                    - service: lock.lock
+                      entity_id: lock.workshop_lock
+        - conditions: "{{ trigger.id == 'arriving' }}"
+          sequence: # arriving home
+            - service: homeassistant.turn_on
+              entity_id: switch.equipment_room_recirculation_pump
+            - service: notify.telegram_jon
+              data:
+                message: "arriving, turning on the recirc pump"
 ########################################
 - alias: "Night Mode: turn on sunset lights at dark or sunset"
   id: "Night Mode: turn on sunset lights at dark or sunset"
@@ -546,7 +541,7 @@
 #       entity_id: climate.main_thermostat
 #       state: cool
 #     - condition: state
-#       entity_id: binary_sensor.vacation_status
+#       entity_id: binary_sensor.vacation
 #       state: "off"
 #   action:
 #     - service: light.turn_on
@@ -562,24 +557,6 @@
 #   action:
 #     - service: light.turn_off
 #       entity_id: light.master_bedroom_master_fan
-#########################################
-- alias: "Away Mode: check the workshop lock when leaving"
-  id: "Away Mode: check the workshop lock when leaving"
-  trigger:
-    - platform: state
-      entity_id: sensor.armed_status
-      to: "armed_away"
-  condition:
-    - condition: state
-      entity_id: lock.workshop_lock
-      state: "unlocked"
-  action:
-    - service: notify.telegram_jon
-      data:
-        title: "Workshop is UNLOCKED!"
-        message: "Locking the workshop"
-    - service: lock.lock
-      entity_id: lock.workshop_lock
 #########################################
 - alias: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
   id: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"

@@ -157,33 +157,9 @@ person:
 config:
 hassio:
 map:
-# discovery:
-#   ignore:
-#     - axis
-#     - homekit
+mobile_app:
+media_source:
 
 speedtestdotnet:
   scan_interval:
     minutes: 121
-
-mobile_app:
-
-# browser_mod:
-#   prefix: "browser_"
-#   devices:
-#     c427d3b2-52fa9681:
-#       name: jons_macbook
-#     06bc0513-a22e88bf:
-#       name: jons_pixel
-
-# lifx:
-#   light:
-#     - broadcast: 192.168.45.181
-#     - broadcast: 192.168.45.182
-#     - broadcast: 192.168.45.183
-#     - broadcast: 192.168.45.184
-
-media_source:
-# cast:
-#   media_player:
-#     - host: 192.168.45.45

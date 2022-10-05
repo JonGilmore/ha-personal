@@ -142,6 +142,17 @@ tvs_off:
         - media_player.media_room_tv
         - media_player.main_bedroom_tv
 
+tvs_off_except_mainbed:
+  alias: "all tvs off except main bed"
+  sequence:
+    - service: media_player.turn_off
+      entity_id:
+        - media_player.sunroom_tv
+        - media_player.office_tv
+        - media_player.gym_tv
+        - media_player.living_room_tv
+        - media_player.media_room_tv
+
 # popup_camera:
 #   sequence:
 #     - service: browser_mod.command
