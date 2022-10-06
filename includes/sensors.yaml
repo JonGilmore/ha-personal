@@ -7,8 +7,6 @@
     - sensor.aeotec_multipurpose_sensor_relative_humidity_measurement
 
 - platform: websocket_api
-- platform: season
-- platform: uptime
 
 - platform: command_line
   name: Public IP
