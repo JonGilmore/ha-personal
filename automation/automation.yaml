@@ -672,6 +672,7 @@
         - input_boolean.frigate_grilldeck_notifier
         - input_boolean.frigate_patio_notifier
         - input_boolean.frigate_workshop_notifier
+        - binary_sensor.light_inside
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     # - platform: state
