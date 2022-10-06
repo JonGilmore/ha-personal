@@ -168,8 +168,8 @@
         - switch.grill_deck_light
         - switch.deck_posts
 #########################################
-- alias: "Wake Mode: done sleeping & HVAC fan off & recirculation pump on"
-  id: "Wake Mode: done sleeping & HVAC fan off & recirculation pump on"
+- alias: "Wake Mode: done sleeping & recirculation pump on"
+  id: "Wake Mode: done sleeping & recirculation pump on"
   description: "also checks if date is between Oct-May & turn on some lights"
   trigger:
     - platform: state
@@ -177,13 +177,6 @@
       from: "on"
       to: "off"
   action:
-    # - service: climate.set_fan_mode
-    #   data:
-    #     entity_id:
-    #       - climate.basement_thermostat
-    #       - climate.main_thermostat
-    #       - climate.upstairs_thermostat
-    #     fan_mode: "auto"
     - service: homeassistant.turn_on
       entity_id: switch.equipment_room_recirculation_pump
     # - choose:
@@ -665,7 +658,7 @@
   trigger:
     - platform: state
       entity_id:
-        - sensor.public_ip
+        - sensor.myip
         - input_boolean.frigate_deck_notifier
         - input_boolean.frigate_driveway_notifier
         - input_boolean.frigate_frontyard_notifier
@@ -675,12 +668,25 @@
         - binary_sensor.light_inside
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
-    # - platform: state
-    #   entity_id:
-    #     - binary_sensor.office_multi_tamper
-    #     - binary_sensor.kitchen_fridge_door_tamper
-    #     - binary_sensor.home_assistant_versions_update_available
-    #   to: "on"
+    - platform: state
+      entity_id:
+        - binary_sensor.lounge_multi_pir_tamper
+        - binary_sensor.home_assistant_versions_update_available
+        - update.adguard_home_update
+        - update.cloudflared_update
+        - update.emqx_update
+        - update.esphome_update
+        - update.frigate_nvr_proxy_update
+        - update.frigate_server
+        - update.home_assistant_core_update
+        - update.home_assistant_supervisor_update
+        - update.mariadb_update
+        - update.rtl_433_update
+        - update.samba_share_update
+        - update.studio_code_server_update
+        - update.terminal_ssh_update
+        - update.wireguard_update
+      to: "on"
     # - platform: numeric_state
     #   entity_id: sensor.computer_multi_temperature_measurement
     #   above: 105

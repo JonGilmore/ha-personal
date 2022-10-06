@@ -4,14 +4,10 @@
   round_digits: 0
   type: mean
   entity_ids:
-    - sensor.aeotec_multipurpose_sensor_relative_humidity_measurement
+    - sensor.lounge_multi_pir_relative_humidity_measurement
+    - sensor.hvac_humidity
 
 - platform: websocket_api
-
-- platform: command_line
-  name: Public IP
-  command: "dig +short myip.opendns.com @resolver1.opendns.com"
-  scan_interval: 1800
 
 - platform: command_line
   name: CPU Temperature
@@ -151,21 +147,3 @@
 #   state_topic: "rtl_915/ERT-SCM/48150945"
 #   unit_of_measurement: "M3"
 #   value_template: "{{ value_json.consumption_data }}"
-
-#THERMOSTAT TEMPLATES
-# main_status:
-#   friendly_name: Main Floor Status
-#   value_template: >-
-#     {{ state_attr('climate.main_floor', 'current_temperature') | round | int }}° / {{ state_attr('climate.main_floor', 'current_humidity') | round | int }}% humidity
-# upstairs_status:
-#   friendly_name: Upstairs Status
-#   value_template: >-
-#     {{ state_attr('climate.upstairs', 'current_temperature') | round | int }}° / {{ state_attr('climate.upstairs', 'current_humidity') | round | int }}% humidity
-# familyroom_temperature:
-#   friendly_name: Family Room Temperature
-#   value_template: >-
-#     {{ states('sensor.family_room_temperature') | round | int }}°
-# diningroom_temperature:
-#   friendly_name: Dining Room Temperature
-#   value_template: >-
-#     {{ states('sensor.dining_room_temperature') | round | int }}°

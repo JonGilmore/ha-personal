@@ -234,8 +234,6 @@ views:
             entities:
               - entity: binary_sensor.light_inside
                 name: main?
-              - entity: binary_sensor.light_inside_master
-                name: second?
           # - entity: sensor.bar_fridge_leak_sensor
           #   type: custom:multiple-entity-row
           #   name: bar
@@ -257,16 +255,16 @@ views:
           #     - entity: sensor.kitchen_freezer_temperature
           #       name: freezer
           # - entity: input_select.vacuum_room
-      # - type: custom:mini-graph-card
-      #   name: Lux Sensors
-      #   icon: mdi:brightness-6
-      #   entities:
-      #     - entity: sensor.main_tv_lux
-      #       name: Main TV Lux
-      #       show_state: true
-      #     - entity: sensor.sitting_room_lux
-      #       name: Sitting Room Lux
-      #       show_state: true
+      - type: custom:mini-graph-card
+        name: Lux Sensors
+        icon: mdi:brightness-6
+        entities:
+          - entity: sensor.main_tv_lux
+            name: Main TV Lux
+            show_state: true
+          - entity: sensor.lounge_multi_pir_illuminance
+            name: Lounge Lux
+            show_state: true
 
   ##########################################
   # CAMERA TAB
@@ -661,6 +659,13 @@ views:
           - input_boolean.block_interior_motion_lights
           - input_boolean.exterior_lights_block
           - input_boolean.guests
+      - type: entities
+        title: Informational
+        show_header_toggle: false
+        entities:
+          - binary_sensor.light_inside
+          - sensor.main_tv_lux
+          - sensor.lounge_multi_pir_illuminance
       - type: markdown
         title: Automations Triggered
         content: |
