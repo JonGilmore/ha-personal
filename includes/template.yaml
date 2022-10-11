@@ -2,7 +2,7 @@
     - name: dark out? # true if the sun is below horizon or cloud coverage is greater than 50%
       icon: mdi:weather-night
       unique_id: dark out
-      state: "{{ state_attr('sun.sun', 'elevation') | float < 2 or states('sensor.cloud_cover') | float > 50 }}"
+      state: "{{ is_state('sun.sun', 'below_horizon') or states('sensor.cloud_cover') | float > 75 }}"
     - name: "Has Unavailable States"
       unique_id: has_unavailable_state
       state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
@@ -204,7 +204,11 @@
     - name: "light inside?"
       unique_id: light_inside
       device_class: light
-      state: "{{ states('sensor.main_tv_lux') | int > 110 }}"
+      state: "{{ states('sensor.main_tv_lux') | int > 90 }}"
+    - name: "light inside basement?"
+      unique_id: light_inside_basement
+      device_class: light
+      state: "{{ states('sensor.lounge_multi_pir_illuminance') | int > 50 }}"
     - name: "Anybody Home"
       unique_id: anybody_home
       device_class: presence

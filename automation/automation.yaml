@@ -64,13 +64,13 @@
       for:
         minutes: 20
   condition:
-    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
     - "{{ is_state('input_boolean.exterior_lights_block', 'off') }}"
   action:
     - choose:
         - conditions: # if exterior person detected, turn on all exterior lights
             - condition: trigger
               id: pir-on
+            - "{{ is_state('binary_sensor.dark_out', 'on') }}"
           sequence:
             - service: scene.turn_on
               entity_id: scene.exterior_lights_on
@@ -318,7 +318,7 @@
                   {%- set ns = namespace(a=[]) -%}
                   {%- for item in expand(integration_entities('anniversaries')) -%}
                   {%- set days = [item.state | int] | min -%}
-                  {%- set next = item.attributes.get('years_at_next_anniversary') -%}
+                  {%- set next = item.attributes.get('current_years') -%}
                   {%- set date = item.attributes.get('date') -%}
                   {%- if days in [0, 7] %}
                   {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
@@ -451,10 +451,12 @@
   trigger:
     - platform: state
       entity_id: binary_sensor.occupied_alarm
+      from: "on"
       to: "off"
       id: leaving
     - platform: state
       entity_id: binary_sensor.occupied_alarm
+      from: "off"
       to: "on"
       id: arriving
   action:
@@ -493,8 +495,8 @@
   id: "Night Mode: turn on sunset lights at dark or sunset"
   trigger:
     - platform: state
-      entity_id: binary_sensor.dark_out
-      to: "on"
+      entity_id: binary_sensor.light_inside
+      to: "off"
       for:
         minutes: 10
     - platform: sun
@@ -509,8 +511,7 @@
     - service: scene.turn_on
       entity_id: scene.sunset_on
     - service: homeassistant.turn_on
-      entity_id:
-        - input_boolean.sunset_run_once
+      entity_id: input_boolean.sunset_run_once
     - service: cover.close_cover
       entity_id: cover.library_shade
 # ########################################
@@ -665,7 +666,6 @@
         - input_boolean.frigate_grilldeck_notifier
         - input_boolean.frigate_patio_notifier
         - input_boolean.frigate_workshop_notifier
-        - binary_sensor.light_inside
     - platform: template
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state
@@ -687,6 +687,14 @@
         - update.terminal_ssh_update
         - update.wireguard_update
       to: "on"
+    - platform: state
+      entity_id: binary_sensor.light_inside
+      from: "off"
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.light_inside
+      from: "on"
+      to: "off"
     # - platform: numeric_state
     #   entity_id: sensor.computer_multi_temperature_measurement
     #   above: 105
@@ -847,3 +855,77 @@
       data_template:
         message: "LOGGING: {{ trigger.json }}"
         level: error
+#########################################
+- alias: "Automatic Lighting: motion light template"
+  id: "Automatic Lighting: motion light template"
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_main_bath_pir
+        - binary_sensor.elkm1_lounge_pir
+        - binary_sensor.elkm1_back_kitchen_pir
+        - binary_sensor.elkm1_kitchen_pir
+        - binary_sensor.elkm1_gym_pir
+      id: pir-on
+      to: "on"
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_lounge_pir
+        - binary_sensor.elkm1_back_kitchen_pir
+        - binary_sensor.elkm1_kitchen_pir
+        - binary_sensor.elkm1_gym_pir
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: binary_sensor.elkm1_main_bath_pir
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 3
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
+            - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+          sequence:
+            - service: homeassistant.turn_on
+              data_template:
+                entity_id: >
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                    light.office_art
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
+                    light.main_bathroom_toekick
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
+                    switch.bar_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
+                    switch.back_kitchen_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
+                    switch.kitchen_cabinets, switch.kitchen_toekick
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
+                    light.gym_cans
+                  {% endif %}
+        - conditions:
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - service: homeassistant.turn_off
+              data_template:
+                entity_id: >
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                    light.office_art
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
+                    light.main_bathroom_toekick
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
+                    switch.bar_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
+                    switch.back_kitchen_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
+                    switch.kitchen_cabinets, switch.kitchen_cabinets, switch.kitchen_toekick
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
+                    light.gym_cans
+                  {% endif %}

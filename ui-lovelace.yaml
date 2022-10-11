@@ -234,6 +234,8 @@ views:
             entities:
               - entity: binary_sensor.light_inside
                 name: main?
+              - entity: binary_sensor.light_inside_basement
+                name: basement?
           # - entity: sensor.bar_fridge_leak_sensor
           #   type: custom:multiple-entity-row
           #   name: bar

@@ -74,7 +74,7 @@ views:
               numeric: true
             filter:
               include:
-                - entity_id: "/(birthday|anniversary)/"
+                - entity_id: "/(birthday|anniversary|holiday)/"
                   state: < 45
                   options:
                     type: custom:template-entity-row
@@ -86,11 +86,11 @@ views:
                       {% else %}
                         {{ states(config.entity) }} days
                       {% endif %}
+                    # if current_years isnt defined, then add nothing at the front, elif the day is today, then add their current_years, else just add yrs at next
                     secondary: |
-                      {% if is_state(config.entity, '0') %}
+                      {% if state_attr(config.entity, 'current_years') == None %}
+                      {% elif is_state(config.entity, '0') %}
                         {{ state_attr(config.entity, 'current_years') }} yrs - 
-                      {% elif state_attr(config.entity, 'current_years') == None %}
-                        no year specified - 
                       {% else %}
                         {{ state_attr(config.entity, 'years_at_next_anniversary') }} yrs - 
                       {% endif %}
