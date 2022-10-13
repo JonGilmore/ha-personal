@@ -304,7 +304,10 @@
               id: 5am
           sequence:
             - service: cover.open_cover
-              entity_id: cover.library_shade
+              entity_id:
+                - cover.library_shade
+                - cover.office_shades
+                - cover.office_west_shade
         - conditions: # 7am and if there is an event 7 days out OR today, send a message
             - condition: trigger
               id: 7am
@@ -929,3 +932,22 @@
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
                     light.gym_cans
                   {% endif %}
+#########################################
+- alias: "Blinds: office"
+  id: "Blinds: office"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_office_pir
+      to: "on"
+  condition:
+    - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+    - condition: template # only notify once every hour at most
+      value_template: "{{ (as_timestamp(now()) - as_timestamp(state_attr('automation.blinds_office', 'last_triggered')) | int(0)) > 21600 }}"
+    - condition: sun
+      after: sunset
+      after_offset: "-00:15:00"
+  action:
+    - service: cover.close_cover
+      entity_id:
+        - cover.office_shades
+        - cover.office_west_shade
