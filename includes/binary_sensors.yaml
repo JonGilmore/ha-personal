@@ -17,20 +17,6 @@
 #   device_class: battery
 #   value_template: "{{ value_json.battery_ok }}"
 # - platform: mqtt
-#   name: Kitchen Freezer Battery
-#   state_topic: "rtl_433/Acurite-986/15488"
-#   payload_on: "0"
-#   payload_off: "1"
-#   device_class: battery
-#   value_template: "{{ value_json.battery_ok }}"
-# - platform: mqtt
-#   name: Kitchen Fridge Battery
-#   state_topic: "rtl_433/Acurite-986/37649"
-#   payload_on: "0"
-#   payload_off: "1"
-#   device_class: battery
-#   value_template: "{{ value_json.battery_ok }}"
-# - platform: mqtt
 #   name: Bar Freezer Battery
 #   state_topic: "rtl_433/Acurite-986/50597"
 #   payload_on: "0"

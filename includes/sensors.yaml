@@ -116,16 +116,6 @@
 #   unit_of_measurement: "%"
 #   value_template: "{{ value_json.humidity }}"
 # - platform: mqtt
-#   name: Kitchen Freezer Temperature
-#   state_topic: "rtl_433/Acurite-986/15488"
-#   unit_of_measurement: "°F"
-#   value_template: "{{ value_json.temperature_F }}"
-# - platform: mqtt
-#   name: Kitchen Fridge Temperature
-#   state_topic: "rtl_433/Acurite-986/37649"
-#   unit_of_measurement: "°F"
-#   value_template: "{{ value_json.temperature_F }}"
-# - platform: mqtt
 #   name: Bar Freezer Temperature
 #   state_topic: "rtl_433/Acurite-986/50597"
 #   unit_of_measurement: "°F"
