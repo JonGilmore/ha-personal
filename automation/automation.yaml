@@ -71,6 +71,15 @@
             - condition: trigger
               id: pir-on
             - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+            # - condition: sun # after 30m before sunset
+            #   after: sunset
+            #   after_offset: "-00:30:00"
+            # - condition: sun # before 30m after sunrise
+            #   before: sunrise
+            #   before_offset: "00:30:00"
+            - condition: state # from sunset until sunrise
+              entity_id: sun.sun
+              state: "below_horizon"
           sequence:
             - service: scene.turn_on
               entity_id: scene.exterior_lights_on
@@ -307,7 +316,6 @@
               entity_id:
                 - cover.library_shade
                 - cover.office_shades
-                - cover.office_west_shade
         - conditions: # 7am and if there is an event 7 days out OR today, send a message
             - condition: trigger
               id: 7am
@@ -380,13 +388,30 @@
   trigger:
     - platform: state
       entity_id: sensor.bed_occupancy
+      id: both
       to: both
+    - platform: state
+      entity_id: sensor.bed_occupancy
+      id: laura
+      to: laura
   condition:
     - condition: time
       after: "18:30:00"
   action:
-    - service: homeassistant.turn_off
-      entity_id: group.all_lights_except_mainbedbath
+    - choose:
+        - conditions: "{{ trigger.id == 'both' }}"
+          sequence:
+            - service: homeassistant.turn_off
+              entity_id: group.all_lights_except_mainbedbath
+        - conditions: "{{ trigger.id == 'laura' }}"
+          sequence:
+            - service: homeassistant.turn_off
+              entity_id:
+                - light.library_cabinets
+                - light.great_room_cabinets
+                - light.kitchen_pendants
+                - light.kitchen_dining_chandelier
+                - light.kitchen_dining_art
 #########################################
 - alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
