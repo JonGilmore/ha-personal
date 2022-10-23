@@ -4,6 +4,7 @@ cloud:
     filter:
       include_entities:
         - scene.chill_on
+        - group.all_lights
     entity_config:
       scene.chill_on:
         name: relax
@@ -11,6 +12,7 @@ cloud:
     filter:
       include_entities:
         - scene.chill_on
+        - group.all_lights
     entity_config:
       scene.chill_on:
         name: relax
