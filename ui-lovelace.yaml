@@ -460,6 +460,18 @@ views:
       #   template: big_group
       #   variables:
       #     - group: group.all_fans
+
+  ##########################################
+  # SHADE TAB
+  ##########################################
+  - title: Shades
+    id: shades
+    icon: mdi:roller-shade
+    cards:
+      - type: custom:decluttering-card
+        template: big_group
+        variables:
+          - group: group.all_shades
   ##########################################
   # SMARTTHINGS TAB
   ##########################################
