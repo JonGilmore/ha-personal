@@ -114,19 +114,6 @@ views:
                   - entity: alarm_control_panel.elkm1_area_1
             view_layout:
               grid-area: five
-          # - type: custom:auto-entities
-          #   show_empty: false
-          #   card:
-          #     type: entities
-          #     title: Lights On
-          #   filter:
-          #     include:
-          #       - group: group.all_lights
-          #         state: "on"
-          #   sort:
-          #     method: name
-          #   view_layout:
-          #     grid-area: six
 
           - type: custom:auto-entities
             card:

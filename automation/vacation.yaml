@@ -10,8 +10,8 @@
       entity_id: binary_sensor.vacation
       state: "on"
   action:
-    - service: homeassistant.turn_off
-      entity_id: group.all_lights
+    - service: button.press
+      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
 #########################################
 - alias: "Vacation Mode: notify if a garage door opens"
   id: "Vacation Mode: notify if a garage door opens"

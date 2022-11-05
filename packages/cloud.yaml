@@ -3,17 +3,29 @@ cloud:
   google_actions:
     filter:
       include_entities:
-        - scene.chill_on
-        - group.all_lights
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
     entity_config:
-      scene.chill_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill:
         name: relax
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on:
+        name: all lights on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off:
+        name: all lights off
   alexa:
     filter:
       include_entities:
-        - scene.chill_on
-        - group.all_lights
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
     entity_config:
-      scene.chill_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill:
         name: relax
         description: relax
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on:
+        name: all lights on
+        description: all lights on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off:
+        name: all lights off
+        description: all lights off
