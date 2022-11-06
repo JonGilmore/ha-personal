@@ -8,7 +8,7 @@ cloud:
         - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
     entity_config:
       button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill:
-        name: relax
+        name: relax button
       button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on:
         name: all lights on
       button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off:
@@ -19,13 +19,65 @@ cloud:
         - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill
         - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on
         - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_basement_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_basement_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_interior_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_interior_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_main_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_main_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_second_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_second_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_sunset1
     entity_config:
       button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill:
-        name: relax
-        description: relax
+        name: relax button
+        description: relax button
       button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on:
         name: all lights on
         description: all lights on
       button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off:
         name: all lights off
         description: all lights off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_basement_off:
+        name: basement off
+        description: basement off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_basement_on:
+        name: basement on
+        description: basement on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_off:
+        name: exterior off
+        description: exterior off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_on:
+        name: exterior on
+        description: exterior on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_interior_off:
+        name: interior off
+        description: interior off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_interior_on:
+        name: interior on
+        description: interior on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_off:
+        name: kitchen off
+        description: kitchen off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_on:
+        name: kitchen on
+        description: kitchen on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_main_off:
+        name: main off
+        description: main off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_main_on:
+        name: main on
+        description: main on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_second_off:
+        name: second off
+        description: second off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_second_on:
+        name: second on
+        description: second on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_sunset1:
+        name: sunset on
+        description: sunset on
