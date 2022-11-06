@@ -64,7 +64,7 @@ system_health:
 #       - device_tracker
 #       - lock
 #     entities:
-#       - switch.equipment_room_recirculation_pump
+#       - switch.basement_equipment_room_recirculation_pump
 #       - switch.water_main_shut_off
 
 elkm1:

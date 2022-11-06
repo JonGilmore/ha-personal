@@ -2,217 +2,218 @@
 exterior_lights:
   name: Exterior Lights
   entities:
-    - switch.exterior_rear_outlet
-    - light.deck
-    - switch.deck_posts
-    - switch.exterior_cans
-    - switch.grill_deck_light
+    - fan.exterior_patio_fan
+    - light.exterior_patio_cans
+    - switch.exterior_back_outlet
+    - switch.exterior_deck_lights
+    - switch.exterior_deck_posts
+    - switch.exterior_front_lights
+    - switch.exterior_grilldeck_light
     - switch.exterior_landscape_lights
-    - light.patio_cans
     - switch.exterior_roof_outlets
-    - switch.workshop_exterior
+    - switch.exterior_workshop_light
 
 interior_lights:
   name: Interior Lights
   entities:
-    - switch.back_kitchen_cabinets
-    - light.back_kitchen_lights
-    - switch.bar_cabinets
-    - light.basement_hall
-    - light.basement_stairs
-    - light.bedroom_2_cans
-    - light.bedroom_3_cans
-    - light.bonus_cans
-    - light.evelyns_cans
-    - light.evelyns_lamp
-    - switch.foyer_lights
-    - switch.garage_hex_lights
-    - switch.garage_lights
-    - light.great_room_cabinets
-    - light.great_room_cans
-    - light.gym_cans
-    - switch.jack_and_jill_light
-    - light.jons_lamp
-    - switch.kitchen_cabinets
-    - light.kitchen_cans
-    - light.kitchen_dining_art
-    - light.kitchen_dining_cans
-    - light.kitchen_dining_chandelier
-    - switch.kitchen_hall
-    - light.kitchen_pendants
-    - switch.kitchen_toekick
-    - light.laundry_cabinets
-    - switch.lauras_lamp
-    - light.library_cabinets
-    - switch.library_lamp
-    - light.library_light
-    - light.lounge_cans
-    - light.main_bathroom_cans
-    - light.main_bathroom_chandelier
-    - light.main_bathroom_sconces
-    - light.main_bathroom_toekick
-    - light.main_bathroom_tub
-    - light.main_bedroom_cans
-    - light.main_bedroom_hall
-    - light.media_room_cabinets
-    - light.media_room_cans
-    - switch.mudroom_lamp
-    - switch.mudroom_lights
-    - light.office_art
-    - light.office_cans
-    - switch.office_hall
-    - light.stairs_chandelier
-    - light.stairs_sconces
-    - light.sunroom_cans
-    - light.upstairs_hall
-    - switch.workshop_lights
-    - switch.main_bathroom_fan
-    - switch.powder_room_fan
-    - switch.equipment_room_recirculation_pump
+    - light.basement_gym_cans
+    - light.basement_lounge_cans
+    - light.basement_lounge_hall
+    - light.basement_media_room_cabinets
+    - light.basement_media_room_cans
+    - light.basement_office_art
+    - light.basement_office_cans
+    - light.basement_stair_lights
+    - switch.basement_bar_cabinets
+    - switch.basement_equipment_room_recirculation_pump
+    - switch.basement_office_hall
+    - switch.basement_workshop_lights
+    - light.main_floor_back_kitchen_lights
+    - light.main_floor_great_room_cabinets
+    - light.main_floor_great_room_cans
+    - light.main_floor_kitchen_cans
+    - light.main_floor_kitchen_dining_cans
+    - light.main_floor_kitchen_dining_chandelier
+    - light.main_floor_kitchen_pendants
+    - light.main_floor_library_cabinets
+    - light.main_floor_library_light
+    - light.main_floor_sunroom_cans
+    - switch.main_floor_back_kitchen_cabinets
+    - switch.main_floor_foyer_lights
+    - switch.main_floor_garage_hex_lights
+    - switch.main_floor_garage_lights
+    - switch.main_floor_great_room_lamp
+    - switch.main_floor_kitchen_cabinets
+    - switch.main_floor_kitchen_hall
+    - switch.main_floor_kitchen_toekick
+    - switch.main_floor_library_lamp
+    - switch.main_floor_mudroom_lamp
+    - switch.main_floor_mudroom_lights
+    - switch.main_floor_powder_room_fan
+    - light.upstairs_bedroom_2_cans
+    - light.upstairs_bedroom_3_cans
+    - light.upstairs_bonus_cans
+    - light.upstairs_evelyns_cans
+    - light.upstairs_evelyns_lamp
+    - light.upstairs_hall_lights
+    - light.upstairs_jons_lamp
+    - light.upstairs_laundry_cabinets
+    - light.upstairs_main_bathroom_cans
+    - light.upstairs_main_bathroom_chandelier
+    - light.upstairs_main_bathroom_sconces
+    - light.upstairs_main_bathroom_toekick
+    - light.upstairs_main_bathroom_tub
+    - light.upstairs_main_bedroom_cans
+    - light.upstairs_main_bedroom_hall
+    - light.upstairs_stair_chandelier
+    - light.upstairs_stair_sconces
+    - switch.upstairs_jack_and_jill_light
+    - switch.upstairs_lauras_lamp
+    - switch.upstairs_main_bathroom_fan
 
 all_lights:
   name: All Lights
   entities:
-    - switch.back_kitchen_cabinets
-    - light.back_kitchen_lights
-    - switch.bar_cabinets
-    - light.basement_hall
-    - light.basement_stairs
-    - light.bedroom_2_cans
-    - light.bedroom_3_cans
-    - light.bonus_cans
-    - switch.deck_lights
-    - switch.deck_posts
-    - light.evelyns_cans
-    - light.evelyns_lamp
-    - switch.exterior_cans
+    - fan.exterior_patio_fan
+    - light.exterior_patio_cans
+    - switch.exterior_back_outlet
+    - switch.exterior_deck_lights
+    - switch.exterior_deck_posts
+    - switch.exterior_front_lights
+    - switch.exterior_grilldeck_light
     - switch.exterior_landscape_lights
-    - switch.foyer_lights
-    - switch.garage_hex_lights
-    - switch.garage_lights
-    - light.great_room_cabinets
-    - light.great_room_cans
-    - switch.grill_deck_light
-    - light.gym_cans
-    - switch.jack_and_jill_light
-    - light.jons_lamp
-    - switch.kitchen_cabinets
-    - light.kitchen_cans
-    - light.kitchen_dining_art
-    - light.kitchen_dining_cans
-    - light.kitchen_dining_chandelier
-    - switch.kitchen_hall
-    - light.kitchen_pendants
-    - switch.kitchen_toekick
-    - light.laundry_cabinets
-    - switch.lauras_lamp
-    - light.library_cabinets
-    - switch.library_lamp
-    - light.library_light
-    - light.lounge_cans
-    - light.main_bathroom_cans
-    - light.main_bathroom_chandelier
-    - light.main_bathroom_sconces
-    - light.main_bathroom_toekick
-    - light.main_bathroom_tub
-    - light.main_bedroom_cans
-    - light.main_bedroom_hall
-    - light.media_room_cabinets
-    - light.media_room_cans
-    - switch.mudroom_lamp
-    - switch.mudroom_lights
-    - light.office_art
-    - light.office_cans
-    - switch.office_hall
-    - light.patio_cans
-    - light.stairs_chandelier
-    - light.stairs_sconces
-    - light.sunroom_cans
-    - light.upstairs_hall
-    - switch.workshop_exterior
-    - switch.workshop_lights
-    - switch.exterior_rear_outlet
     - switch.exterior_roof_outlets
-    - switch.main_bathroom_fan
-    - switch.powder_room_fan
-    - switch.equipment_room_recirculation_pump
-    - fan.patio_fan
+    - switch.exterior_workshop_light
+    - light.basement_gym_cans
+    - light.basement_lounge_cans
+    - light.basement_lounge_hall
+    - light.basement_media_room_cabinets
+    - light.basement_media_room_cans
+    - light.basement_office_art
+    - light.basement_office_cans
+    - light.basement_stair_lights
+    - switch.basement_bar_cabinets
+    - switch.basement_equipment_room_recirculation_pump
+    - switch.basement_office_hall
+    - switch.basement_workshop_lights
+    - light.main_floor_back_kitchen_lights
+    - light.main_floor_great_room_cabinets
+    - light.main_floor_great_room_cans
+    - light.main_floor_kitchen_cans
+    - light.main_floor_kitchen_dining_cans
+    - light.main_floor_kitchen_dining_chandelier
+    - light.main_floor_kitchen_pendants
+    - light.main_floor_library_cabinets
+    - light.main_floor_library_light
+    - light.main_floor_sunroom_cans
+    - switch.main_floor_back_kitchen_cabinets
+    - switch.main_floor_foyer_lights
+    - switch.main_floor_garage_hex_lights
+    - switch.main_floor_garage_lights
+    - switch.main_floor_great_room_lamp
+    - switch.main_floor_kitchen_cabinets
+    - switch.main_floor_kitchen_hall
+    - switch.main_floor_kitchen_toekick
+    - switch.main_floor_library_lamp
+    - switch.main_floor_mudroom_lamp
+    - switch.main_floor_mudroom_lights
+    - switch.main_floor_powder_room_fan
+    - light.upstairs_bedroom_2_cans
+    - light.upstairs_bedroom_3_cans
+    - light.upstairs_bonus_cans
+    - light.upstairs_evelyns_cans
+    - light.upstairs_evelyns_lamp
+    - light.upstairs_hall_lights
+    - light.upstairs_jons_lamp
+    - light.upstairs_laundry_cabinets
+    - light.upstairs_main_bathroom_cans
+    - light.upstairs_main_bathroom_chandelier
+    - light.upstairs_main_bathroom_sconces
+    - light.upstairs_main_bathroom_toekick
+    - light.upstairs_main_bathroom_tub
+    - light.upstairs_main_bedroom_cans
+    - light.upstairs_main_bedroom_hall
+    - light.upstairs_stair_chandelier
+    - light.upstairs_stair_sconces
+    - switch.upstairs_jack_and_jill_light
+    - switch.upstairs_lauras_lamp
+    - switch.upstairs_main_bathroom_fan
 
 basement_lights:
   name: Basement Lights
   entities:
-    - switch.bar_cabinets
-    - light.basement_hall
-    - light.basement_stairs
-    - light.gym_cans
-    - light.lounge_cans
-    - switch.office_hall
-    - switch.workshop_lights
-    - light.media_room_cabinets
-    - light.media_room_cans
-    - light.office_art
-    - light.office_cans
+    - light.basement_gym_cans
+    - light.basement_lounge_cans
+    - light.basement_lounge_hall
+    - light.basement_media_room_cabinets
+    - light.basement_media_room_cans
+    - light.basement_office_art
+    - light.basement_office_cans
+    - light.basement_stair_lights
+    - switch.basement_bar_cabinets
+    - switch.basement_equipment_room_recirculation_pump
+    - switch.basement_office_hall
+    - switch.basement_workshop_lights
 
 main_floor_lights:
   name: Main Floor Lights
   entities:
-    - switch.back_kitchen_cabinets
-    - light.back_kitchen_lights
-    - light.great_room_cabinets
-    - light.great_room_cans
-    - switch.kitchen_cabinets
-    - light.kitchen_cans
-    - light.kitchen_dining_art
-    - light.kitchen_dining_cans
-    - light.kitchen_dining_chandelier
-    - switch.kitchen_hall
-    - light.kitchen_pendants
-    - switch.kitchen_toekick
-    - light.library_cabinets
-    - switch.library_lamp
-    - light.library_light
-    - light.stairs_chandelier
-    - light.stairs_sconces
-    - light.sunroom_cans
-    - switch.mudroom_lamp
-    - switch.mudroom_lights
-    - switch.powder_room_fan
-    - light.stairs_chandelier
-    - light.stairs_sconces
+    - light.main_floor_back_kitchen_lights
+    - light.main_floor_great_room_cabinets
+    - light.main_floor_great_room_cans
+    - light.main_floor_kitchen_cans
+    - light.main_floor_kitchen_dining_cans
+    - light.main_floor_kitchen_dining_chandelier
+    - light.main_floor_kitchen_pendants
+    - light.main_floor_library_cabinets
+    - light.main_floor_library_light
+    - light.main_floor_sunroom_cans
+    - switch.main_floor_back_kitchen_cabinets
+    - switch.main_floor_foyer_lights
+    - switch.main_floor_garage_hex_lights
+    - switch.main_floor_garage_lights
+    - switch.main_floor_great_room_lamp
+    - switch.main_floor_kitchen_cabinets
+    - switch.main_floor_kitchen_hall
+    - switch.main_floor_kitchen_toekick
+    - switch.main_floor_library_lamp
+    - switch.main_floor_mudroom_lamp
+    - switch.main_floor_mudroom_lights
+    - switch.main_floor_powder_room_fan
 
 upstairs_lights:
   name: Upstairs Lights
   entities:
-    - light.bedroom_2_cans
-    - light.bedroom_3_cans
-    - light.bonus_cans
-    - light.evelyns_cans
-    - light.evelyns_lamp
-    - switch.jack_and_jill_light
-    - light.jons_lamp
-    - light.laundry_cabinets
-    - switch.lauras_lamp
-    - light.main_bathroom_cans
-    - light.main_bathroom_chandelier
-    - light.main_bathroom_sconces
-    - light.main_bathroom_toekick
-    - light.main_bathroom_tub
-    - light.main_bedroom_cans
-    - light.main_bedroom_hall
-    - light.stairs_chandelier
-    - light.stairs_sconces
-    - light.upstairs_hall
-    - switch.main_bathroom_fan
+    - light.upstairs_bedroom_2_cans
+    - light.upstairs_bedroom_3_cans
+    - light.upstairs_bonus_cans
+    - light.upstairs_evelyns_cans
+    - light.upstairs_evelyns_lamp
+    - light.upstairs_hall_lights
+    - light.upstairs_jons_lamp
+    - light.upstairs_laundry_cabinets
+    - light.upstairs_main_bathroom_cans
+    - light.upstairs_main_bathroom_chandelier
+    - light.upstairs_main_bathroom_sconces
+    - light.upstairs_main_bathroom_toekick
+    - light.upstairs_main_bathroom_tub
+    - light.upstairs_main_bedroom_cans
+    - light.upstairs_main_bedroom_hall
+    - light.upstairs_stair_chandelier
+    - light.upstairs_stair_sconces
+    - switch.upstairs_jack_and_jill_light
+    - switch.upstairs_lauras_lamp
+    - switch.upstairs_main_bathroom_fan
 
 all_fans:
   name: All Fans
   entities:
-    - fan.patio_fan
+    - fan.exterior_patio_fan
 
 # sunset:
 #   name: Sunset Lights
 #   entities:
-#     - switch.exterior_cans
+#     - switch.exterior_front_lights
 #     - switch.exterior_uplights
 #     - switch.great_room_lamp
 #     - switch.sunroom_sunroom_lamp
@@ -246,8 +247,8 @@ basement_doors:
 garage_lights:
   name: Garage Lights
   entities:
-    - switch.garage_hex_lights
-    - switch.garage_lights
+    - switch.main_floor_garage_hex_lights
+    - switch.main_floor_garage_lights
 
 garage_doors:
   name: Garage Doors
@@ -296,39 +297,39 @@ exterior_motions:
 all_shades:
   name: all shades
   entities:
-    - cover.great_room_shades
-    - cover.kitchen_shades
-    - cover.library_shade
-    - cover.lounge_shades
-    - cover.main_bathroom_shade
-    - cover.main_bedroom_shade
-    - cover.media_room_shades
-    - cover.office_shades
-    - cover.office_west_shade
-    - cover.stairs_shade
-    - cover.sunroom_door_shades
-    - cover.sunroom_west_shades
+    - cover.basement_lounge_shades
+    - cover.basement_media_room_shades
+    - cover.basement_office_shade
+    - cover.basement_office_west_shade
+    - cover.main_floor_great_room_shades
+    - cover.main_floor_kitchen_shades
+    - cover.main_floor_library_shade
+    - cover.main_floor_sunroom_door_shades
+    - cover.main_floor_sunroom_west_shades
+    - cover.upstairs_main_bathroom_shade
+    - cover.upstairs_main_bedroom_shade
+    - cover.upstairs_stair_shade
 
 main_floor_shades:
   name: main floor shades
   entities:
-    - cover.great_room_shades
-    - cover.kitchen_shades
-    - cover.library_shade
-    - cover.sunroom_door_shades
-    - cover.sunroom_west_shades
+    - cover.main_floor_great_room_shades
+    - cover.main_floor_kitchen_shades
+    - cover.main_floor_library_shade
+    - cover.main_floor_sunroom_door_shades
+    - cover.main_floor_sunroom_west_shades
 
 upstairs_shades:
   name: upstairs shades
   entities:
-    - cover.main_bathroom_shade
-    - cover.main_bedroom_shade
-    - cover.stairs_shade
+    - cover.upstairs_main_bathroom_shade
+    - cover.upstairs_main_bedroom_shade
+    - cover.upstairs_stair_shade
 
 basement_shades:
   name: basement shades
   entities:
-    - cover.lounge_shades
-    - cover.media_room_shades
-    - cover.office_shades
-    - cover.office_west_shade
+    - cover.basement_lounge_shades
+    - cover.basement_media_room_shades
+    - cover.basement_office_shade
+    - cover.basement_office_west_shade

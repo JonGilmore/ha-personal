@@ -82,7 +82,7 @@
               state: "below_horizon"
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_on
+              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_on
         - conditions: # if its after 11pm, turn em all off, else turn exterior_except_sunset lights off
             - condition: trigger
               id: pir-off
@@ -94,10 +94,10 @@
                       before: "10:00:00"
                   sequence:
                     - service: button.press
-                      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_off
+                      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
               default:
                 - service: button.press
-                  entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_ext_exept_sun_off
+                  entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ext_except_sun_off
 #########################################
 - alias: "Automatic Lighting: deck lights on when deck door opens"
   id: "Automatic Lighting: deck lights on when deck door opens"
@@ -116,7 +116,7 @@
       timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: switch.deck_lights
+      entity_id: switch.exterior_deck_lights
 #########################################
 - alias: "Automatic Lighting: patio lights on when patio door opens"
   id: "Automatic Lighting: patio lights on when patio door opens"
@@ -135,7 +135,7 @@
       timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: light.patio_cans
+      entity_id: light.exterior_patio_cans
 #########################################
 - alias: "Automatic Lighting: workshop lights on when workshop door opens"
   id: "Automatic Lighting: workshop lights on when workshop door opens"
@@ -154,7 +154,7 @@
       timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: switch.workshop_exterior
+      entity_id: switch.exterior_workshop_light
 #########################################
 - alias: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
   id: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
@@ -173,7 +173,7 @@
       timeout: 30
       continue_on_timeout: false
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_grilldeck_on
+      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_grilldeck_on
 #########################################
 - alias: "Wake Mode: done sleeping & recirculation pump on"
   id: "Wake Mode: done sleeping & recirculation pump on"
@@ -185,7 +185,7 @@
       to: "off"
   action:
     - service: homeassistant.turn_on
-      entity_id: switch.equipment_room_recirculation_pump
+      entity_id: switch.basement_equipment_room_recirculation_pump
     # - choose:
     #     conditions:
     #       - condition: state
@@ -277,7 +277,7 @@
     # - service: scene.turn_on
     #   entity_id: scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
+      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_off
 #########################################
 - alias: "Utility: generic time based triggers"
   id: "Utility: generic time based triggers"
@@ -312,8 +312,8 @@
           sequence:
             - service: cover.open_cover
               entity_id:
-                - cover.library_shade
-                - cover.office_shades
+                - cover.main_floor_library_shade
+                - cover.basement_office_shade
         - conditions: # 7am and if there is an event 7 days out OR today, send a message
             - condition: trigger
               id: 7am
@@ -348,7 +348,7 @@
               state: "on"
           sequence:
             - service: homeassistant.turn_off
-              entity_id: switch.equipment_room_recirculation_pump
+              entity_id: switch.basement_equipment_room_recirculation_pump
         - conditions: # 10am check the house humidity level
             - condition: trigger
               id: 10am
@@ -368,13 +368,13 @@
               state: "on"
           sequence:
             - service: homeassistant.turn_on
-              entity_id: switch.equipment_room_recirculation_pump
+              entity_id: switch.basement_equipment_room_recirculation_pump
         - conditions: # 11pm turn off the exterior lights
             - condition: trigger
               id: 11pm
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_off
+              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
       default: # at noon and 8am, turn off the sunset run once and driveway sentry
         - service: homeassistant.turn_off
           entity_id:
@@ -400,11 +400,11 @@
         - conditions: "{{ trigger.id == 'both' }}"
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_but_mainbed
+              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_but_mainbed
         - conditions: "{{ trigger.id == 'laura' }}"
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill_off
+              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_chill_off
 #########################################
 - alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
@@ -415,7 +415,7 @@
       to: "on"
   action:
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_but_mainbed
+      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_but_mainbed
     # - service: scene.turn_on
     #   data_template:
     #     entity_id: >
@@ -433,7 +433,7 @@
     #     fan_mode: "on"
     - service: script.tvs_off_except_mainbed
     - service: homeassistant.turn_off
-      entity_id: switch.equipment_room_recirculation_pump
+      entity_id: switch.basement_equipment_room_recirculation_pump
     - service: input_boolean.turn_on
       entity_id:
         - input_boolean.frigate_deck_notifier
@@ -488,13 +488,13 @@
               data:
                 message: "leaving, checking the locks, lights, recirc pump"
             - service: homeassistant.turn_off
-              entity_id: switch.equipment_room_recirculation_pump
+              entity_id: switch.basement_equipment_room_recirculation_pump
             - service: script.tvs_off
             - choose: # if its light inside, turn off all lights
                 - conditions: "{{ is_state('binary_sensor.light_inside', 'on') }}"
                   sequence:
                     - service: button.press
-                      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
+                      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_off
             - choose: # if the workshop is unlocked, notify & lock
                 - conditions: "{{ is_state('lock.workshop_lock', 'unlocked') }}"
                   sequence:
@@ -507,7 +507,7 @@
         - conditions: "{{ trigger.id == 'arriving' }}"
           sequence: # arriving home
             - service: homeassistant.turn_on
-              entity_id: switch.equipment_room_recirculation_pump
+              entity_id: switch.basement_equipment_room_recirculation_pump
             - service: notify.telegram_jon
               data:
                 message: "arriving, turning on the recirc pump"
@@ -530,11 +530,11 @@
       after: "15:30:00"
   action:
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_sunset1
+      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_sunset1
     - service: homeassistant.turn_on
       entity_id: input_boolean.sunset_run_once
     - service: cover.close_cover
-      entity_id: cover.library_shade
+      entity_id: cover.main_floor_library_shade
 # ########################################
 # - alias: "Night Mode: turn on sunset2 lights at ten min after sunset"
 #   id: "Night Mode: turn on sunset2 lights at ten min after sunset"
@@ -583,7 +583,7 @@
     - service: homeassistant.turn_off
       data:
         entity_id:
-          - switch.equipment_room_recirculation_pump
+          - switch.basement_equipment_room_recirculation_pump
           # - switch.water_main_shut_off
     - service: notify.telegram_jon
       data:
@@ -620,7 +620,7 @@
       to: "burglar_alarm"
   action:
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ph_burglar
+      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_burglar
     - service: script.alarm
 #########################################
 - alias: "Alarm: turn off alarm notifications because of user interaction"
@@ -673,7 +673,7 @@
         - conditions: "{{ not is_state('sensor.period_of_day', 'day') and is_state('person.jon', 'home') }}"
           sequence:
             - service: homeassistant.turn_on
-              entity_id: light.jons_lamp
+              entity_id: light.upstairs_jons_lamp
 #########################################
 - alias: "Utility: general notifications"
   id: "Utility: general notifications"
@@ -923,17 +923,17 @@
               data_template:
                 entity_id: >
                   {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
-                    light.office_art
+                    light.basement_office_art
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
-                    light.main_bathroom_toekick
+                    light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
-                    switch.bar_cabinets
+                    switch.basement_bar_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
-                    switch.back_kitchen_cabinets
+                    switch.main_floor_back_kitchen_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
-                    button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_low_on
+                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_on
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
-                    light.gym_cans
+                    light.basement_gym_cans
                   {% endif %}
         - conditions:
             - condition: trigger
@@ -948,17 +948,17 @@
               data_template:
                 entity_id: >
                   {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
-                    light.office_art
+                    light.basement_office_art
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
-                    light.main_bathroom_toekick
+                    light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
-                    switch.bar_cabinets
+                    switch.basement_bar_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
-                    switch.back_kitchen_cabinets
+                    switch.main_floor_back_kitchen_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
-                    button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_low_off
+                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_off
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
-                    light.gym_cans
+                    light.basement_gym_cans
                   {% endif %}
 #########################################
 - alias: "Blinds: office"
@@ -977,5 +977,5 @@
   action:
     - service: cover.close_cover
       entity_id:
-        - cover.office_shades
-        - cover.office_west_shade
+        - cover.basement_office_shade
+        - cover.basement_office_west_shade

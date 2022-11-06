@@ -140,7 +140,7 @@ views:
         camera_image: camera.driveway
         title: Exterior
         entities:
-          - switch.exterior_cans
+          - switch.exterior_front_lights
       - type: entities
         title: Presence
         show_header_toggle: false
@@ -205,7 +205,7 @@ views:
         title: Equipment
         show_header_toggle: false
         entities:
-          - entity: switch.equipment_room_recirculation_pump
+          - entity: switch.basement_equipment_room_recirculation_pump
             type: custom:multiple-entity-row
             name: Recirc Pump
             secondary_info: last-changed
@@ -213,7 +213,7 @@ views:
               # - entity: switch.water_main_shut_off
               #   name: main
               #   toggle: true
-              - entity: switch.equipment_room_recirculation_pump
+              - entity: switch.basement_equipment_room_recirculation_pump
                 name: recirc
                 toggle: true
           - entity: switch.exterior_landscape_lights
@@ -224,7 +224,7 @@ views:
               - entity: switch.exterior_landscape_lights
                 name: landscape
                 toggle: true
-              - entity: switch.deck_posts
+              - entity: switch.exterior_deck_posts
                 name: deck
                 toggle: true
           - entity: sensor.period_of_day

@@ -3,81 +3,83 @@ cloud:
   google_actions:
     filter:
       include_entities:
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_chill_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_all_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_all_off
     entity_config:
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_chill:
         name: relax button
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_all_on:
         name: all lights on
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_all_off:
         name: all lights off
   alexa:
     filter:
       include_entities:
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_basement_off
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_basement_on
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_off
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_on
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_interior_off
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_interior_on
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_off
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_on
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_main_off
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_main_on
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_second_off
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_second_on
-        - button.basement_equipment_room_phantom_kp_position_1_keypad_ph_sunset1
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_all_but_mainbed
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_all_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_all_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_basement_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_chill_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_cleaners_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_ext_except_sun_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_interior_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_interior_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_main_lower_ext_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_main_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_mainbath_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_mainbath_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_second_on
+        - button.basement_equipment_room_phantom_kp_position_1_keypad_sunset1
     entity_config:
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_chill:
-        name: relax button
-        description: relax button
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_on:
-        name: all lights on
-        description: all lights on
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_all_off:
-        name: all lights off
-        description: all lights off
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_basement_off:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_all_but_mainbed:
+        name: all but mainbed
+      button.basement_equipment_room_phantom_kp_position_1_keypad_all_off:
+        name: all off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_all_on:
+        name: all on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off:
         name: basement off
-        description: basement off
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_basement_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_basement_on:
         name: basement on
-        description: basement on
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_off:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_chill_on:
+        name: relax
+      button.basement_equipment_room_phantom_kp_position_1_keypad_cleaners_on:
+        name: cleaners on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_ext_except_sun_off:
+        name: exterior except sunset
+      button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off:
         name: exterior off
-        description: exterior off
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_exterior_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_on:
         name: exterior on
-        description: exterior on
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_interior_off:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_interior_off:
         name: interior off
-        description: interior off
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_interior_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_interior_on:
         name: interior on
-        description: interior on
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_off:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_off:
         name: kitchen off
-        description: kitchen off
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_kitchen_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_on:
         name: kitchen on
-        description: kitchen on
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_main_off:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_main_lower_ext_off:
+        name: main lower exterior off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_main_off:
         name: main off
-        description: main off
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_main_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_main_on:
         name: main on
-        description: main on
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_second_off:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_mainbath_off:
+        name: mainbed off
+      button.basement_equipment_room_phantom_kp_position_1_keypad_mainbath_on:
+        name: mainbed on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_second_off:
         name: second off
-        description: second off
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_second_on:
+      button.basement_equipment_room_phantom_kp_position_1_keypad_second_on:
         name: second on
-        description: second on
-      button.basement_equipment_room_phantom_kp_position_1_keypad_ph_sunset1:
-        name: sunset on
-        description: sunset on
+      button.basement_equipment_room_phantom_kp_position_1_keypad_sunset1:
+        name: sunset
