@@ -24,7 +24,7 @@ interior_lights:
     - light.basement_office_art
     - light.basement_office_cans
     - light.basement_stair_lights
-    - switch.basement_bar_cabinets
+    - light.basement_bar_cabinets
     - switch.basement_equipment_room_recirculation_pump
     - switch.basement_office_hall
     - switch.basement_workshop_lights
@@ -32,13 +32,14 @@ interior_lights:
     - light.main_floor_great_room_cabinets
     - light.main_floor_great_room_cans
     - light.main_floor_kitchen_cans
+    - light.main_floor_kitchen_dining_art
     - light.main_floor_kitchen_dining_cans
     - light.main_floor_kitchen_dining_chandelier
     - light.main_floor_kitchen_pendants
     - light.main_floor_library_cabinets
     - light.main_floor_library_light
     - light.main_floor_sunroom_cans
-    - switch.main_floor_back_kitchen_cabinets
+    - light.main_floor_back_kitchen_cabinets
     - switch.main_floor_foyer_lights
     - switch.main_floor_garage_hex_lights
     - switch.main_floor_garage_lights
@@ -92,7 +93,7 @@ all_lights:
     - light.basement_office_art
     - light.basement_office_cans
     - light.basement_stair_lights
-    - switch.basement_bar_cabinets
+    - light.basement_bar_cabinets
     - switch.basement_equipment_room_recirculation_pump
     - switch.basement_office_hall
     - switch.basement_workshop_lights
@@ -100,13 +101,14 @@ all_lights:
     - light.main_floor_great_room_cabinets
     - light.main_floor_great_room_cans
     - light.main_floor_kitchen_cans
+    - light.main_floor_kitchen_dining_art
     - light.main_floor_kitchen_dining_cans
     - light.main_floor_kitchen_dining_chandelier
     - light.main_floor_kitchen_pendants
     - light.main_floor_library_cabinets
     - light.main_floor_library_light
     - light.main_floor_sunroom_cans
-    - switch.main_floor_back_kitchen_cabinets
+    - light.main_floor_back_kitchen_cabinets
     - switch.main_floor_foyer_lights
     - switch.main_floor_garage_hex_lights
     - switch.main_floor_garage_lights
@@ -150,7 +152,7 @@ basement_lights:
     - light.basement_office_art
     - light.basement_office_cans
     - light.basement_stair_lights
-    - switch.basement_bar_cabinets
+    - light.basement_bar_cabinets
     - switch.basement_equipment_room_recirculation_pump
     - switch.basement_office_hall
     - switch.basement_workshop_lights
@@ -162,13 +164,14 @@ main_floor_lights:
     - light.main_floor_great_room_cabinets
     - light.main_floor_great_room_cans
     - light.main_floor_kitchen_cans
+    - light.main_floor_kitchen_dining_art
     - light.main_floor_kitchen_dining_cans
     - light.main_floor_kitchen_dining_chandelier
     - light.main_floor_kitchen_pendants
     - light.main_floor_library_cabinets
     - light.main_floor_library_light
     - light.main_floor_sunroom_cans
-    - switch.main_floor_back_kitchen_cabinets
+    - light.main_floor_back_kitchen_cabinets
     - switch.main_floor_foyer_lights
     - switch.main_floor_garage_hex_lights
     - switch.main_floor_garage_lights

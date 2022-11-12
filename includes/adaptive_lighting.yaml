@@ -1,26 +1,22 @@
+- name: default
+  lights: []
+  min_brightness: 36
+  max_brightness: 90
+  take_over_control: true
+  detect_non_ha_changes: false
+  only_once: false
 - name: main bath
   min_brightness: 40
-  min_color_temp: 2700
-  max_color_temp: 5100
   lights:
     - light.upstairs_main_bathroom_toekick
-    - light.upstairs_main_bathroom_sconces
 - name: gym
   min_brightness: 5
-  max_brightness: 90
-  min_color_temp: 2700
-  max_color_temp: 5100
+  max_brightness: 70
   lights:
     - light.basement_gym_cans
 - name: office
-  max_brightness: 90
-  min_color_temp: 2700
-  max_color_temp: 5100
   lights:
     - light.basement_office_cans
 - name: lounge
-  max_brightness: 90
-  min_color_temp: 2700
-  max_color_temp: 5100
   lights:
     - light.basement_lounge_cans

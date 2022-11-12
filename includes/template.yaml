@@ -417,6 +417,9 @@
     - name: "Precipitation Probability"
       unique_id: precipitation_probability
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int }}%"
+    - name: "circadian brightness"
+      unique_id: circadian_brightness
+      state: "{{ state_attr('switch.adaptive_lighting_default', 'brightness_pct') }}"
     ############################
     ## HVAC Sensors
     - name: "Lower Level Temperature"

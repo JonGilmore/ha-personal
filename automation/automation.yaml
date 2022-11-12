@@ -400,7 +400,7 @@
         - conditions: "{{ trigger.id == 'both' }}"
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_but_mainbed
+              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_int_but_mbed_off
         - conditions: "{{ trigger.id == 'laura' }}"
           sequence:
             - service: button.press
@@ -708,14 +708,6 @@
         - update.terminal_ssh_update
         - update.wireguard_update
       to: "on"
-    - platform: state
-      entity_id: binary_sensor.light_inside
-      from: "off"
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.light_inside
-      from: "on"
-      to: "off"
     # - platform: numeric_state
     #   entity_id: sensor.computer_multi_temperature_measurement
     #   above: 105
@@ -886,7 +878,6 @@
         - binary_sensor.elkm1_main_bath_pir
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_back_kitchen_pir
-        - binary_sensor.elkm1_kitchen_pir
         - binary_sensor.elkm1_gym_pir
       id: pir-on
       to: "on"
@@ -894,7 +885,6 @@
       entity_id:
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_back_kitchen_pir
-        - binary_sensor.elkm1_kitchen_pir
         - binary_sensor.elkm1_gym_pir
       id: pir-off
       to: "off"
@@ -914,12 +904,7 @@
             - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
             - "{{ is_state('binary_sensor.light_inside', 'off') }}"
           sequence:
-            - service_template: >
-                {% if trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
-                  button.press
-                {% else %}
-                  homeassistant.turn_on
-                {% endif %}
+            - service: light.turn_on
               data_template:
                 entity_id: >
                   {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
@@ -930,35 +915,68 @@
                     switch.basement_bar_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
                     switch.main_floor_back_kitchen_cabinets
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
-                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_on
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
                     light.basement_gym_cans
+                  {% endif %}
+                brightness: "{{ states('sensor.circadian_brightness') }}"
+        - conditions:
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - service: homeassistant.turn_off
+              data_template:
+                entity_id: >
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                    light.basement_office_art
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
+                    light.upstairs_main_bathroom_toekick
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
+                    switch.basement_bar_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
+                    switch.main_floor_back_kitchen_cabinets
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
+                    light.basement_gym_cans
+                  {% endif %}
+#########################################
+- alias: "Automatic Lighting: motion light template - scenes"
+  id: "Automatic Lighting: motion light template - scenes"
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_kitchen_pir
+      id: pir-on
+      to: "on"
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_kitchen_pir
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 10
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
+            - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+          sequence:
+            - service: button.press
+              data_template:
+                entity_id: >
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
+                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_on
                   {% endif %}
         - conditions:
             - condition: trigger
               id: pir-off
           sequence:
-            - service_template: >
-                {% if trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
-                  button.press
-                {% else %}
-                  homeassistant.turn_off
-                {% endif %}
+            - service: button.press
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
-                    light.basement_office_art
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
-                    light.upstairs_main_bathroom_toekick
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
-                    switch.basement_bar_cabinets
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
-                    switch.main_floor_back_kitchen_cabinets
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
-                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_off
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
-                    light.basement_gym_cans
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
+                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_on
                   {% endif %}
 #########################################
 - alias: "Blinds: office"
@@ -979,3 +997,41 @@
       entity_id:
         - cover.basement_office_shade
         - cover.basement_office_west_shade
+# #########################################
+# - alias: "Automatic Lighting: office"
+#   id: "Automatic Lighting: office"
+#   mode: restart
+#   variables:
+#     # pir: binary_sensor.elkm1_office_pir
+#     light: light.basement_office_cans
+#     brightness: switch.adaptive_lighting_office
+#   trigger:
+#     - platform: state
+#       entity_id: sensor.elkm1_office_pir
+#       id: pir-on
+#       to: "Violated"
+#     - platform: state
+#       entity_id: sensor.elkm1_office_pir
+#       id: pir-off
+#       to: "Normal"
+#       for:
+#         minutes: 10
+#   action:
+#     - choose:
+#         - conditions:
+#             - condition: trigger
+#               id: pir-on
+#             - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
+#             - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+#           sequence:
+#             - service: light.turn_on
+#               data_template:
+#                 entity_id: "{{ light }}"
+#                 brightness: "{{ state_attr(brightness, 'brightness_pct') }}"
+#         - conditions:
+#             - condition: trigger
+#               id: pir-off
+#           sequence:
+#             - service: homeassistant.turn_off
+#               data_template:
+#                 entity_id: "{{ light }}"
