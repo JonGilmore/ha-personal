@@ -693,6 +693,14 @@ views:
               {{t}} &nbsp;&nbsp; _{{state.name}}_
             {% endif -%}
           {% endfor %}
+      - type: custom:mini-graph-card
+        name: Circadian Brightness
+        icon: mdi:brightness-6
+        hours_to_show: 48
+        entities:
+          - entity: sensor.circadian_brightness
+            name: Brightness
+            show_state: true
       # - type: custom:mini-graph-card
       #   name: Internet
       #   icon: mdi:server

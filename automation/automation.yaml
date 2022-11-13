@@ -177,7 +177,7 @@
 #########################################
 - alias: "Wake Mode: done sleeping & recirculation pump on"
   id: "Wake Mode: done sleeping & recirculation pump on"
-  description: "also checks if date is between Oct-May & turn on some lights"
+  description: "also checks if date is between Oct-May & turn on some lights & turns Evelyns Rest Plus to green"
   trigger:
     - platform: state
       entity_id: binary_sensor.sleeping
@@ -186,73 +186,39 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.basement_equipment_room_recirculation_pump
-    # - choose:
-    #     conditions:
-    #       - condition: state
-    #         entity_id: binary_sensor.light_inside
-    #         state: "off"
-    #       - condition: or
-    #         conditions:
-    #           - condition: template
-    #             value_template: '{{ now().strftime("%m")|int > 10 }}'
-    #           - condition: template
-    #             value_template: '{{ now().strftime("%m")|int < 4 }}'
-    #     sequence:
-    #       - service: homeassistant.turn_on
-    #         entity_id: switch.sunroom_sunroom_lamp, switch.great_room_lamp
-# ########################################
-# - alias: "Day Mode: turn off wake mode morning lamps"
-#   id: "Day Mode: turn off wake mode morning lamps"
-#   description: "only trigger between 6am and 10am"
-#   trigger:
-#     - platform: sun
-#       event: sunrise
-#       offset: "+01:00:00"
-#   condition:
-#     - condition: time
-#       after: "6:00:00"
-#       before: "10:00:00"
-#   action:
-#     - service: homeassistant.turn_off
-#       entity_id: switch.sunroom_sunroom_lamp, switch.great_room_lamp
-# ########################################
-# - alias: "Automatic Lighting: motion light template - scenes"
-#   id: "Automatic Lighting: motion light template - scenes"
-#   description: "Template to turn off basement & kitchen & deck"
-#   trigger:
-#     # - platform: state
-#     #   entity_id: sensor.elkm1_kitchen_pir
-#     #   from: "Violated"
-#     #   to: "Normal"
-#     #   for:
-#     #     minutes: 15
-#     - platform: state
-#       entity_id: binary_sensor.basement_motions
-#       to: "off"
-#       for:
-#         minutes: 45
-#     - platform: state
-#       entity_id: sensor.deck_person_count
-#       to: "0"
-#       for:
-#         minutes: 15
-#   # condition:
-#   #   - condition: state
-#   #     entity_id: input_boolean.block_interior_motion_lights
-#   #     state: "off"
-#   #   - condition: state
-#   #     entity_id: binary_sensor.light_inside
-#   #     state: "off"
-#   action:
-#     - service: scene.turn_on
-#       data_template:
-#         entity_id: >
-#           {% set trigger_entity = trigger.entity_id %}
-#           {% if trigger_entity == 'sensor.elkm1_kitchen_pir' %}
-#             scene.equipment_room_enclosure_device_001_ph_kitchen_off
-#           {% elif trigger_entity == 'binary_sensor.basement_motions' %}
-#             scene.equipment_room_enclosure_device_001_ph_basement_off
-#           {% endif %}
+    - service: light.turn_on
+      data:
+        entity_id: light.evelyns_room_light
+        rgb_color: [0, 255, 0]
+    - choose:
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.light_inside
+            state: "off"
+          - condition: or
+            conditions:
+              - condition: template
+                value_template: '{{ now().strftime("%m")|int > 10 }}'
+              - condition: template
+                value_template: '{{ now().strftime("%m")|int < 4 }}'
+        sequence:
+          - service: homeassistant.turn_on
+            entity_id: switch.main_floor_great_room_lamp
+########################################
+- alias: "Day Mode: turn off wake mode morning lamps"
+  id: "Day Mode: turn off wake mode morning lamps"
+  description: "only trigger between 6am and 10am"
+  trigger:
+    - platform: sun
+      event: sunrise
+      offset: "+01:00:00"
+  condition:
+    - condition: time
+      after: "6:00:00"
+      before: "10:00:00"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.main_floor_great_room_lamp
 ########################################
 - alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
   id: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
@@ -274,8 +240,6 @@
       for:
         minutes: 20
   action:
-    # - service: scene.turn_on
-    #   entity_id: scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
     - service: button.press
       entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_off
 #########################################
@@ -468,7 +432,7 @@
 #########################################
 - alias: "Occupancy: leaving or arriving home"
   id: "Occupancy: leaving or arriving home"
-  description: "check locks, lights, recirc pump"
+  description: "check locks & lights & recirc pump"
   trigger:
     - platform: state
       entity_id: binary_sensor.occupied_alarm
@@ -490,11 +454,8 @@
             - service: homeassistant.turn_off
               entity_id: switch.basement_equipment_room_recirculation_pump
             - service: script.tvs_off
-            - choose: # if its light inside, turn off all lights
-                - conditions: "{{ is_state('binary_sensor.light_inside', 'on') }}"
-                  sequence:
-                    - service: button.press
-                      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_off
+            - service: button.press
+              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_interior_off
             - choose: # if the workshop is unlocked, notify & lock
                 - conditions: "{{ is_state('lock.workshop_lock', 'unlocked') }}"
                   sequence:
@@ -504,6 +465,15 @@
                         message: "Locking the workshop"
                     - service: lock.lock
                       entity_id: lock.workshop_lock
+            - choose: # if the grilldeck is unlocked, notify & lock
+                - conditions: "{{ is_state('lock.mudroom_lock', 'unlocked') }}"
+                  sequence:
+                    - service: notify.telegram_jon
+                      data:
+                        title: "Grilldeck is UNLOCKED!"
+                        message: "Locking the grilldeck"
+                    - service: lock.lock
+                      entity_id: lock.mudroom_lock
         - conditions: "{{ trigger.id == 'arriving' }}"
           sequence: # arriving home
             - service: homeassistant.turn_on
@@ -879,6 +849,7 @@
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_back_kitchen_pir
         - binary_sensor.elkm1_gym_pir
+        - binary_sensor.elkm1_great_room_pir
       id: pir-on
       to: "on"
     - platform: state
@@ -886,6 +857,7 @@
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_back_kitchen_pir
         - binary_sensor.elkm1_gym_pir
+        - binary_sensor.elkm1_great_room_pir
       id: pir-off
       to: "off"
       for:
@@ -912,13 +884,13 @@
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
                     light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
-                    switch.basement_bar_cabinets
+                    light.basement_bar_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
-                    switch.main_floor_back_kitchen_cabinets
+                    light.main_floor_back_kitchen_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
                     light.basement_gym_cans
                   {% endif %}
-                brightness: "{{ states('sensor.circadian_brightness') }}"
+                brightness_pct: "{{ states('sensor.circadian_brightness') }}"
         - conditions:
             - condition: trigger
               id: pir-off
@@ -931,9 +903,9 @@
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
                     light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
-                    switch.basement_bar_cabinets
+                    light.basement_bar_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_back_kitchen_pir' %}
-                    switch.main_floor_back_kitchen_cabinets
+                    light.main_floor_back_kitchen_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_gym_pir' %}
                     light.basement_gym_cans
                   {% endif %}
