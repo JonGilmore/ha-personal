@@ -849,7 +849,6 @@
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_back_kitchen_pir
         - binary_sensor.elkm1_gym_pir
-        - binary_sensor.elkm1_great_room_pir
       id: pir-on
       to: "on"
     - platform: state
@@ -857,7 +856,6 @@
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_back_kitchen_pir
         - binary_sensor.elkm1_gym_pir
-        - binary_sensor.elkm1_great_room_pir
       id: pir-off
       to: "off"
       for:
@@ -963,7 +961,7 @@
       value_template: "{{ (as_timestamp(now()) - as_timestamp(state_attr('automation.blinds_office', 'last_triggered')) | int(0)) > 21600 }}"
     - condition: sun
       after: sunset
-      after_offset: "-00:15:00"
+      after_offset: "00:30:00"
   action:
     - service: cover.close_cover
       entity_id:
