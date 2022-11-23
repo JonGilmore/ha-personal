@@ -31,6 +31,7 @@ interior_lights:
     - light.main_floor_back_kitchen_lights
     - light.main_floor_great_room_cabinets
     - light.main_floor_great_room_cans
+    - light.main_floor_great_room_lamp
     - light.main_floor_kitchen_cans
     - light.main_floor_kitchen_dining_art
     - light.main_floor_kitchen_dining_cans
@@ -100,6 +101,7 @@ all_lights:
     - light.main_floor_back_kitchen_lights
     - light.main_floor_great_room_cabinets
     - light.main_floor_great_room_cans
+    - light.main_floor_great_room_lamp
     - light.main_floor_kitchen_cans
     - light.main_floor_kitchen_dining_art
     - light.main_floor_kitchen_dining_cans
@@ -140,6 +142,8 @@ all_lights:
     - switch.upstairs_jack_and_jill_light
     - switch.upstairs_lauras_lamp
     - switch.upstairs_main_bathroom_fan
+    - light.great_room_christmas_tree
+    - light.sunroom_christmas_tree
 
 basement_lights:
   name: Basement Lights
@@ -163,6 +167,7 @@ main_floor_lights:
     - light.main_floor_back_kitchen_lights
     - light.main_floor_great_room_cabinets
     - light.main_floor_great_room_cans
+    - light.main_floor_great_room_lamp
     - light.main_floor_kitchen_cans
     - light.main_floor_kitchen_dining_art
     - light.main_floor_kitchen_dining_cans
@@ -221,13 +226,17 @@ all_fans:
 #     - switch.great_room_lamp
 #     - switch.sunroom_sunroom_lamp
 
-# christmasLights:
-#   name: Christmas Lights
-#   entities:
+christmasLights:
+  name: Christmas Lights
+  entities:
+    - light.great_room_christmas_tree
+    - light.sunroom_christmas_tree
 
-# christmasTrees:
-#   name: Christmas Trees
-#   entities:
+christmasTrees:
+  name: Christmas Trees
+  entities:
+    - light.great_room_christmas_tree
+    - light.sunroom_christmas_tree
 
 # garmin:
 #   name: garmin
