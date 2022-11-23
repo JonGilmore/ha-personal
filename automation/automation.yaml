@@ -186,10 +186,10 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.basement_equipment_room_recirculation_pump
-    - service: light.turn_on
-      data:
-        entity_id: light.evelyns_room_light
-        rgb_color: [0, 255, 0]
+    # - service: light.turn_on
+    #   data:
+    #     entity_id: light.evelyns_room_light
+    #     rgb_color: [0, 255, 0]
     - choose:
         conditions:
           - condition: state
@@ -629,10 +629,10 @@
     - platform: event
       event_type: state_changed
       event_data:
-        entity_id: sensor.pixel5_last_notification
+        entity_id: sensor.pixel7_last_notification
   condition:
     - condition: state
-      entity_id: sensor.pixel5_last_notification
+      entity_id: sensor.pixel7_last_notification
       state: com.pagerduty.android
       attribute: package
   action:
@@ -948,7 +948,7 @@
               data_template:
                 entity_id: >
                   {% if trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
-                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_on
+                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_off
                   {% endif %}
 #########################################
 - alias: "Blinds: office"
