@@ -243,7 +243,7 @@
         {% set today = states('sensor.date').split('-') %}
         {% set month = today[1]|int %}
         {% set day = today[2]|int %}
-        {{ month == 11 and day >= 23
+        {{ month == 11 and day >= 22
         or month == 12
         or month == 1 and day <= 6 }}
     - name: All Sonos
