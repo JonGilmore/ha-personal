@@ -2,10 +2,22 @@
 #########################################
 - alias: "Christmas: generic triggers"
   id: "Christmas: generic triggers"
+  description: |
+    at 4:30pm, or if Laura gets home, or when we wake up, turn on the xmas lights.
+    at 11pm, or start sleeping, or laura leaves, or laura gets in bed, or alarm armed away, turn off xmas lights
   trigger:
     - platform: time
       at: "16:30:00"
       id: 430pm
+    - platform: state
+      entity_id: person.laura
+      to: "home"
+      id: xmason
+    - platform: state
+      entity_id: binary_sensor.sleeping
+      from: "on"
+      to: "off"
+      id: xmason
     - platform: time
       at: "23:00:00"
       id: xmasoff
@@ -19,14 +31,15 @@
       to: "not_home"
       id: xmasoff
     - platform: state
-      entity_id: person.laura
-      to: "home"
-      id: xmason
-    - platform: state
       entity_id: binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed
       from: "off"
       to: "on"
-      id: xmason
+      id: xmasoff
+    - platform: state
+      entity_id: binary_sensor.occupied_alarm
+      from: "on"
+      to: "off"
+      id: xmasoff
   condition:
     - condition: state
       entity_id: binary_sensor.christmas_season
@@ -53,6 +66,9 @@
           sequence:
             - service: homeassistant.turn_off
               entity_id: group.christmaslights
+            - service: notify.telegram_jon
+              data_template:
+                message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees turned off"
         - conditions: # xmas on, only before 11pm
             - condition: trigger
               id: xmason
@@ -63,4 +79,4 @@
               entity_id: group.christmastrees
             - service: notify.telegram_jon
               data_template:
-                message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees are toggled"
+                message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees turned on"
