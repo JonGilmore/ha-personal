@@ -1,6 +1,13 @@
 - name: default
   lights: []
-  min_brightness: 36
+  min_brightness: 40
   take_over_control: true
   detect_non_ha_changes: false
   only_once: true
+- name: Main Bedroom Lamps
+  lights:
+    - light.jons_lamp
+    - light.lauras_lamp
+  min_brightness: 10
+  min_color_temp: 2300
+  max_color_temp: 5000
