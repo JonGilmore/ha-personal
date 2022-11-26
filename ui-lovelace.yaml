@@ -28,18 +28,24 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-card-mod/card-mod.js
     type: module
+  - url: /hacsfiles/slider-button-card/slider-button-card.js
+    type: module
 
 decluttering_templates:
-  cam_small:
+  small_group:
     card:
-      type: custom:button-card
-      icon: "[[icon]]"
-      color: rgb(28, 128, 199)
+      type: button
+      entity: "[[entity]]"
+      name: "[[name]]"
+      icon: mdi:lightbulb
       tap_action:
         action: call-service
-        service: script.turn_on
+        service: button.press
         service_data:
-          entity_id: "[[entity_id]]"
+          entity_id: "[[button]]"
+      double_tap_action:
+        action: navigate
+        navigation_path: "[[page]]"
   big_group:
     card:
       type: entities
@@ -98,49 +104,83 @@ views:
                       action: toggle
           - type: horizontal-stack
             cards:
-              - entity: lock.garage_lock
-                type: "custom:button-card"
-                name: garage lock
-                tap_action:
-                  action: call-service
-                  service: '[[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]'
-                  service_data:
-                    entity_id: entity
-              - entity: lock.workshop_lock
-                type: "custom:button-card"
-                name: workshop lock
-                tap_action:
-                  action: call-service
-                  service: '[[[ return entity.state === "locked" ? "lock.unlock" : "lock.lock" ]]]'
-                  service_data:
-                    entity_id: entity
-          # - type: horizontal-stack
-          #   cards:
-          #     - type: custom:decluttering-card
-          #       template: cam_small
-          #       variables:
-          #         - icon: mdi:oil
-          #         - entity_id: script.video_driveway
-          #     - type: custom:decluttering-card
-          #       template: cam_small
-          #       variables:
-          #         - icon: mdi:dog-side
-          #         - entity_id: script.video_daisy
-          #     - type: custom:decluttering-card
-          #       template: cam_small
-          #       variables:
-          #         - icon: mdi:chair-school
-          #         - entity_id: script.video_deck
-          #     - type: custom:decluttering-card
-          #       template: cam_small
-          #       variables:
-          #         - icon: mdi:car
-          #         - entity_id: script.video_garage
+              - type: custom:slider-button-card
+                entity: lock.garage_lock
+                slider:
+                  direction: left-right
+                  background: solid
+                  toggle_on_click: true
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
+                action_button:
+                  show: false
+              - type: custom:slider-button-card
+                entity: lock.workshop_lock
+                slider:
+                  direction: left-right
+                  background: solid
+                  toggle_on_click: true
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
+                action_button:
+                  show: false
+              - type: custom:slider-button-card
+                entity: lock.mudroom_lock
+                slider:
+                  direction: left-right
+                  background: solid
+                  toggle_on_click: true
+                icon:
+                  use_state_color: true
+                  tap_action:
+                    action: more-info
+                action_button:
+                  show: false
+          - type: horizontal-stack
+            cards:
+              - type: custom:decluttering-card
+                template: small_group
+                variables:
+                  - entity: group.main_floor_lights
+                  - name: Main
+                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+                  - page: "/lovelace/lights-main"
+              - type: custom:decluttering-card
+                template: small_group
+                variables:
+                  - entity: group.upstairs_lights
+                  - name: Upstairs
+                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
+                  - page: "/lovelace/lights-upstairs"
+              - type: custom:decluttering-card
+                template: small_group
+                variables:
+                  - entity: group.basement_lights
+                  - name: Basement
+                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
+                  - page: "/lovelace/lights-basement"
+              - type: custom:decluttering-card
+                template: small_group
+                variables:
+                  - entity: group.exterior_lights
+                  - name: Exterior
+                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
+                  - page: "/lovelace/lights-exterior"
+          - type: tile
+            icon: mdi:roller-shade
+            entity: group.all_shades
       - type: picture-glance
         camera_image: camera.driveway
         title: Exterior
         entities:
           - switch.exterior_front_lights
+        double_tap_action:
+          action: navigate
+          navigation_path: /lovelace/camerasv1
       - type: entities
         title: Presence
         show_header_toggle: false
@@ -267,6 +307,65 @@ views:
           - entity: sensor.lounge_multi_pir_illuminance
             name: Lounge Lux
             show_state: true
+
+  ##########################################
+  # CAMERA SUBVIEW
+  ##########################################
+  - title: cameras
+    id: camerasv1
+    icon: mdi:home
+    path: camerasv1
+    subview: true
+    panel: true
+    cards:
+      - type: custom:layout-card
+        layout_type: custom:grid
+        layout:
+          mediaquery:
+            "(min-width: 1800px)":
+              grid-template-areas: |
+                "cam1 cam2 cam3"
+                "cam4 . ."
+                ". . ."
+            "(min-width: 1000px)":
+              grid-template-areas: |
+                "cam1 cam2"
+                "cam3 cam4"
+            "all":
+              grid-template-areas: |
+                "cam1"
+                "cam2"
+                "cam3"
+                "cam4"
+        cards:
+          - type: custom:frigate-card
+            cameras:
+              - camera_entity: camera.driveway
+              - webrtc_card:
+                  entity: camera.driveway_rtsp
+            view_layout:
+              grid-area: cam1
+          - type: custom:frigate-card
+            cameras:
+              - camera_entity: camera.doorbell
+              - webrtc_card:
+                  entity: camera.a8105_e_0
+            view_layout:
+              grid-area: cam2
+          - type: custom:frigate-card
+            cameras:
+              - camera_entity: camera.frontyard
+              - webrtc_card:
+                  entity: camera.frontyard_rtsp
+            view_layout:
+              grid-area: cam3
+          - type: custom:frigate-card
+            cameras:
+              - camera_entity: camera.garage
+              - webrtc_card:
+                  entity: camera.garage_rtsp
+            view_layout:
+              grid-area: cam4
 
   ##########################################
   # CAMERA TAB
@@ -399,7 +498,7 @@ views:
     icon: mdi:music
     panel: true
     cards:
-      - type: custom:custom-sonos-card
+      - type: custom:sonos-card
         name: Sonos
         entities:
           - media_player.deck
@@ -434,32 +533,100 @@ views:
       - type: media-control
         entity: media_player.living_room_tv
   ##########################################
-  # LIGHT TAB
+  # LIGHT SUBVIEWS
   ##########################################
-  - title: Lights
-    id: lights
+  - title: Lights - Main
+    id: lights-main
     icon: mdi:lightbulb
+    subview: true
+    path: lights-main
+    panel: true
     cards:
-      - type: custom:decluttering-card
-        template: big_group
-        variables:
-          - group: group.basement_lights
-      - type: custom:decluttering-card
-        template: big_group
-        variables:
-          - group: group.main_floor_lights
-      - type: custom:decluttering-card
-        template: big_group
-        variables:
-          - group: group.upstairs_lights
-      - type: custom:decluttering-card
-        template: big_group
-        variables:
-          - group: group.exterior_lights
+      - type: custom:auto-entities
+        card:
+          type: grid
+          columns: 4
+          square: false
+        card_param: cards
+        filter:
+          include:
+            - options:
+                type: custom:slider-button-card
+              group: group.main_floor_lights
+      # - type: custom:decluttering-card
+      #   template: big_group
+      #   variables:
+      #     - group: group.basement_lights
+      # - type: custom:decluttering-card
+      #   template: big_group
+      #   variables:
+      #     - group: group.main_floor_lights
+      # - type: custom:decluttering-card
+      #   template: big_group
+      #   variables:
+      #     - group: group.upstairs_lights
+      # - type: custom:decluttering-card
+      #   template: big_group
+      #   variables:
+      #     - group: group.exterior_lights
       # - type: custom:decluttering-card
       #   template: big_group
       #   variables:
       #     - group: group.all_fans
+  - title: Lights - Upstairs
+    id: lights-upstairs
+    icon: mdi:lightbulb
+    subview: true
+    path: lights-upstairs
+    panel: true
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: grid
+          columns: 4
+          square: false
+        card_param: cards
+        filter:
+          include:
+            - options:
+                type: custom:slider-button-card
+              group: group.upstairs_lights
+  - title: Lights - Basement
+    id: lights-basement
+    icon: mdi:lightbulb
+    subview: true
+    path: lights-basement
+    panel: true
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: grid
+          columns: 4
+          square: false
+        card_param: cards
+        filter:
+          include:
+            - options:
+                type: custom:slider-button-card
+              group: group.basement_lights
+  - title: Lights - Exterior
+    id: lights-exterior
+    icon: mdi:lightbulb
+    subview: true
+    path: lights-exterior
+    panel: true
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: grid
+          columns: 4
+          square: false
+        card_param: cards
+        filter:
+          include:
+            - options:
+                type: custom:slider-button-card
+              group: group.exterior_lights
 
   ##########################################
   # SHADE TAB
@@ -467,6 +634,9 @@ views:
   - title: Shades
     id: shades
     icon: mdi:roller-shade
+    subview: true
+    path: covers
+    panel: true
     cards:
       - type: custom:decluttering-card
         template: big_group
