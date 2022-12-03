@@ -185,7 +185,9 @@
         {{ states('sensor.elkm1_basement_bath_wb') == "Violated"
         or states('sensor.elkm1_powder_wb') == "Violated"
         or states('sensor.elkm1_upstairs_west_wb') == "Violated"
-        or states('sensor.elkm1_upstairs_west_wb_2') == "Violated" }}
+        or states('sensor.elkm1_upstairs_west_wb_2') == "Violated"
+        or states('binary_sensor.kitchen_leak_water_leak_detected') == "on"
+        or states('binary_sensor.bar_leak_water_leak_detected') == "on" }}
     - name: "Vacation?"
       unique_id: vacation
       device_class: occupancy
@@ -208,7 +210,7 @@
     - name: "light inside basement?"
       unique_id: light_inside_basement
       device_class: light
-      state: "{{ states('sensor.lounge_multi_pir_illuminance') | int > 50 }}"
+      state: "{{ states('sensor.lounge_pir_illuminance') | int > 50 }}"
     - name: "Anybody Home"
       unique_id: anybody_home
       device_class: presence

@@ -661,7 +661,7 @@
       value_template: "{{ not (is_state('sensor.alarm_state', 'no_alarm_active') or is_state('sensor.alarm_state', 'entrance_delay_active')) }}"
     - platform: state
       entity_id:
-        - binary_sensor.lounge_multi_pir_tamper
+        - binary_sensor.lounge_pir_tampering_product_cover_removed
         - binary_sensor.home_assistant_versions_update_available
         - update.adguard_home_update
         - update.cloudflared_update

@@ -4,7 +4,7 @@
   round_digits: 0
   type: mean
   entity_ids:
-    - sensor.lounge_multi_pir_relative_humidity_measurement
+    - sensor.lounge_pir_humidity
     - sensor.hvac_humidity
 
 - platform: websocket_api
