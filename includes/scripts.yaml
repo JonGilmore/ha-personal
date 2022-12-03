@@ -263,3 +263,15 @@ send_dynamic_notification:
           video: '{% if (importance == "default" and video != null) -%} {{ video }} {%- else-%} {{ null }} {%- endif %}'
           notification_icon: "{{ notifIcon }}"
           importance: "{{ importance }}"
+
+movie_on:
+  alias: "movie on"
+  sequence:
+    - service: cover.close_cover
+      entity_id: cover.basement_media_room_shades
+    # - service: light.turn_on
+    #   data:
+    #     entity_id: light.basement_media_room_cans
+    #     brightness_pct: 1
+    - service: light.turn_on
+      entity_id: light.basement_media_room_cabinets
