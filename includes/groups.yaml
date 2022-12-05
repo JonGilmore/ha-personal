@@ -40,7 +40,8 @@ interior_lights:
     - light.main_floor_library_cabinets
     - light.main_floor_library_light
     - light.main_floor_sunroom_cans
-    - light.main_floor_sunroom_lamp
+    - light.main_floor_sunroom_lamp1
+    - switch.main_floor_sunroom_lamp2
     - light.main_floor_back_kitchen_cabinets
     - switch.main_floor_foyer_lights
     - switch.main_floor_garage_hex_lights
@@ -111,7 +112,8 @@ all_lights:
     - light.main_floor_library_cabinets
     - light.main_floor_library_light
     - light.main_floor_sunroom_cans
-    - light.main_floor_sunroom_lamp
+    - light.main_floor_sunroom_lamp1
+    - switch.main_floor_sunroom_lamp2
     - light.main_floor_back_kitchen_cabinets
     - switch.main_floor_foyer_lights
     - switch.main_floor_garage_hex_lights
@@ -178,7 +180,8 @@ main_floor_lights:
     - light.main_floor_library_cabinets
     - light.main_floor_library_light
     - light.main_floor_sunroom_cans
-    - light.main_floor_sunroom_lamp
+    - light.main_floor_sunroom_lamp1
+    - switch.main_floor_sunroom_lamp2
     - light.main_floor_back_kitchen_cabinets
     - switch.main_floor_foyer_lights
     - switch.main_floor_garage_hex_lights
