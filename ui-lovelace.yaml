@@ -209,6 +209,29 @@ views:
               state: "on"
         sort:
           method: name
+      - type: vertical-stack
+        cards:
+          - type: entities
+            show_name: false
+            show_header_toggle: false
+            entities:
+              - entity: sensor.trash
+                type: custom:multiple-entity-row
+                name: Waste Pickup
+                show_state: false
+                entities:
+                  - entity: sensor.trash
+                    attribute: next_date
+                    format: relative
+                    tap_action:
+                      action: url
+                      url_path: !secret trash
+                  - entity: sensor.recycling
+                    attribute: next_date
+                    format: relative
+                    tap_action:
+                      action: url
+                      url_path: !secret recycling
       - type: "custom:auto-entities"
         show_empty: true
         card:
