@@ -1,4 +1,5 @@
 ---
+default_config:
 homeassistant:
   name: !secret name
   latitude: !secret ha_latitude
@@ -6,6 +7,7 @@ homeassistant:
   elevation: !secret ha_elevation
   unit_system: imperial
   currency: USD
+  country: US
   time_zone: !secret ha_tz
   external_url: !secret ext_hass_url
   internal_url: !secret int_hass_url

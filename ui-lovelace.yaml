@@ -182,7 +182,6 @@ views:
           action: navigate
           navigation_path: /lovelace/camerasv1
       - type: entities
-        title: Presence
         show_header_toggle: false
         entities:
           - entity: binary_sensor.anybody_home
@@ -329,6 +328,9 @@ views:
             show_state: true
           - entity: sensor.lounge_pir_illuminance
             name: Lounge Lux
+            show_state: true
+          - entity: sensor.outdoor_pir_illuminance
+            name: Outdoor Lux
             show_state: true
 
   ##########################################

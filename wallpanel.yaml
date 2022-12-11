@@ -27,6 +27,22 @@ resources:
   - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
     type: module
 
+decluttering_templates:
+  small_group:
+    card:
+      type: button
+      entity: "[[entity]]"
+      name: "[[name]]"
+      icon: mdi:lightbulb
+      tap_action:
+        action: call-service
+        service: button.press
+        service_data:
+          entity_id: "[[button]]"
+      double_tap_action:
+        action: navigate
+        navigation_path: "[[page]]"
+
 views:
   - title: panel
     id: home
@@ -114,49 +130,36 @@ views:
                   - entity: alarm_control_panel.elkm1_area_1
             view_layout:
               grid-area: five
-
-          - type: custom:auto-entities
-            card:
-              type: custom:layout-card
-              layout_type: horizontal
-              layout_options:
-                width: 100
-            filter:
-              include:
-                - group: group.all_lights
-                  state: "on"
-                  options:
-                    type: custom:button-card
-                    entity_id: this.entity_id
-                    icon: mdi:lightbulb-on-10
-                    show_last_changed: true
-                    aspect_ratio: 1/1
-                    styles:
-                      card:
-                        - box-shadow: 0px 0px 10px 1px var(--button-card-light-color)
-                      icon:
-                        - width: 40%
-                        - padding-top: 20px
-                      label:
-                        - color: gray
-                        - font-size: 10px
-                        - justify-self: start
-                        - padding-left: 10px
-                        - padding-top: 0px
-                      name:
-                        - font-weight: bold
-                        - padding-left: 0px
-                        - font-size: 12px
-                        - white-space: normal
-                    tap_action:
-                      action: toggle
-              exclude:
-                - state: unavailable
-            sort:
-              method: name
-            show_empty: false
-            view_layout:
-              grid-area: six
+          - type: horizontal-stack
+            cards:
+              - type: custom:decluttering-card
+                template: small_group
+                variables:
+                  - entity: group.main_floor_lights
+                  - name: Main
+                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+                  - page: "/lovelace/lights-main"
+              - type: custom:decluttering-card
+                template: small_group
+                variables:
+                  - entity: group.upstairs_lights
+                  - name: Upstairs
+                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
+                  - page: "/lovelace/lights-upstairs"
+              - type: custom:decluttering-card
+                template: small_group
+                variables:
+                  - entity: group.basement_lights
+                  - name: Basement
+                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
+                  - page: "/lovelace/lights-basement"
+              - type: custom:decluttering-card
+                template: small_group
+                variables:
+                  - entity: group.exterior_lights
+                  - name: Exterior
+                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
+                  - page: "/lovelace/lights-exterior"
   - title: Cameras Front
     id: camera-front
     icon: mdi:camera
