@@ -1,14 +1,6 @@
 title: !secret name
 resources:
-  - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
-    type: module
-  - url: /hacsfiles/button-card/button-card.js
-    type: module
   - url: /hacsfiles/decluttering-card/decluttering-card.js
-    type: module
-  - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
-    type: module
-  - url: /hacsfiles/mini-climate-card/mini-climate-card-bundle.js
     type: module
   - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
     type: module
@@ -18,48 +10,26 @@ resources:
     type: module
   - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
     type: module
-  - url: /hacsfiles/lovelace-card-tools/card-tools.js
-    type: module
-  - url: /hacsfiles/lovelace-fold-entity-row/fold-entity-row.js
-    type: module
   - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
     type: module
   - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
-    type: module
-  - url: /hacsfiles/lovelace-card-mod/card-mod.js
-    type: module
-  - url: /hacsfiles/slider-button-card/slider-button-card.js
     type: module
 
 decluttering_templates:
   small_group:
     card:
-      type: button
+      type: tile
       entity: "[[entity]]"
       name: "[[name]]"
       icon: mdi:lightbulb
       tap_action:
-        action: call-service
-        service: button.press
-        service_data:
-          entity_id: "[[button]]"
-      double_tap_action:
         action: navigate
         navigation_path: "[[page]]"
-  big_group:
-    card:
-      type: entities
-      entities:
-        - type: custom:auto-entities
-          show_empty: false
-          sort:
-            method: name
-          card:
-            type: custom:fold-entity-row
-            head: "[[group]]"
-          filter:
-            include:
-              - group: "[[group]]"
+      icon_tap_action:
+        action: call-service
+        service: button.press
+        target:
+          entity_id: "[[button]]"
 
 views:
   ##########################################
@@ -104,42 +74,21 @@ views:
                       action: toggle
           - type: horizontal-stack
             cards:
-              - type: custom:slider-button-card
+              - type: tile
                 entity: lock.garage_lock
-                slider:
-                  direction: left-right
-                  background: solid
-                  toggle_on_click: true
-                icon:
-                  use_state_color: true
-                  tap_action:
-                    action: more-info
-                action_button:
-                  show: false
-              - type: custom:slider-button-card
+                name: garage
+                tap_action:
+                  action: toggle
+              - type: tile
                 entity: lock.workshop_lock
-                slider:
-                  direction: left-right
-                  background: solid
-                  toggle_on_click: true
-                icon:
-                  use_state_color: true
-                  tap_action:
-                    action: more-info
-                action_button:
-                  show: false
-              - type: custom:slider-button-card
+                name: shop
+                tap_action:
+                  action: toggle
+              - type: tile
                 entity: lock.mudroom_lock
-                slider:
-                  direction: left-right
-                  background: solid
-                  toggle_on_click: true
-                icon:
-                  use_state_color: true
-                  tap_action:
-                    action: more-info
-                action_button:
-                  show: false
+                name: deck
+                tap_action:
+                  action: toggle
           - type: horizontal-stack
             cards:
               - type: custom:decluttering-card
@@ -156,6 +105,8 @@ views:
                   - name: Upstairs
                   - button: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
                   - page: "/lovelace/lights-upstairs"
+          - type: horizontal-stack
+            cards:
               - type: custom:decluttering-card
                 template: small_group
                 variables:
@@ -319,19 +270,19 @@ views:
           #     - entity: sensor.kitchen_freezer_temperature
           #       name: freezer
           # - entity: input_select.vacuum_room
-      - type: custom:mini-graph-card
-        name: Lux Sensors
-        icon: mdi:brightness-6
-        entities:
-          - entity: sensor.main_tv_lux
-            name: Main TV Lux
-            show_state: true
-          - entity: sensor.lounge_pir_illuminance
-            name: Lounge Lux
-            show_state: true
-          - entity: sensor.outdoor_pir_illuminance
-            name: Outdoor Lux
-            show_state: true
+      # - type: custom:mini-graph-card
+      #   name: Lux Sensors
+      #   icon: mdi:brightness-6
+      #   entities:
+      #     - entity: sensor.main_tv_lux
+      #       name: Main TV Lux
+      #       show_state: true
+      #     - entity: sensor.lounge_pir_illuminance
+      #       name: Lounge Lux
+      #       show_state: true
+      #     - entity: sensor.outdoor_pir_illuminance
+      #       name: Outdoor Lux
+      #       show_state: true
 
   ##########################################
   # CAMERA SUBVIEW
@@ -576,28 +527,10 @@ views:
         filter:
           include:
             - options:
-                type: custom:slider-button-card
+                type: tile
+                features:
+                  - type: light-brightness
               group: group.main_floor_lights
-      # - type: custom:decluttering-card
-      #   template: big_group
-      #   variables:
-      #     - group: group.basement_lights
-      # - type: custom:decluttering-card
-      #   template: big_group
-      #   variables:
-      #     - group: group.main_floor_lights
-      # - type: custom:decluttering-card
-      #   template: big_group
-      #   variables:
-      #     - group: group.upstairs_lights
-      # - type: custom:decluttering-card
-      #   template: big_group
-      #   variables:
-      #     - group: group.exterior_lights
-      # - type: custom:decluttering-card
-      #   template: big_group
-      #   variables:
-      #     - group: group.all_fans
   - title: Lights - Upstairs
     id: lights-upstairs
     icon: mdi:lightbulb
@@ -614,7 +547,9 @@ views:
         filter:
           include:
             - options:
-                type: custom:slider-button-card
+                type: tile
+                features:
+                  - type: light-brightness
               group: group.upstairs_lights
   - title: Lights - Basement
     id: lights-basement
@@ -632,7 +567,9 @@ views:
         filter:
           include:
             - options:
-                type: custom:slider-button-card
+                type: tile
+                features:
+                  - type: light-brightness
               group: group.basement_lights
   - title: Lights - Exterior
     id: lights-exterior
@@ -650,203 +587,11 @@ views:
         filter:
           include:
             - options:
-                type: custom:slider-button-card
+                type: tile
+                features:
+                  - type: light-brightness
               group: group.exterior_lights
 
-  ##########################################
-  # SHADE TAB
-  ##########################################
-  - title: Shades
-    id: shades
-    icon: mdi:roller-shade
-    subview: true
-    path: covers
-    panel: true
-    cards:
-      - type: custom:decluttering-card
-        template: big_group
-        variables:
-          - group: group.all_shades
-  ##########################################
-  # SMARTTHINGS TAB
-  ##########################################
-  # - title: ST Devices
-  #   id: st_devices
-  #   icon: mdi:cellphone-wireless
-  #   cards:
-  #     - type: entities
-  #       title: ST Devices
-  #       show_header_toggle: false
-  #       entities:
-  #         - sensor.powder_room_temperature_measurement
-  #         - sensor.kitchen_sink_leak_temperature_measurement
-  #         - sensor.kitchen_dishwasher_leak_temperature_measurement
-  #         - sensor.kitchen_fridge_leak_temperature_measurement
-  #         - sensor.basement_fridge_temperature_measurement
-  #         - sensor.daisy_temperature_measurement
-  #         - sensor.dryer_temperature_measurement
-  #         - sensor.washer_temperature_measurement
-  #         - sensor.office_multi_temperature_measurement
-  #         - sensor.basement_multi_temperature_measurement
-  #     - type: entities
-  #       title: Moisture Sensors
-  #       show_header_toggle: false
-  #       entities:
-  #         - binary_sensor.powder_room_water
-  #         - binary_sensor.kitchen_sink_leak_water
-  #         - binary_sensor.kitchen_dishwasher_leak_water
-  #         - binary_sensor.kitchen_fridge_leak_water
-  #         - binary_sensor.basement_fridge_water
-  ##########################################
-  # ENERGY/CONSUMPTION TAB
-  ##########################################
-  # - title: Consumption
-  #   id: consumption
-  #   icon: mdi:chart-timeline-variant
-  #   cards:
-  #     - type: "custom:auto-entities"
-  #       card:
-  #         show_header_toggle: false
-  #         title: Energy
-  #         type: entities
-  #       sort:
-  #         method: state
-  #       filter:
-  #         include:
-  #           - entity_id: "/^(sensor.*power|sensor.*energy).*/"
-  #         exclude:
-  #           - state: "unavailable"
-  #       show_empty: false
-  #     - type: custom:mini-graph-card
-  #       name: Gas Usage
-  #       icon: mdi:gas-station
-  #       hours_to_show: 168
-  #       points_per_hour: .25
-  #       entities:
-  #         - entity: sensor.gas_meter
-  #           name: Gas Usage
-  #           show_state: true
-  #     - type: custom:mini-graph-card
-  #       name: Water Consumption
-  #       icon: mdi:water-pump
-  #       hours_to_show: 168
-  #       points_per_hour: .25
-  #       entities:
-  #         - entity: sensor.water_meter
-  #           name: Water Consumption
-  #           show_state: true
-  ##########################################
-  # SCENES TAB
-  ##########################################
-  # - title: Scenes
-  #   id: scenes
-  #   icon: mdi:movie-outline
-  #   cards:
-  #     - type: custom:auto-entities
-  #       card:
-  #         type: entities
-  #         title: Lights Scenes (on)
-  #         show_header_toggle: false
-  #       filter:
-  #         include:
-  #           - entity_id: /scene.equipment_room_enclosure_device_001_.*on/
-  #         exclude:
-  #           - entity_id: /(.*flash.*|.*emergency.*)/
-  #       sort:
-  #         method: name
-  #     - type: custom:auto-entities
-  #       card:
-  #         type: entities
-  #         title: Lights Scenes (off)
-  #         show_header_toggle: false
-  #       filter:
-  #         include:
-  #           - entity_id: /scene.equipment_room_enclosure_device_001_.*off/
-  #         exclude:
-  #           - entity_id: /(.*flash.*|.*emergency.*)/
-  #       sort:
-  #         method: name
-  #     - type: custom:auto-entities
-  #       card:
-  #         type: entities
-  #         title: Lights Scenes (other)
-  #         show_header_toggle: false
-  #       filter:
-  #         include:
-  #           - entity_id: /scene.equipment_room_enclosure_device_001_.*/
-  #         exclude:
-  #           - entity_id: /(.*flash.*|.*emergency.*|.*on.*|.*off.*)/
-  #       sort:
-  #         method: name
-  ##########################################
-  # SPRINKLER TAB
-  ##########################################
-  # - title: Sprinklers
-  #   id: sprinklers
-  #   icon: mdi:flower
-  #   cards:
-  #     - type: entities
-  #       title: Sprinkler Zones
-  #       show_header_toggle: false
-  #       entities:
-  #         - switch.front_right_sidewalk
-  #         - switch.side_right_front_right
-  #         - switch.backyard_far
-  #         - switch.backyard_middle
-  #         - switch.backyard_near
-  #         - switch.side_left
-  #         - switch.front_left
-  #         - switch.drip_right
-  #         - switch.drip_left
-  #         - switch.front_pots
-  #         - switch.backyard_drip
-  #         - switch.backyard_pots
-  #     - type: entities
-  #       title: Timers
-  #       show_header_toggle: false
-  #       entities:
-  #         - input_number.front_right_sidewalk_timer
-  #         - input_number.side_right_front_right_timer
-  #         - input_number.backyard_far_timer
-  #         - input_number.backyard_middle_timer
-  #         - input_number.backyard_near_timer
-  #         - input_number.side_left_timer
-  #         - input_number.front_left_timer
-  #         - input_number.drip_right_timer
-  #         - input_number.drip_left_timer
-  #         - input_number.front_pots_timer
-  #         - input_number.backyard_drip_timer
-  #         - input_number.backyard_pots_timer
-  #     - type: glance
-  #       title: Sprinkler Programs
-  #       entities:
-  #         - scene.p1_normal
-  #         - scene.p2_drip
-  #         - scene.p3_pots
-  #     # - type: entities
-  #     #   title: Sprinkler Zones
-  #     #   show_header_toggle: false
-  #     #   entities:
-  #     #     - binary_sensor.front_right_sidewalk
-  #     #     - binary_sensor.side_right_front_right
-  #     #     - binary_sensor.backyard_far
-  #     #     - binary_sensor.backyard_middle
-  #     #     - binary_sensor.backyard_near
-  #     #     - binary_sensor.side_left
-  #     #     - binary_sensor.front_left
-  #     #     - binary_sensor.drip_right
-  #     #     - binary_sensor.drip_left
-  #     #     - binary_sensor.front_pots
-  #     #     - binary_sensor.backyard_drip
-  #     #     - binary_sensor.backyard_pots
-  #     - type: glance
-  #       title: Sensors
-  #       entities:
-  #         - binary_sensor.rain_sensor
-  #         - binary_sensor.rain_delay
-  #         - sensor.rain_delay_stop_time
-  #         - sensor.water_level
-  #         - sensor.last_run
   ##########################################
   # MAINTENANCE TAB
   ##########################################
@@ -888,48 +633,7 @@ views:
               {{t}} &nbsp;&nbsp; _{{state.name}}_
             {% endif -%}
           {% endfor %}
-      - type: custom:mini-graph-card
-        name: Circadian Brightness
-        icon: mdi:brightness-6
-        hours_to_show: 48
-        entities:
-          - entity: sensor.circadian_brightness
-            name: Brightness
-            show_state: true
-      # - type: custom:mini-graph-card
-      #   name: Internet
-      #   icon: mdi:server
-      #   entities:
-      #     - entity: sensor.speedtest_download
-      #       name: download
-      #       show_state: true
-      #     - entity: sensor.speedtest_ping
-      #       name: ping
-      #       show_state: true
-      #     - entity: sensor.speedtest_upload
-      #       name: upload
-      #       show_state: true
-      # - type: "custom:battery-state-card"
-      #   title: Batteries < 60%
-      #   sort_by_level: "asc"
-      #   tap_action: more-info
-      #   secondary_info: last_updated
-      #   filter:
-      #     include:
-      #       - name: entity_id
-      #         value: "*battery*"
-      #       - name: attributes.device_class
-      #         value: battery
-      #     exclude:
-      #       - name: state
-      #         value: 40
-      #         operator: ">"
-      #       - name: entity_id
-      #         value: "automation.*"
-      #       - name: state
-      #         value: "/Off|Good|Not Charging|Discharging/"
-      #       - name: entity_id
-      #         value: "*temp*"
+
   ##########################################
   # MOBILE TAB
   ##########################################
@@ -964,72 +668,6 @@ views:
             - state: "Unknown"
         show_empty: false
 
-  ##########################################
-  # GRAPH TAB
-  ##########################################
-  # - title: Graphs
-  #   id: graphs
-  #   icon: mdi:chart-areaspline
-  #   cards:
-  #     - type: entities
-  #       title: Moisture Sensors
-  #       show_header_toggle: false
-  #       entities:
-  #         - sensor.covid_mn_death
-
-  ##########################################
-  # ALARM PAGE
-  ##########################################
-  - title: Alarm
-    id: alarm
-    visible: false
-    cards:
-      - id: alarmPanel
-        type: alarm-panel
-        entity: alarm_control_panel.elkm1_area_1
-        name: !secret name
-        states:
-          - arm_home
-          - arm_away
-          - arm_night
-
-  ##########################################
-  # PIR PAGE
-  ##########################################
-  - title: PIR
-    id: pir
-    icon: mdi:motion-sensor
-    cards:
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Main PIRs
-        filter:
-          include:
-            - group: group.main_motions
-        sort:
-          method: name
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Basement PIRs
-        filter:
-          include:
-            - group: group.basement_motions
-        sort:
-          method: name
-      - type: custom:auto-entities
-        show_empty: false
-        card:
-          type: entities
-          title: Upstairs PIRs
-        filter:
-          include:
-            - group: group.upstairs_motions
-        sort:
-          method: name
   ##########################################
   # AUTOMATION PAGE
   ##########################################
