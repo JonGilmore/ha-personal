@@ -116,7 +116,7 @@
       timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: switch.exterior_deck_lights
+      entity_id: light.exterior_deck_lights
 #########################################
 - alias: "Automatic Lighting: patio lights on when patio door opens"
   id: "Automatic Lighting: patio lights on when patio door opens"
@@ -154,7 +154,7 @@
       timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: switch.exterior_workshop_light
+      entity_id: light.exterior_workshop_light
 #########################################
 - alias: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
   id: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
@@ -203,7 +203,7 @@
                 value_template: '{{ now().strftime("%m")|int < 4 }}'
         sequence:
           - service: homeassistant.turn_on
-            entity_id: switch.main_floor_great_room_lamp
+            entity_id: light.main_floor_great_room_lamp
 ########################################
 - alias: "Day Mode: turn off wake mode morning lamps"
   id: "Day Mode: turn off wake mode morning lamps"
@@ -218,7 +218,7 @@
       before: "10:00:00"
   action:
     - service: homeassistant.turn_off
-      entity_id: switch.main_floor_great_room_lamp
+      entity_id: light.main_floor_great_room_lamp
 ########################################
 - alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
   id: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
@@ -370,8 +370,8 @@
             - service: button.press
               entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_chill_off
 #########################################
-- alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
-  id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & & main if guests) & and main tv off & recirc pump off & enable driveway notify"
+- alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & main if guests) & and main tv off & recirc pump off & enable driveway notify"
+  id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   description: "also check garage doors and locks - notify if they are open or unlocked"
   trigger:
     - platform: state
@@ -379,22 +379,13 @@
       to: "on"
   action:
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_but_mainbed
-    # - service: scene.turn_on
-    #   data_template:
-    #     entity_id: >
-    #       {% if is_state('input_boolean.guests', 'on') %}
-    #         scene.equipment_room_enclosure_device_001_ph_main_lower_ext_off
-    #       {% else %}
-    #         scene.equipment_room_enclosure_device_001_ph_all_but_master
-    #       {% endif %}
-    # - service: climate.set_fan_mode
-    #   data:
-    #     entity_id:
-    #       - climate.basement_thermostat
-    #       - climate.main_thermostat
-    #       - climate.upstairs_thermostat
-    #     fan_mode: "on"
+      data_template:
+        entity_id: >
+          {% if is_state('input_boolean.guests', 'on') %}
+            button.basement_equipment_room_phantom_kp_position_1_keypad_main_lower_ext_off
+          {% else %}
+            button.basement_equipment_room_phantom_kp_position_1_keypad_all_but_mainbed
+          {% endif %}
     - service: script.tvs_off_except_mainbed
     - service: homeassistant.turn_off
       entity_id: switch.basement_equipment_room_recirculation_pump
@@ -665,16 +656,16 @@
         - binary_sensor.home_assistant_versions_update_available
         - update.adguard_home_update
         - update.cloudflared_update
-        - update.emqx_update
+        - update.double_take_update
         - update.esphome_update
+        - update.exadel_compreface_update
         - update.frigate_nvr_proxy_update
-        - update.frigate_server
         - update.home_assistant_core_update
         - update.home_assistant_supervisor_update
         - update.mariadb_update
-        - update.rtl_433_update
+        - update.mosquitto_broker_update
+        - update.network_ups_tools_update
         - update.samba_share_update
-        - update.studio_code_server_update
         - update.terminal_ssh_update
         - update.wireguard_update
       to: "on"
@@ -726,24 +717,19 @@
       below: 55
       for:
         minutes: 15
-    # - platform: state
-    #   entity_id:
-    #     - binary_sensor.washer_wash_completed
-    #     - binary_sensor.dryer_dry_completed
-    #   from: "off"
-    #   to: "on"
-    - platform: event
-      event_type: nut.ups_event
+    - platform: state
+      entity_id: sensor.cyberpower_ups_status_data
+      to: "OB DISCHRG"
       id: nut_event
   action:
     - choose:
-        - conditions: # nut event
+        - conditions:
             - condition: trigger
               id: nut_event
           sequence:
             - service: notify.telegram_jon
               data_template:
-                message: "{{ trigger.event.data.notify_msg }}"
+                message: "Power outage detected by UPS: {{ (state('sensor.cyberpower_ups_battery_runtime') | float / 60) | round(0) }} minutes of battery power remaining."
       default:
         - service: notify.telegram_jon
           data_template:
@@ -766,6 +752,20 @@
 #         {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
 #         {% else %}homeassistant.turn_off{% endif %}
 #       entity_id: switch.office_speakers
+# #########################################
+- alias: "Utility: Auto-restart NUT add-on"
+  id: "Utility: Auto-restart NUT add-on"
+  trigger:
+    - platform: state
+      entity_id:
+        - sensor.cyberpower_ups_status
+      to: unavailable
+      for:
+        minutes: 1
+  action:
+    - service: hassio.addon_restart
+      data:
+        addon: a0d7b954_nut
 #########################################
 - alias: "Garage: acknowledge garage open"
   id: "Garage: acknowledge garage open"
