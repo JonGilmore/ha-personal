@@ -63,6 +63,11 @@
         - conditions: # turn off at 11pm, when sleeping starts, or when laura leaves
             - condition: trigger
               id: xmasoff
+            - condition: not # wont turn off between 4:30am-7am
+              conditions:
+                - condition: time
+                  before: "07:00:00"
+                  after: "04:30:00"
           sequence:
             - service: homeassistant.turn_off
               entity_id: group.christmaslights
