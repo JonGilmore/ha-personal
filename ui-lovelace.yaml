@@ -128,7 +128,7 @@ views:
         camera_image: camera.driveway
         title: Exterior
         entities:
-          - switch.exterior_front_lights
+          - light.exterior_front_lights
         double_tap_action:
           action: navigate
           navigation_path: /lovelace/camerasv1
@@ -229,15 +229,15 @@ views:
               - entity: switch.basement_equipment_room_recirculation_pump
                 name: recirc
                 toggle: true
-          - entity: switch.exterior_landscape_lights
+          - entity: light.exterior_landscape_lights
             type: custom:multiple-entity-row
             name: Landscape
             secondary_info: last-changed
             entities:
-              - entity: switch.exterior_landscape_lights
+              - entity: light.exterior_landscape_lights
                 name: landscape
                 toggle: true
-              - entity: switch.exterior_deck_posts
+              - entity: light.exterior_deck_posts
                 name: deck
                 toggle: true
           - entity: sensor.period_of_day
@@ -317,29 +317,57 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-              - webrtc_card:
+                live_provider: webrtc-card
+                webrtc_card:
                   entity: camera.driveway_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam1
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.doorbell
-              - webrtc_card:
+                live_provider: webrtc-card
+                webrtc_card:
                   entity: camera.a8105_e_0
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-              - webrtc_card:
+                live_provider: webrtc-card
+                webrtc_card:
                   entity: camera.frontyard_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.garage
-              - webrtc_card:
+                live_provider: webrtc-card
+                webrtc_card:
                   entity: camera.garage_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam4
 
