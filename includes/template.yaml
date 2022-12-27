@@ -280,6 +280,10 @@
         {{ states('sensor.lower_level_hvac_action') == "cooling"
         or states('sensor.main_level_hvac_action') == "cooling"
         or states('sensor.upper_level_hvac_action') == "cooling" }}
+    - name: wireguard peer macbook
+      state: "{{ state_attr('sensor.wireguard_peers_status_api', 'macbook').latest_handshake > as_timestamp(now()) - 180 }}"
+    - name: wireguard peer jons-phone
+      state: "{{ state_attr('sensor.wireguard_peers_status_api', 'jons-phone').latest_handshake > as_timestamp(now()) - 180 }}"
 
 - sensor:
     - name: "Bed Occupancy"

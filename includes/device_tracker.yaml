@@ -1,0 +1,4 @@
+---
+- platform: ping
+  hosts:
+    jons_phone: 192.168.30.53

@@ -9,12 +9,13 @@
 
 - platform: websocket_api
 
-- platform: command_line
-  name: CPU Temperature
-  command: "cat /sys/class/thermal/thermal_zone2/temp"
-  value_template: "{{ value | multiply(0.001) | round(2) }}"
-  unit_of_measurement: "°C"
-  scan_interval: 600
+- platform: rest
+  name: WireGuard peers status API
+  resource: "http://a0d7b954-wireguard"
+  value_template: "OK"
+  json_attributes:
+    - macbook
+    - jons-phone
 
 - platform: systemmonitor
   resources:
@@ -35,105 +36,3 @@
     - "time_date"
     - "time_utc"
     - "beat"
-# HVAC tracking
-- platform: history_stats
-  name: daily hvac heat on time
-  entity_id: binary_sensor.hvac_heat
-  state: "on"
-  type: time
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-- platform: history_stats
-  name: daily hvac heat on count
-  entity_id: binary_sensor.hvac_heat
-  state: "on"
-  type: count
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-
-- platform: history_stats
-  name: daily hvac ac on time
-  entity_id: binary_sensor.hvac_ac
-  state: "on"
-  type: time
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-- platform: history_stats
-  name: daily hvac ac on count
-  entity_id: binary_sensor.hvac_ac
-  state: "on"
-  type: count
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-
-- platform: history_stats
-  name: daily hvac on time
-  entity_id: binary_sensor.hvac
-  state: "on"
-  type: time
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-- platform: history_stats
-  name: daily hvac on count
-  entity_id: binary_sensor.hvac
-  state: "on"
-  type: count
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-- platform: history_stats
-  name: daily hvac duty cycle
-  entity_id: binary_sensor.hvac
-  state: "on"
-  type: ratio
-  end: "{{ now() }}"
-  duration:
-    hours: 24
-# rtl_433 sensors
-# - platform: mqtt
-#   name: Nursery Temperature
-#   state_topic: "rtl_433/Acurite-Tower/4303"
-#   unit_of_measurement: "°F"
-#   value_template: "{{ value_json.temperature_F }}"
-# - platform: mqtt
-#   name: Nursery Humidity
-#   state_topic: "rtl_433/Acurite-Tower/4303"
-#   unit_of_measurement: "%"
-#   value_template: "{{ value_json.humidity }}"
-# - platform: mqtt
-#   name: Gym Temperature
-#   state_topic: "rtl_433/Acurite-Tower/14641"
-#   unit_of_measurement: "°F"
-#   value_template: "{{ value_json.temperature_F }}"
-# - platform: mqtt
-#   name: Gym Humidity
-#   state_topic: "rtl_433/Acurite-Tower/14641"
-#   unit_of_measurement: "%"
-#   value_template: "{{ value_json.humidity }}"
-# - platform: mqtt
-#   name: Bar Freezer Temperature
-#   state_topic: "rtl_433/Acurite-986/50597"
-#   unit_of_measurement: "°F"
-#   value_template: "{{ value_json.temperature_F }}"
-# - platform: mqtt
-#   name: Bar Fridge Temperature
-#   state_topic: "rtl_433/Acurite-986/17933"
-#   unit_of_measurement: "°F"
-#   value_template: "{{ value_json.temperature_F }}"
-
-# rtl_915 sensors
-# - platform: mqtt
-#   name: Water Meter
-#   state_topic: "rtl_915/SCM_/68242959"
-#   unit_of_measurement: "Gallons"
-#   value_template: "{{ value_json.Consumption }}"
-# - platform: mqtt
-#   name: Gas Meter
-#   state_topic: "rtl_915/ERT-SCM/48150945"
-#   unit_of_measurement: "M3"
-#   value_template: "{{ value_json.consumption_data }}"
