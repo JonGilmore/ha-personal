@@ -184,8 +184,10 @@
       state: >-
         {{ states('sensor.elkm1_basement_bath_wb') == "Violated"
         or states('sensor.elkm1_powder_wb') == "Violated"
-        or states('sensor.elkm1_upstairs_west_wb') == "Violated"
-        or states('sensor.elkm1_upstairs_west_wb_2') == "Violated"
+        or states('sensor.elkm1_eveylns_bath_wb') == "Violated"
+        or states('sensor.elkm1_jack_and_jill_wb') == "Violated"
+        or states('sensor.elkm1_main_bath_wb') == "Violated"
+        or states('sensor.elkm1_upper_laundry_wb') == "Violated"
         or states('binary_sensor.kitchen_leak_water_leak_detected') == "on"
         or states('binary_sensor.bar_leak_water_leak_detected') == "on" }}
     - name: "Vacation?"
