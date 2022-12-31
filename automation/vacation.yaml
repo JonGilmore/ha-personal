@@ -75,7 +75,7 @@
 #       value_template: "{{ not is_state('climate.main_thermostat', 'heat') }}"
 #   action:
 #     - service: homeassistant.turn_on
-#       entity_id: switch.water_main_shut_off
+#       entity_id: switch.water_main
 #     - service: climate.set_temperature
 #       data:
 #         entity_id:

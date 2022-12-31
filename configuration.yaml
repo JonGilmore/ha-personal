@@ -67,7 +67,7 @@ system_health:
 #       - lock
 #     entities:
 #       - switch.basement_equipment_room_recirculation_pump
-#       - switch.water_main_shut_off
+#       - switch.water_main
 
 elkm1:
   host: !secret url_elk
