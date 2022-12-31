@@ -186,10 +186,17 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.basement_equipment_room_recirculation_pump
-    # - service: light.turn_on
-    #   data:
-    #     entity_id: light.evelyns_room_light
-    #     rgb_color: [0, 255, 0]
+    - service: light.turn_on
+      data:
+        entity_id: light.evelyns_room_light
+        rgb_color: [0, 255, 0]
+        brightness_pct: 6
+    - wait_for_trigger: # w/in 20m of disarming, if there is foyer motion, turn on the living room
+        - platform: state
+          entity_id: sensor.elkm1_foyer_pir
+          to: "Violated"
+      timeout: 1200
+      continue_on_timeout: false
     - choose:
         conditions:
           - condition: state
@@ -203,7 +210,7 @@
                 value_template: '{{ now().strftime("%m")|int < 4 }}'
         sequence:
           - service: homeassistant.turn_on
-            entity_id: light.main_floor_great_room_lamp
+            entity_id: light.main_floor_great_room_cabinets
 ########################################
 - alias: "Day Mode: turn off wake mode morning lamps"
   id: "Day Mode: turn off wake mode morning lamps"
@@ -218,7 +225,7 @@
       before: "10:00:00"
   action:
     - service: homeassistant.turn_off
-      entity_id: light.main_floor_great_room_lamp
+      entity_id: light.main_floor_great_room_cabinets
 ########################################
 - alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
   id: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
@@ -545,7 +552,7 @@
       data:
         entity_id:
           - switch.basement_equipment_room_recirculation_pump
-          # - switch.water_main_shut_off
+          - switch.water_main
     - service: notify.telegram_jon
       data:
         title: "Water Leak!"
