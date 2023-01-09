@@ -1,7 +1,5 @@
 title: !secret name
 resources:
-  - url: /hacsfiles/decluttering-card/decluttering-card.js
-    type: module
   - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
     type: module
   - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
@@ -14,22 +12,6 @@ resources:
     type: module
   - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
     type: module
-
-decluttering_templates:
-  small_group:
-    card:
-      type: tile
-      entity: "[[entity]]"
-      name: "[[name]]"
-      icon: mdi:lightbulb
-      tap_action:
-        action: navigate
-        navigation_path: "[[page]]"
-      icon_tap_action:
-        action: call-service
-        service: button.press
-        target:
-          entity_id: "[[button]]"
 
 views:
   ##########################################
@@ -91,47 +73,70 @@ views:
                   action: toggle
           - type: horizontal-stack
             cards:
-              - type: custom:decluttering-card
-                template: small_group
-                variables:
-                  - entity: group.main_floor_lights
-                  - name: Main
-                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
-                  - page: "/lovelace/lights-main"
-              - type: custom:decluttering-card
-                template: small_group
-                variables:
-                  - entity: group.upstairs_lights
-                  - name: Upstairs
-                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
-                  - page: "/lovelace/lights-upstairs"
+              - type: tile
+                entity: group.main_floor_lights
+                name: Main
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-main"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+              - type: tile
+                entity: group.upstairs_lights
+                name: Upstairs
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-upstairs"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
           - type: horizontal-stack
             cards:
-              - type: custom:decluttering-card
-                template: small_group
-                variables:
-                  - entity: group.basement_lights
-                  - name: Basement
-                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
-                  - page: "/lovelace/lights-basement"
-              - type: custom:decluttering-card
-                template: small_group
-                variables:
-                  - entity: group.exterior_lights
-                  - name: Exterior
-                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
-                  - page: "/lovelace/lights-exterior"
+              - type: tile
+                entity: group.basement_lights
+                name: Basement
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-basement"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
+              - type: tile
+                entity: group.exterior_lights
+                name: Exterior
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-exterior"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
           - type: tile
             icon: mdi:roller-shade
             entity: group.all_shades
-      - type: picture-glance
-        camera_image: camera.driveway
-        title: Exterior
-        entities:
-          - light.exterior_front_lights
-        double_tap_action:
-          action: navigate
-          navigation_path: /lovelace/camerasv1
+          - type: custom:frigate-card
+            cameras:
+              - camera_entity: camera.driveway
+                live_provider: webrtc-card
+                title: Driveway
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
       - type: entities
         show_header_toggle: false
         entities:
@@ -223,9 +228,9 @@ views:
             name: Recirc Pump
             secondary_info: last-changed
             entities:
-              # - entity: switch.water_main_shut_off
-              #   name: main
-              #   toggle: true
+              - entity: switch.water_main
+                name: main
+                toggle: true
               - entity: switch.basement_equipment_room_recirculation_pump
                 name: recirc
                 toggle: true
@@ -270,19 +275,6 @@ views:
           #     - entity: sensor.kitchen_freezer_temperature
           #       name: freezer
           # - entity: input_select.vacuum_room
-      # - type: custom:mini-graph-card
-      #   name: Lux Sensors
-      #   icon: mdi:brightness-6
-      #   entities:
-      #     - entity: sensor.main_tv_lux
-      #       name: Main TV Lux
-      #       show_state: true
-      #     - entity: sensor.lounge_pir_illuminance
-      #       name: Lounge Lux
-      #       show_state: true
-      #     - entity: sensor.outdoor_pir_illuminance
-      #       name: Outdoor Lux
-      #       show_state: true
 
   ##########################################
   # CAMERA SUBVIEW
@@ -317,9 +309,6 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-                live_provider: webrtc-card
-                webrtc_card:
-                  entity: camera.driveway_rtsp
             live:
               webrtc_card:
                 ui: true
@@ -331,9 +320,6 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.doorbell
-                live_provider: webrtc-card
-                webrtc_card:
-                  entity: camera.a8105_e_0
             live:
               webrtc_card:
                 ui: true
@@ -345,9 +331,6 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-                live_provider: webrtc-card
-                webrtc_card:
-                  entity: camera.frontyard_rtsp
             live:
               webrtc_card:
                 ui: true
@@ -359,9 +342,6 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.garage
-                live_provider: webrtc-card
-                webrtc_card:
-                  entity: camera.garage_rtsp
             live:
               webrtc_card:
                 ui: true
@@ -402,29 +382,45 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-              - webrtc_card:
-                  entity: camera.driveway_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam1
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.doorbell
-              - webrtc_card:
-                  entity: camera.a8105_e_0
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-              - webrtc_card:
-                  entity: camera.frontyard_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.garage
-              - webrtc_card:
-                  entity: camera.garage_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam4
 
@@ -461,36 +457,56 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.deck
-              - webrtc_card:
-                  entity: camera.deck_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam1
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.workshop
-              - webrtc_card:
-                  entity: camera.workshop_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.grilldeck
-              - webrtc_card:
-                  entity: camera.grilldeck_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.mudroom
-              - webrtc_card:
-                  entity: camera.mudroom_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam4
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.patio
-              - webrtc_card:
-                  entity: camera.patio_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam5
 
@@ -697,7 +713,7 @@ views:
         show_empty: false
 
   ##########################################
-  # AUTOMATION PAGE
+  # AUTOMATION & RANDOM PAGE
   ##########################################
   - title: AUTOMATION
     id: automation
@@ -714,3 +730,14 @@ views:
         filter:
           include:
             - entity_id: "/automation.*/"
+      - type: "custom:auto-entities"
+        show_empty: true
+        card:
+          title: Elk M1 Binary Sensors
+          type: entities
+          show_header_toggle: true
+        sort:
+          method: name
+        filter:
+          include:
+            - entity_id: "/binary_sensor\\.elkm1.*/"

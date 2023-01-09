@@ -1,15 +1,5 @@
 title: !secret name
 resources:
-  - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
-    type: module
-  - url: /hacsfiles/button-card/button-card.js
-    type: module
-  - url: /hacsfiles/decluttering-card/decluttering-card.js
-    type: module
-  - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
-    type: module
-  - url: /hacsfiles/mini-climate-card/mini-climate-card-bundle.js
-    type: module
   - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
     type: module
   - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
@@ -20,28 +10,10 @@ resources:
     type: module
   - url: /hacsfiles/lovelace-card-tools/card-tools.js
     type: module
-  - url: /hacsfiles/lovelace-fold-entity-row/fold-entity-row.js
-    type: module
   - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
     type: module
   - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
     type: module
-
-decluttering_templates:
-  small_group:
-    card:
-      type: button
-      entity: "[[entity]]"
-      name: "[[name]]"
-      icon: mdi:lightbulb
-      tap_action:
-        action: call-service
-        service: button.press
-        service_data:
-          entity_id: "[[button]]"
-      double_tap_action:
-        action: navigate
-        navigation_path: "[[page]]"
 
 views:
   - title: panel
@@ -68,15 +40,23 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-                webrtc:
-                  entity: camera.driveway_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: one
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-                webrtc:
-                  entity: camera.frontyard_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: two
           - type: "custom:auto-entities"
@@ -132,34 +112,54 @@ views:
               grid-area: five
           - type: horizontal-stack
             cards:
-              - type: custom:decluttering-card
-                template: small_group
-                variables:
-                  - entity: group.main_floor_lights
-                  - name: Main
-                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
-                  - page: "/lovelace/lights-main"
-              - type: custom:decluttering-card
-                template: small_group
-                variables:
-                  - entity: group.upstairs_lights
-                  - name: Upstairs
-                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
-                  - page: "/lovelace/lights-upstairs"
-              - type: custom:decluttering-card
-                template: small_group
-                variables:
-                  - entity: group.basement_lights
-                  - name: Basement
-                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
-                  - page: "/lovelace/lights-basement"
-              - type: custom:decluttering-card
-                template: small_group
-                variables:
-                  - entity: group.exterior_lights
-                  - name: Exterior
-                  - button: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
-                  - page: "/lovelace/lights-exterior"
+              - type: tile
+                entity: group.main_floor_lights
+                name: Main
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-main"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+              - type: tile
+                entity: group.upstairs_lights
+                name: Upstairs
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-upstairs"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
+              - type: tile
+                entity: group.basement_lights
+                name: Basement
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-basement"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
+              - type: tile
+                entity: group.exterior_lights
+                name: Exterior
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-exterior"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
   - title: Cameras Front
     id: camera-front
     icon: mdi:camera
