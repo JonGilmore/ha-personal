@@ -162,6 +162,14 @@
         or states('sensor.elkm1_main_bed_pir') == "Violated"
         or states('sensor.elkm1_second_hall_pir') == "Violated"
         or states('sensor.elkm1_garage_pir') == "Violated" }}
+    - name: "Kitchen Area Motions"
+      unique_id: kitchen_area_motions
+      device_class: motion
+      state: >-
+        {{ states('sensor.elkm1_back_kitchen_pir') == "Violated"
+        or states('sensor.elkm1_foyer_pir') == "Violated"
+        or states('sensor.elkm1_great_room_pir') == "Violated"
+        or states('sensor.elkm1_kitchen_pir') == "Violated" }}
     - name: "Garage Doors"
       unique_id: garage_doors
       device_class: garage_door
