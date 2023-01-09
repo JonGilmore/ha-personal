@@ -1,0 +1,178 @@
+title: ncc-main
+resources:
+  - url: /hacsfiles/lovelace-card-mod/card-mod.js
+    type: module
+  - url: https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&display=swap
+    type: css
+
+views:
+  - title: panel
+    theme: LCARS Classic
+    id: home
+    icon: mdi:home
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            card_mod:
+              class: header
+            content: "# Cameras"
+          - type: custom:frigate-card
+            cameras:
+              - camera_entity: camera.driveway
+                webrtc:
+                  entity: camera.driveway_rtsp
+            card_mod:
+              class: middle
+          - type: thermostat
+            entity: climate.lower_level
+            card_mod:
+              class: middle
+          - type: thermostat
+            entity: climate.main_level
+            card_mod:
+              class: middle
+          - type: thermostat
+            entity: climate.upper_level
+            card_mod:
+              class: footer
+      - type: markdown
+        card_mod:
+          class: header
+        content: "# Climate"
+      - type: weather-forecast
+        entity: weather.tomorrow_io_home_daily
+        card_mod:
+          class: middle
+      - type: markdown
+        card_mod:
+          class: header
+        content: "# People"
+      - type: entities
+        show_header_toggle: false
+        card_mod:
+          class: middle
+        entities:
+          - entity: binary_sensor.anybody_home
+            type: custom:multiple-entity-row
+            name: Presence
+            secondary_info: last-changed
+            entities:
+              - entity: binary_sensor.anybody_away
+          - entity: binary_sensor.anybody_home
+            type: custom:multiple-entity-row
+            name: People
+            hide_state: true
+            entities:
+              - entity: person.jon
+              - entity: person.laura
+
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: group.main_floor_lights
+            name: Main
+            icon: mdi:lightbulb
+            tap_action:
+              action: navigate
+              navigation_path: "/ui-lcars/lights-main"
+            icon_tap_action:
+              action: call-service
+              service: button.press
+              target:
+                entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+            card_mod:
+              class: tile-bullet
+      - type: button
+        show_name: true
+        show_icon: true
+        tap_action:
+          action: toggle
+        entity: light.jons_lamp
+        icon: ""
+        card_mod:
+          class: button-lozenge
+  ##########################################
+  # LIGHT SUBVIEWS
+  ##########################################
+  - title: Lights - Main
+    theme: LCARS Cardassia
+    id: lights-main
+    icon: mdi:lightbulb
+    subview: true
+    path: lights-main
+    panel: true
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: grid
+          columns: 4
+          square: false
+        card_param: cards
+        filter:
+          include:
+            - options:
+                type: tile
+                features:
+                  - type: light-brightness
+              group: group.main_floor_lights
+  - title: Lights - Upstairs
+    id: lights-upstairs
+    icon: mdi:lightbulb
+    subview: true
+    path: lights-upstairs
+    panel: true
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: grid
+          columns: 4
+          square: false
+        card_param: cards
+        filter:
+          include:
+            - options:
+                type: tile
+                features:
+                  - type: light-brightness
+              group: group.upstairs_lights
+  - title: Lights - Basement
+    id: lights-basement
+    icon: mdi:lightbulb
+    subview: true
+    path: lights-basement
+    panel: true
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: grid
+          columns: 4
+          square: false
+        card_param: cards
+        filter:
+          include:
+            - options:
+                type: tile
+                features:
+                  - type: light-brightness
+              group: group.basement_lights
+  - title: Lights - Exterior
+    id: lights-exterior
+    icon: mdi:lightbulb
+    subview: true
+    path: lights-exterior
+    panel: true
+    cards:
+      - type: custom:auto-entities
+        card:
+          type: grid
+          columns: 4
+          square: false
+        card_param: cards
+        filter:
+          include:
+            - options:
+                type: tile
+                features:
+                  - type: light-brightness
+              group: group.exterior_lights

@@ -42,32 +42,24 @@ recorder:
       - sensor.pixel*
 frontend:
   themes: !include_dir_merge_named themes/
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
 lovelace:
   mode: yaml
   dashboards:
     wallpanel-dashboard:
       mode: yaml
       title: Wallpanel
-      icon: mdi:time
-      show_in_sidebar: true
+      icon: mdi:tablet-dashboard
+      show_in_sidebar: false
       filename: wallpanel.yaml
+    ui-lcars:
+      mode: yaml
+      title: ncc-main
+      icon: mdi:tablet-dashboard
+      show_in_sidebar: true
+      filename: ui-lcars.yaml
 system_health:
-
-# influxdb:
-#   host: localhost
-#   username: !secret influx_usr
-#   password: !secret influx_pwd
-#   database: !secret influx_db
-#   include:
-#     domains:
-#       - sensor
-#       - binary_sensor
-#       - climate
-#       - device_tracker
-#       - lock
-#     entities:
-#       - switch.basement_equipment_room_recirculation_pump
-#       - switch.water_main
 
 elkm1:
   host: !secret url_elk
@@ -137,10 +129,6 @@ zone: !include includes/zones.yaml
 
 logger:
   default: error
-  logs:
-    custom_components.localtuya.common: fatal
-    # homeassistant.components.lutron_caseta: debug
-    # pylutron_caseta: debug
 
 panel_custom:
   - name: panel_supervisor
