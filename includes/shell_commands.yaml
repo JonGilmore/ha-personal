@@ -11,3 +11,5 @@ unifi_powercycle: /bin/bash /config/scripts/unifi.sh powercycleport {{ username 
 unifi_powercycle_device: /bin/bash /config/scripts/unifi.sh powercycledevice {{ username }} {{ password }} {{ baseurl }} {{ mac }} {{ reboot_type }} {{ cmd }}
 trim_video: /usr/bin/ffmpeg -i {{ clip }} -t {{ duration }} -c copy {{ path }} -y
 download_file: /usr/bin/wget {{ url }} -O {{ download }}
+debian_shutdown: /usr/bin/ssh -i /config/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@192.168.30.249 "/usr/sbin/shutdown -h now"
+debian_restart: /usr/bin/ssh -i /config/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@192.168.30.249 "/usr/sbin/shutdown -r now"

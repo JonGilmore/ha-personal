@@ -2,7 +2,7 @@
     - name: dark out? # true if the sun is below horizon or cloud coverage is greater than 50%
       icon: mdi:weather-night
       unique_id: dark out
-      state: "{{ is_state('sun.sun', 'below_horizon') or states('sensor.cloud_cover') | float > 75 }}"
+      state: "{{ is_states('sun.sun', 'below_horizon') or states('sensor.cloud_cover') | float > 75 }}"
     - name: "Has Unavailable States"
       unique_id: has_unavailable_state
       state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
@@ -115,6 +115,12 @@
         or states('sensor.elkm1_lounge_pir') == "Violated"
         or states('sensor.elkm1_office_pir') == "Violated"
         or states('sensor.elkm1_workshop_pir') == "Violated" }}
+    - name: "Office Motions"
+      unique_id: office_motions
+      device_class: motion
+      state: >-
+        {{ states('binary_sensor.occupancy') == "on"
+        or states('sensor.elkm1_office_pir') == "Violated" }}
     - name: "Main Motions"
       unique_id: main_motions
       device_class: motion
@@ -296,6 +302,28 @@
       state: "{{ state_attr('sensor.wireguard_peers_status_api', 'jons-phone').latest_handshake > as_timestamp(now()) - 180 }}"
 
 - sensor:
+    - name: recycle
+      icon: mdi:garbage
+      unique_id: recycle
+      # check if its an odd/even week. then, check if its before/after tuesday (waste pickup day)
+      state: >-
+        {% if not now().isocalendar()[1] % 2 %}
+          {%- if now().weekday() | int < 1 %}
+            {{ state_attr('schedule.tuesdays', 'next_event') }}
+          {%- else -%}
+            {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
+          {%- endif -%}
+        {%- else -%}
+          {%- if now().weekday() | int < 1 %}
+            {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
+          {%- else -%}
+            {{ state_attr('schedule.tuesdays', 'next_event') }}
+          {%- endif -%}
+        {%endif%}
+    - name: trash
+      icon: mdi:garbage
+      unique_id: trash
+      state: "{{ state_attr('schedule.tuesdays', 'next_event') }}"
     - name: "Bed Occupancy"
       icon: mdi:bed
       unique_id: bed_occupancy_sensor
@@ -383,6 +411,14 @@
         {% else %}
           mdi:weather-sunny
         {% endif %}
+    - name: cyberpower ups
+      unique_id: cyberpower_ups
+      state: >-
+        {% if   states('sensor.cyberpower_ups_battery_runtime') | int < 180 %}three
+        {% elif states('sensor.cyberpower_ups_battery_runtime') | int < 300 %}five
+        {% elif states('sensor.cyberpower_ups_battery_runtime') | int < 600 %}ten
+        {% elif states('sensor.cyberpower_ups_battery_runtime') | int < 1200 %}twenty
+        {% else %}okay{% endif %}
     - name: "target humidity max"
       unique_id: target_humidity_max
       device_class: humidity

@@ -138,7 +138,7 @@ tvs_off:
         - media_player.sunroom_tv
         - media_player.office_tv
         - media_player.gym_tv
-        - media_player.living_room_tv
+        - media_player.great_room_tv
         - media_player.media_room_tv
         - media_player.main_bedroom_tv
 
@@ -150,7 +150,7 @@ tvs_off_except_mainbed:
         - media_player.sunroom_tv
         - media_player.office_tv
         - media_player.gym_tv
-        - media_player.living_room_tv
+        - media_player.great_room_tv
         - media_player.media_room_tv
 
 # popup_camera:

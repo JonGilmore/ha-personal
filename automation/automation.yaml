@@ -783,6 +783,52 @@
     - service: hassio.addon_restart
       data:
         addon: a0d7b954_nut
+# #########################################
+- alias: "Utility: power outage"
+  id: "Utility: power outage"
+  trigger:
+    - platform: state
+      entity_id: sensor.cyberpower_ups
+      to: three
+      id: three
+      for:
+        seconds: 30
+    - platform: state
+      entity_id: sensor.cyberpower_ups
+      to: five
+      id: five
+      for:
+        seconds: 15
+    - platform: state
+      entity_id: sensor.cyberpower_ups
+      to: ten
+      id: ten
+      for:
+        seconds: 15
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: three
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                message: "Cyberpower ups has {{ (state('sensor.cyberpower_ups_battery_runtime') | float / 60) | round(0) }}min remaining, turning off HA."
+            - service: shell_command.debian_shutdown
+        - conditions:
+            - condition: trigger
+              id: five
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                message: "Cyberpower ups has {{ (state('sensor.cyberpower_ups_battery_runtime') | float / 60) | round(0) }}min remaining."
+        - conditions:
+            - condition: trigger
+              id: ten
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                message: "Cyberpower ups has {{ (state('sensor.cyberpower_ups_battery_runtime') | float / 60) | round(0) }}min remaining."
 #########################################
 - alias: "Garage: acknowledge garage open"
   id: "Garage: acknowledge garage open"
@@ -862,17 +908,16 @@
   trigger:
     - platform: state
       entity_id:
-        - binary_sensor.elkm1_office_pir
+        - binary_sensor.office_motions
         - binary_sensor.elkm1_main_bath_pir
         - binary_sensor.elkm1_lounge_pir
-        - binary_sensor.elkm1_basmnt_stair_pir
         - binary_sensor.elkm1_mudroom_pir
       id: pir-on
       to: "on"
     - platform: state
       entity_id:
         - binary_sensor.elkm1_lounge_pir
-        - binary_sensor.elkm1_office_pir
+        - binary_sensor.office_motions
         - binary_sensor.elkm1_mudroom_pir
       id: pir-off
       to: "off"
@@ -881,7 +926,6 @@
     - platform: state
       entity_id:
         - binary_sensor.elkm1_main_bath_pir
-        - binary_sensor.elkm1_basmnt_stair_pir
       id: pir-off
       to: "off"
       for:
@@ -897,14 +941,12 @@
             - service: light.turn_on
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                  {% if trigger.entity_id == 'binary_sensor.office_motions' %}
                     light.basement_office_art
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
                     light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
                     light.basement_bar_cabinets
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_basmnt_stair_pir' %}
-                    light.basement_stair_lights
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir' %}
                     light.main_floor_mudroom_lamp
                   {% endif %}
@@ -916,14 +958,12 @@
             - service: homeassistant.turn_off
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                  {% if trigger.entity_id == 'binary_sensor.office_motions' %}
                     light.basement_office_art
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
                     light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
                     light.basement_bar_cabinets
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_basmnt_stair_pir' %}
-                    light.basement_stair_lights
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir' %}
                     light.main_floor_mudroom_lamp
                   {% endif %}
@@ -962,6 +1002,58 @@
             - service: homeassistant.turn_off
               target:
                 entity_id: "{{light}}"
+#########################################
+- alias: "Automatic Lighting: motion light basement stairs"
+  id: "Automatic Lighting: motion light basement stairs"
+  description: "on basement stair motion, turn on the lights (at 30% of the circadian brightness)"
+  variables:
+    light: light.basement_stair_lights
+    brightness_pct: 30
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_basmnt_stair_pir
+      to: "on"
+      id: pir-on
+    - platform: state
+      entity_id: binary_sensor.elkm1_basmnt_stair_pir
+      to: "off"
+      id: pir-off
+      for: "00:05:00"
+  condition: "{{ (trigger.to_state.state == 'on' and is_state(light, 'off')) or (trigger.to_state.state == 'off' and is_state(light, 'on')) }}"
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
+            - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+          sequence:
+            - service: light.turn_on
+              data_template:
+                entity_id: "{{light}}"
+                brightness_pct: "{{ states('sensor.circadian_brightness') | float * brightness_pct }}"
+        - conditions:
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - service: homeassistant.turn_off
+              target:
+                entity_id: "{{light}}"
+#########################################
+- alias: "Automatic Lighting: main bath lights"
+  id: "Automatic Lighting: main bath lights"
+  description: "if there is not motion in the main bath for 20 minutes, turn off the lights"
+  variables:
+    light: button.basement_equipment_room_phantom_kp_position_1_keypad_mainbath_off
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_main_bath_pir
+      to: "off"
+      for: "00:20:00"
+  action:
+    - service: button.press
+      data_template:
+        entity_id: "{{light}}"
 #########################################
 - alias: "Automatic Lighting: motion light back kitchen"
   id: "Automatic Lighting: motion light back kitchen"
