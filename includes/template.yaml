@@ -2,7 +2,7 @@
     - name: dark out? # true if the sun is below horizon or cloud coverage is greater than 50%
       icon: mdi:weather-night
       unique_id: dark out
-      state: "{{ is_states('sun.sun', 'below_horizon') or states('sensor.cloud_cover') | float > 75 }}"
+      state: "{{ is_state('sun.sun', 'below_horizon') or states('sensor.cloud_cover') | float > 75 }}"
     - name: "Has Unavailable States"
       unique_id: has_unavailable_state
       state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
