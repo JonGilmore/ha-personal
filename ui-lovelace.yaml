@@ -59,16 +59,19 @@ views:
               - type: tile
                 entity: lock.garage_lock
                 name: garage
+                vertical: true
                 tap_action:
                   action: toggle
               - type: tile
                 entity: lock.workshop_lock
                 name: shop
+                vertical: true
                 tap_action:
                   action: toggle
               - type: tile
                 entity: lock.mudroom_lock
                 name: deck
+                vertical: true
                 tap_action:
                   action: toggle
           - type: horizontal-stack
