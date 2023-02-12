@@ -188,29 +188,47 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-                webrtc:
-                  entity: camera.driveway_rtsp
+                live_provider: webrtc-card
+                title: Driveway
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam1
           - type: custom:frigate-card
             cameras:
-              - camera_entity: camera.a8105_e_0
-                webrtc:
-                  entity: camera.a8105_e_0
+              - camera_entity: camera.doorbell
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-                webrtc:
-                  entity: camera.frontyard_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.garage
-                webrtc:
-                  entity: camera.garage_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam4
 
@@ -247,35 +265,55 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.deck
-                webrtc:
-                  entity: camera.deck_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam1
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.workshop
-                webrtc:
-                  entity: camera.workshop_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.grilldeck
-                webrtc:
-                  entity: camera.grilldeck_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.mudroom
-                webrtc:
-                  entity: camera.mudroom_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam4
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.patio
-                webrtc:
-                  entity: camera.patio_rtsp
+            live:
+              webrtc_card:
+                ui: true
+              controls:
+                title:
+                  mode: none
             view_layout:
               grid-area: cam5
