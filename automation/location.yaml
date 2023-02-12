@@ -1,31 +1,31 @@
 ---
 #########################################
-- alias: "Location: leave home & either garage open"
-  id: "Location: leave home & either garage open"
-  description: "Leave `home` zone with either garage open, send a photo notification & prompt to close"
-  trigger:
-    - platform: state
-      entity_id:
-        - cover.single_garage_door
-        - cover.double_garage_door
-      to: "open"
-  action:
-    - wait_for_trigger:
-        - platform: state
-          entity_id: person.jon
-          from: "home"
-      timeout: 1800
-      continue_on_timeout: false
-    - service: telegram_bot.send_photo
-      data_template:
-        url: "http://192.168.30.249:5005/api/garage/latest.jpg"
-        inline_keyboard: >
-          {% if trigger.entity_id == 'cover.single_garage_door' %}
-            Yes:/closegarage_single, No:/do_nothing
-          {% elif trigger.entity_id == 'cover.double_garage_door' %}
-            Yes:/closegarage_double, No:/do_nothing
-          {% endif %}
-        caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
+# - alias: "Location: leave home & either garage open"
+#   id: "Location: leave home & either garage open"
+#   description: "Leave `home` zone with either garage open, send a photo notification & prompt to close"
+#   trigger:
+#     - platform: state
+#       entity_id:
+#         - cover.single_garage_door
+#         - cover.double_garage_door
+#       to: "open"
+#   action:
+#     - wait_for_trigger:
+#         - platform: state
+#           entity_id: person.jon
+#           from: "home"
+#       timeout: 1800
+#       continue_on_timeout: false
+#     - service: telegram_bot.send_photo
+#       data_template:
+#         url: "http://192.168.30.249:5005/api/garage/latest.jpg"
+#         inline_keyboard: >
+#           {% if trigger.entity_id == 'cover.single_garage_door' %}
+#             Yes:/closegarage_single, No:/do_nothing
+#           {% elif trigger.entity_id == 'cover.double_garage_door' %}
+#             Yes:/closegarage_double, No:/do_nothing
+#           {% endif %}
+#         caption: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Close?"
 # #########################################
 # # alarm_occupancy_status switches to off (were away), then turn ON detection and snapshots
 # - alias: "Location: house unoccupied"
@@ -40,3 +40,14 @@
 #       entity_id:
 #         - switch.kitchen_detect
 #         - switch.kitchen_snapshots
+#########################################
+- alias: "Location: laura"
+  id: "Location: laura"
+  trigger:
+    - platform: state
+      entity_id: person.laura
+      to: "home"
+  action:
+    - service: notify.telegram_jon
+      data_template:
+        message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
