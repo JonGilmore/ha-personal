@@ -941,9 +941,7 @@
             - service: light.turn_on
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.office_motions' %}
-                    light.basement_office_art
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
                     light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
                     light.basement_bar_cabinets
@@ -958,15 +956,48 @@
             - service: homeassistant.turn_off
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.office_motions' %}
-                    light.basement_office_art
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
                     light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
                     light.basement_bar_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir' %}
                     light.main_floor_mudroom_lamp
                   {% endif %}
+#########################################
+- alias: "Automatic Lighting: motion light laundry"
+  id: "Automatic Lighting: motion light laundry"
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_laundry_pir
+      id: pir-on
+      to: "on"
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_laundry_pir
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 4
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
+            # - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+          sequence:
+            - service: light.turn_on
+              data_template:
+                entity_id: light.upstairs_laundry_cabinets
+        - conditions:
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - service: homeassistant.turn_off
+              data_template:
+                entity_id: light.upstairs_laundry_cabinets
 #########################################
 - alias: "Automatic Lighting: motion light gym"
   id: "Automatic Lighting: motion light gym"
@@ -1262,3 +1293,38 @@
               entity_id:
                 - light.jons_lamp
                 - light.lauras_lamp
+#########################################
+- alias: "Lutron: office pico"
+  id: "Lutron: office pico"
+  trigger:
+    - platform: event
+      event_type: lutron_caseta_button_event
+      id: fan-on
+      event_data:
+        serial: 44120560
+        button_number: 8
+        action: press
+    - platform: event
+      event_type: lutron_caseta_button_event
+      id: fan-off
+      event_data:
+        serial: 44120560
+        button_number: 9
+        action: press
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: fan-on
+          sequence:
+            - service: fan.set_percentage
+              target:
+                entity_id: fan.office_fan
+              data:
+                percentage: 33
+        - conditions:
+            - condition: trigger
+              id: fan-off
+          sequence:
+            - service: fan.turn_off
+              entity_id: fan.office_fan
