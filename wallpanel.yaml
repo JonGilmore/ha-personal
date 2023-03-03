@@ -20,9 +20,6 @@ views:
     id: home
     icon: mdi:home
     panel: true
-    layout:
-      max_width: 150
-      width: 150
     view_layout:
       column: 2
     cards:
@@ -35,7 +32,7 @@ views:
                 "one two"
                 "three four"
                 "five six"
-                "seven ."
+                "seven eight"
         cards:
           - type: custom:frigate-card
             cameras:
@@ -59,6 +56,94 @@ views:
                   mode: none
             view_layout:
               grid-area: two
+          - type: horizontal-stack
+            view_layout:
+              grid-area: three
+            cards:
+              - type: tile
+                entity: group.main_floor_lights
+                name: Main
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-main"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+              - type: tile
+                entity: group.upstairs_lights
+                name: Upstairs
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-upstairs"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
+          - type: horizontal-stack
+            view_layout:
+              grid-area: four
+            cards:
+              - type: tile
+                entity: group.basement_lights
+                name: Basement
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-basement"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
+              - type: tile
+                entity: group.exterior_lights
+                name: Exterior
+                icon: mdi:lightbulb
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/lights-exterior"
+                icon_tap_action:
+                  action: call-service
+                  service: button.press
+                  target:
+                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
+          - type: horizontal-stack
+            view_layout:
+              grid-area: five
+            cards:
+              - type: tile
+                entity: cover.main_floor_library_shade
+                name: Library
+                icon: mdi:roller-shade
+                features:
+                  - type: "cover-open-close"
+              - type: tile
+                entity: cover.main_floor_kitchen_shades
+                name: Kitchen
+                icon: mdi:roller-shade
+                features:
+                  - type: "cover-open-close"
+          - type: horizontal-stack
+            view_layout:
+              grid-area: six
+            cards:
+              - type: tile
+                entity: cover.main_floor_great_room_shades
+                name: Great Room
+                icon: mdi:roller-shade
+                features:
+                  - type: "cover-open-close"
+              - type: tile
+                entity: cover.upstairs_stair_shade
+                name: Stairs
+                icon: mdi:roller-shade
+                features:
+                  - type: "cover-open-close"
           - type: "custom:auto-entities"
             show_empty: true
             card:
@@ -88,78 +173,15 @@ views:
                       {% elif is_state(config.entity, '0') %}
                         {{ state_attr(config.entity, 'current_years') }} yrs - 
                       {% else %}
-                        {{ state_attr(config.entity, 'years_at_next_anniversary') }} yrs - 
+                        {{ state_attr(config.entity, 'years_at_anniversary') }} yrs - 
                       {% endif %}
                       {{ as_timestamp(state_attr(config.entity, 'date')) | timestamp_custom('%m/%d/%Y') }}
             view_layout:
-              grid-area: three
+              grid-area: seven
           - type: weather-forecast
             entity: weather.tomorrow_io_home_daily
             view_layout:
-              grid-area: four
-          - type: entities
-            show_name: false
-            show_header_toggle: false
-            entities:
-              - entity: alarm_control_panel.elkm1_area_1
-                type: custom:multiple-entity-row
-                name: Alarm
-                show_state: false
-                secondary_info: last-changed
-                entities:
-                  - entity: alarm_control_panel.elkm1_area_1
-            view_layout:
-              grid-area: five
-          - type: horizontal-stack
-            cards:
-              - type: tile
-                entity: group.main_floor_lights
-                name: Main
-                icon: mdi:lightbulb
-                tap_action:
-                  action: navigate
-                  navigation_path: "/lovelace/lights-main"
-                icon_tap_action:
-                  action: call-service
-                  service: button.press
-                  target:
-                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
-              - type: tile
-                entity: group.upstairs_lights
-                name: Upstairs
-                icon: mdi:lightbulb
-                tap_action:
-                  action: navigate
-                  navigation_path: "/lovelace/lights-upstairs"
-                icon_tap_action:
-                  action: call-service
-                  service: button.press
-                  target:
-                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_second_off
-              - type: tile
-                entity: group.basement_lights
-                name: Basement
-                icon: mdi:lightbulb
-                tap_action:
-                  action: navigate
-                  navigation_path: "/lovelace/lights-basement"
-                icon_tap_action:
-                  action: call-service
-                  service: button.press
-                  target:
-                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
-              - type: tile
-                entity: group.exterior_lights
-                name: Exterior
-                icon: mdi:lightbulb
-                tap_action:
-                  action: navigate
-                  navigation_path: "/lovelace/lights-exterior"
-                icon_tap_action:
-                  action: call-service
-                  service: button.press
-                  target:
-                    entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
+              grid-area: eight
   - title: Cameras Front
     id: camera-front
     icon: mdi:camera
