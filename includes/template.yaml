@@ -15,7 +15,7 @@
           {%- set ns = namespace(a=[]) -%}
           {%- for item in expand(integration_entities('anniversaries')) -%}
           {%- set days = [item.state | int] | min -%}
-          {%- set next = item.attributes.get('years_at_next_anniversary') -%}
+          {%- set next = item.attributes.get('years_at_anniversary') -%}
           {%- set date = item.attributes.get('date') -%}
           {%- if days in [0] %}
           {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
@@ -36,7 +36,7 @@
           {%- set ns = namespace(a=[]) -%}
           {%- for item in expand(integration_entities('anniversaries')) -%}
           {%- set days = [item.state | int] | min -%}
-          {%- set next = item.attributes.get('years_at_next_anniversary') -%}
+          {%- set next = item.attributes.get('years_at_anniversary') -%}
           {%- set date = item.attributes.get('date') -%}
           {%- if days == 1 %}
           {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
@@ -57,7 +57,7 @@
           {%- set ns = namespace(a=[]) -%}
           {%- for item in expand(integration_entities('anniversaries')) -%}
           {%- set days = [item.state | int] | min -%}
-          {%- set next = item.attributes.get('years_at_next_anniversary') -%}
+          {%- set next = item.attributes.get('years_at_anniversary') -%}
           {%- set date = item.attributes.get('date') -%}
           {%- if days < 7 %}
           {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
@@ -78,7 +78,7 @@
           {%- set ns = namespace(a=[]) -%}
           {%- for item in expand(integration_entities('anniversaries')) -%}
           {%- set days = [item.state | int] | min -%}
-          {%- set next = item.attributes.get('years_at_next_anniversary') -%}
+          {%- set next = item.attributes.get('years_at_anniversary') -%}
           {%- set date = item.attributes.get('date') -%}
           {%- if days < 30 %}
           {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}

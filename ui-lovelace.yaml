@@ -217,7 +217,7 @@ views:
                   {% elif is_state(config.entity, '0') %}
                     {{ state_attr(config.entity, 'current_years') }} yrs - 
                   {% else %}
-                    {{ state_attr(config.entity, 'years_at_next_anniversary') }} yrs - 
+                    {{ state_attr(config.entity, 'years_at_anniversary') }} yrs - 
                   {% endif %}
                   {{ as_timestamp(state_attr(config.entity, 'date')) | timestamp_custom('%m/%d/%Y') }}
       - type: entities
