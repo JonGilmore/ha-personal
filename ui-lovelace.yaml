@@ -21,6 +21,8 @@ views:
     id: home
     icon: mdi:home
     cards:
+      - type: shopping-list
+        title: Shopping List
       - type: entities
         show_name: false
         show_header_toggle: false
@@ -132,14 +134,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-                live_provider: webrtc-card
-                title: Driveway
-            live:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
+                live_provider: go2rtc
       - type: entities
         show_header_toggle: false
         entities:
@@ -310,45 +305,45 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-            live:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
+                live_provider: go2rtc
+                go2rtc:
+                  modes:
+                    - mjpeg
+            view:
+              default: live
             view_layout:
               grid-area: cam1
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.doorbell
-            live:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
+                live_provider: go2rtc
+                go2rtc:
+                  modes:
+                    - mjpeg
+            view:
+              default: live
             view_layout:
               grid-area: cam2
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-            live:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
+                live_provider: go2rtc
+                go2rtc:
+                  modes:
+                    - mjpeg
+            view:
+              default: live
             view_layout:
               grid-area: cam3
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.garage
-            live:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
+                live_provider: go2rtc
+                go2rtc:
+                  modes:
+                    - mjpeg
+            view:
+              default: live
             view_layout:
               grid-area: cam4
 
@@ -383,7 +378,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -394,7 +389,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.doorbell
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -405,7 +400,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -416,7 +411,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.garage
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -458,7 +453,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.deck
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -469,7 +464,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.workshop
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -480,7 +475,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.grilldeck
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -491,7 +486,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.mudroom
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -502,7 +497,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.patio
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:

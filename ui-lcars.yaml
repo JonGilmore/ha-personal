@@ -98,7 +98,7 @@ views:
                   - camera_entity: camera.driveway
                     live_provider: webrtc-card
                     title: Driveway
-                live:
+                cameras_global:
                   webrtc_card:
                     ui: true
                   controls:

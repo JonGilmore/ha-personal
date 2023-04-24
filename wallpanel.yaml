@@ -37,7 +37,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -48,7 +48,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -212,7 +212,7 @@ views:
               - camera_entity: camera.driveway
                 live_provider: webrtc-card
                 title: Driveway
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -223,7 +223,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.doorbell
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -234,7 +234,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.frontyard
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -245,7 +245,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.garage
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -287,7 +287,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.deck
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -298,7 +298,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.workshop
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -309,7 +309,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.grilldeck
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -320,7 +320,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.mudroom
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
@@ -331,7 +331,7 @@ views:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.patio
-            live:
+            cameras_global:
               webrtc_card:
                 ui: true
               controls:
