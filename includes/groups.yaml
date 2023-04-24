@@ -47,12 +47,12 @@ interior_lights:
     - light.main_floor_garage_lights
     - light.main_floor_great_room_lamp
     - light.main_floor_kitchen_cabinets
-    - light.main_floor_kitchen_hall
     - light.main_floor_kitchen_toekick
     - light.main_floor_library_lamp
     - light.main_floor_mudroom_lamp
     - light.main_floor_mudroom_lights
     - fan.main_floor_powder_room_fan
+    - light.main_floor_powder_room_light
     - light.upstairs_bedroom_2_cans
     - light.upstairs_bedroom_3_cans
     - light.upstairs_bonus_cans
@@ -119,12 +119,12 @@ all_lights:
     - light.main_floor_garage_lights
     - light.main_floor_great_room_lamp
     - light.main_floor_kitchen_cabinets
-    - light.main_floor_kitchen_hall
     - light.main_floor_kitchen_toekick
     - light.main_floor_library_lamp
     - light.main_floor_mudroom_lamp
     - light.main_floor_mudroom_lights
     - fan.main_floor_powder_room_fan
+    - light.main_floor_powder_room_light
     - light.upstairs_bedroom_2_cans
     - light.upstairs_bedroom_3_cans
     - light.upstairs_bonus_cans
@@ -189,12 +189,12 @@ main_floor_lights:
     - light.main_floor_garage_lights
     - light.main_floor_great_room_lamp
     - light.main_floor_kitchen_cabinets
-    - light.main_floor_kitchen_hall
     - light.main_floor_kitchen_toekick
     - light.main_floor_library_lamp
     - light.main_floor_mudroom_lamp
     - light.main_floor_mudroom_lights
     - fan.main_floor_powder_room_fan
+    - light.main_floor_powder_room_light
 
 upstairs_lights:
   name: Upstairs Lights

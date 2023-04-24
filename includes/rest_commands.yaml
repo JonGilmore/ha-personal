@@ -1,1 +1,8 @@
 ---
+# todoist:
+#   method: post
+#   url: "https://api.todoist.com/sync/v9/{{ url }}"
+#   payload: "{{ payload }}"
+#   headers:
+#     Authorization: !secret todoist
+#   content_type: "application/x-www-form-urlencoded"

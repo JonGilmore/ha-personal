@@ -8,6 +8,6 @@
   lights:
     - light.jons_lamp
     - light.lauras_lamp
-  min_brightness: 10
-  min_color_temp: 2300
+  min_brightness: 20
+  min_color_temp: 2400
   max_color_temp: 5000

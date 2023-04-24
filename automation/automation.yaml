@@ -9,45 +9,62 @@
       device_id: 498618c4bb775b9d0a1963689f168ddb
       entity_id: binary_sensor.a8105_e_0_call_button
       domain: binary_sensor
+  variables:
+    filename: "/tmp/doorbell_latest.jpg"
   action:
-    - service: media_player.play_media
-      target:
-        entity_id: media_player.kitchen
-      data:
-        media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-        media_content_type: provider
-      metadata:
-        title: ding dong - somebody is at the door
-        thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
-        media_class: app
-        children_media_class:
-        navigateIds:
-          - {}
-          - media_content_type: app
-            media_content_id: media-source://tts
-          - media_content_type: provider
+    - parallel:
+        - service: media_player.play_media
+          target:
+            entity_id: media_player.kitchen
+          data:
             media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-    - service: media_player.play_media
-      target:
-        entity_id: media_player.office
-      data:
-        media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-        media_content_type: provider
-      metadata:
-        title: ding dong - somebody is at the door
-        thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
-        media_class: app
-        children_media_class:
-        navigateIds:
-          - {}
-          - media_content_type: app
-            media_content_id: media-source://tts
-          - media_content_type: provider
+            media_content_type: provider
+          metadata:
+            title: ding dong - somebody is at the door
+            thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+            media_class: app
+            children_media_class:
+            navigateIds:
+              - {}
+              - media_content_type: app
+                media_content_id: media-source://tts
+              - media_content_type: provider
+                media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+        - service: media_player.play_media
+          target:
+            entity_id: media_player.office
+          data:
             media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-    - service: notify.telegram_jon
+            media_content_type: provider
+          metadata:
+            title: ding dong - somebody is at the door
+            thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+            media_class: app
+            children_media_class:
+            navigateIds:
+              - {}
+              - media_content_type: app
+                media_content_id: media-source://tts
+              - media_content_type: provider
+                media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+    - service: camera.snapshot
+      target:
+        entity_id: camera.doorbell
       data:
-        message: doorbell just rang
-        title: Doorbell!
+        filename: "{{filename}}"
+    - parallel:
+        - service: notify.telegram_jon
+          data_template:
+            message: "Doorbell Rang!"
+            data:
+              photo:
+                - file: "{{filename}}"
+                  caption: "Doorbell Rang!"
+        - service: notify.mobile_app_lauras_iphone
+          data:
+            message: "Doorbell Rang!"
+            data:
+              image: "{{filename}}"
 #########################################
 - alias: "Automatic Lighting: exterior person & dark out - toggle exterior lights"
   id: "Automatic Lighting: exterior person & dark out - toggle exterior lights"
@@ -298,28 +315,15 @@
         - conditions: # 7am and if there is an event 7 days out OR today, send a message
             - condition: trigger
               id: 7am
-            # true when there is an event exactly today OR 7 days from now
-            - "{{ expand(integration_entities('anniversaries')) | selectattr('state', 'match', '^[0|7]$') | list |  map(attribute='state') | map('int') | list | length > 0 }}"
+            - "{{ states('sensor.events_today') != '0' or states('sensor.events_in_seven_days') != '0' }}"
           sequence:
             - service: telegram_bot.send_message
               data_template:
                 title: "*Important Date Reminder!*"
                 message: >-
-                  {%- set ns = namespace(a=[]) -%}
-                  {%- for item in expand(integration_entities('anniversaries')) -%}
-                  {%- set days = [item.state | int] | min -%}
-                  {%- set next = item.attributes.get('current_years') -%}
-                  {%- set date = item.attributes.get('date') -%}
-                  {%- if days in [0, 7] %}
-                  {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
-                  {%- endif -%}
-                  {%- endfor -%}
-                  {%- for item in ns.a | sort(attribute='r') -%}
-                  {%- set name, next, date = item.n, item.x, item.d %}
-
-                  _{{name}}_ {%- if next %} ({{next}}) {%- endif %} - {{date}}
-
-                  {%- endfor -%}
+                  {% for entity in  state_attr('sensor.events_in_seven_days', 'entity_id') + state_attr('sensor.events_today', 'entity_id') %}
+                  {{ '_' + state_attr(entity, 'friendly_name') + '_ - ' + state_attr(entity, 'date').strftime('%Y-%m-%d') }}
+                  {% endfor %}
                 parse_mode: markdown
         - conditions: # 9am turn off the recirc pump (assuming its a workday)
             - condition: trigger
@@ -1328,3 +1332,57 @@
           sequence:
             - service: fan.turn_off
               entity_id: fan.office_fan
+#########################################
+# - alias: "Lutron: utility pico"
+#   id: "Lutron: utility pico"
+#   trigger:
+#     - platform: event
+#       event_type: lutron_caseta_button_event
+#       id: fan-on
+#       event_data:
+#         serial: 29314072
+#         button_number: 8
+#         action: press
+#     - platform: event
+#       event_type: lutron_caseta_button_event
+#       id: fan-off
+#       event_data:
+#         serial: 29314072
+#         button_number: 11
+#         action: press
+#   action:
+#     - choose:
+#         - conditions:
+#             - condition: trigger
+#               id: fan-on
+#           sequence:
+#             - service: homeassistant.turn_on
+#               entity_id: light.main_floor_sunroom_cans
+#         - conditions:
+#             - condition: trigger
+#               id: fan-off
+#           sequence:
+#             - service: homeassistant.turn_off
+#               entity_id: light.main_floor_sunroom_cans
+#########################################
+- alias: "LPR: driveway plate recognition"
+  id: "LPR: driveway plate recognition"
+  description: "when the driveway LPR sensor changes, send a photo and the state of the sensor"
+  trigger:
+    - platform: state
+      entity_id: sensor.driveway_plate
+  variables:
+    filename: "/tmp/driveway_lpr.jpg"
+  action:
+    - service: camera.snapshot
+      target:
+        entity_id: camera.driveway_image
+      data:
+        filename: "{{filename}}"
+    - service: notify.telegram_jon
+      data_template:
+        message: "Driveway LPR!"
+        data:
+          photo:
+            - file: "{{filename}}"
+              caption: "New plate recognized: {{ states('sensor.driveway_plate') }}"

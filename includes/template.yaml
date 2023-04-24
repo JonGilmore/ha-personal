@@ -6,90 +6,6 @@
     - name: "Has Unavailable States"
       unique_id: has_unavailable_state
       state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
-    - name: Events Today
-      unique_id: events_today
-      state: >- # state is `on` when there is an event today
-        {{ expand(integration_entities('anniversaries')) | selectattr('state') | map(attribute='state') | list | sort | map('int') | sort | min == 0 }}
-      attributes:
-        events: >-
-          {%- set ns = namespace(a=[]) -%}
-          {%- for item in expand(integration_entities('anniversaries')) -%}
-          {%- set days = [item.state | int] | min -%}
-          {%- set next = item.attributes.get('years_at_anniversary') -%}
-          {%- set date = item.attributes.get('date') -%}
-          {%- if days in [0] %}
-          {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
-          {%- endif -%}
-          {%- endfor -%}
-          [
-          {%- for item in ns.a | sort(attribute='r') -%}
-          {%- set name, next, date, days = item.n, item.x, item.d, item.r %}
-          {"name": "{{name}}","date": "{{date}}",{%- if next %}"years": {{next}},{%- endif %}"days": {{days}}},
-          {%- endfor -%}
-          ]
-    - name: Events Tomorrow
-      unique_id: events_tomorrow
-      state: >- # state is `on` when there is an event tomorrow
-        {{ expand(integration_entities('anniversaries')) | selectattr('state') | map(attribute='state') | list | sort | map('int') | sort | min == 1 }}
-      attributes:
-        events: >-
-          {%- set ns = namespace(a=[]) -%}
-          {%- for item in expand(integration_entities('anniversaries')) -%}
-          {%- set days = [item.state | int] | min -%}
-          {%- set next = item.attributes.get('years_at_anniversary') -%}
-          {%- set date = item.attributes.get('date') -%}
-          {%- if days == 1 %}
-          {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
-          {%- endif -%}
-          {%- endfor -%}
-          [
-          {%- for item in ns.a | sort(attribute='r') -%}
-          {%- set name, next, date, days = item.n, item.x, item.d, item.r %}
-          {"name": "{{name}}","date": "{{date}}",{%- if next %}"years": {{next}},{%- endif %}"days": {{days}}},
-          {%- endfor -%}
-          ]
-    - name: Events in the Next Week
-      unique_id: events_in_the_next_week
-      state: >- # state is `on` when there is an event in the next 7 days
-        {{ expand(integration_entities('anniversaries')) | selectattr('state') | map(attribute='state') | list | sort | map('int') | sort | min < 7 }}
-      attributes:
-        events: >-
-          {%- set ns = namespace(a=[]) -%}
-          {%- for item in expand(integration_entities('anniversaries')) -%}
-          {%- set days = [item.state | int] | min -%}
-          {%- set next = item.attributes.get('years_at_anniversary') -%}
-          {%- set date = item.attributes.get('date') -%}
-          {%- if days < 7 %}
-          {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
-          {%- endif -%}
-          {%- endfor -%}
-          [
-          {%- for item in ns.a | sort(attribute='r') -%}
-          {%- set name, next, date, days = item.n, item.x, item.d, item.r %}
-          {"name": "{{name}}","date": "{{date}}",{%- if next %}"years": {{next}},{%- endif %}"days": {{days}}},
-          {%- endfor -%}
-          ]
-    - name: Events in the Next Thirty Days
-      unique_id: events_in_the_next_thirty_days
-      state: >- # state is `on` when there is an event in the next 30 days
-        {{ expand(integration_entities('anniversaries')) | selectattr('state') | map(attribute='state') | list | sort | map('int') | sort | min < 30 }}
-      attributes:
-        events: >-
-          {%- set ns = namespace(a=[]) -%}
-          {%- for item in expand(integration_entities('anniversaries')) -%}
-          {%- set days = [item.state | int] | min -%}
-          {%- set next = item.attributes.get('years_at_anniversary') -%}
-          {%- set date = item.attributes.get('date') -%}
-          {%- if days < 30 %}
-          {%- set ns.a = ns.a + [ dict(n=item.name, x=next, d=date.strftime('%Y-%m-%d'), r=days)] %}
-          {%- endif -%}
-          {%- endfor -%}
-          [
-          {%- for item in ns.a | sort(attribute='r') -%}
-          {%- set name, next, date, days = item.n, item.x, item.d, item.r %}
-          {"name": "{{name}}","date": "{{date}}",{%- if next %}"years": {{next}},{%- endif %}"days": {{days}}},
-          {%- endfor -%}
-          ]
     - name: "Bed Occupancy"
       icon: mdi:bed
       unique_id: bed_occupancy
@@ -302,6 +218,71 @@
       state: "{{ state_attr('sensor.wireguard_peers_status_api', 'jons-phone').latest_handshake > as_timestamp(now()) - 180 }}"
 
 - sensor:
+    - name: "Platerecognizer API Calls Remaining"
+      unique_id: platerecognizer_api_calls_remaining
+      icon: mdi:api
+      state: "{{ state_attr('image_processing.platerecognizer_driveway', 'statistics').calls_remaining }}"
+    - name: "Events Today"
+      unique_id: events_today # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
+      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set entities = state_attr(this.entity_id,'entity_id') %}
+        {% if entities != none %} {{ entities|count }} {% endif %}
+      attributes:
+        entity_id: >
+          {% from 'events.jinja' import events %}
+          {{ events(1) }}
+    - name: "Events Tomorrow"
+      unique_id: events_tomorrow # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
+      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set entities = state_attr(this.entity_id,'entity_id') %}
+        {% if entities != none %} {{ entities|count }} {% endif %}
+      attributes:
+        entity_id: >
+          {% from 'events.jinja' import events %}
+          {{ events(2) }}
+    - name: "Events in the Next Week"
+      unique_id: events_in_the_next_week # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
+      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set entities = state_attr(this.entity_id,'entity_id') %}
+        {% if entities != none %} {{ entities|count }} {% endif %}
+      attributes:
+        entity_id: >
+          {% from 'events.jinja' import events %}
+          {{ events(7) }}
+    - name: "Events in Seven Days"
+      unique_id: events_in_seven_days # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
+      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set entities = state_attr(this.entity_id,'entity_id') %}
+        {% if entities != none %} {{ entities|count }} {% endif %}
+      attributes:
+        entity_id: >
+          {% set sensors = states.sensor
+          | rejectattr('state', 'in', ['unavailable', 'unknown'])
+          | selectattr('attributes.unit_of_measurement', 'defined')
+          | selectattr('attributes.unit_of_measurement', '==', 'Days')
+          | list
+          %}
+          {% set low = sensors | map(attribute='state') | map('int') | select('==', 7) | map('string') | list %}
+          {{ sensors | selectattr('state', 'in', low) | map(attribute='entity_id') | list }}
+    - name: Events in the Next Thirty Days
+      unique_id: events_in_the_next_thirty_days
+      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set entities = state_attr(this.entity_id,'entity_id') %}
+        {% if entities != none %} {{ entities|count }} {% endif %}
+      attributes:
+        entity_id: >
+          {% from 'events.jinja' import events %}
+          {{ events(30) }}
     - name: recycle
       icon: mdi:garbage
       unique_id: recycle

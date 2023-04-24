@@ -19,12 +19,35 @@
 
 - platform: systemmonitor
   resources:
-    - type: disk_use_percent
-      arg: /
+    - type: disk_use
+    - type: disk_free
     - type: memory_use_percent
+    - type: memory_use
+    - type: memory_free
+    - type: swap_use_percent
+    - type: swap_use
+    - type: swap_free
     - type: load_1m
     - type: load_5m
     - type: load_15m
+    - type: network_in
+      arg: eth0
+    - type: network_out
+      arg: eth0
+    - type: throughput_network_in
+      arg: eth0
+    - type: throughput_network_out
+      arg: eth0
+    - type: packets_in
+      arg: eth0
+    - type: packets_out
+      arg: eth0
+    - type: ipv4_address
+      arg: eth0
+    - type: ipv6_address
+      arg: eth0
+    - type: processor_use
+    - type: processor_temperature
     - type: last_boot
 
 - platform: time_date
@@ -37,3 +60,43 @@
     - "time_date"
     - "time_utc"
     - "beat"
+
+# - platform: rest
+#   name: Lauras Todo
+#   method: GET
+#   resource: "https://api.todoist.com/sync/v9/projects/get_data"
+#   params:
+#     project_id: 2310964916
+#   headers:
+#     Authorization: !secret todoist
+#   value_template: "{{ value_json['project']['id'] }}"
+#   json_attributes:
+#     - project
+#     - items
+#   scan_interval: 60
+# - platform: rest
+#   name: Jons Todo
+#   method: GET
+#   resource: "https://api.todoist.com/sync/v9/projects/get_data"
+#   params:
+#     project_id: 2310964920
+#   headers:
+#     Authorization: !secret todoist
+#   value_template: "{{ value_json['project']['id'] }}"
+#   json_attributes:
+#     - project
+#     - items
+#   scan_interval: 60
+# - platform: rest
+#   name: Evelyns Todo
+#   method: GET
+#   resource: "https://api.todoist.com/sync/v9/projects/get_data"
+#   params:
+#     project_id: 2310964987
+#   headers:
+#     Authorization: !secret todoist
+#   value_template: "{{ value_json['project']['id'] }}"
+#   json_attributes:
+#     - project
+#     - items
+#   scan_interval: 60
