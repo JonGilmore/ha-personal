@@ -2,7 +2,7 @@
 # A * ensures that everything will be ignored.
 *
 
-# You can whitelist files/folders with !, these will not be ignored.
+# You can allowlist files/folders with !, these will not be ignored.
 !*.yaml
 !.gitignore
 !*.md
@@ -20,6 +20,8 @@
 !images/**
 !includes
 !includes/*.yaml
+!custom_templates
+!custom_templates/*.jinja
 
 # Ignore folders.
 .storage
