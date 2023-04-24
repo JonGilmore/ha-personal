@@ -116,6 +116,23 @@
             message: "Damnit, defaulting: {{ trigger.event.data.command == '\/mutefrigate' ~ location ~ time }} && {{ mutefrigate ~ location ~ time }} && variable values: {{ location ~ time }} && {{trigger}}"
             level: error
 #########################################
+- alias: "LPR: driveway car"
+  id: "LPR: driveway car"
+  trigger:
+    - platform: mqtt
+      topic: frigate/events
+      id: frigate-event
+      payload: driveway
+      value_template: '{{ value_json["after"]["camera"] }}'
+  condition: # only run if a car has entered the far driveway zone
+    - "{{ trigger.payload_json['after']['label'] == 'car' }}"
+    - "{{ 'driveway_far' in trigger.payload_json['after']['entered_zones'] }}"
+    - "{{ states('sensor.platerecognizer_api_calls_remaining') | int > 0 }}"
+  action:
+    - service: image_processing.scan
+      target:
+        entity_id: image_processing.platerecognizer_driveway
+#########################################
 - alias: "Frigate: driveway video notification"
   id: "Frigate: driveway video notification"
   description: "if Jons away or were asleep - send a video of the driveway"
