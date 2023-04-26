@@ -739,7 +739,7 @@
       for:
         minutes: 15
     - platform: state
-      entity_id: sensor.cyberpower_ups_status_data
+      entity_id: sensor.cyberpower_status_data
       to: "OB DISCHRG"
       id: nut_event
   action:
@@ -750,7 +750,7 @@
           sequence:
             - service: notify.telegram_jon
               data_template:
-                message: "Power outage detected by UPS: {{ (state('sensor.cyberpower_ups_battery_runtime') | float / 60) | round(0) }} minutes of battery power remaining."
+                message: "Power outage detected by UPS: {{ (states('sensor.cyberpower_battery_runtime') | float / 60) | round(0) }} minutes of battery power remaining."
       default:
         - service: notify.telegram_jon
           data_template:
@@ -779,7 +779,7 @@
   trigger:
     - platform: state
       entity_id:
-        - sensor.cyberpower_ups_status
+        - sensor.cyberpower_status
       to: unavailable
       for:
         minutes: 1
@@ -817,7 +817,7 @@
           sequence:
             - service: notify.telegram_jon
               data_template:
-                message: "Cyberpower ups has {{ (state('sensor.cyberpower_ups_battery_runtime') | float / 60) | round(0) }}min remaining, turning off HA."
+                message: "Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime') | float / 60) | round(0) }}min remaining, turning off HA."
             - service: shell_command.debian_shutdown
         - conditions:
             - condition: trigger
@@ -825,14 +825,14 @@
           sequence:
             - service: notify.telegram_jon
               data_template:
-                message: "Cyberpower ups has {{ (state('sensor.cyberpower_ups_battery_runtime') | float / 60) | round(0) }}min remaining."
+                message: "Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime') | float / 60) | round(0) }}min remaining."
         - conditions:
             - condition: trigger
               id: ten
           sequence:
             - service: notify.telegram_jon
               data_template:
-                message: "Cyberpower ups has {{ (state('sensor.cyberpower_ups_battery_runtime') | float / 60) | round(0) }}min remaining."
+                message: "Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime') | float / 60) | round(0) }}min remaining."
 #########################################
 - alias: "Garage: acknowledge garage open"
   id: "Garage: acknowledge garage open"

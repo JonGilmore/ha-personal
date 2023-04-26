@@ -389,10 +389,10 @@
     - name: cyberpower ups
       unique_id: cyberpower_ups
       state: >-
-        {% if   states('sensor.cyberpower_ups_battery_runtime') | int < 180 %}three
-        {% elif states('sensor.cyberpower_ups_battery_runtime') | int < 300 %}five
-        {% elif states('sensor.cyberpower_ups_battery_runtime') | int < 600 %}ten
-        {% elif states('sensor.cyberpower_ups_battery_runtime') | int < 1200 %}twenty
+        {% if   states('sensor.cyberpower_battery_runtime') | int < 180 %}three
+        {% elif states('sensor.cyberpower_battery_runtime') | int < 300 %}five
+        {% elif states('sensor.cyberpower_battery_runtime') | int < 600 %}ten
+        {% elif states('sensor.cyberpower_battery_runtime') | int < 1200 %}twenty
         {% else %}okay{% endif %}
     - name: "target humidity max"
       unique_id: target_humidity_max
