@@ -138,7 +138,7 @@
     - name: "light inside?"
       unique_id: light_inside
       device_class: light
-      state: "{{ states('sensor.main_tv_lux') | int > 90 }}"
+      state: "{{ states('sensor.outdoor_pir_illuminance') | int > 350 }}"
     - name: "light inside basement?"
       unique_id: light_inside_basement
       device_class: light
