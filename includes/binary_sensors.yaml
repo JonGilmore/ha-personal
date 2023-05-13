@@ -1,6 +1,8 @@
 ---
-- platform: workday
-  country: US
+- platform: ping
+  host: 192.168.30.242
+  name: diskstation
+  scan_interval: 30
 # # rtl_433 sensors
 # - platform: mqtt
 #   name: Nursery Acurite Battery
