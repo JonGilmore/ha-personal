@@ -899,6 +899,10 @@
   id: "Test: webhook"
   trigger:
     - platform: webhook
+      allowed_methods:
+        - POST
+        - PUT
+      local_only: false
       webhook_id: !secret pd_hook
   action:
     - service: system_log.write
@@ -1386,3 +1390,25 @@
           photo:
             - file: "{{filename}}"
               caption: "New plate recognized: {{ states('sensor.driveway_plate') }}"
+#########################################
+- alias: "Frigate: mount NAS share on startup"
+  id: "Frigate: mount NAS share on startup"
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    - wait_template: "{{ is_state('binary_sensor.diskstation', 'on') }}"
+    - delay:
+        hours: 0
+        minutes: 1
+        seconds: 0
+        milliseconds: 0
+    - service: shell_command.mount_frigate_nas
+      data: {}
+    - service: system_log.write
+      data_template:
+        message: "LOGGING: about to start the frigate addon..."
+        level: error
+    # - service: hassio.addon_start
+    #   data:
+    #     addon: ccab4aaf_frigate

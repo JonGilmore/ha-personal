@@ -16,7 +16,6 @@ homeassistant:
   allowlist_external_dirs:
     - "/tmp"
     - "/config/www"
-    - "/share"
   media_dirs:
     local: /media
 cloud:
@@ -133,15 +132,6 @@ zone: !include includes/zones.yaml
 logger:
   default: error
 
-panel_custom:
-  - name: panel_supervisor
-    sidebar_title: Supervisor Add-ons
-    sidebar_icon: mdi:home-assistant
-    url_path: hassio/dashboard
-    module_url: /api/hassio/app/entrypoint.js
-    embed_iframe: true
-    require_admin: true
-
 history:
 websocket_api:
 sun:
@@ -149,7 +139,6 @@ conversation:
 logbook:
 person:
 config:
-hassio:
 map:
 mobile_app:
 media_source:

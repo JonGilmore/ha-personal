@@ -52,7 +52,7 @@
       data:
         title: "Ran vacation mode on!"
         message: |
-          Reminder: 
+          Reminder:
           * set back temps on thermostats
           * set vacation mode on water heater
           * depending how long you're gone, maybe turn off the water main?

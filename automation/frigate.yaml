@@ -177,15 +177,15 @@
                   - service: shell_command.download_file
                     data_template:
                       url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
-                      download: "/share/{{camera}}.mp4"
+                      download: "/tmp/{{camera}}.mp4"
                   - service: shell_command.trim_video
                     data_template:
                       duration: "00:00:10"
-                      clip: "/share/{{camera}}.mp4"
-                      path: "/share/trimmed-{{camera}}.mp4"
+                      clip: "/tmp/{{camera}}.mp4"
+                      path: "/tmp/trimmed-{{camera}}.mp4"
                   - service: telegram_bot.send_video
                     data_template:
-                      file: "/share/trimmed-{{camera}}.mp4"
+                      file: "/tmp/trimmed-{{camera}}.mp4"
                       inline_keyboard:
                         - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
                       caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
@@ -236,15 +236,15 @@
                   - service: shell_command.download_file
                     data_template:
                       url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
-                      download: "/share/{{camera}}.mp4"
+                      download: "/tmp/{{camera}}.mp4"
                   - service: shell_command.trim_video
                     data_template:
                       duration: "00:00:10"
-                      clip: "/share/{{camera}}.mp4"
-                      path: "/share/trimmed-{{camera}}.mp4"
+                      clip: "/tmp/{{camera}}.mp4"
+                      path: "/tmp/trimmed-{{camera}}.mp4"
                   - service: telegram_bot.send_video
                     data_template:
-                      file: "/share/trimmed-{{camera}}.mp4"
+                      file: "/tmp/trimmed-{{camera}}.mp4"
                       inline_keyboard:
                         - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
                       caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
@@ -295,15 +295,15 @@
                   - service: shell_command.download_file
                     data_template:
                       url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
-                      download: "/share/{{camera}}.mp4"
+                      download: "/tmp/{{camera}}.mp4"
                   - service: shell_command.trim_video
                     data_template:
                       duration: "00:00:10"
-                      clip: "/share/{{camera}}.mp4"
-                      path: "/share/trimmed-{{camera}}.mp4"
+                      clip: "/tmp/{{camera}}.mp4"
+                      path: "/tmp/trimmed-{{camera}}.mp4"
                   - service: telegram_bot.send_video
                     data_template:
-                      file: "/share/trimmed-{{camera}}.mp4"
+                      file: "/tmp/trimmed-{{camera}}.mp4"
                       inline_keyboard:
                         - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
                       caption: "{{ label }} detected. Mute?"
@@ -354,15 +354,15 @@
                   - service: shell_command.download_file
                     data_template:
                       url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
-                      download: "/share/{{camera}}.mp4"
+                      download: "/tmp/{{camera}}.mp4"
                   - service: shell_command.trim_video
                     data_template:
                       duration: "00:00:10"
-                      clip: "/share/{{camera}}.mp4"
-                      path: "/share/trimmed-{{camera}}.mp4"
+                      clip: "/tmp/{{camera}}.mp4"
+                      path: "/tmp/trimmed-{{camera}}.mp4"
                   - service: telegram_bot.send_video
                     data_template:
-                      file: "/share/trimmed-{{camera}}.mp4"
+                      file: "/tmp/trimmed-{{camera}}.mp4"
                       inline_keyboard:
                         - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
                       caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
@@ -413,15 +413,15 @@
                   - service: shell_command.download_file
                     data_template:
                       url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
-                      download: "/share/{{camera}}.mp4"
+                      download: "/tmp/{{camera}}.mp4"
                   - service: shell_command.trim_video
                     data_template:
                       duration: "00:00:10"
-                      clip: "/share/{{camera}}.mp4"
-                      path: "/share/trimmed-{{camera}}.mp4"
+                      clip: "/tmp/{{camera}}.mp4"
+                      path: "/tmp/trimmed-{{camera}}.mp4"
                   - service: telegram_bot.send_video
                     data_template:
-                      file: "/share/trimmed-{{camera}}.mp4"
+                      file: "/tmp/trimmed-{{camera}}.mp4"
                       inline_keyboard:
                         - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
                       caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
@@ -472,15 +472,15 @@
                   - service: shell_command.download_file
                     data_template:
                       url: "http://192.168.30.249:5005/api/events/{{ id }}/clip.mp4"
-                      download: "/share/{{camera}}.mp4"
+                      download: "/tmp/{{camera}}.mp4"
                   - service: shell_command.trim_video
                     data_template:
                       duration: "00:00:10"
-                      clip: "/share/{{camera}}.mp4"
-                      path: "/share/trimmed-{{camera}}.mp4"
+                      clip: "/tmp/{{camera}}.mp4"
+                      path: "/tmp/trimmed-{{camera}}.mp4"
                   - service: telegram_bot.send_video
                     data_template:
-                      file: "/share/trimmed-{{camera}}.mp4"
+                      file: "/tmp/trimmed-{{camera}}.mp4"
                       inline_keyboard:
                         - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
                       caption: "{{trigger.payload_json['after']['label']}} detected. Mute?"
