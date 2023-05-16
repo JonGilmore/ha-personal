@@ -9,14 +9,6 @@
 
 - platform: websocket_api
 
-- platform: rest
-  name: WireGuard peers status API
-  resource: "http://a0d7b954-wireguard"
-  value_template: "OK"
-  json_attributes:
-    - macbook
-    - jons-phone
-
 - platform: systemmonitor
   resources:
     - type: disk_use
