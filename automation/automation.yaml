@@ -254,6 +254,26 @@
     - service: homeassistant.turn_off
       entity_id: light.main_floor_great_room_cabinets
 ########################################
+- alias: "Automatic Lighting: template turn off lights if no motion detected for 30 min"
+  id: "Automatic Lighting: template turn off lights if no motion detected for 30 min"
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.basement_motions
+        - binary_sensor.main_motions
+      to: "off"
+      for:
+        minutes: 30
+  action:
+    - service: button.press
+      data_template:
+        entity_id: >
+          {% if trigger.entity_id == 'binary_sensor.basement_motions' %}
+            button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
+          {% elif trigger.entity_id == 'binary_sensor.main_motions' %}
+            button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+          {% endif %}
+########################################
 - alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
   id: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
   trigger:
@@ -675,20 +695,7 @@
       entity_id:
         - binary_sensor.lounge_pir_tampering_product_cover_removed
         - binary_sensor.home_assistant_versions_update_available
-        - update.adguard_home_update
-        - update.cloudflared_update
-        - update.double_take_update
-        - update.esphome_update
-        - update.exadel_compreface_update
-        - update.frigate_nvr_proxy_update
-        - update.home_assistant_core_update
-        - update.home_assistant_supervisor_update
-        - update.mariadb_update
-        - update.mosquitto_broker_update
-        - update.network_ups_tools_update
-        - update.samba_share_update
-        - update.terminal_ssh_update
-        - update.wireguard_update
+        - update.frigate_server
       to: "on"
     # - platform: numeric_state
     #   entity_id: sensor.computer_multi_temperature_measurement
