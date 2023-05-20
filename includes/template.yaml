@@ -1,4 +1,10 @@
 - binary_sensor:
+    - name: "AdBlocking"
+      icon: "{{ iif(states(this.entity_id) == 'on','mdi:advertisements-off','mdi:advertisements') }}"
+      unique_id: adblocking
+      state: >-
+        {{ states('switch.adguard_home_protection_2') == 'on'
+        and states('switch.adguard_pi_protection') == 'on' }}
     - name: dark out? # true if the sun is below horizon or cloud coverage is greater than 50%
       icon: mdi:weather-night
       unique_id: dark out

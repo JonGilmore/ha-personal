@@ -322,8 +322,19 @@
     - platform: time
       at: "23:00:00"
       id: 11pm
+    - platform: homeassistant
+      event: start
+      id: start
   action:
     - choose:
+        - conditions: # at HA startup, enable adblocking
+            - condition: trigger
+              id: start
+          sequence:
+            - service: homeassistant.turn_on
+              entity_id:
+                - switch.adguard_pi_protection
+                - switch.adguard_home_protection_2
         - conditions: # 5am, open the library shade
             - condition: trigger
               id: 5am
@@ -1419,3 +1430,16 @@
     # - service: hassio.addon_start
     #   data:
     #     addon: ccab4aaf_frigate
+#########################################
+- alias: "Utility: adblocking on/off"
+  id: "Utility: adblocking on/off"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.adblocking
+      to: "off"
+  action:
+    - delay: 45
+    - service: homeassistant.turn_on
+      entity_id:
+        - switch.adguard_pi_protection
+        - switch.adguard_home_protection_2

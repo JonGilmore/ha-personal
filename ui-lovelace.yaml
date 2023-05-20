@@ -250,6 +250,22 @@ views:
                 name: main?
               - entity: binary_sensor.light_inside_basement
                 name: basement?
+          - entity: binary_sensor.adblocking
+            type: custom:multiple-entity-row
+            secondary_info: last-changed
+            show_state: false
+            entities:
+              - entity: binary_sensor.adblocking
+                icon: true
+                name: " "
+                state_color: false
+                tap_action:
+                  action: call-service
+                  service: homeassistant.turn_off
+                  service_data:
+                    entity_id:
+                      - switch.adguard_home_protection_2
+                      - switch.adguard_pi_protection
           # - entity: sensor.bar_fridge_leak_sensor
           #   type: custom:multiple-entity-row
           #   name: bar
@@ -658,7 +674,7 @@ views:
         show_header_toggle: false
         entities:
           - binary_sensor.light_inside
-          - sensor.main_tv_lux
+          - sensor.outdoor_pir_illuminance
           - sensor.lounge_pir_illuminance
       - type: markdown
         title: Automations Triggered
