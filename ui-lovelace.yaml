@@ -289,81 +289,6 @@ views:
           # - entity: input_select.vacuum_room
 
   ##########################################
-  # CAMERA SUBVIEW
-  ##########################################
-  - title: cameras
-    id: camerasv1
-    icon: mdi:home
-    path: camerasv1
-    subview: true
-    panel: true
-    cards:
-      - type: custom:layout-card
-        layout_type: custom:grid
-        layout:
-          mediaquery:
-            "(min-width: 1800px)":
-              grid-template-areas: |
-                "cam1 cam2 cam3"
-                "cam4 . ."
-                ". . ."
-            "(min-width: 1000px)":
-              grid-template-areas: |
-                "cam1 cam2"
-                "cam3 cam4"
-            "all":
-              grid-template-areas: |
-                "cam1"
-                "cam2"
-                "cam3"
-                "cam4"
-        cards:
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.driveway
-                live_provider: go2rtc
-                go2rtc:
-                  modes:
-                    - mjpeg
-            view:
-              default: live
-            view_layout:
-              grid-area: cam1
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.doorbell
-                live_provider: go2rtc
-                go2rtc:
-                  modes:
-                    - mjpeg
-            view:
-              default: live
-            view_layout:
-              grid-area: cam2
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.frontyard
-                live_provider: go2rtc
-                go2rtc:
-                  modes:
-                    - mjpeg
-            view:
-              default: live
-            view_layout:
-              grid-area: cam3
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.garage
-                live_provider: go2rtc
-                go2rtc:
-                  modes:
-                    - mjpeg
-            view:
-              default: live
-            view_layout:
-              grid-area: cam4
-
-  ##########################################
   # CAMERA TAB
   ##########################################
   - title: Cameras Front
@@ -375,152 +300,39 @@ views:
         layout_type: custom:grid
         layout:
           mediaquery:
-            "(min-width: 1800px)":
-              grid-template-areas: |
-                "cam1 cam2 cam3"
-                "cam4 . ."
-                ". . ."
-            "(min-width: 1000px)":
-              grid-template-areas: |
-                "cam1 cam2"
-                "cam3 cam4"
             "all":
               grid-template-areas: |
                 "cam1"
                 "cam2"
-                "cam3"
-                "cam4"
         cards:
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
-            view_layout:
-              grid-area: cam1
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.doorbell
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
-            view_layout:
-              grid-area: cam2
-          - type: custom:frigate-card
-            cameras:
+                live_provider: go2rtc
               - camera_entity: camera.frontyard
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
-            view_layout:
-              grid-area: cam3
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.garage
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
-            view_layout:
-              grid-area: cam4
-
-  ##########################################
-  # CAMERA TAB
-  ##########################################
-  - title: Cameras Rear
-    id: camera-rear
-    icon: mdi:camera
-    panel: true
-    cards:
-      - type: custom:layout-card
-        layout_type: custom:grid
-        layout:
-          mediaquery:
-            "(min-width: 1800px)":
-              grid-template-areas: |
-                "cam1 cam2 cam3"
-                "cam4 cam5 ."
-                ". . ."
-            "(min-width: 1000px)":
-              grid-template-areas: |
-                "cam1 cam2"
-                "cam3 cam4"
-                "cam5 ."
-            "all":
-              grid-template-areas: |
-                "cam1"
-                "cam2"
-                "cam3"
-                "cam4"
-                "cam5"
-        cards:
-          - type: custom:frigate-card
-            cameras:
+                live_provider: go2rtc
+              - camera_entity: camera.doorbell
+                live_provider: go2rtc
+              - camera_entity: camera.patio
+                live_provider: go2rtc
+              - camera_entity: camera.workshop
+                live_provider: go2rtc
               - camera_entity: camera.deck
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
+                live_provider: go2rtc
+              - camera_entity: camera.grilldeck
+                live_provider: go2rtc
+              - camera_entity: camera.mudroom
+                live_provider: go2rtc
+              - camera_entity: camera.garage
+                live_provider: go2rtc
             view_layout:
               grid-area: cam1
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.workshop
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
-            view_layout:
-              grid-area: cam2
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.grilldeck
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
-            view_layout:
-              grid-area: cam3
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.mudroom
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
-            view_layout:
-              grid-area: cam4
-          - type: custom:frigate-card
-            cameras:
-              - camera_entity: camera.patio
-            cameras_global:
-              webrtc_card:
-                ui: true
-              controls:
-                title:
-                  mode: none
-            view_layout:
-              grid-area: cam5
+          # - type: custom:frigate-card
+          #   cameras:
+          #     - frigate:
+          #         camera_name: birdseye
+          #   view_layout:
+          #     grid-area: cam2
 
   ##########################################
   # MUSIC TAB
