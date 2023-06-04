@@ -1,4 +1,120 @@
+# yaml-language-server: $schema=https://cdn.jsdelivr.net/npm/homeassistant-js-yaml-schema@1.1.1/src/index.min.js
 - binary_sensor:
+    - name: "Events Today"
+      unique_id: events_today # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
+      icon: "{{ 'mdi:alert-circle' if is_state(this.entity_id, 'on') else 'mdi:check-circle' }}"
+      unit_of_measurement: people
+      state: >
+        {% set anniversaries = namespace(sensors=[]) %}
+        {% for state in states.sensor %}
+          {% if state.object_id.startswith('anniversary_') and state.state | int == 0 %}
+            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+          {% endif %}
+        {% endfor %}
+        {{ anniversaries.sensors | length > 0 }}
+      attributes:
+        entity_id: >
+          {% set anniversaries = namespace(sensors=[]) %}
+          {% for state in states.sensor %}
+            {% if state.object_id.startswith('anniversary_') and state.state | int == 0 %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+            {% endif %}
+          {% endfor %}
+          {{ anniversaries.sensors | sort(attribute='days') }}
+    - name: "Events Tomorrow"
+      unique_id: events_tomorrow
+      icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set anniversaries = namespace(sensors=[]) %}
+        {% for state in states.sensor %}
+          {% if state.object_id.startswith('anniversary_') and state.state | int == 1 %}
+            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+          {% endif %}
+        {% endfor %}
+        {{ anniversaries.sensors | length > 0 }}
+      attributes:
+        entity_id: >
+          {% set anniversaries = namespace(sensors=[]) %}
+          {% for state in states.sensor %}
+            {% if state.object_id.startswith('anniversary_') and state.state | int == 1 %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+            {% endif %}
+          {% endfor %}
+          {{ anniversaries.sensors | sort(attribute='days') }}
+    - name: "Events in the Next Week"
+      unique_id: events_in_the_next_week
+      icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set anniversaries = namespace(sensors=[]) %}
+        {% for state in states.sensor %}
+          {% if state.object_id.startswith('anniversary_') and state.state | int <= 7 %}
+            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+          {% endif %}
+        {% endfor %}
+        {{ anniversaries.sensors | length > 0 }}
+      attributes:
+        entity_id: >
+          {% set anniversaries = namespace(sensors=[]) %}
+          {% for state in states.sensor %}
+            {% if state.object_id.startswith('anniversary_') and state.state | int <= 7 %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+            {% endif %}
+          {% endfor %}
+          {{ anniversaries.sensors | sort(attribute='days') }}
+    - name: "Events in Seven Days"
+      unique_id: events_in_seven_days
+      icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set anniversaries = namespace(sensors=[]) %}
+        {% for state in states.sensor %}
+          {% if state.object_id.startswith('anniversary_') and state.state | int == 7 %}
+            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+          {% endif %}
+        {% endfor %}
+        {{ anniversaries.sensors | length > 0 }}
+      attributes:
+        entity_id: >
+          {% set anniversaries = namespace(sensors=[]) %}
+          {% for state in states.sensor %}
+            {% if state.object_id.startswith('anniversary_') and state.state | int == 7 %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+            {% endif %}
+          {% endfor %}
+          {{ anniversaries.sensors | sort(attribute='days') }}
+    - name: Events in the Next Thirty Days
+      unique_id: events_in_the_next_thirty_days
+      icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: >
+        {% set anniversaries = namespace(sensors=[]) %}
+        {% for state in states.sensor %}
+          {% if state.object_id.startswith('anniversary_') and state.state | int <= 30 %}
+            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+          {% endif %}
+        {% endfor %}
+        {{ anniversaries.sensors | length > 0 }}
+      attributes:
+        entity_id: >
+          {% set anniversaries = namespace(sensors=[]) %}
+          {% for state in states.sensor %}
+            {% if state.object_id.startswith('anniversary_') and state.state | int <= 30 %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+            {% endif %}
+          {% endfor %}
+          {{ anniversaries.sensors | sort(attribute='days') }}
     - name: "AdBlocking"
       icon: "{{ iif(states(this.entity_id) == 'on','mdi:advertisements-off','mdi:advertisements') }}"
       unique_id: adblocking
@@ -21,13 +137,15 @@
         or states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == 'on' }}
       attributes:
         sleeping: >-
-          {% if states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "on"
-          and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "on" %}both
-          {% elif states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "on"
-          and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "off" %}jon
-          {% elif states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "off"
-          and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "on" %}laura
-          {% else %}unoccupied{% endif %}
+          {% set jon_in_bed = states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') %}
+          {% set laura_in_bed = states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') %}
+          {% set result = 
+            'both' if jon_in_bed == 'on' and laura_in_bed == 'on' else
+            'jon' if jon_in_bed == 'on' and laura_in_bed == 'off' else
+            'laura' if jon_in_bed == 'off' and laura_in_bed == 'on' else
+            'unoccupied'
+          %}
+          {{ result }}
     - name: "Basement Motions"
       unique_id: basement_motions
       device_class: motion
@@ -218,71 +336,12 @@
         {{ states('sensor.lower_level_hvac_action') == "cooling"
         or states('sensor.main_level_hvac_action') == "cooling"
         or states('sensor.upper_level_hvac_action') == "cooling" }}
-    - name: wireguard peer macbook
-      state: "{{ state_attr('sensor.wireguard_peers_status_api', 'macbook').latest_handshake > as_timestamp(now()) - 180 }}"
-    - name: wireguard peer jons-phone
-      state: "{{ state_attr('sensor.wireguard_peers_status_api', 'jons-phone').latest_handshake > as_timestamp(now()) - 180 }}"
 
 - sensor:
     - name: "Platerecognizer API Calls Remaining"
       unique_id: platerecognizer_api_calls_remaining
       icon: mdi:api
       state: "{{ state_attr('image_processing.platerecognizer_driveway', 'statistics').calls_remaining }}"
-    - name: "Events Today"
-      unique_id: events_today # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
-      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
-      unit_of_measurement: people
-      state: >
-        {% set entities = state_attr(this.entity_id,'entity_id') %}
-        {% if entities != none %} {{ entities|count }} {% endif %}
-      attributes:
-        entity_id: >
-          {% from 'events.jinja' import events %}
-          {{ events(0) }}
-    - name: "Events Tomorrow"
-      unique_id: events_tomorrow # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
-      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
-      unit_of_measurement: people
-      state: >
-        {% set entities = state_attr(this.entity_id,'entity_id') %}
-        {% if entities != none %} {{ entities|count }} {% endif %}
-      attributes:
-        entity_id: >
-          {% from 'events.jinja' import events %}
-          {{ events(1) }}
-    - name: "Events in the Next Week"
-      unique_id: events_in_the_next_week # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
-      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
-      unit_of_measurement: people
-      state: >
-        {% set entities = state_attr(this.entity_id,'entity_id') %}
-        {% if entities != none %} {{ entities|count }} {% endif %}
-      attributes:
-        entity_id: >
-          {% from 'events.jinja' import events_less_than %}
-          {{ events_less_than(7) }}
-    - name: "Events in Seven Days"
-      unique_id: events_in_seven_days # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
-      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
-      unit_of_measurement: people
-      state: >
-        {% set entities = state_attr(this.entity_id,'entity_id') %}
-        {% if entities != none %} {{ entities|count }} {% endif %}
-      attributes:
-        entity_id: >
-          {% from 'events.jinja' import events %}
-          {{ events(7) }}
-    - name: Events in the Next Thirty Days
-      unique_id: events_in_the_next_thirty_days
-      icon: "{{ iif(states(this.entity_id)|int(0) > 0,'mdi:alert-circle','mdi:check-circle') }}"
-      unit_of_measurement: people
-      state: >
-        {% set entities = state_attr(this.entity_id,'entity_id') %}
-        {% if entities != none %} {{ entities|count }} {% endif %}
-      attributes:
-        entity_id: >
-          {% from 'events.jinja' import events_less_than %}
-          {{ events_less_than(30) }}
     - name: recycle
       icon: mdi:garbage
       unique_id: recycle
@@ -309,13 +368,13 @@
       icon: mdi:bed
       unique_id: bed_occupancy_sensor
       state: >-
-        {% if states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "on"
-        and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "on" %}both
-        {% elif states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "on"
-        and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "off" %}jon
-        {% elif states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == "off"
-        and states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == "on" %}laura
-        {% else %}unoccupied{% endif %}
+        {% set jon_in_bed = states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') %}
+        {% set laura_in_bed = states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') %}
+        {% if jon_in_bed == "on" and laura_in_bed == "on" %}both
+        {% elif jon_in_bed == "on" and laura_in_bed == "off" %}jon
+        {% elif jon_in_bed == "off" and laura_in_bed == "on" %}laura
+        {% else %}unoccupied
+        {% endif %}
     - name: "Armed Status"
       unique_id: armed_status
       state: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') }}"

@@ -346,25 +346,24 @@
         - conditions: # 7am and if there is an event 7 days out OR today, send a message
             - condition: trigger
               id: 7am
-            - "{{ states('sensor.events_today') != '0' or states('sensor.events_in_seven_days') != '0' }}"
+            - "{{ states('binary_sensor.events_today') or states('binary_sensor.events_in_seven_days') }}"
           sequence:
             - service: telegram_bot.send_message
               data_template:
                 title: "*Important Date Reminder!*"
                 message: >-
-                  {% for entity in  state_attr('sensor.events_in_seven_days', 'entity_id') + state_attr('sensor.events_today', 'entity_id') %}
+                  {% for entity in  state_attr('binary_sensor.events_in_seven_days', 'entity_id') + state_attr('binary_sensor.events_today', 'entity_id') %}
                   {{ '_' + state_attr(entity, 'friendly_name') + '_ - ' + state_attr(entity, 'date').strftime('%Y-%m-%d') }}
                   {% endfor %}
                 parse_mode: markdown
-        - conditions: # 9am turn off the recirc pump (assuming its a workday)
+        - conditions: # 9am turn off the recirc pump
             - condition: trigger
               id: 9am
-            - condition: state
-              entity_id: binary_sensor.workday_sensor
-              state: "on"
           sequence:
             - service: homeassistant.turn_off
-              entity_id: switch.basement_equipment_room_recirculation_pump
+              entity_id:
+                - switch.basement_equipment_room_recirculation_pump
+                - switch.upstairs_main_bedroom_fan
         - conditions: # 10am check the house humidity level
             - condition: trigger
               id: 10am
@@ -860,20 +859,18 @@
       event_type: telegram_callback
       event_data:
         command: /ignore_garagesingle
+      variables:
+        alert: alert.garage_door_single
     - platform: event
       event_type: telegram_callback
       event_data:
         command: /ignore_garagedouble
+      variables:
+        alert: alert.garage_door_double
   action:
-    - choose:
-        - conditions: "{{ trigger.event.data.command == '\/ignore_garagesingle' }}"
-          sequence:
-            - service: homeassistant.turn_off
-              entity_id: alert.garage_door_single
-        - conditions: "{{ trigger.event.data.command == '\/ignore_garagedouble' }}"
-          sequence:
-            - service: homeassistant.turn_off
-              entity_id: alert.garage_door_double
+    - service: homeassistant.turn_off
+      target:
+        entity_id: "{{ alert }}"
 #########################################
 - alias: "Garage: telegram door close"
   id: "Garage: telegram door close"
