@@ -306,25 +306,106 @@ views:
                 "cam2"
         cards:
           - type: custom:frigate-card
+            automations:
+              - conditions:
+                  fullscreen: true
+                actions:
+                  - action: custom:frigate-card-action
+                    frigate_card_action: live_substream_on
+                actions_not:
+                  - action: custom:frigate-card-action
+                    frigate_card_action: live_substream_off
             cameras:
               - camera_entity: camera.driveway
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - driveway_hd
+              - camera_entity: camera.driveway
+                title: driveway HD
                 live_provider: go2rtc
+                id: driveway_hd
+                hide: true
               - camera_entity: camera.frontyard
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - frontyard_hd
+              - camera_entity: camera.frontyard
+                title: frontyard HD
                 live_provider: go2rtc
+                id: frontyard_hd
+                hide: true
               - camera_entity: camera.doorbell
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - doorbell_hd
+              - camera_entity: camera.doorbell
+                title: doorbell HD
                 live_provider: go2rtc
+                id: doorbell_hd
+                hide: true
               - camera_entity: camera.patio
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - patio_hd
+              - camera_entity: camera.patio
+                title: patio HD
                 live_provider: go2rtc
+                id: patio_hd
+                hide: true
               - camera_entity: camera.workshop
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - workshop_hd
+              - camera_entity: camera.workshop
+                title: workshop HD
                 live_provider: go2rtc
+                id: workshop_hd
+                hide: true
               - camera_entity: camera.deck
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - deck_hd
+              - camera_entity: camera.deck
+                title: deck HD
                 live_provider: go2rtc
+                id: deck_hd
+                hide: true
               - camera_entity: camera.grilldeck
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - grilldeck_hd
+              - camera_entity: camera.grilldeck
+                title: grilldeck HD
                 live_provider: go2rtc
+                id: grilldeck_hd
+                hide: true
               - camera_entity: camera.mudroom
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - mudroom_hd
+              - camera_entity: camera.mudroom
+                title: mudroom HD
                 live_provider: go2rtc
+                id: mudroom_hd
+                hide: true
               - camera_entity: camera.garage
+                live_provider: image
+                dependencies:
+                  cameras:
+                    - garage_hd
+              - camera_entity: camera.garage
+                title: garage HD
                 live_provider: go2rtc
+                id: garage_hd
+                hide: true
             view_layout:
               grid-area: cam1
           # - type: custom:frigate-card
