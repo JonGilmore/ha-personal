@@ -87,7 +87,7 @@
         - conditions: # if exterior person detected, turn on all exterior lights
             - condition: trigger
               id: pir-on
-            - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+            - "{{ is_state('binary_sensor.light_inside', 'off') }}"
             # - condition: sun # after 30m before sunset
             #   after: sunset
             #   after_offset: "-00:30:00"
@@ -124,7 +124,7 @@
       entity_id: binary_sensor.elkm1_sunroom_pir
       to: "on"
   condition:
-    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+    - "{{ is_state('binary_sensor.light_inside', 'off') }}"
   action:
     - wait_for_trigger:
         - platform: state
@@ -143,7 +143,7 @@
       entity_id: binary_sensor.elkm1_lounge_pir
       to: "on"
   condition:
-    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+    - "{{ is_state('binary_sensor.light_inside', 'off') }}"
   action:
     - wait_for_trigger:
         - platform: state
@@ -162,7 +162,7 @@
       entity_id: binary_sensor.elkm1_workshop_pir
       to: "on"
   condition:
-    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+    - "{{ is_state('binary_sensor.light_inside', 'off') }}"
   action:
     - wait_for_trigger:
         - platform: state
@@ -181,7 +181,7 @@
       entity_id: binary_sensor.elkm1_mudroom_pir
       to: "on"
   condition:
-    - "{{ is_state('binary_sensor.dark_out', 'on') }}"
+    - "{{ is_state('binary_sensor.light_inside', 'off') }}"
   action:
     - wait_for_trigger:
         - platform: state
@@ -346,14 +346,14 @@
         - conditions: # 7am and if there is an event 7 days out OR today, send a message
             - condition: trigger
               id: 7am
-            - "{{ states('binary_sensor.events_today') or states('binary_sensor.events_in_seven_days') }}"
+            - "{{ states('binary_sensor.events_today') == 'on' or states('binary_sensor.events_in_seven_days') == 'on' }}"
           sequence:
             - service: telegram_bot.send_message
               data_template:
                 title: "*Important Date Reminder!*"
                 message: >-
                   {% for entity in  state_attr('binary_sensor.events_in_seven_days', 'entity_id') + state_attr('binary_sensor.events_today', 'entity_id') %}
-                  {{ '_' + state_attr(entity, 'friendly_name') + '_ - ' + state_attr(entity, 'date').strftime('%Y-%m-%d') }}
+                  {{ '_' + entity.name + '_ - ' + entity.next_date }}
                   {% endfor %}
                 parse_mode: markdown
         - conditions: # 9am turn off the recirc pump

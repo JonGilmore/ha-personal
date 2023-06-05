@@ -8,7 +8,7 @@
         {% set anniversaries = namespace(sensors=[]) %}
         {% for state in states.sensor %}
           {% if state.object_id.startswith('anniversary_') and state.state | int == 0 %}
-            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversary = {'name': state.name} %}
             {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
           {% endif %}
         {% endfor %}
@@ -18,7 +18,7 @@
           {% set anniversaries = namespace(sensors=[]) %}
           {% for state in states.sensor %}
             {% if state.object_id.startswith('anniversary_') and state.state | int == 0 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
               {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
             {% endif %}
           {% endfor %}
@@ -31,7 +31,7 @@
         {% set anniversaries = namespace(sensors=[]) %}
         {% for state in states.sensor %}
           {% if state.object_id.startswith('anniversary_') and state.state | int == 1 %}
-            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversary = {'name': state.name} %}
             {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
           {% endif %}
         {% endfor %}
@@ -41,7 +41,7 @@
           {% set anniversaries = namespace(sensors=[]) %}
           {% for state in states.sensor %}
             {% if state.object_id.startswith('anniversary_') and state.state | int == 1 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
               {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
             {% endif %}
           {% endfor %}
@@ -54,7 +54,7 @@
         {% set anniversaries = namespace(sensors=[]) %}
         {% for state in states.sensor %}
           {% if state.object_id.startswith('anniversary_') and state.state | int <= 7 %}
-            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversary = {'name': state.name} %}
             {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
           {% endif %}
         {% endfor %}
@@ -64,7 +64,7 @@
           {% set anniversaries = namespace(sensors=[]) %}
           {% for state in states.sensor %}
             {% if state.object_id.startswith('anniversary_') and state.state | int <= 7 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
               {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
             {% endif %}
           {% endfor %}
@@ -77,7 +77,7 @@
         {% set anniversaries = namespace(sensors=[]) %}
         {% for state in states.sensor %}
           {% if state.object_id.startswith('anniversary_') and state.state | int == 7 %}
-            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversary = {'name': state.name} %}
             {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
           {% endif %}
         {% endfor %}
@@ -87,7 +87,7 @@
           {% set anniversaries = namespace(sensors=[]) %}
           {% for state in states.sensor %}
             {% if state.object_id.startswith('anniversary_') and state.state | int == 7 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
               {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
             {% endif %}
           {% endfor %}
@@ -100,7 +100,7 @@
         {% set anniversaries = namespace(sensors=[]) %}
         {% for state in states.sensor %}
           {% if state.object_id.startswith('anniversary_') and state.state | int <= 30 %}
-            {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+            {% set anniversary = {'name': state.name} %}
             {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
           {% endif %}
         {% endfor %}
@@ -110,7 +110,7 @@
           {% set anniversaries = namespace(sensors=[]) %}
           {% for state in states.sensor %}
             {% if state.object_id.startswith('anniversary_') and state.state | int <= 30 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int} %}
+              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
               {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
             {% endif %}
           {% endfor %}
@@ -121,10 +121,6 @@
       state: >-
         {{ states('switch.adguard_home_protection_2') == 'on'
         and states('switch.adguard_pi_protection') == 'on' }}
-    - name: dark out? # true if the sun is below horizon or cloud coverage is greater than 50%
-      icon: mdi:weather-night
-      unique_id: dark out
-      state: "{{ is_state('sun.sun', 'below_horizon') or states('sensor.cloud_cover') | float > 75 }}"
     - name: "Has Unavailable States"
       unique_id: has_unavailable_state
       state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
@@ -483,13 +479,6 @@
       unique_id: current_temperature
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'temperature') }}"
       unit_of_measurement: "°F"
-    - name: "Current Feels"
-      unique_id: current_feels
-      state: "feels like {{ states('sensor.tomorrow_io_home_feels_like') }}"
-      unit_of_measurement: "°F"
-    - name: "Cloud Cover"
-      unique_id: cloud_cover
-      state: "{{ states('sensor.tomorrow_io_home_cloud_cover') | round | int }}"
     - name: "Current Humidity"
       unique_id: current_humidity
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}%"
