@@ -143,10 +143,6 @@ map:
 mobile_app:
 media_source:
 
-speedtestdotnet:
-  scan_interval:
-    minutes: 121
-
 image_processing:
   - platform: platerecognizer
     api_token: !secret platerecognizer_api
