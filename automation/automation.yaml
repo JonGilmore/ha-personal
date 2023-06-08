@@ -343,7 +343,7 @@
               entity_id:
                 - cover.main_floor_library_shade
                 - cover.basement_office_shade
-        - conditions: # 730am and if there is an event 7 days out OR today, send a message
+        - conditions: # 730am and if there is an event 7 days out OR today, send a message. if its the first of the month, send a summary for the next 30 days
             - condition: trigger
               id: 730am
             - "{{ states('binary_sensor.events_today') == 'on' or states('binary_sensor.events_in_seven_days') == 'on' }}"
@@ -351,19 +351,37 @@
             - parallel:
                 - service: telegram_bot.send_message
                   data_template:
-                    title: "*Important Date Reminder!*"
+                    title: >-
+                      {% if as_local(states.sensor.date.last_updated).day == 1 %}*Important Dates in the Next 30 Days!*
+                      {% else %}*Important Upcoming Dates!*
+                      {% endif %}
                     message: >-
-                      {% for entity in  state_attr('binary_sensor.events_in_seven_days', 'entity_id') + state_attr('binary_sensor.events_today', 'entity_id') %}
-                      {{ '_' + entity.name + '_ - ' + entity.next_date }}
+                      {% if as_local(states.sensor.date.last_updated).day == 1 %}
+                      {% for entity in  state_attr('binary_sensor.events_in_the_next_thirty_days', 'entity_id') -%}
+                      {{ '\n_' + entity.name + '_ - ' + entity.next_date }}
                       {% endfor %}
+                      {% else %}
+                      {% for entity in  state_attr('binary_sensor.events_in_seven_days', 'entity_id') + state_attr('binary_sensor.events_today', 'entity_id') %}
+                      {{ '\n_' + entity.name + '_ - ' + entity.next_date }}
+                      {% endfor %}
+                      {% endif %}
                     parse_mode: markdown
                 - service: notify.mobile_app_lauras_iphone
                   data:
-                    title: "Important Date Reminder!"
+                    title: >-
+                      {% if as_local(states.sensor.date.last_updated).day == 1 %}*Important Dates in the Next 30 Days!*
+                      {% else %}*Important Upcoming Dates!*
+                      {% endif %}
                     message: >-
-                      {% for entity in  state_attr('binary_sensor.events_in_seven_days', 'entity_id') + state_attr('binary_sensor.events_today', 'entity_id') %}
-                      {{ entity.name + ' - ' + entity.next_date }}
+                      {% if as_local(states.sensor.date.last_updated).day == 1 %}
+                      {% for entity in  state_attr('binary_sensor.events_in_the_next_thirty_days', 'entity_id') -%}
+                      {{ '\n_' + entity.name + '_ - ' + entity.next_date }}
                       {% endfor %}
+                      {% else %}
+                      {% for entity in  state_attr('binary_sensor.events_in_seven_days', 'entity_id') + state_attr('binary_sensor.events_today', 'entity_id') %}
+                      {{ '\n_' + entity.name + '_ - ' + entity.next_date }}
+                      {% endfor %}
+                      {% endif %}
         - conditions: # 9am turn off the recirc pump
             - condition: trigger
               id: 9am
