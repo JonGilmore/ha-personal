@@ -4,117 +4,57 @@
       unique_id: events_today # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
       icon: "{{ 'mdi:alert-circle' if is_state(this.entity_id, 'on') else 'mdi:check-circle' }}"
       unit_of_measurement: people
-      state: >
-        {% set anniversaries = namespace(sensors=[]) %}
-        {% for state in states.sensor %}
-          {% if state.object_id.startswith('anniversary_') and state.state | int == 0 %}
-            {% set anniversary = {'name': state.name} %}
-            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-          {% endif %}
-        {% endfor %}
-        {{ anniversaries.sensors | length > 0 }}
+      state: |
+        {% from 'events.jinja' import events_bool %}
+        {{ events_bool(equal=0) }}
       attributes:
-        entity_id: >
-          {% set anniversaries = namespace(sensors=[]) %}
-          {% for state in states.sensor %}
-            {% if state.object_id.startswith('anniversary_') and state.state | int == 0 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
-              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-            {% endif %}
-          {% endfor %}
-          {{ anniversaries.sensors | sort(attribute='days') }}
+        entity_id: |
+          {% from 'events.jinja' import events %}
+          {{ events(equal=0) }}
     - name: "Events Tomorrow"
       unique_id: events_tomorrow
       icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
       unit_of_measurement: people
-      state: >
-        {% set anniversaries = namespace(sensors=[]) %}
-        {% for state in states.sensor %}
-          {% if state.object_id.startswith('anniversary_') and state.state | int == 1 %}
-            {% set anniversary = {'name': state.name} %}
-            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-          {% endif %}
-        {% endfor %}
-        {{ anniversaries.sensors | length > 0 }}
+      state: |
+        {% from 'events.jinja' import events_bool %}
+        {{ events_bool(equal=1) }}
       attributes:
-        entity_id: >
-          {% set anniversaries = namespace(sensors=[]) %}
-          {% for state in states.sensor %}
-            {% if state.object_id.startswith('anniversary_') and state.state | int == 1 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
-              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-            {% endif %}
-          {% endfor %}
-          {{ anniversaries.sensors | sort(attribute='days') }}
+        entity_id: |
+          {% from 'events.jinja' import events %}
+          {{ events(equal=1) }}
     - name: "Events in the Next Week"
       unique_id: events_in_the_next_week
       icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
       unit_of_measurement: people
-      state: >
-        {% set anniversaries = namespace(sensors=[]) %}
-        {% for state in states.sensor %}
-          {% if state.object_id.startswith('anniversary_') and state.state | int <= 7 %}
-            {% set anniversary = {'name': state.name} %}
-            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-          {% endif %}
-        {% endfor %}
-        {{ anniversaries.sensors | length > 0 }}
+      state: |
+        {% from 'events.jinja' import events_bool %}
+        {{ events_bool(lessthan=7) }}
       attributes:
-        entity_id: >
-          {% set anniversaries = namespace(sensors=[]) %}
-          {% for state in states.sensor %}
-            {% if state.object_id.startswith('anniversary_') and state.state | int <= 7 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
-              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-            {% endif %}
-          {% endfor %}
-          {{ anniversaries.sensors | sort(attribute='days') }}
+        entity_id: |
+          {% from 'events.jinja' import events %}
+          {{ events(lessthan=7) }}
     - name: "Events in Seven Days"
       unique_id: events_in_seven_days
       icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
       unit_of_measurement: people
-      state: >
-        {% set anniversaries = namespace(sensors=[]) %}
-        {% for state in states.sensor %}
-          {% if state.object_id.startswith('anniversary_') and state.state | int == 7 %}
-            {% set anniversary = {'name': state.name} %}
-            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-          {% endif %}
-        {% endfor %}
-        {{ anniversaries.sensors | length > 0 }}
+      state: |
+        {% from 'events.jinja' import events_bool %}
+        {{ events_bool(equal=7) }}
       attributes:
-        entity_id: >
-          {% set anniversaries = namespace(sensors=[]) %}
-          {% for state in states.sensor %}
-            {% if state.object_id.startswith('anniversary_') and state.state | int == 7 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
-              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-            {% endif %}
-          {% endfor %}
-          {{ anniversaries.sensors | sort(attribute='days') }}
+        entity_id: |
+          {% from 'events.jinja' import events %}
+          {{ events(equal=7) }}
     - name: Events in the Next Thirty Days
       unique_id: events_in_the_next_thirty_days
       icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
       unit_of_measurement: people
-      state: >
-        {% set anniversaries = namespace(sensors=[]) %}
-        {% for state in states.sensor %}
-          {% if state.object_id.startswith('anniversary_') and state.state | int <= 30 %}
-            {% set anniversary = {'name': state.name} %}
-            {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-          {% endif %}
-        {% endfor %}
-        {{ anniversaries.sensors | length > 0 }}
+      state: |
+        {% from 'events.jinja' import events_bool %}
+        {{ events_bool(lessthan=30) }}
       attributes:
-        entity_id: >
-          {% set anniversaries = namespace(sensors=[]) %}
-          {% for state in states.sensor %}
-            {% if state.object_id.startswith('anniversary_') and state.state | int <= 30 %}
-              {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
-              {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-            {% endif %}
-          {% endfor %}
-          {{ anniversaries.sensors | sort(attribute='days') }}
+        entity_id: |
+          {% from 'events.jinja' import events %}
+          {{ events(lessthan=30) }}
     - name: "AdBlocking"
       icon: "{{ iif(states(this.entity_id) == 'on','mdi:advertisements-off','mdi:advertisements') }}"
       unique_id: adblocking
@@ -160,50 +100,49 @@
     - name: "Main Motions"
       unique_id: main_motions
       device_class: motion
-      state: >-
-        {{ states('sensor.elkm1_back_kitchen_pir') == "Violated"
-        or states('sensor.elkm1_foyer_pir') == "Violated"
-        or states('sensor.elkm1_great_room_pir') == "Violated"
-        or states('sensor.elkm1_kitchen_pir') == "Violated"
-        or states('sensor.elkm1_library_pir') == "Violated"
-        or states('sensor.elkm1_mudroom_pir') == "Violated"
-        or states('sensor.elkm1_sunroom_pir') == "Violated" }}
+      state: >
+        {{ "Violated" in [states('sensor.elkm1_back_kitchen_pir'),
+          states('sensor.elkm1_foyer_pir'),
+          states('sensor.elkm1_great_room_pir'),
+          states('sensor.elkm1_kitchen_pir'),
+          states('sensor.elkm1_library_pir'),
+          states('sensor.elkm1_mudroom_pir'),
+          states('sensor.elkm1_sunroom_pir')] }}
     - name: "Upstairs Motions"
       unique_id: upstairs_motions
       device_class: motion
-      state: >-
-        {{ states('sensor.elkm1_bonus_hall_pir') == "Violated"
-        or states('sensor.elkm1_laundry_pir') == "Violated"
-        or states('sensor.elkm1_main_bath_pir') == "Violated"
-        or states('sensor.elkm1_main_bed_pir') == "Violated"
-        or states('sensor.elkm1_second_hall_pir') == "Violated" }}
+      state: >
+        {{ "Violated" in [states('sensor.elkm1_bonus_hall_pir'),
+          states('sensor.elkm1_laundry_pir'),
+          states('sensor.elkm1_main_bath_pir'),
+          states('sensor.elkm1_main_bed_pir'),
+          states('sensor.elkm1_second_hall_pir')] }}
     - name: "Exterior Motions"
       unique_id: exterior_motions
       device_class: motion
-      state: >-
-        {{ states('sensor.elkm1_garage_pir') == "Violated" }}
+      state: "{{ states('sensor.elkm1_garage_pir') == 'Violated' }}"
     - name: "All Motions"
       unique_id: all_motions
       device_class: motion
       state: >-
-        {{ states('sensor.elkm1_basmnt_stair_pir') == "Violated"
-        or states('sensor.elkm1_gym_pir') == "Violated"
-        or states('sensor.elkm1_lounge_pir') == "Violated"
-        or states('sensor.elkm1_office_pir') == "Violated"
-        or states('sensor.elkm1_workshop_pir') == "Violated"
-        or states('sensor.elkm1_back_kitchen_pir') == "Violated"
-        or states('sensor.elkm1_foyer_pir') == "Violated"
-        or states('sensor.elkm1_great_room_pir') == "Violated"
-        or states('sensor.elkm1_kitchen_pir') == "Violated"
-        or states('sensor.elkm1_library_pir') == "Violated"
-        or states('sensor.elkm1_mudroom_pir') == "Violated"
-        or states('sensor.elkm1_sunroom_pir') == "Violated"
-        or states('sensor.elkm1_bonus_hall_pir') == "Violated"
-        or states('sensor.elkm1_laundry_pir') == "Violated"
-        or states('sensor.elkm1_main_bath_pir') == "Violated"
-        or states('sensor.elkm1_main_bed_pir') == "Violated"
-        or states('sensor.elkm1_second_hall_pir') == "Violated"
-        or states('sensor.elkm1_garage_pir') == "Violated" }}
+        {{ "Violated" in [states('sensor.elkm1_basmnt_stair_pir'),
+          states('sensor.elkm1_gym_pir'),
+          states('sensor.elkm1_lounge_pir'),
+          states('sensor.elkm1_office_pir'),
+          states('sensor.elkm1_workshop_pir'),
+          states('sensor.elkm1_back_kitchen_pir'),
+          states('sensor.elkm1_foyer_pir'),
+          states('sensor.elkm1_great_room_pir'),
+          states('sensor.elkm1_kitchen_pir'),
+          states('sensor.elkm1_library_pir'),
+          states('sensor.elkm1_mudroom_pir'),
+          states('sensor.elkm1_sunroom_pir'),
+          states('sensor.elkm1_bonus_hall_pir'),
+          states('sensor.elkm1_laundry_pir'),
+          states('sensor.elkm1_main_bath_pir'),
+          states('sensor.elkm1_main_bed_pir'),
+          states('sensor.elkm1_second_hall_pir'),
+          states('sensor.elkm1_garage_pir')] }}
     - name: "Kitchen Area Motions"
       unique_id: kitchen_area_motions
       device_class: motion
@@ -300,20 +239,20 @@
         {{ month == 11 and day >= 22
         or month == 12
         or month == 1 and day <= 6 }}
-    - name: All Sonos
+    - name: "All Sonos"
       unique_id: all_sonos
       state: >-
-        {{ states('media_player.deck') == "playing"
-        or states('media_player.den') == "playing"
-        or states('media_player.gym') == "playing"
-        or states('media_player.kitchen') == "playing"
-        or states('media_player.living_room') == "playing"
-        or states('media_player.main_bathroom') == "playing"
-        or states('media_player.main_bedroom') == "playing"
-        or states('media_player.media_room') == "playing"
-        or states('media_player.office') == "playing"
-        or states('media_player.patio') == "playing"
-        or states('media_player.sunroom') == "playing" }}
+        {{ "playing" in [states('media_player.deck'),
+          states('media_player.den'),
+          states('media_player.gym'),
+          states('media_player.kitchen'),
+          states('media_player.living_room'),
+          states('media_player.main_bathroom'),
+          states('media_player.main_bedroom'),
+          states('media_player.media_room'),
+          states('media_player.office'),
+          states('media_player.patio'),
+          states('media_player.sunroom')] }}
     - name: HVAC
       unique_id: hvac
       state: >-
@@ -341,7 +280,10 @@
     - name: recycle
       icon: mdi:garbage
       unique_id: recycle
-      # check if its an odd/even week. then, check if its before/after tuesday (waste pickup day)
+      # check if its an odd/even week. then, check if its before/after tuesday (waste pickup day). if its before tuesday, use the next tuesday.
+      ## if its after tuesday, use the next tuesday. On tues itself, if its before 9:30am (which is when schedule.tuesdays is set to), set it
+      ## to the following tuesday
+      ## credit to: https://brianhanifin.com/posts/home-assistant-date-time-template-macros/
       state: >-
         {% if not now().isocalendar()[1] % 2 %}
           {%- if now().weekday() | int < 1 %}
@@ -353,7 +295,11 @@
           {%- if now().weekday() | int < 1 %}
             {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
           {%- else -%}
-            {{ state_attr('schedule.tuesdays', 'next_event') }}
+            {%- if now().hour >= 9 and now().minute < 30 %}
+              {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
+            {%- else -%}
+              {{ state_attr('schedule.tuesdays', 'next_event') }}
+            {%- endif -%}
           {%- endif -%}
         {%endif%}
     - name: trash
@@ -389,14 +335,11 @@
     - name: "Number of Sensors"
       unique_id: number_of_sensors
       state: >
-        {%- set domains = ['sensor'] -%}
-        {%- for domain in domains -%}
-          {%- for item in states[domain] -%}
-            {% if loop.first %}
-              {{loop.length}}
-            {% endif %}
-          {%- endfor -%}
+        {% set count = namespace(value=0) %}
+        {%- for domain in ['sensor'] -%}
+          {%- set count.value = count.value + states[domain] | count -%}
         {%- endfor -%}
+        {{ count.value }}
     - name: "Lights On"
       unit_of_measurement: "On"
       state: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
@@ -450,21 +393,25 @@
     - name: cyberpower ups
       unique_id: cyberpower_ups
       state: >-
-        {% if   states('sensor.cyberpower_battery_runtime') | int < 180 %}three
-        {% elif states('sensor.cyberpower_battery_runtime') | int < 300 %}five
-        {% elif states('sensor.cyberpower_battery_runtime') | int < 600 %}ten
-        {% elif states('sensor.cyberpower_battery_runtime') | int < 1200 %}twenty
-        {% else %}okay{% endif %}
+        {% set runtime = states('sensor.cyberpower_battery_runtime') | int %}
+        {% if runtime < 180 %}three
+        {% elif runtime < 300 %}five
+        {% elif runtime < 600 %}ten
+        {% elif runtime < 1200 %}twenty
+        {% else %}okay
+        {% endif %}
     - name: "target humidity max"
       unique_id: target_humidity_max
       device_class: humidity
       state: >-
-        {% if   state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -20 %}25
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -10 %}30
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <   0 %}35
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  10 %}40
-        {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int <  20 %}45
-        {% else %} 55 {% endif %}
+        {% set temperature = state_attr('weather.tomorrow_io_home_daily', 'temperature') | int %}
+        {% if temperature < -20 %}25
+        {% elif temperature < -10 %}30
+        {% elif temperature < 0 %}35
+        {% elif temperature < 10 %}40
+        {% elif temperature < 20 %}45
+        {% else %}55
+        {% endif %}
     - name: "target humidity min"
       unique_id: target_humidity_min
       device_class: humidity

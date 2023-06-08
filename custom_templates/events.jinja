@@ -1,21 +1,39 @@
-{% macro events(days) %}
-    {% set sensors = states.sensor
-    | rejectattr('state', 'in', ['unavailable', 'unknown'])
-    | selectattr('attributes.unit_of_measurement', 'defined')
-    | selectattr('attributes.unit_of_measurement', '==', 'Days')
-    | list
-    %}
-    {% set low = sensors | map(attribute='state') | map('int') | select('==', days) | map('string') | list %}
-    {{ sensors | selectattr('state', 'in', low) | map(attribute='entity_id') | list }}
+{% macro events() %}
+    {% set anniversaries = namespace(sensors=[]) %}
+    {% for key, value in kwargs.items() %}
+        {% for state in states.sensor %}
+            {% if key == 'equal' %}
+                {% if state.object_id.startswith('anniversary_') and state.state | int == value %}
+                    {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
+                    {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+                {% endif %}
+            {% else %}
+                {% if state.object_id.startswith('anniversary_') and state.state | int <= value %}
+                    {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
+                    {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}        
+    {%- endfor -%}
+    {{ anniversaries.sensors | sort(attribute='days') }}
 {% endmacro %}
 
-{% macro events_less_than(days) %}
-    {% set sensors = states.sensor
-    | rejectattr('state', 'in', ['unavailable', 'unknown'])
-    | selectattr('attributes.unit_of_measurement', 'defined')
-    | selectattr('attributes.unit_of_measurement', '==', 'Days')
-    | list
-    %}
-    {% set low = sensors | map(attribute='state') | map('int') | select('<=', days) | map('string') | list %}
-    {{ sensors | selectattr('state', 'in', low) | map(attribute='entity_id') | list }}
+{% macro events_bool() %}
+    {% set anniversaries = namespace(sensors=[]) %}
+    {% for key, value in kwargs.items() %}
+        {% for state in states.sensor %}
+            {% if key == 'equal' %}
+                {% if state.object_id.startswith('anniversary_') and state.state | int == value %}
+                    {% set anniversary = {'name': state.name} %}
+                    {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+                {% endif %}
+            {% else %}
+                {% if state.object_id.startswith('anniversary_') and state.state | int <= value %}
+                    {% set anniversary = {'name': state.name} %}
+                    {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}        
+    {%- endfor -%}
+    {{ anniversaries.sensors | length > 0 }}
 {% endmacro %}
