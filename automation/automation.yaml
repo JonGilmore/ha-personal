@@ -12,41 +12,44 @@
   variables:
     filename: "/tmp/doorbell_latest.jpg"
   action:
-    - parallel:
-        - service: media_player.play_media
-          target:
-            entity_id: media_player.kitchen
-          data:
-            media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-            media_content_type: provider
-          metadata:
-            title: ding dong - somebody is at the door
-            thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
-            media_class: app
-            children_media_class:
-            navigateIds:
-              - {}
-              - media_content_type: app
-                media_content_id: media-source://tts
-              - media_content_type: provider
+    - choose:
+        - conditions: # if the doorbell input_boolean is on, play the doorbell sound in the kitchen
+            - "{{ is_state('input_boolean.doorbell', 'on') }}"
+          sequence:
+            - service: media_player.play_media
+              target:
+                entity_id: media_player.kitchen
+              data:
                 media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-        - service: media_player.play_media
-          target:
-            entity_id: media_player.office
-          data:
+                media_content_type: provider
+              metadata:
+                title: ding dong - somebody is at the door
+                thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+                media_class: app
+                children_media_class:
+                navigateIds:
+                  - {}
+                  - media_content_type: app
+                    media_content_id: media-source://tts
+                  - media_content_type: provider
+                    media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+    - service: media_player.play_media
+      target:
+        entity_id: media_player.office
+      data:
+        media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+        media_content_type: provider
+      metadata:
+        title: ding dong - somebody is at the door
+        thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+        media_class: app
+        children_media_class:
+        navigateIds:
+          - {}
+          - media_content_type: app
+            media_content_id: media-source://tts
+          - media_content_type: provider
             media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-            media_content_type: provider
-          metadata:
-            title: ding dong - somebody is at the door
-            thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
-            media_class: app
-            children_media_class:
-            navigateIds:
-              - {}
-              - media_content_type: app
-                media_content_id: media-source://tts
-              - media_content_type: provider
-                media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
     - service: camera.snapshot
       target:
         entity_id: camera.doorbell
@@ -254,16 +257,19 @@
     - service: homeassistant.turn_off
       entity_id: light.main_floor_great_room_cabinets
 ########################################
-- alias: "Automatic Lighting: template turn off lights if no motion detected for 30 min"
-  id: "Automatic Lighting: template turn off lights if no motion detected for 30 min"
+- alias: "Automatic Lighting: template turn off lights if no motion detected for x min"
+  id: "Automatic Lighting: template turn off lights if no motion detected for x min"
   trigger:
     - platform: state
       entity_id:
         - binary_sensor.basement_motions
         - binary_sensor.main_motions
       to: "off"
-      for:
-        minutes: 30
+      for: "00:30:00"
+    - platform: state
+      entity_id: binary_sensor.elkm1_main_bath_pir
+      to: "off"
+      for: "00:20:00"
   action:
     - service: button.press
       data_template:
@@ -272,6 +278,8 @@
             button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
           {% elif trigger.entity_id == 'binary_sensor.main_motions' %}
             button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+          {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
+            button.basement_equipment_room_phantom_kp_position_1_keypad_mainbath_off
           {% endif %}
 ########################################
 - alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
@@ -957,7 +965,7 @@
   trigger:
     - platform: state
       entity_id:
-        - binary_sensor.office_motions
+        - binary_sensor.elkm1_office_pir
         - binary_sensor.elkm1_main_bath_pir
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_mudroom_pir
@@ -966,7 +974,7 @@
     - platform: state
       entity_id:
         - binary_sensor.elkm1_lounge_pir
-        - binary_sensor.office_motions
+        - binary_sensor.elkm1_office_pir
         - binary_sensor.elkm1_mudroom_pir
       id: pir-off
       to: "off"
@@ -990,7 +998,9 @@
             - service: light.turn_on
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                    light.basement_office_art
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
                     light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
                     light.basement_bar_cabinets
@@ -1005,7 +1015,9 @@
             - service: homeassistant.turn_off
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
+                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                    light.basement_office_art
+                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
                     light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
                     light.basement_bar_cabinets
@@ -1016,6 +1028,8 @@
 - alias: "Automatic Lighting: motion light laundry"
   id: "Automatic Lighting: motion light laundry"
   mode: restart
+  variables:
+    light: light.upstairs_laundry_cabinets
   trigger:
     - platform: state
       entity_id:
@@ -1035,18 +1049,17 @@
             - condition: trigger
               id: pir-on
             - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
-            # - "{{ is_state('binary_sensor.light_inside', 'off') }}"
           sequence:
             - service: light.turn_on
               data_template:
-                entity_id: light.upstairs_laundry_cabinets
+                entity_id: "{{light}}"
         - conditions:
             - condition: trigger
               id: pir-off
           sequence:
             - service: homeassistant.turn_off
               data_template:
-                entity_id: light.upstairs_laundry_cabinets
+                entity_id: "{{light}}"
 #########################################
 - alias: "Automatic Lighting: motion light gym"
   id: "Automatic Lighting: motion light gym"
@@ -1088,7 +1101,7 @@
   description: "on basement stair motion, turn on the lights (at 30% of the circadian brightness)"
   variables:
     light: light.basement_stair_lights
-    brightness_pct: 30
+    brightness_pct: 0.3
   trigger:
     - platform: state
       entity_id: binary_sensor.elkm1_basmnt_stair_pir
@@ -1119,21 +1132,6 @@
             - service: homeassistant.turn_off
               target:
                 entity_id: "{{light}}"
-#########################################
-- alias: "Automatic Lighting: main bath lights"
-  id: "Automatic Lighting: main bath lights"
-  description: "if there is not motion in the main bath for 20 minutes, turn off the lights"
-  variables:
-    light: button.basement_equipment_room_phantom_kp_position_1_keypad_mainbath_off
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.elkm1_main_bath_pir
-      to: "off"
-      for: "00:20:00"
-  action:
-    - service: button.press
-      data_template:
-        entity_id: "{{light}}"
 #########################################
 - alias: "Automatic Lighting: motion light back kitchen"
   id: "Automatic Lighting: motion light back kitchen"
