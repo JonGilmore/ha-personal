@@ -292,14 +292,10 @@
             {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
           {%- endif -%}
         {%- else -%}
-          {%- if now().weekday() | int < 1 %}
+          {%- if (now().weekday() | int < 1) or (now().weekday() | int == 2 and now().hour <= 9 and now().minute < 30) %}
             {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
           {%- else -%}
-            {%- if now().hour >= 9 and now().minute < 30 %}
-              {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
-            {%- else -%}
-              {{ state_attr('schedule.tuesdays', 'next_event') }}
-            {%- endif -%}
+            {{ state_attr('schedule.tuesdays', 'next_event') }}
           {%- endif -%}
         {%endif%}
     - name: trash
@@ -402,7 +398,6 @@
         {% endif %}
     - name: "target humidity max"
       unique_id: target_humidity_max
-      device_class: humidity
       state: >-
         {% set temperature = state_attr('weather.tomorrow_io_home_daily', 'temperature') | int %}
         {% if temperature < -20 %}25
@@ -414,7 +409,6 @@
         {% endif %}
     - name: "target humidity min"
       unique_id: target_humidity_min
-      device_class: humidity
       state: >-
         {% if   state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -20 %}15
         {% elif state_attr('weather.tomorrow_io_home_daily', 'temperature') | int < -10 %}20

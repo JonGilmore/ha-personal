@@ -43,3 +43,7 @@ driveway_sentry:
   name: Driveway Sentry Mode
 exterior_lights_block:
   name: Exterior Lights Block
+doorbell:
+  name: Doorbell
+  icon: mdi:bell
+  initial: true

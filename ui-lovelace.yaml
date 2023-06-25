@@ -266,6 +266,8 @@ views:
                     entity_id:
                       - switch.adguard_home_protection_2
                       - switch.adguard_pi_protection
+          - entity: input_boolean.doorbell
+            name: Doorbell Kitchen Chime
           # - entity: sensor.bar_fridge_leak_sensor
           #   type: custom:multiple-entity-row
           #   name: bar
