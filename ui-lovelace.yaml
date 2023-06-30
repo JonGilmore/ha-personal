@@ -21,6 +21,23 @@ views:
     id: home
     icon: mdi:home
     cards:
+      - type: markdown
+        title: Home Summary
+        content: |
+          {% set unlocked = states('sensor.doors_unlocked_number') | int %}
+          {% set open = states('sensor.number_of_doors_open') | int %}
+
+          {% if unlocked == 1 %}
+          {{ states('sensor.doors_unlocked') }} is unlocked.
+          {% elif unlocked > 1 %}
+          {{ states('sensor.doors_unlocked') }} are unlocked.
+          {% endif %}
+
+          {% if open == 1 %}
+          {{ states('sensor.doors_open') }} is open.
+          {% elif open > 1 %}
+          {{ states('sensor.doors_open') }} are open.
+          {% endif %}
       - type: shopping-list
         title: Shopping List
       - type: entities

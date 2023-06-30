@@ -358,6 +358,15 @@
     - name: "Number of Doors Unlocked"
       state: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|length }}"
       unique_id: doors_unlocked_number
+    - name: "Doors Open"
+      state: "{{ expand('group.all_doors') | selectattr('state', 'in', ['on']) | map(attribute='name') | list | join(', ') }}"
+      unique_id: doors_open
+    - name: "Doors Open Entities"
+      state: "{{ expand('group.all_doors') | selectattr('state', 'in', ['on']) | map(attribute='entity_id') | list | join(', ') }}"
+      unique_id: doors_open_entities
+    - name: "Number of Doors Open"
+      state: "{{ expand('group.all_doors') | selectattr('state', 'in', ['on']) | list | length }}"
+      unique_id: doors_open_number
     - name: "People Home"
       state: "{{ states.person|selectattr('state', 'equalto', 'home')|list|map(attribute='name')| list|join(', ') }}"
       unique_id: people_home

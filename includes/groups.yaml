@@ -247,9 +247,21 @@ christmasTrees:
     - light.sunroom_christmas_tree
     - light.mudroom_christmas_tree
 
-# garmin:
-#   name: garmin
-#   entities:
+all_doors:
+  name: All Doors
+  entities:
+    - binary_sensor.elkm1_patio_door
+    - binary_sensor.elkm1_workshop_door
+    - binary_sensor.elkm1_front_door
+    - binary_sensor.elkm1_garage_door
+    - binary_sensor.elkm1_deck_door
+    - binary_sensor.elkm1_grilldeck_door
+
+lower_doors:
+  name: Lower Doors
+  entities:
+    - binary_sensor.elkm1_patio_door
+    - binary_sensor.elkm1_workshop_door
 
 main_doors:
   name: Main Doors
