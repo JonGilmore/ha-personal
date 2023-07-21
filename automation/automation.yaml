@@ -526,22 +526,16 @@
     - choose:
         - conditions: "{{ trigger.id == 'leaving' }}"
           sequence: # leaving home
-            - service: notify.telegram_jon
-              data:
-                message: "leaving, checking the locks, lights, recirc pump"
             - service: homeassistant.turn_off
               entity_id: switch.basement_equipment_room_recirculation_pump
             - service: script.tvs_off
-            - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_interior_off
+            - service: script.interior_lights_off
+            - service: script.fans_off
             - service: script.lock_doors
         - conditions: "{{ trigger.id == 'arriving' }}"
           sequence: # arriving home
             - service: homeassistant.turn_on
               entity_id: switch.basement_equipment_room_recirculation_pump
-            - service: notify.telegram_jon
-              data:
-                message: "arriving, turning on the recirc pump"
 ########################################
 - alias: "Night Mode: turn on sunset lights at dark or sunset"
   id: "Night Mode: turn on sunset lights at dark or sunset"

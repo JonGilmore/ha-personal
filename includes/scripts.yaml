@@ -131,11 +131,20 @@ lock_doors:
               data:
                 entity_id:
                   - lock.garage_lock
-    - default:
+      default:
         - service: notify.telegram_jon
           data_template:
-            title: "Locked shop and mudroom doors"
-            message: "later noob"
+            message: "Locked shop and mudroom doors"
+
+fans_off:
+  alias: fans off
+  sequence:
+    - service: homeassistant.turn_off
+      entity_id:
+        - switch.upstairs_main_bedroom_fan
+        - fan.office_fan
+        - fan.exterior_patio_fan
+        - switch.main_floor_sunroom_fan
 
 # send_videos:
 #   alias: "send videos"
@@ -279,6 +288,16 @@ send_dynamic_notification:
           video: '{% if (importance == "default" and video != null) -%} {{ video }} {%- else-%} {{ null }} {%- endif %}'
           notification_icon: "{{ notifIcon }}"
           importance: "{{ importance }}"
+
+interior_lights_off:
+  alias: "interior lights off"
+  sequence:
+    - service: button.press
+      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_interior_off
+    - service: homeassistant.turn_off
+      entity_id:
+        - light.jons_lamp
+        - light.lauras_lamp
 
 movie_on:
   alias: "movie on"

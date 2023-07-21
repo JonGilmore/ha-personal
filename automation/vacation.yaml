@@ -53,7 +53,7 @@
           * locked house locks (will happen in 60s)
           * closed all blinds
           * set back temps on thermostats
-          * turned off lights & TVs
+          * turned off lights, TVs, and fans
     - choose: # set the thermostats appropriately for the season
         - conditions: "{{ states('climate.main_level') == 'cool' }}"
           sequence:
@@ -75,6 +75,8 @@
                   - climate.main_level
                   - climate.lower_level
                   - climate.upper_level
+    - service: script.interior_lights_off
+    - service: script.fans_off
     - delay: 60
     - service: script.lock_doors
 #########################################
