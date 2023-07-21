@@ -12,6 +12,8 @@ resources:
     type: module
   - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
     type: module
+  - url: /hacsfiles/lovelace-state-switch/state-switch.js
+    type: module
 
 views:
   ##########################################
@@ -21,23 +23,29 @@ views:
     id: home
     icon: mdi:home
     cards:
-      - type: markdown
-        title: Home Summary
-        content: |
-          {% set unlocked = states('sensor.doors_unlocked_number') | int %}
-          {% set open = states('sensor.number_of_doors_open') | int %}
+      - type: conditional
+        conditions:
+          - entity: sensor.doors_unlocked_number
+            state_not: 0
+          - entity: sensor.number_of_doors_open
+            state_not: 0
+        card:
+          type: markdown
+          content: |
+            {% set unlocked = states('sensor.doors_unlocked_number') | int %}
+            {% set open = states('sensor.number_of_doors_open') | int %}
 
-          {% if unlocked == 1 %}
-          {{ states('sensor.doors_unlocked') }} is unlocked.
-          {% elif unlocked > 1 %}
-          {{ states('sensor.doors_unlocked') }} are unlocked.
-          {% endif %}
+            {% if unlocked == 1 %}
+            {{ states('sensor.doors_unlocked') }} is unlocked.
+            {% elif unlocked > 1 %}
+            {{ states('sensor.doors_unlocked') }} are unlocked.
+            {% endif %}
 
-          {% if open == 1 %}
-          {{ states('sensor.doors_open') }} is open.
-          {% elif open > 1 %}
-          {{ states('sensor.doors_open') }} are open.
-          {% endif %}
+            {% if open == 1 %}
+            {{ states('sensor.doors_open') }} is open.
+            {% elif open > 1 %}
+            {{ states('sensor.doors_open') }} are open.
+            {% endif %}
       - type: shopping-list
         title: Shopping List
       - type: entities
@@ -282,7 +290,7 @@ views:
                   service_data:
                     entity_id:
                       - switch.adguard_home_protection_2
-                      - switch.adguard_pi_protection
+                      - switch.adguard_home_protection
           - entity: input_boolean.doorbell
             name: Doorbell Kitchen Chime
           # - entity: sensor.bar_fridge_leak_sensor
@@ -567,6 +575,111 @@ views:
     id: maintenance
     icon: mdi:wrench
     cards:
+      - type: vertical-stack
+        cards:
+          - type: entities
+            title: Garage Door Lock Codes
+            entities:
+              - input_select.code_slot
+          - type: custom:state-switch
+            entity: input_select.code_slot
+            states:
+              "01":
+                cards: null
+                type: entities
+                entities:
+                  - entity: input_text.code_slot_garage_user_01
+                  - entity: input_number.garage_code_01
+                  - entity: script.set_lock_garage_code
+                    action_name: Set
+                    type: button
+                    name: Set Lock Code
+                    tap_action:
+                      action: call-service
+                      service: script.set_lock_garage_code
+                      confirmation:
+                        text: Change the lock code for this slot?
+                  - entity: script.delete_lock_garage_code
+                    action_name: Delete
+                    type: button
+                    name: Delete Lock Code
+                    tap_action:
+                      action: call-service
+                      service: script.delete_lock_garage_code
+                      confirmation:
+                        text: Delete the lock code for this slot?
+              "02":
+                cards: null
+                type: entities
+                entities:
+                  - entity: input_text.code_slot_garage_user_02
+                  - entity: input_number.garage_code_02
+                  - entity: script.set_lock_garage_code
+                    action_name: Set
+                    type: button
+                    name: Set Lock Code
+                    tap_action:
+                      action: call-service
+                      service: script.set_lock_garage_code
+                      confirmation:
+                        text: Change the lock code for this slot?
+                  - entity: script.delete_lock_garage_code
+                    action_name: Delete
+                    type: button
+                    name: Delete Lock Code
+                    tap_action:
+                      action: call-service
+                      service: script.delete_lock_garage_code
+                      confirmation:
+                        text: Delete the lock code for this slot?
+              "03":
+                cards: null
+                type: entities
+                entities:
+                  - entity: input_text.code_slot_garage_user_03
+                  - entity: input_number.garage_code_03
+                  - entity: script.set_lock_garage_code
+                    action_name: Set
+                    type: button
+                    name: Set Lock Code
+                    tap_action:
+                      action: call-service
+                      service: script.set_lock_garage_code
+                      confirmation:
+                        text: Change the lock code for this slot?
+                  - entity: script.delete_lock_garage_code
+                    action_name: Delete
+                    type: button
+                    name: Delete Lock Code
+                    tap_action:
+                      action: call-service
+                      service: script.delete_lock_garage_code
+                      confirmation:
+                        text: Delete the lock code for this slot?
+              "04":
+                cards: null
+                type: entities
+                entities:
+                  - entity: input_text.code_slot_garage_user_04
+                  - entity: input_number.garage_code_04
+                  - entity: script.set_lock_garage_code
+                    action_name: Set
+                    type: button
+                    name: Set Lock Code
+                    tap_action:
+                      action: call-service
+                      service: script.set_lock_garage_code
+                      confirmation:
+                        text: Change the lock code for this slot?
+                  - entity: script.delete_lock_garage_code
+                    action_name: Delete
+                    type: button
+                    name: Delete Lock Code
+                    tap_action:
+                      action: call-service
+                      service: script.delete_lock_garage_code
+                      confirmation:
+                        text: Delete the lock code for this slot?
       - type: entities
         title: Host Stats
         show_header_toggle: false

@@ -1,0 +1,21 @@
+---
+garage_code_01:
+  name: Garage Code 01
+  min: 0
+  max: 9999
+  mode: box
+garage_code_02:
+  name: Garage Code 02
+  min: 0
+  max: 9999
+  mode: box
+garage_code_03:
+  name: Garage Code 03
+  min: 0
+  max: 9999
+  mode: box
+garage_code_04:
+  name: Garage Code 04
+  min: 0
+  max: 9999
+  mode: box

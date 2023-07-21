@@ -60,7 +60,7 @@
       unique_id: adblocking
       state: >-
         {{ states('switch.adguard_home_protection_2') == 'on'
-        and states('switch.adguard_pi_protection') == 'on' }}
+        and states('switch.adguard_home_protection') == 'on' }}
     - name: "Has Unavailable States"
       unique_id: has_unavailable_state
       state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
@@ -298,6 +298,20 @@
             {{ state_attr('schedule.tuesdays', 'next_event') }}
           {%- endif -%}
         {%endif%}
+    - name: Power Export
+      unique_id: power_export
+      state_class: measurement
+      icon: mdi:transmission-tower
+      unit_of_measurement: W
+      device_class: power
+      state: "{{ [0, states('sensor.solar_production') | int(0) - states('sensor.total_consumption') | int(0) ] | max }}"
+    - name: Power Import
+      unique_id: power_import
+      state_class: measurement
+      icon: mdi:transmission-tower
+      unit_of_measurement: W
+      device_class: power
+      state: "{{ [0, states('sensor.total_consumption') | int(0) - states('sensor.solar_production') | int(0) ] | max }}"
     - name: trash
       icon: mdi:garbage
       unique_id: trash

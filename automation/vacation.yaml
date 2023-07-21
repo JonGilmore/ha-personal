@@ -40,29 +40,43 @@
       entity_id: switch.basement_equipment_room_recirculation_pump
     - service: cover.close_cover
       entity_id: group.all_shades
-    - choose: # check the locks, notify & lock if unlocked
-        - conditions: "{{ states('sensor.doors_unlocked_number') | int > 0 }}"
-          sequence:
-            - service: notify.telegram_jon
-              data_template:
-                title: "{{ states('sensor.doors_unlocked_number') }} door(s) UNLOCKED!"
-                message: "Locking {{ states('sensor.doors_unlocked') }}"
-            - service: script.lock_doors
+    - service: script.tvs_off
     - service: notify.telegram_jon
       data:
         title: "Ran vacation mode on!"
         message: |
           Reminder:
-          * set back temps on thermostats
-          * set vacation mode on water heater
-          * depending how long you're gone, maybe turn off the water main?
+          * depending how long you're gone and the time of year, maybe turn off the water main
 
           This automation already performed the following:
           * turned off recirc pump
-          * locked house locks
+          * locked house locks (will happen in 60s)
           * closed all blinds
+          * set back temps on thermostats
           * turned off lights & TVs
-
+    - choose: # set the thermostats appropriately for the season
+        - conditions: "{{ states('climate.main_level') == 'cool' }}"
+          sequence:
+            - service: climate.set_temperature
+              data:
+                temperature: 80
+              target:
+                entity_id:
+                  - climate.main_level
+                  - climate.lower_level
+                  - climate.upper_level
+        - conditions: "{{ states('climate.main_level') == 'heat' }}"
+          sequence:
+            - service: climate.set_temperature
+              data:
+                temperature: 60
+              target:
+                entity_id:
+                  - climate.main_level
+                  - climate.lower_level
+                  - climate.upper_level
+    - delay: 60
+    - service: script.lock_doors
 #########################################
 # - alias: "Vacation Mode: return"
 #   id: "Vacation Mode: return"
@@ -72,7 +86,7 @@
 #       to: "off"
 #   condition:
 #     - condition: template
-#       value_template: "{{ not is_state('climate.main_thermostat', 'heat') }}"
+#       value_template: "{{ not is_state('climate.main_level', 'heat') }}"
 #   action:
 #     - service: homeassistant.turn_on
 #       entity_id: switch.water_main
@@ -80,7 +94,7 @@
 #       data:
 #         entity_id:
 #           - climate.upstairs_thermostat
-#           - climate.main_thermostat
+#           - climate.main_level
 #           - climate.basement_thermostat
 #         temperature: 77
 #         hvac_mode: cool

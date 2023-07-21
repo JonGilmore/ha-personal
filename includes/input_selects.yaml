@@ -14,3 +14,10 @@ camera_view:
     - interior
   initial: exterior
   icon: mdi:camera
+code_slot:
+  name: "Code Slot"
+  options:
+    - "01"
+    - "02"
+    - "03"
+    - "04"

@@ -341,11 +341,12 @@
           sequence:
             - service: homeassistant.turn_on
               entity_id:
-                - switch.adguard_pi_protection
+                - switch.adguard_home_protection
                 - switch.adguard_home_protection_2
-        - conditions: # 5am, open the library shade
+        - conditions: # 5am & vacation off, open some shades
             - condition: trigger
               id: 5am
+            - "{{ states('binary_sensor.vacation') == 'off' }}"
           sequence:
             - service: cover.open_cover
               entity_id:
@@ -476,6 +477,7 @@
       entity_id: switch.basement_equipment_room_recirculation_pump
     - service: input_boolean.turn_on
       entity_id:
+        - input_boolean.frigate_doorbell_notifier
         - input_boolean.frigate_deck_notifier
         - input_boolean.frigate_driveway_notifier
         - input_boolean.frigate_frontyard_notifier
@@ -532,24 +534,7 @@
             - service: script.tvs_off
             - service: button.press
               entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_interior_off
-            - choose: # if the workshop is unlocked, notify & lock
-                - conditions: "{{ is_state('lock.workshop_lock', 'unlocked') }}"
-                  sequence:
-                    - service: notify.telegram_jon
-                      data:
-                        title: "Workshop is UNLOCKED!"
-                        message: "Locking the workshop"
-                    - service: lock.lock
-                      entity_id: lock.workshop_lock
-            - choose: # if the grilldeck is unlocked, notify & lock
-                - conditions: "{{ is_state('lock.mudroom_lock', 'unlocked') }}"
-                  sequence:
-                    - service: notify.telegram_jon
-                      data:
-                        title: "Grilldeck is UNLOCKED!"
-                        message: "Locking the grilldeck"
-                    - service: lock.lock
-                      entity_id: lock.mudroom_lock
+            - service: script.lock_doors
         - conditions: "{{ trigger.id == 'arriving' }}"
           sequence: # arriving home
             - service: homeassistant.turn_on
@@ -591,33 +576,31 @@
 #   action:
 #     - service: scene.turn_on
 #       entity_id: scene.equipment_room_enclosure_device_001_ph_sunset2
-# ########################################
-# - alias: "Fans: turn on master fan at night (if AC is on)"
-#   id: "Fans: turn on master fan at night (if AC is on)"
-#   trigger:
-#     - platform: time
-#       at: "20:00:00"
-#   condition:
-#     - condition: state
-#       entity_id: climate.main_thermostat
-#       state: cool
-#     - condition: state
-#       entity_id: binary_sensor.vacation
-#       state: "off"
-#   action:
-#     - service: light.turn_on
-#       data:
-#         entity_id: light.master_bedroom_master_fan
-#         brightness_pct: 50
-# ########################################
-# - alias: "Fans: turn off master fan in the morning"
-#   id: "Fans: turn off master fan in the morning"
-#   trigger:
-#     - platform: time
-#       at: "09:00:00"
-#   action:
-#     - service: light.turn_off
-#       entity_id: light.master_bedroom_master_fan
+########################################
+- alias: "Fans: turn on master fan at night (if AC is on)"
+  id: "Fans: turn on master fan at night (if AC is on)"
+  trigger:
+    - platform: time
+      at: "20:00:00"
+  condition:
+    - condition: state
+      entity_id: climate.main_level
+      state: cool
+    - condition: state
+      entity_id: binary_sensor.vacation
+      state: "off"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: switch.upstairs_main_bedroom_fan
+########################################
+- alias: "Fans: turn off master fan in the morning"
+  id: "Fans: turn off master fan in the morning"
+  trigger:
+    - platform: time
+      at: "08:00:00"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.upstairs_main_bedroom_fan
 #########################################
 - alias: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
   id: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
@@ -635,28 +618,29 @@
       data:
         title: "Water Leak!"
         message: "HomeAssistant detected a water leak"
-# #########################################
-# - alias: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
-#   id: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
-#   trigger:
-#     - platform: state
-#       entity_id: sensor.alarm_state
-#       to: "fire_alarm"
-#   action:
-#     - service: input_boolean.turn_on
-#       entity_id: input_boolean.alarm_notifier
-#     - service: scene.turn_on
-#       entity_id: scene.equipment_room_enclosure_device_001_ph_fire
-#     - service: lock.unlock
-#       data:
-#         entity_id:
-#           - lock.garage_lock
-#           - lock.workshop_lock
-#     - service: script.alarm
-#     - service: notify.mobile_app_lauras_iphone
-#       data:
-#         title: "Fire alarm active"
-#         message: "check the alarm, fire detected"
+#########################################
+- alias: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
+  id: "Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac off & repeat notifications"
+  trigger:
+    - platform: state
+      entity_id: sensor.alarm_state
+      to: "fire_alarm"
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.alarm_notifier
+    # - service: scene.turn_on
+    #   entity_id: scene.equipment_room_enclosure_device_001_ph_fire
+    - service: lock.unlock
+      data:
+        entity_id:
+          - lock.garage_lock
+          - lock.workshop_lock
+          - lock.mudroom_lock
+    - service: script.alarm
+    # - service: notify.mobile_app_lauras_iphone
+    #   data:
+    #     title: "Fire alarm active"
+    #     message: "check the alarm, fire detected"
 #########################################
 - alias: "Alarm: burglar active & lights on & send videos & repeat notifications"
   id: "Alarm: burglar active & lights on & send videos & repeat notifications"
@@ -727,6 +711,7 @@
     - platform: state
       entity_id:
         - sensor.myip
+        - input_boolean.frigate_doorbell_notifier
         - input_boolean.frigate_deck_notifier
         - input_boolean.frigate_driveway_notifier
         - input_boolean.frigate_frontyard_notifier
@@ -1462,5 +1447,5 @@
     - delay: 45
     - service: homeassistant.turn_on
       entity_id:
-        - switch.adguard_pi_protection
+        - switch.adguard_home_protection
         - switch.adguard_home_protection_2

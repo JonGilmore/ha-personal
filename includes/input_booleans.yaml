@@ -37,6 +37,10 @@ frigate_workshop_notifier:
   name: Frigate Workshop Notifier
   initial: true
   icon: mdi:cctv
+frigate_doorbell_notifier:
+  name: Frigate Doorbell Notifier
+  initial: true
+  icon: mdi:cctv
 main_bed_override:
   name: Master Lights Override
 driveway_sentry:

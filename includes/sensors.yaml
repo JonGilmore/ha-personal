@@ -1,4 +1,25 @@
 ---
+- platform: integration
+  name: Grid Power Consumption
+  source: sensor.total_consumption
+  unit_prefix: k
+  unit_time: h
+  method: left
+
+- platform: integration
+  name: Grid Power Export
+  source: sensor.power_export
+  unit_prefix: k
+  unit_time: h
+  method: left
+
+- platform: integration
+  name: Solar Power Production
+  source: sensor.solar_production
+  unit_prefix: k
+  unit_time: h
+  method: left
+
 - platform: min_max
   name: House Humidity
   round_digits: 0
@@ -52,43 +73,3 @@
     - "time_date"
     - "time_utc"
     - "beat"
-
-# - platform: rest
-#   name: Lauras Todo
-#   method: GET
-#   resource: "https://api.todoist.com/sync/v9/projects/get_data"
-#   params:
-#     project_id: 2310964916
-#   headers:
-#     Authorization: !secret todoist
-#   value_template: "{{ value_json['project']['id'] }}"
-#   json_attributes:
-#     - project
-#     - items
-#   scan_interval: 60
-# - platform: rest
-#   name: Jons Todo
-#   method: GET
-#   resource: "https://api.todoist.com/sync/v9/projects/get_data"
-#   params:
-#     project_id: 2310964920
-#   headers:
-#     Authorization: !secret todoist
-#   value_template: "{{ value_json['project']['id'] }}"
-#   json_attributes:
-#     - project
-#     - items
-#   scan_interval: 60
-# - platform: rest
-#   name: Evelyns Todo
-#   method: GET
-#   resource: "https://api.todoist.com/sync/v9/projects/get_data"
-#   params:
-#     project_id: 2310964987
-#   headers:
-#     Authorization: !secret todoist
-#   value_template: "{{ value_json['project']['id'] }}"
-#   json_attributes:
-#     - project
-#     - items
-#   scan_interval: 60

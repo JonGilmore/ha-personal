@@ -9,6 +9,20 @@
     - platform: event
       event_type: telegram_callback
       event_data:
+        command: "/mutefrigatedoorbell60"
+      variables:
+        location: doorbell
+        time: "60"
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        command: "/mutefrigatedoorbellday"
+      variables:
+        location: doorbell
+        time: day
+    - platform: event
+      event_type: telegram_callback
+      event_data:
         command: "/mutefrigatedriveway60"
       variables:
         location: driveway
@@ -149,7 +163,7 @@
   id: "Frigate: track objects approaching the house"
   description: "send an initial picture on detection, then once it enters the near zone, send a 10s video clip from the go2rtc camera api"
   mode: parallel
-  max: 10
+  max: 20
   trigger:
     - platform: mqtt
       topic: frigate/events
@@ -164,6 +178,19 @@
         near_zone: deck_near
         far_zone: deck_far
         notifier: input_boolean.frigate_deck_notifier
+    - platform: mqtt
+      topic: frigate/events
+      payload: doorbell
+      value_template: '{{ value_json["after"]["camera"] }}'
+      variables:
+        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
+        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
+        label: "{{ trigger.payload_json['after']['label'] }}"
+        camera: "{{ trigger.payload_json['after']['camera'] }}"
+        id: "{{ trigger.payload_json['after']['id'] }}"
+        near_zone: doorbell_near
+        far_zone: doorbell_far
+        notifier: input_boolean.frigate_doorbell_notifier
     - platform: mqtt
       topic: frigate/events
       payload: driveway
@@ -222,114 +249,10 @@
     - or: # ensure only to notify of objects that are new or just entered a zone. This avoids getting lots of updated notifications for the same object
         - "{{ trigger.payload_json['type'] == 'new' }}"
         - "{{ before_zones | length == 0 }}"
-    - or: # always send notifications if Jon is not home OR if the camera is the driveway
+    - or: # always send notifications if Jon is not home OR if the camera is the driveway/doorbell
         - "{{ camera == 'driveway' }}"
+        - "{{ camera == 'doorbell' }}"
         - "{{ states('person.jon') != 'home' }}"
-  action:
-    # Send the initial notification with snapshot and info
-    - service: telegram_bot.send_photo
-      data:
-        url: http://192.168.30.249:5005/api/events/{{id}}/snapshot.jpg
-        caption: "{{label}} detected - {{camera}}"
-    # download a 10s clip of the event and send it
-    - service: shell_command.download_file
-      data_template:
-        url: "http://192.168.30.249:5005/live/webrtc/api/stream.mp4?src={{camera}}&duration=10" # go2rtc live stream
-        download: "/tmp/{{camera}}-{{label}}.mp4"
-    # wait for the object to get into the closer zone, then send a video clip notification
-    - wait_for_trigger:
-        - platform: mqtt
-          topic: frigate/events
-          value_template: "{{ near_zone in wait.trigger.payload_json['after']['current_zones'] }}"
-      timeout: "00:00:50"
-      continue_on_timeout: false
-    - service: telegram_bot.send_video
-      data_template:
-        file: "/tmp/{{camera}}-{{label}}.mp4"
-        inline_keyboard:
-          - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
-        caption: "{{label}} detected - {{camera}}"
-#########################################
-- alias: "Frigate: track objects approaching the house - TEST"
-  id: "Frigate: track objects approaching the house - TEST"
-  description: "send an initial picture on detection, then once it enters the near zone, send a 10s video clip from the go2rtc camera api"
-  mode: parallel
-  max: 10
-  trigger:
-    - platform: mqtt
-      topic: frigate/events
-      payload: deck
-      value_template: '{{ value_json["after"]["camera"] }}'
-      variables:
-        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
-        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
-        label: "{{ trigger.payload_json['after']['label'] }}"
-        camera: "{{ trigger.payload_json['after']['camera'] }}"
-        id: "{{ trigger.payload_json['after']['id'] }}"
-        near_zone: deck_near
-        far_zone: deck_far
-        notifier: input_boolean.frigate_deck_notifier
-    - platform: mqtt
-      topic: frigate/events
-      payload: driveway
-      value_template: '{{ value_json["after"]["camera"] }}'
-      variables:
-        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
-        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
-        label: "{{ trigger.payload_json['after']['label'] }}"
-        camera: "{{ trigger.payload_json['after']['camera'] }}"
-        id: "{{ trigger.payload_json['after']['id'] }}"
-        near_zone: driveway_near
-        far_zone: driveway_far
-        notifier: input_boolean.frigate_driveway_notifier
-    - platform: mqtt
-      topic: frigate/events
-      payload: grilldeck
-      value_template: '{{ value_json["after"]["camera"] }}'
-      variables:
-        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
-        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
-        label: "{{ trigger.payload_json['after']['label'] }}"
-        camera: "{{ trigger.payload_json['after']['camera'] }}"
-        id: "{{ trigger.payload_json['after']['id'] }}"
-        near_zone: grilldeck_near
-        far_zone: grilldeck_far
-        notifier: input_boolean.frigate_grilldeck_notifier
-    - platform: mqtt
-      topic: frigate/events
-      payload: patio
-      value_template: '{{ value_json["after"]["camera"] }}'
-      variables:
-        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
-        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
-        label: "{{ trigger.payload_json['after']['label'] }}"
-        camera: "{{ trigger.payload_json['after']['camera'] }}"
-        id: "{{ trigger.payload_json['after']['id'] }}"
-        near_zone: patio_near
-        far_zone: patio_far
-        notifier: input_boolean.frigate_patio_notifier
-    - platform: mqtt
-      topic: frigate/events
-      payload: workshop
-      value_template: '{{ value_json["after"]["camera"] }}'
-      variables:
-        after_zones: "{{ trigger.payload_json['after']['entered_zones'] }}"
-        before_zones: "{{ trigger.payload_json['before']['entered_zones'] }}"
-        label: "{{ trigger.payload_json['after']['label'] }}"
-        camera: "{{ trigger.payload_json['after']['camera'] }}"
-        id: "{{ trigger.payload_json['after']['id'] }}"
-        near_zone: workshop_near
-        far_zone: workshop_far
-        notifier: input_boolean.frigate_workshop_notifier
-  condition:
-    - "{{ is_state(notifier, 'on') }}" # make sure notifications havent been paused from an actionable notification
-    - "{{ far_zone in after_zones }}"
-    - or: # ensure only to notify of objects that are new or just entered a zone. This avoids getting lots of updated notifications for the same object
-        - "{{ trigger.payload_json['type'] == 'new' }}"
-        - "{{ before_zones | length == 0 }}"
-    # - or: # always send notifications if Jon is not home OR if the camera is the driveway
-    #     - "{{ camera == 'driveway' }}"
-    #     - "{{ states('person.jon') != 'home' }}"
   action:
     # Send the initial notification with snapshot and info
     - service: telegram_bot.send_photo
