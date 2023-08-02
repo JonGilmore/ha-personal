@@ -1443,3 +1443,31 @@
       entity_id:
         - switch.adguard_home_protection
         - switch.adguard_home_protection_2
+#########################################
+- alias: "Power: summer mode"
+  description: "Power: summer mode"
+  trigger:
+    - platform: state
+      entity_id: sensor.tou_period
+      to: summer
+  action:
+    - service: select.select_option
+      data:
+        option: summer
+      target:
+        entity_id:
+          - select.daily_energy
+#########################################
+- alias: "Power: winter mode"
+  description: "Power: winter mode"
+  trigger:
+    - platform: state
+      entity_id: sensor.tou_period
+      to: winter
+  action:
+    - service: select.select_option
+      data:
+        option: winter
+      target:
+        entity_id:
+          - select.daily_energy

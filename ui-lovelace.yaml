@@ -48,17 +48,16 @@ views:
             {% endif %}
       - type: shopping-list
         title: Shopping List
-      - type: entities
-        show_name: false
-        show_header_toggle: false
-        entities:
-          - entity: alarm_control_panel.elkm1_area_1
-            type: custom:multiple-entity-row
-            name: Alarm
-            show_state: false
-            secondary_info: last-changed
-            entities:
-              - entity: alarm_control_panel.elkm1_area_1
+      - type: tile
+        entity: alarm_control_panel.elkm1_area_1
+        name: Home Alarm
+        features:
+          - type: alarm-modes
+            modes:
+              - armed_away
+              - armed_night
+              - armed_vacation
+              - disarmed
       - type: weather-forecast
         entity: weather.tomorrow_io_home_daily
       - type: vertical-stack
@@ -153,9 +152,14 @@ views:
                   service: button.press
                   target:
                     entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
-          - type: tile
-            icon: mdi:roller-shade
-            entity: group.all_shades
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                icon: mdi:roller-shade
+                entity: group.all_shades
+              - type: tile
+                icon: mdi:fan
+                entity: group.all_fans
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
@@ -575,6 +579,50 @@ views:
     id: maintenance
     icon: mdi:wrench
     cards:
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: sensor.processor_temperature
+            type: custom:multiple-entity-row
+            name: Host Stats
+            state_header: Temp
+            entities:
+              - entity: sensor.disk_use_percent
+                name: Disk
+              - entity: sensor.memory_use_percent
+                name: Memory
+              - entity: sensor.swap_use_percent
+                name: Swap
+          - entity: sensor.cyberpower_ups
+            type: custom:multiple-entity-row
+            name: UPS Stats
+            state_header: Status
+            secondary_info: last-changed
+            entities:
+              - entity: sensor.cyberpower_battery_charge
+                name: Charge
+              - entity: sensor.cyberpower_battery_runtime
+                name: Runtime
+              - entity: sensor.cyberpower_load
+                name: Load
+          - entity: binary_sensor.light_inside
+            type: custom:multiple-entity-row
+            name: Light
+            state_header: Light Inside?
+            secondary_info: last-changed
+            entities:
+              - entity: sensor.outdoor_pir_illuminance
+                name: Outside Lux
+              - entity: sensor.lounge_pir_illuminance
+                name: Light Basement?
+      - type: history-graph
+        title: Power
+        hours_to_show: 48
+        entities:
+          - entity: sensor.solar_production
+            name: Solar Production
+          - entity: sensor.total_consumption
+            name: Total Consumption
       - type: vertical-stack
         cards:
           - type: entities
@@ -681,26 +729,12 @@ views:
                       confirmation:
                         text: Delete the lock code for this slot?
       - type: entities
-        title: Host Stats
-        show_header_toggle: false
-        entities:
-          - sensor.disk_use_percent
-          - sensor.memory_use_percent
-          - sensor.cpu_temperature
-      - type: entities
         title: Toggles
         show_header_toggle: false
         entities:
           - input_boolean.block_interior_motion_lights
           - input_boolean.exterior_lights_block
           - input_boolean.guests
-      - type: entities
-        title: Informational
-        show_header_toggle: false
-        entities:
-          - binary_sensor.light_inside
-          - sensor.outdoor_pir_illuminance
-          - sensor.lounge_pir_illuminance
       - type: markdown
         title: Automations Triggered
         content: |

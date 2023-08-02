@@ -223,7 +223,10 @@ upstairs_lights:
 all_fans:
   name: All Fans
   entities:
+    - switch.upstairs_main_bedroom_fan
+    - fan.office_fan
     - fan.exterior_patio_fan
+    - switch.main_floor_sunroom_fan
 
 # sunset:
 #   name: Sunset Lights

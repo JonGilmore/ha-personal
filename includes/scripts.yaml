@@ -140,11 +140,8 @@ fans_off:
   alias: fans off
   sequence:
     - service: homeassistant.turn_off
-      entity_id:
-        - switch.upstairs_main_bedroom_fan
-        - fan.office_fan
-        - fan.exterior_patio_fan
-        - switch.main_floor_sunroom_fan
+      target:
+        entity_id: group.all_fans
 
 # send_videos:
 #   alias: "send videos"
@@ -317,7 +314,9 @@ set_lock_garage_code:
   sequence:
     - service: zwave_js.set_lock_usercode
       target:
-        entity_id: lock.garage_lock
+        entity_id:
+          - lock.garage_lock
+          - lock.workshop_lock
       data:
         code_slot: '{{ states("input_select.code_slot") | int }}'
         usercode: >
@@ -336,7 +335,9 @@ delete_lock_garage_code:
   sequence:
     - service: zwave_js.clear_lock_usercode
       target:
-        entity_id: lock.garage_lock
+        entity_id:
+          - lock.garage_lock
+          - lock.workshop_lock
       data:
         code_slot: '{{ states("input_select.code_slot") | int }}'
     - service: input_number.set_value

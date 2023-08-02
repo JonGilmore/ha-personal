@@ -298,20 +298,69 @@
             {{ state_attr('schedule.tuesdays', 'next_event') }}
           {%- endif -%}
         {%endif%}
+    - name: Power Net
+      unique_id: power_net
+      state_class: measurement
+      icon: mdi:home-lightning-bolt
+      unit_of_measurement: W
+      device_class: power
+      state: "{{ states('sensor.power_consumption') | int(0) - states('sensor.power_production') | int(0) }}"
     - name: Power Export
       unique_id: power_export
       state_class: measurement
       icon: mdi:transmission-tower
       unit_of_measurement: W
       device_class: power
-      state: "{{ [0, states('sensor.solar_production') | int(0) - states('sensor.total_consumption') | int(0) ] | max }}"
+      state: "{{ [0, states('sensor.power_production') | int(0) - states('sensor.power_consumption') | int(0) ] | max }}"
     - name: Power Import
       unique_id: power_import
       state_class: measurement
       icon: mdi:transmission-tower
       unit_of_measurement: W
       device_class: power
-      state: "{{ [0, states('sensor.total_consumption') | int(0) - states('sensor.solar_production') | int(0) ] | max }}"
+      state: "{{ [0, states('sensor.power_consumption') | int(0) - states('sensor.power_production') | int(0) ] | max }}"
+    - name: Energy Net
+      unique_id: energy_net
+      state_class: total
+      icon: mdi:transmission-tower
+      unit_of_measurement: kWh
+      device_class: energy
+      state: "{{ (states('sensor.energy_import') | float(0) - states('sensor.energy_export') | float(0)) | round(2) }}"
+    - name: Energy Consumption
+      unique_id: energy_consumption
+      state_class: total
+      icon: mdi:home-lightning-bolt
+      unit_of_measurement: kWh
+      device_class: energy
+      state: "{{ (states('sensor.energy_production') | float(0) + states('sensor.energy_net') | float(0)) | round(2) }}"
+    - name: TOU Period
+      unique_id: tou_period
+      icon: mdi:clock-time-three-outline
+      state: >
+        {% set current_month = now().month %}
+        {% if current_month in [6, 7, 8, 9] %}
+          summer
+        {% else %}
+          winter
+        {% endif %}
+    - name: Tariff Price
+      unique_id: tariff_price
+      unit_of_measurement: ¢/kWh
+      state: >
+        {% if is_state('sensor.tou_period', 'summer') %}
+          {{ states('input_number.summer') | float(0) }}
+        {% else %}
+          {{ states('input_number.winter') | float(0) }}
+        {% endif %}
+    - name: Tariff Price Export
+      unique_id: tariff_price_export
+      unit_of_measurement: ¢/kWh
+      state: >
+        {% if is_state('sensor.tou_period', 'summer') %}
+          {{ states('input_number.summer') | float(0) }}
+        {% else %}
+          {{ states('input_number.winter') | float(0) }}
+        {% endif %}
     - name: trash
       icon: mdi:garbage
       unique_id: trash

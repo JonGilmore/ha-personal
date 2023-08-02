@@ -45,12 +45,12 @@ lovelace:
       icon: mdi:tablet-dashboard
       show_in_sidebar: false
       filename: wallpanel.yaml
-    ui-lcars:
-      mode: yaml
-      title: ncc-main
-      icon: mdi:tablet-dashboard
-      show_in_sidebar: true
-      filename: ui-lcars.yaml
+    # ui-lcars:
+    #   mode: yaml
+    #   title: ncc-main
+    #   icon: mdi:tablet-dashboard
+    #   show_in_sidebar: true
+    #   filename: ui-lcars.yaml
     test-dashboard:
       mode: yaml
       title: test-dashboard
@@ -163,20 +163,58 @@ image_processing:
       - entity_id: camera.driveway
 rest:
   - headers:
-      Authorization: !secret envoy
+      Authorization: !secret enphase_api
     verify_ssl: False
-    scan_interval: 15
+    scan_interval: 6
     resource: https://192.168.31.108/ivp/meters/readings
     sensor:
-      - name: Solar Production
+      - name: Power Production
+        unique_id: power_production
         value_template: "{{ value_json[0].activePower | int(0) }}"
         device_class: power
         unit_of_measurement: W
         state_class: measurement
         icon: mdi:solar-panel
-      - name: Total Consumption
+      - name: Power Consumption
+        unique_id: power_consumption
         value_template: "{{ value_json[1].activePower | int(0) }}"
-        state_class: measurement
         device_class: power
         unit_of_measurement: W
+        state_class: measurement
+        icon: mdi:solar-panel
+      - name: Energy Production
+        unique_id: energy_production
+        value_template: "{{ (value_json[0].actEnergyDlvd / 1000 | float(0)) | round(2) }}"
+        device_class: energy
+        unit_of_measurement: kWh
+        state_class: total_increasing
+        icon: mdi:solar-panel
+      - name: Energy Import
+        unique_id: energy_import
+        value_template: "{{ (value_json[1].actEnergyDlvd / 1000 | float(0)) | round(2) }}"
+        device_class: energy
+        unit_of_measurement: kWh
+        state_class: total_increasing
         icon: mdi:transmission-tower
+      - name: Energy Export
+        unique_id: energy_export
+        value_template: "{{ (value_json[1].actEnergyRcvd / 1000 | float(0)) | round(2) }}"
+        device_class: energy
+        unit_of_measurement: kWh
+        state_class: total_increasing
+        icon: mdi:transmission-tower
+
+utility_meter:
+  daily_energy:
+    source: sensor.energy_import
+    name: Daily Import
+    cycle: daily
+    tariffs:
+      - summer
+      - winter
+  daily_energy_export:
+    source: sensor.energy_export
+    name: Daily Export
+    cycle: daily
+    tariffs:
+      - buyback

@@ -1,21 +1,14 @@
 ---
 - platform: integration
-  name: Grid Power Consumption
-  source: sensor.total_consumption
-  unit_prefix: k
-  unit_time: h
-  method: left
-
-- platform: integration
-  name: Grid Power Export
+  name: Riemann Export
   source: sensor.power_export
   unit_prefix: k
   unit_time: h
   method: left
 
 - platform: integration
-  name: Solar Power Production
-  source: sensor.solar_production
+  name: Riemann Import
+  source: sensor.power_import
   unit_prefix: k
   unit_time: h
   method: left
@@ -32,33 +25,28 @@
 
 - platform: systemmonitor
   resources:
-    - type: disk_use
-    - type: disk_free
+    - type: disk_use_percent
     - type: memory_use_percent
-    - type: memory_use
-    - type: memory_free
     - type: swap_use_percent
-    - type: swap_use
-    - type: swap_free
     - type: load_1m
     - type: load_5m
     - type: load_15m
     - type: network_in
-      arg: eth0
+      arg: enp42s0
     - type: network_out
-      arg: eth0
+      arg: enp42s0
     - type: throughput_network_in
-      arg: eth0
+      arg: enp42s0
     - type: throughput_network_out
-      arg: eth0
+      arg: enp42s0
     - type: packets_in
-      arg: eth0
+      arg: enp42s0
     - type: packets_out
-      arg: eth0
+      arg: enp42s0
     - type: ipv4_address
-      arg: eth0
+      arg: enp42s0
     - type: ipv6_address
-      arg: eth0
+      arg: enp42s0
     - type: processor_use
     - type: processor_temperature
     - type: last_boot

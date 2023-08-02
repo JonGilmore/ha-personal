@@ -19,3 +19,15 @@ garage_code_04:
   min: 0
   max: 9999
   mode: box
+summer:
+  name: summer
+  initial: 0.125
+  min: 0.125
+  max: 0.126
+  unit_of_measurement: ¢/kWh
+winter:
+  name: winter
+  initial: 0.117
+  min: 0.117
+  max: 0.118
+  unit_of_measurement: ¢/kWh
