@@ -204,17 +204,14 @@ rest:
         state_class: total_increasing
         icon: mdi:transmission-tower
 
-utility_meter:
-  daily_energy:
-    source: sensor.energy_import
-    name: Daily Import
-    cycle: daily
-    tariffs:
-      - summer
-      - winter
-  daily_energy_export:
-    source: sensor.energy_export
-    name: Daily Export
-    cycle: daily
-    tariffs:
-      - buyback
+weather:
+  - platform: template
+    name: Local Weather
+    condition_template: "{{ states('sensor.hub_hb_00069559_weather') }}"
+    temperature_template: "{{ states('sensor.weatherflow_tempest_temperature') | float}}"
+    humidity_template: "{{ states('sensor.weatherflow_tempest_humidity')| int }}"
+    pressure_template: "{{ states('sensor.weatherflow_tempest_sea_level_pressure')| float }}"
+    wind_speed_template: "{{ states('sensor.weatherflow_tempest_wind_speed_avg')| float }}"
+    wind_bearing_template: "{{ states('sensor.weatherflow_tempest_wind_bearing_avg')| int }}"
+    visibility_template: "{{ states('sensor.weatherflow_tempest_visibility')| float }}"
+    forecast_template: "{{ state_attr('sensor.hub_hb_00069559_weather', 'daily_forecast') }}"
