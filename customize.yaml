@@ -1,3 +1,139 @@
 ---
 scene.equipment_room_enclosure_device_001_ph_all_off:
   friendly_name: all off
+fan.exterior_patio_fan:
+  icon: mdi:ceiling-fan
+fan.main_floor_powder_room_fan:
+  icon: mdi:fan
+fan.upstairs_main_bathroom_fan:
+  icon: mdi:fan
+light.basement_bar_cabinets:
+  icon: mdi:glass-mug-variant
+light.basement_gym_cans:
+  icon: mdi:dumbbell
+light.basement_lounge_cans:
+  icon: mdi:glass-mug-variant
+light.basement_lounge_hall:
+  icon: mdi:glass-mug-variant
+light.basement_media_room_cabinets:
+  icon: mdi:multimedia
+light.basement_media_room_cans:
+  icon: mdi:multimedia
+light.basement_office_art:
+  icon: mdi:artboard
+light.basement_office_cans:
+  icon: mdi:light-recessed
+light.basement_office_hall:
+  icon: mdi:light-recessed
+light.basement_stair_lights:
+  icon: mdi:light-recessed
+light.basement_workshop_lights:
+  icon: mdi:circular-saw
+light.desk_lights:
+  icon: mdi:led-strip
+light.exterior_deck_lights:
+  icon: mdi:dome-light
+light.exterior_deck_posts:
+  icon: mdi:circular-saw
+light.exterior_front_lights:
+  icon: mdi:dome-light
+light.exterior_grilldeck_light:
+  icon: mdi:grill
+light.exterior_landscape_lights:
+  icon: mdi:pine-tree
+light.exterior_patio_cans:
+  icon: mdi:light-recessed
+light.exterior_workshop_light:
+  icon: mdi:dome-light
+light.jons_lamp:
+  icon: mdi:lamp
+light.lauras_lamp:
+  icon: mdi:lamp
+light.main_floor_back_kitchen_cabinets:
+  icon: mdi:lamp
+light.main_floor_back_kitchen_lights:
+  icon: mdi:dome-light
+light.main_floor_foyer_lights:
+  icon: mdi:dome-light
+light.main_floor_garage_hex_lights:
+  icon: mdi:hexagon-multiple-outline
+light.main_floor_garage_lights:
+  icon: mdi:lightbulb-fluorescent-tube-outline
+light.main_floor_great_room_cabinets:
+  icon: mdi:hockey-puck
+light.main_floor_great_room_cans:
+  icon: mdi:light-recessed
+light.main_floor_great_room_lamp:
+  icon: mdi:lamp
+light.main_floor_kitchen_cabinets:
+  icon: mdi:hockey-puck
+light.main_floor_kitchen_cans:
+  icon: mdi:light-recessed
+light.main_floor_kitchen_dining_art:
+  icon: mdi:artboard
+light.main_floor_kitchen_dining_cans:
+  icon: mdi:light-recessed
+light.main_floor_kitchen_dining_chandelier:
+  icon: mdi:chandelier
+light.main_floor_kitchen_pendants:
+  icon: mdi:ceiling-light-multiple
+light.main_floor_kitchen_toekick:
+  icon: mdi:led-strip
+light.main_floor_library_cabinets:
+  icon: mdi:hockey-puck
+light.main_floor_library_lamp:
+  icon: mdi:lamp
+light.main_floor_library_light:
+  icon: mdi:dome-light
+light.main_floor_mudroom_lamp:
+  icon: mdi:lamp
+light.main_floor_mudroom_lights:
+  icon: mdi:dome-light
+light.main_floor_powder_room_light:
+  icon: mdi:chandelier
+light.main_floor_sunroom_cans:
+  icon: mdi:light-recessed
+light.main_floor_sunroom_lamp1:
+  icon: mdi:lamp
+light.main_floor_sunroom_lamp2:
+  icon: mdi:lamp
+light.upstairs_bedroom_2_cans:
+  icon: mdi:light-recessed
+light.upstairs_bedroom_3_cans:
+  icon: mdi:light-recessed
+light.upstairs_bonus_cans:
+  icon: mdi:light-recessed
+light.upstairs_evelyns_cans:
+  icon: mdi:light-recessed
+light.upstairs_evelyns_lamp:
+  icon: mdi:lamp
+light.upstairs_hall_lights:
+  icon: mdi:light-recessed
+light.upstairs_jack_and_jill_light:
+  icon: mdi:wall-sconce
+light.upstairs_laundry_cabinets:
+  icon: mdi:led-strip
+light.upstairs_main_bathroom_cans:
+  icon: mdi:light-recessed
+light.upstairs_main_bathroom_chandelier:
+  icon: mdi:chandelier
+light.upstairs_main_bathroom_sconces:
+  icon: mdi:wall-sconce
+light.upstairs_main_bathroom_toekick:
+  icon: mdi:led-strip
+light.upstairs_main_bathroom_tub:
+  icon: mdi:light-recessed
+light.upstairs_main_bedroom_cans:
+  icon: mdi:light-recessed
+light.upstairs_main_bedroom_hall:
+  icon: mdi:light-recessed
+light.upstairs_stair_chandelier:
+  icon: mdi:chandelier
+light.upstairs_stair_sconces:
+  icon: mdi:wall-sconce
+switch.exterior_back_outlet:
+  icon: mdi:toggle-switch-variant-off
+switch.exterior_roof_outlets:
+  icon: mdi:toggle-switch-variant-off
+switch.basement_equipment_room_recirculation_pump:
+  icon: mdi:pump

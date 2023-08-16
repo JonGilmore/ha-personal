@@ -102,7 +102,7 @@
               state: "below_horizon"
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_on
+              entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_on
         - conditions: # if its after 11pm, turn em all off, else turn exterior_except_sunset lights off
             - condition: trigger
               id: pir-off
@@ -114,10 +114,10 @@
                       before: "10:00:00"
                   sequence:
                     - service: button.press
-                      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
+                      entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_off
               default:
                 - service: button.press
-                  entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_ext_except_sun_off
+                  entity_id: button.basement_equipment_room_homeowner_kp01_position_5_keypad_ext_except_sun_off
 #########################################
 - alias: "Automatic Lighting: deck lights on when deck door opens"
   id: "Automatic Lighting: deck lights on when deck door opens"
@@ -193,7 +193,7 @@
       timeout: 30
       continue_on_timeout: false
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_grilldeck_on
+      entity_id: button.basement_equipment_room_homeowner_kp01_position_5_keypad_grilldeck_on
 #########################################
 - alias: "Wake Mode: done sleeping in the morning"
   id: "Wake Mode: done sleeping in the morning"
@@ -275,11 +275,11 @@
       data_template:
         entity_id: >
           {% if trigger.entity_id == 'binary_sensor.basement_motions' %}
-            button.basement_equipment_room_phantom_kp_position_1_keypad_basement_off
+            button.basement_equipment_room_homeowner_kp_position_1_keypad_basement_off
           {% elif trigger.entity_id == 'binary_sensor.main_motions' %}
-            button.basement_equipment_room_phantom_kp_position_1_keypad_main_off
+            button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
           {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
-            button.basement_equipment_room_phantom_kp_position_1_keypad_mainbath_off
+            button.basement_equipment_room_homeowner_kp01_position_4_keypad_mainbath_off
           {% endif %}
 ########################################
 - alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
@@ -303,7 +303,7 @@
         minutes: 20
   action:
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_off
+      entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_off
 #########################################
 - alias: "Utility: generic time based triggers"
   id: "Utility: generic time based triggers"
@@ -324,6 +324,9 @@
       id: 10am
     - platform: time
       at: "12:00:00"
+    - platform: time
+      at: "15:30:00"
+      id: 330pm
     - platform: time
       at: "16:30:00"
       id: 430pm
@@ -410,6 +413,12 @@
               data_template:
                 title: "*Humidity Warning!*"
                 message: "Humidity in the house is: {{ states('sensor.house_humidity') }}"
+        - conditions: # 3:30pm turn off evelyns fan
+            - condition: trigger
+              id: 330pm
+          sequence:
+            - service: homeassistant.turn_off
+              entity_id: fan.evelyns_fan
         - conditions: # 4:30pm and if anybody is home, turn on the recirc pump
             - condition: trigger
               id: 430pm
@@ -419,12 +428,14 @@
           sequence:
             - service: homeassistant.turn_on
               entity_id: switch.basement_equipment_room_recirculation_pump
-        - conditions: # 11pm turn off the exterior lights
+        - conditions: # 11pm turn off the exterior lights & open the sunroom shades
             - condition: trigger
               id: 11pm
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_exterior_off
+              entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_off
+            - service: cover.open_cover
+              entity_id: cover.main_floor_sunroom_west_shades
       default: # at noon and 8am, turn off the sunset run once and driveway sentry
         - service: homeassistant.turn_off
           entity_id:
@@ -450,11 +461,11 @@
         - conditions: "{{ trigger.id == 'both' }}"
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_all_int_but_mbed_off
+              entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_int_but_mbed_off
         - conditions: "{{ trigger.id == 'laura' }}"
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_chill_off
+              entity_id: button.basement_equipment_room_homeowner_kp01_position_5_keypad_chill_off
 #########################################
 - alias: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & main if guests) & and main tv off & recirc pump off & enable driveway notify"
   id: "Night Mode: start sleeping & set HVAC fans on & all lights off if no guests (only exterior & lower & main if guests) & and main tv off & recirc pump off & enable driveway notify"
@@ -468,9 +479,9 @@
       data_template:
         entity_id: >
           {% if is_state('input_boolean.guests', 'on') %}
-            button.basement_equipment_room_phantom_kp_position_1_keypad_main_lower_ext_off
+            button.basement_equipment_room_homeowner_kp01_position_4_keypad_main_lower_ext_off
           {% else %}
-            button.basement_equipment_room_phantom_kp_position_1_keypad_all_but_mainbed
+            button.basement_equipment_room_homeowner_kp_position_1_keypad_all_but_mainbed
           {% endif %}
     - service: script.tvs_off_except_mainbed
     - service: homeassistant.turn_off
@@ -484,29 +495,13 @@
         - input_boolean.frigate_grilldeck_notifier
         - input_boolean.frigate_patio_notifier
         - input_boolean.frigate_workshop_notifier
-    - choose: # check the garage doors & notify
-        conditions:
-          condition: or
-          conditions:
-            - condition: state
-              entity_id: sensor.elkm1_double_garage
-              state: "Violated"
-            - condition: state
-              entity_id: sensor.elkm1_single_garage
-              state: "Violated"
-        sequence:
-          - service: notify.telegram_jon
-            data_template:
-              title: "Garage Door is Open!"
-              message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}!"
-    - choose: # check the locks, notify & lock if unlocked
-        - conditions: "{{ states('sensor.doors_unlocked_number') | int > 0 }}"
-          sequence:
-            - service: notify.telegram_jon
-              data_template:
-                title: "{{ states('sensor.doors_unlocked_number') }} door(s) UNLOCKED!"
-                message: "Locking {{ states('sensor.doors_unlocked') }}"
-            - service: script.lock_doors
+    - service: script.garage_doors_check_and_close
+    - service: script.lock_doors
+    - service: telegram_bot.send_message
+      data:
+        message: "Night mode... close blinds?"
+        inline_keyboard:
+          - "Yes:/close_blinds, Ignore:/blinds_do_nothing"
 #########################################
 - alias: "Occupancy: leaving or arriving home"
   id: "Occupancy: leaving or arriving home"
@@ -532,10 +527,48 @@
             - service: script.interior_lights_off
             - service: script.fans_off
             - service: script.lock_doors
+            - service: telegram_bot.send_message
+              data:
+                message: "Leaving... close blinds?"
+                inline_keyboard:
+                  - "Yes:/close_blinds, Ignore:/blinds_do_nothing"
         - conditions: "{{ trigger.id == 'arriving' }}"
           sequence: # arriving home
             - service: homeassistant.turn_on
               entity_id: switch.basement_equipment_room_recirculation_pump
+            - service: button.press
+              entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_open
+########################################
+- alias: "Telegram: blinds callback"
+  trigger:
+    - platform: event
+      id: close_blinds
+      event_type: telegram_callback
+      event_data:
+        command: "/close_blinds"
+    - platform: event
+      id: blinds_do_nothing
+      event_type: telegram_callback
+      event_data:
+        command: "/blinds_do_nothing"
+  action:
+    - choose:
+        - conditions: "{{ trigger.id == 'close_blinds' }}"
+          sequence:
+            - service: button.press
+              entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_closed
+            - service: telegram_bot.answer_callback_query
+              data:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Closing blinds..."
+                show_alert: true
+        - conditions: "{{ trigger.id == 'blinds_do_nothing' }}"
+          sequence:
+            - service: telegram_bot.answer_callback_query
+              data:
+                callback_query_id: "{{ trigger.event.data.id }}"
+                message: "Not closing the blinds"
+                show_alert: false
 ########################################
 - alias: "Night Mode: turn on sunset lights at dark or sunset"
   id: "Night Mode: turn on sunset lights at dark or sunset"
@@ -555,7 +588,7 @@
       after: "15:30:00"
   action:
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_sunset1
+      entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_sunset1
     - service: homeassistant.turn_on
       entity_id: input_boolean.sunset_run_once
     - service: cover.close_cover
@@ -587,14 +620,16 @@
     - service: homeassistant.turn_on
       entity_id: switch.upstairs_main_bedroom_fan
 ########################################
-- alias: "Fans: turn off master fan in the morning"
-  id: "Fans: turn off master fan in the morning"
+- alias: "Fans: turn off fans in the morning"
+  id: "Fans: turn off fans in the morning"
   trigger:
     - platform: time
       at: "08:00:00"
   action:
     - service: homeassistant.turn_off
-      entity_id: switch.upstairs_main_bedroom_fan
+      entity_id:
+        - switch.upstairs_main_bedroom_fan
+        - fan.evelyns_fan
 #########################################
 - alias: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
   id: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
@@ -644,7 +679,7 @@
       to: "burglar_alarm"
   action:
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_burglar
+      entity_id: button.basement_equipment_room_homeowner_kp01_position_4_keypad_burglar
     - service: script.alarm
 #########################################
 - alias: "Alarm: turn off alarm notifications because of user interaction"
@@ -785,6 +820,88 @@
         - service: notify.telegram_jon
           data_template:
             message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}."
+#########################################
+- alias: "Blinds: close appropriate blinds based on azimuth"
+  id: "Blinds: close appropriate blinds based on azimuth"
+  trigger:
+    - platform: numeric_state
+      entity_id: sun.sun
+      attribute: azimuth
+      above: 244
+      id: west_close
+    - platform: numeric_state
+      entity_id: sun.sun
+      attribute: azimuth
+      above: 100
+      below: 170
+      id: east_close
+    - platform: sun
+      event: sunset
+      id: west_open
+    - platform: numeric_state
+      entity_id: sun.sun
+      attribute: azimuth
+      above: 170
+      id: east_open
+  condition: # only june through october
+    - "{{ now().month >= 6 or now().month <= 10 }}"
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: west_close
+            - "{{ is_state('input_boolean.west_blinds_run_once', 'off') }}"
+            - "{{ is_state('binary_sensor.shades_should_close', 'on') }}"
+          sequence:
+            - service: cover.set_cover_position
+              data:
+                position: 0
+              target:
+                entity_id: cover.main_floor_sunroom_west_shades
+            - service: homeassistant.turn_on
+              entity_id: input_boolean.west_blinds_run_once
+        - conditions:
+            - condition: trigger
+              id: east_close
+            - "{{ is_state('input_boolean.east_blinds_run_once', 'off') }}"
+            - "{{ is_state('binary_sensor.shades_should_close', 'on') }}"
+          sequence:
+            - service: cover.set_cover_position
+              data:
+                position: 0
+              target:
+                entity_id:
+                  - cover.main_floor_sunroom_east_shade
+                  - cover.basement_office_east_shade
+                  - cover.main_floor_kitchen_east_shades
+            - service: homeassistant.turn_on
+              entity_id: input_boolean.east_blinds_run_once
+        - conditions:
+            - condition: trigger
+              id: west_open
+          sequence:
+            - service: cover.set_cover_position
+              data:
+                position: 100
+              target:
+                entity_id: cover.main_floor_sunroom_west_shades
+            - service: homeassistant.turn_off
+              entity_id: input_boolean.west_blinds_run_once
+        - conditions:
+            - condition: trigger
+              id: east_open
+            - "{{ is_state('input_boolean.east_blinds_run_once', 'on') }}"
+          sequence:
+            - service: cover.set_cover_position
+              data:
+                position: 100
+              target:
+                entity_id:
+                  - cover.main_floor_sunroom_east_shade
+                  - cover.basement_office_east_shade
+                  - cover.main_floor_kitchen_east_shades
+            - service: homeassistant.turn_off
+              entity_id: input_boolean.east_blinds_run_once
 # #########################################
 # - alias: "Presence: office speakers on/off with presence"
 #   id: "Presence: office speakers on/off with presence"
@@ -1174,7 +1291,7 @@
               data_template:
                 entity_id: >
                   {% if trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir' %}
-                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchen_low_on
+                    button.basement_equipment_room_homeowner_kp01_position_5_keypad_kitchen_low_on
                   {% endif %}
         - conditions:
             - condition: trigger
@@ -1184,8 +1301,28 @@
               data_template:
                 entity_id: >
                   {% if trigger.entity_id == 'binary_sensor.kitchen_area_motions' %}
-                    button.basement_equipment_room_phantom_kp_position_1_keypad_kitchenhall_off
+                    button.basement_equipment_room_homeowner_kp01_position_2_keypad_kitchenhall_off
                   {% endif %}
+#########################################
+- alias: "Automatic Lighting: primary bedroom first evening entry"
+  id: "Automatic Lighting: primary bedroom first evening entry"
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.elkm1_main_bed_pir
+      to: "on"
+  condition: # only when its dark, once per day (rate limit), between 4:30pm and 9pm, and if nobody is in the bed
+    - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+    - "{{ is_state('binary_sensor.bed_occupancy', 'off') }}"
+    - "{{ this.attributes.last_triggered is none or this.attributes.last_triggered < today_at() }}"
+    - condition: time
+      after: "16:30:00"
+      before: "21:00:00"
+  action:
+    - service: homeassistant.turn_on
+      entity_id:
+        - light.jons_lamp
+        - light.lauras_lamp
 #########################################
 - alias: "Blinds: office"
   id: "Blinds: office"
@@ -1204,7 +1341,7 @@
     - service: cover.close_cover
       entity_id:
         - cover.basement_office_shade
-        - cover.basement_office_west_shade
+        - cover.basement_office_east_shade
 # #########################################
 # - alias: "Automatic Lighting: office"
 #   id: "Automatic Lighting: office"
