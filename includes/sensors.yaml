@@ -1,6 +1,7 @@
 ---
 - platform: integration
   name: Riemann Export
+  unique_id: riemann_export
   source: sensor.power_export
   unit_prefix: k
   unit_time: h
@@ -8,6 +9,7 @@
 
 - platform: integration
   name: Riemann Import
+  unique_id: riemann_import
   source: sensor.power_import
   unit_prefix: k
   unit_time: h
@@ -15,11 +17,28 @@
 
 - platform: min_max
   name: House Humidity
+  unique_id: house_humidity
   round_digits: 0
   type: mean
   entity_ids:
     - sensor.lounge_pir_humidity
     - sensor.hvac_humidity
+
+- platform: min_max
+  name: Exterior Temperature
+  unique_id: exterior_temperature
+  type: mean
+  entity_ids:
+    - sensor.weatherflow_tempest_temperature
+    - sensor.outdoor_pir_air_temperature
+    - sensor.current_temperature
+    - sensor.outdoor_hvac_temperature
+
+- platform: mold_indicator
+  indoor_temp_sensor: sensor.temperature
+  indoor_humidity_sensor: sensor.humidity
+  outdoor_temp_sensor: sensor.exterior_temperature
+  calibration_factor: 2.0
 
 - platform: websocket_api
 
