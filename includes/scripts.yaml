@@ -84,7 +84,7 @@ alarm:
   sequence:
     - service: notify.telegram_jon
       data_template:
-        message: "alarm active, do you want to disable this?"
+        message: "⚠️ alarm active, do you want to disable this?"
         data:
           inline_keyboard:
             - "Yes:/turnoffnotification, No:/do_nothing"
@@ -112,29 +112,80 @@ alarm_loop:
     - service: script.turn_on
       entity_id: script.alarm
 
+# check if the garage doors are violated & notify & close
+garage_doors_check_and_close:
+  alias: Garage Doors Check and Close
+  sequence:
+    - choose:
+        conditions:
+          condition: or
+          conditions:
+            - condition: state
+              entity_id: sensor.elkm1_double_garage
+              state: "Violated"
+            - condition: state
+              entity_id: sensor.elkm1_single_garage
+              state: "Violated"
+        sequence:
+          - service: notify.telegram_jon
+            data_template:
+              message: >
+                {% set double_garage_status = states('sensor.elkm1_double_garage') %}
+                {% set single_garage_status = states('sensor.elkm1_single_garage') %}
+                {% if double_garage_status == 'Violated' %}
+                  Double garage door is open.
+                {% endif %}
+                {% if single_garage_status == 'Violated' %}
+                  Single garage door is open.
+                {% endif %}
+                {% if double_garage_status == 'Violated' and single_garage_status == 'Violated' %}
+                  Both garage doors are open.
+                {% endif %}
+          - service: cover.close_cover
+            target:
+              entity_id:
+                - cover.double_garage_door
+                - cover.single_garage_door
+      default:
+        - service: system_log.write
+          data_template:
+            message: "Garage door check was all good, nothing to do because both doors are closed."
+            level: info
+
 lock_doors:
   alias: "lock doors"
   sequence:
-    - service: lock.lock
-      data:
-        entity_id:
-          - lock.workshop_lock
-          - lock.mudroom_lock
-    - choose:
+    - choose: # check  if vacation mode is on, then lock all doors
         - conditions: "{{ states('binary_sensor.vacation') == 'on' }}"
           sequence:
             - service: notify.telegram_jon
               data_template:
-                title: "Vacation is on, locked all doors"
+                title: "🔒 Vacation is on, locked all doors"
                 message: "Hopefully you dont get locked out... 💀"
+            - delay: "00:01:30" # wait 90s before locking the doors so we can get out the garage
             - service: lock.lock
               data:
                 entity_id:
                   - lock.garage_lock
+                  - lock.workshop_lock
+                  - lock.mudroom_lock
+    - choose: # check the locks, notify & lock if unlocked
+        - conditions: "{{ states('sensor.number_of_non_vacation_doors_unlocked') | int > 0 }}"
+          sequence:
+            - service: notify.telegram_jon
+              data_template:
+                title: "🔒 {{ states('sensor.number_of_non_vacation_doors_unlocked') }} door(s) UNLOCKED!"
+                message: "Locking {{ states('sensor.non_vacation_doors_unlocked') }}"
+            - service: lock.lock
+              data:
+                entity_id:
+                  - lock.workshop_lock
+                  - lock.mudroom_lock
       default:
-        - service: notify.telegram_jon
+        - service: system_log.write
           data_template:
-            message: "Locked shop and mudroom doors"
+            message: "Leaving, nothing to do though."
+            level: info
 
 fans_off:
   alias: fans off
@@ -290,7 +341,7 @@ interior_lights_off:
   alias: "interior lights off"
   sequence:
     - service: button.press
-      entity_id: button.basement_equipment_room_phantom_kp_position_1_keypad_interior_off
+      entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_interior_off
     - service: homeassistant.turn_off
       entity_id:
         - light.jons_lamp
