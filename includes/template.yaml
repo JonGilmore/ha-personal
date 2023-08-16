@@ -1,5 +1,12 @@
 # yaml-language-server: $schema=https://cdn.jsdelivr.net/npm/homeassistant-js-yaml-schema@1.1.1/src/index.min.js
 - binary_sensor:
+    - name: "Shades Should Close"
+      unique_id: binary_sensor.shades_should_close
+      # inspiration: https://community.home-assistant.io/t/automatic-blinds-sunscreen-control-based-on-sun-platform/573818/193
+      state: >
+        {{ (states('sensor.tomorrow_io_home_cloud_cover') | float < 65.0
+        or states('sensor.weatherflow_tempest_illuminance') | float > 7000.0)
+        and states('sensor.weatherflow_tempest_solar_elevation') | float > 5.0 }}
     - name: "Events Today"
       unique_id: events_today # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
       icon: "{{ 'mdi:alert-circle' if is_state(this.entity_id, 'on') else 'mdi:check-circle' }}"
@@ -197,11 +204,11 @@
     - name: "light inside?"
       unique_id: light_inside
       device_class: light
-      state: "{{ states('sensor.outdoor_pir_illuminance') | int > 350 }}"
-    - name: "light inside basement?"
-      unique_id: light_inside_basement
-      device_class: light
-      state: "{{ states('sensor.lounge_pir_illuminance') | int > 50 }}"
+      state: "{{ states('sensor.outdoor_pir_illuminance') | int > 325 }}"
+    # - name: "light inside basement?"
+    #   unique_id: light_inside_basement
+    #   device_class: light
+    #   state: "{{ states('sensor.lounge_pir_illuminance') | int > 50 }}"
     - name: "Anybody Home"
       unique_id: anybody_home
       device_class: presence
@@ -421,6 +428,14 @@
     - name: "Number of Doors Unlocked"
       state: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|length }}"
       unique_id: doors_unlocked_number
+    - name: "Number of Non-vacation Doors Unlocked"
+      state: "{{ states | selectattr('entity_id', 'in', state_attr('group.door_locks_shop_mudroom', 'entity_id')) | selectattr('state', 'eq', 'unlocked') | list | count }}"
+      unique_id: number_of_non_vacation_doors_unlocked
+      # icon: "{{ 'mdi:lock-open' if states(this.entity_id) | int > 0 else 'mdi:lock' }}"
+    - name: "Non-vacation Doors Unlocked"
+      state: "{{ states | selectattr('entity_id', 'in', state_attr('group.door_locks_shop_mudroom', 'entity_id'))|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
+      unique_id: non_vacation_doors_unlocked
+      # icon: "{{ 'mdi:lock-open' if states(this.entity_id) | int > 0 else 'mdi:lock' }}"
     - name: "Doors Open"
       state: "{{ expand('group.all_doors') | selectattr('state', 'in', ['on']) | map(attribute='name') | list | join(', ') }}"
       unique_id: doors_open
@@ -492,28 +507,44 @@
       unique_id: current_temperature
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'temperature') }}"
       unit_of_measurement: "°F"
+      device_class: temperature
     - name: "Current Humidity"
+      icon: mdi:water-percent
       unique_id: current_humidity
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}%"
+      device_class: humidity
+      unit_of_measurement: "%"
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}"
     - name: "daily_high"
       unique_id: daily_high
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].temperature }}"
       unit_of_measurement: "°F"
+      device_class: temperature
       icon: mdi:thermometer
     - name: "Todays Low"
       unique_id: todays_low
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].templow }}"
       unit_of_measurement: "°F"
+      device_class: temperature
       icon: mdi:thermometer
     - name: "Precipitation Amount"
       unique_id: precipitation_amount
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation }}"
     - name: "Precipitation Probability"
       unique_id: precipitation_probability
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int }}%"
+      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int }}"
     - name: "circadian brightness"
       unique_id: circadian_brightness
       state: "{{ state_attr('switch.adaptive_lighting_default', 'brightness_pct') }}"
+    - name: Exterior Humidity
+      icon: mdi:water-percent
+      unique_id: exterior_humidity
+      device_class: humidity
+      unit_of_measurement: "%"
+      state: >-
+        {{ (( float(states('sensor.weatherflow_tempest_humidity')) +
+              float(states('sensor.outdoor_pir_humidity')) +
+              float(states('sensor.current_humidity'))) / 3) | round(2) }}
+
     ############################
     ## HVAC Sensors
     - name: "Lower Level Temperature"

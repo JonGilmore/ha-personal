@@ -51,3 +51,11 @@ doorbell:
   name: Doorbell
   icon: mdi:bell
   initial: true
+west_blinds_run_once:
+  name: West Blinds Run Once
+  icon: mdi:roller-shade
+  initial: false
+east_blinds_run_once:
+  name: East Blinds Run Once
+  icon: mdi:roller-shade
+  initial: false
