@@ -458,7 +458,7 @@ views:
         name: Sonos
         entities:
           - media_player.deck
-          - media_player.den
+          - media_player.library_sonos
           - media_player.gym
           - media_player.kitchen
           - media_player.living_room

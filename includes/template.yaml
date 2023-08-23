@@ -250,7 +250,7 @@
       unique_id: all_sonos
       state: >-
         {{ "playing" in [states('media_player.deck'),
-          states('media_player.den'),
+          states('media_player.library_sonos'),
           states('media_player.gym'),
           states('media_player.kitchen'),
           states('media_player.living_room'),
