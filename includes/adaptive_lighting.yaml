@@ -8,6 +8,20 @@
   lights:
     - light.jons_lamp
     - light.lauras_lamp
-  min_brightness: 20
+  min_brightness: 10
+  sunrise_offset: 900 # sunrise will always be 15 minutes later
   min_color_temp: 2400
   max_color_temp: 5000
+- name: Main Bathroom
+  lights:
+    - light.upstairs_main_bathroom_chandelier
+    - light.upstairs_main_bathroom_sconces
+    - light.upstairs_main_bathroom_toekick
+    - light.upstairs_main_bathroom_tub
+  min_brightness: 1
+  max_brightness: 100
+  sleep_brightness: 1
+  sunrise_offset: 1800 # sunrise will always be 30 minutes later
+  skip_redundant_commands: true
+  take_over_control: true
+  detect_non_ha_changes: true
