@@ -716,23 +716,19 @@
   description: "if its not daytime and Jon is home turn on his lamp"
   trigger:
     - platform: event
-      event_type: state_changed
+      event_type: "imap_content"
       event_data:
-        entity_id: sensor.pixel7_last_notification
-  condition:
-    - condition: state
-      entity_id: sensor.pixel7_last_notification
-      state: com.pagerduty.android
-      attribute: package
+        sender: no-reply@pagerduty.com
   action:
     - service: notify.telegram_jon
       data_template:
-        message: "ALERT: work page! {{ states(trigger.event.data.entity_id) }}"
+        message: "ALERT: work page"
     - choose:
         - conditions: "{{ not is_state('sensor.period_of_day', 'day') and is_state('person.jon', 'home') }}"
           sequence:
-            - service: homeassistant.turn_on
+            - service: light.turn_on
               entity_id: light.jons_lamp
+              brightness_pct: "{{ states('sensor.circadian_brightness') }}"
 #########################################
 - alias: "Utility: general notifications"
   id: "Utility: general notifications"
@@ -826,22 +822,23 @@
   trigger:
     - platform: numeric_state
       entity_id: sun.sun
-      attribute: azimuth
-      above: 244
+      value_template: "{{ states.sun.sun.attributes.azimuth }}"
+      above: 244.0
       id: west_close
     - platform: numeric_state
       entity_id: sun.sun
-      attribute: azimuth
-      above: 100
-      below: 170
+      value_template: "{{ states.sun.sun.attributes.azimuth }}"
+      above: 100.0
+      below: 170.0
       id: east_close
     - platform: sun
       event: sunset
       id: west_open
     - platform: numeric_state
       entity_id: sun.sun
-      attribute: azimuth
-      above: 170
+      value_template: "{{ states.sun.sun.attributes.azimuth }}"
+      above: 170.0
+      below: 205.0
       id: east_open
   condition: # only june through october
     - "{{ now().month >= 6 or now().month <= 10 }}"
@@ -874,6 +871,7 @@
                   - cover.main_floor_sunroom_east_shade
                   - cover.basement_office_east_shade
                   - cover.main_floor_kitchen_east_shades
+                  - cover.basement_lounge_east_shade
             - service: homeassistant.turn_on
               entity_id: input_boolean.east_blinds_run_once
         - conditions:
@@ -890,7 +888,6 @@
         - conditions:
             - condition: trigger
               id: east_open
-            - "{{ is_state('input_boolean.east_blinds_run_once', 'on') }}"
           sequence:
             - service: cover.set_cover_position
               data:
@@ -900,6 +897,7 @@
                   - cover.main_floor_sunroom_east_shade
                   - cover.basement_office_east_shade
                   - cover.main_floor_kitchen_east_shades
+                  - cover.basement_lounge_east_shade
             - service: homeassistant.turn_off
               entity_id: input_boolean.east_blinds_run_once
 # #########################################
@@ -1608,3 +1606,22 @@
       target:
         entity_id:
           - select.daily_energy
+# ##
+# - alias: "Test: temp"
+#   id: "Test: temp"
+#   trigger:
+#     - platform: numeric_state
+#       entity_id: sun.sun
+#       value_template: "{{ states.sun.sun.attributes.azimuth }}"
+#       above: 100.0
+#       id: west_close
+#   action:
+#     - choose:
+#         - conditions:
+#             - condition: trigger
+#               id: west_close
+#           sequence:
+#             - service: system_log.write
+#               data_template:
+#                 message: "TEMP test trigger: {{ trigger.json }}"
+#                 level: error
