@@ -210,6 +210,11 @@
   action:
     - service: homeassistant.turn_on
       entity_id: switch.basement_equipment_room_recirculation_pump
+    - service: homeassistant.turn_off
+      entity_id:
+        - switch.adaptive_lighting_sleep_mode_default
+        - switch.adaptive_lighting_sleep_mode_main_bathroom
+        - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
     - choose: # if the power of the hatch is on, turn the light green!
         conditions:
           - condition: state
@@ -457,6 +462,11 @@
     - condition: time
       after: "18:30:00"
   action:
+    - service: homeassistant.turn_on
+      entity_id:
+        - switch.adaptive_lighting_sleep_mode_default
+        - switch.adaptive_lighting_sleep_mode_main_bathroom
+        - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
     - choose:
         - conditions: "{{ trigger.id == 'both' }}"
           sequence:
