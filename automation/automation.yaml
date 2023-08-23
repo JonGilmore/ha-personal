@@ -1606,22 +1606,3 @@
       target:
         entity_id:
           - select.daily_energy
-# ##
-# - alias: "Test: temp"
-#   id: "Test: temp"
-#   trigger:
-#     - platform: numeric_state
-#       entity_id: sun.sun
-#       value_template: "{{ states.sun.sun.attributes.azimuth }}"
-#       above: 100.0
-#       id: west_close
-#   action:
-#     - choose:
-#         - conditions:
-#             - condition: trigger
-#               id: west_close
-#           sequence:
-#             - service: system_log.write
-#               data_template:
-#                 message: "TEMP test trigger: {{ trigger.json }}"
-#                 level: error
