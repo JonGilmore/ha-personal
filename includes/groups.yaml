@@ -333,6 +333,7 @@ exterior_motions:
 all_shades:
   name: all shades
   entities:
+    - cover.basement_lounge_east_shade
     - cover.basement_lounge_shades
     - cover.basement_media_room_shades
     - cover.basement_office_shade
@@ -367,6 +368,7 @@ upstairs_shades:
 basement_shades:
   name: basement shades
   entities:
+    - cover.basement_lounge_east_shade
     - cover.basement_lounge_shades
     - cover.basement_media_room_shades
     - cover.basement_office_shade
