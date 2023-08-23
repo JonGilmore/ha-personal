@@ -1,0 +1,207 @@
+---
+# Garmin Livetrack
+# reference: https://community.home-assistant.io/t/garmin-livetrack-tracking-package/552793
+
+input_text:
+  garmin_livetrack_link:
+    name: Garmin LiveTrack link
+    max: 250
+    icon: mdi:link
+    initial: ""
+
+sensor:
+  - platform: rest
+    unique_id: garmin_livetrack
+    icon: mdi:map-clock-outline
+    resource_template: "{{ state_attr('sensor.garmin_livetrack_id','data_link') if state_attr('sensor.garmin_livetrack_id','data_link') != None else 'http://localhost/local/none_garmin.json'}}"
+    name: Garmin LiveTrack
+    value_template: "{{ value_json.trackPoints[-1].dateTime if 'trackPoints' in value_json and (value_json.trackPoints | length) > 0 }}"
+    scan_interval: 2592000 #30d
+    timeout: 10
+    headers:
+      Content-Type: application/json
+    json_attributes_path: "$.trackPoints[-1:]"
+    json_attributes:
+      - dateTime
+      - position
+      - fixType
+      - altitude
+      - fitnessPointData
+      - speed
+
+template:
+  - trigger:
+      - platform: state
+        entity_id: input_text.garmin_livetrack_link
+      - platform: state
+        entity_id: sensor.garmin_livetrack_link_from_email
+    sensor:
+      - name: Garmin LiveTrack id
+        unique_id: garmin_livetrack_id
+        state: >-
+          {%- if "livetrack.garmin.com" in trigger.to_state.state -%}
+          {{- (trigger.to_state.state | regex_findall(find='https://livetrack.garmin.com/session/([a-z0-9-]+)/token', ignorecase=True))[0] -}}
+          {%- elif trigger.entity_id == "sensor.garmin_livetrack_link_from_email" and trigger.to_state.state != "" -%}
+          {{- trigger.to_state.state -}}
+          {%- endif -%}
+        attributes:
+          link: >-
+            https://livetrack.garmin.com/session/
+            {%- if "livetrack.garmin.com" in trigger.to_state.state -%}
+            {{- (trigger.to_state.state | regex_findall(find='(https://livetrack.garmin.com/session/+[a-z0-9-]+/token/+[a-z0-9-]+)', ignorecase=True))[0] -}}
+            {%- elif trigger.entity_id == "sensor.garmin_livetrack_link_from_email" and trigger.to_state.state != "" -%}
+            {{- trigger.to_state.state -}}/token/{{- trigger.to_state.attributes.token -}}
+            {%- endif -%}
+          data_link: >-
+            https://livetrack.garmin.com/services/session/
+            {%- if "livetrack.garmin.com" in trigger.to_state.state -%}
+            {{- (trigger.to_state.state | regex_findall(find='https://livetrack.garmin.com/session/([a-z0-9-]+)/token', ignorecase=True))[0] -}}
+            {%- elif trigger.entity_id == "sensor.garmin_livetrack_link_from_email" and trigger.to_state.state != "" -%}
+            {{- trigger.to_state.state -}}
+            {%- endif -%}/trackpoints
+          session: >-
+            {%- if "livetrack.garmin.com" in trigger.to_state.state -%}
+            {{- (trigger.to_state.state | regex_findall(find='https://livetrack.garmin.com/session/([a-z0-9-]+)/token/([a-z0-9-]+)', ignorecase=True))[0].0 -}}
+            {%- elif trigger.entity_id == "sensor.garmin_livetrack_link_from_email" and trigger.to_state.state != "" -%}
+            {{- trigger.to_state.attributes.session -}}
+            {%- endif -%}
+          token: >-
+            {%- if "livetrack.garmin.com" in trigger.to_state.state -%}
+            {{- (trigger.to_state.state | regex_findall(find='https://livetrack.garmin.com/session/([a-z0-9-]+)/token/([a-z0-9-]+)', ignorecase=True))[0].1 -}}
+            {%- elif trigger.entity_id == "sensor.garmin_livetrack_link_from_email" and trigger.to_state.state != "" -%}
+            {{- trigger.to_state.attributes.token -}}
+            {%- endif -%}
+        icon: mdi:map
+
+  # Sensor to get link from email with integration: https://www.home-assistant.io/integrations/imap_email_content/
+  - trigger:
+      - platform: event
+        event_type: "imap_content"
+        event_data:
+          sender: noreply@garmin.com
+    sensor:
+      - name: Garmin LiveTrack link from email
+        unique_id: garmin_livetrack_link_from_email
+        icon: mdi:email-alert-outline
+        state: >-
+          {{ (trigger.event.data['text'] | regex_findall(find='https://livetrack.garmin.com/session/([a-z0-9-\n\r=]+)/token', ignorecase=True))[0] | replace('\n','') | replace('\r','') | replace('=','') }}
+        attributes:
+          date: "{{ trigger.event.data['date'] }}"
+          link: >-
+            {{ ((trigger.event.data['text'] | regex_findall(find='(https://livetrack.garmin.com/session/+[a-z0-9-\n\r=]+/token/+[a-z0-9-\n\r=][^"]+)', ignorecase=True))[0]) | replace('\n','') | replace('\r','') | replace('=','') }}
+          session: >-
+            {{ ((trigger.event.data['text'] | regex_findall(find='https://livetrack.garmin.com/session/([a-z0-9-\n\r=]+)/token/([a-z0-9-\n\r=][^"]+)', ignorecase=True))[0].0) | replace('\n','') | replace('\r','') | replace('=','') }}
+          token: >-
+            {{ ((trigger.event.data['text'] | regex_findall(find='https://livetrack.garmin.com/session/([a-z0-9-\n\r=]+)/token/([a-z0-9-\n\r=][^"]+)', ignorecase=True))[0].1) | replace('\n','') | replace('\r','') | replace('=','') }}
+
+  - binary_sensor:
+      - name: Garmin Livetrack
+        unique_id: garmin_livetrack
+        icon: mdi:run-fast
+        state: "{{ is_state_attr('automation.garmin_livetrack', 'current',1) }}"
+        attributes:
+          latitude: "{{ states.sensor.garmin_livetrack.attributes.position.lat if 'position' in states.sensor.garmin_livetrack.attributes }}"
+          longitude: "{{ states.sensor.garmin_livetrack.attributes.position.lon if 'position' in states.sensor.garmin_livetrack.attributes }}"
+          start: "{{ states.sensor.garmin_livetrack.attributes.fitnessPointData.activityCreatedTime if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes }}"
+          datetime: "{{ states.sensor.garmin_livetrack.attributes.dateTime if 'dateTime' in states.sensor.garmin_livetrack.attributes }}"
+          duration: "{{ timedelta(seconds=(states.sensor.garmin_livetrack.attributes.fitnessPointData.totalDurationSecs | float(0) ))[:-7] if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes }}"
+          activity: "{{ (states.sensor.garmin_livetrack.attributes.fitnessPointData.activityType if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes ) | lower }}"
+          speed_ms: "{{ states.sensor.garmin_livetrack.attributes.speed if 'speed' in states.sensor.garmin_livetrack.attributes }}"
+          speed: "{{ (states.sensor.garmin_livetrack.attributes.speed)*3.6 if 'speed' in states.sensor.garmin_livetrack.attributes }}"
+          pace: "{{ 16.666666667/(states.sensor.garmin_livetrack.attributes.speed) if 'speed' in states.sensor.garmin_livetrack.attributes and float(states.sensor.garmin_livetrack.attributes.speed) > 0 }}"
+          altitude: "{{ states.sensor.garmin_livetrack.attributes.altitude if 'altitude' in states.sensor.garmin_livetrack.attributes }}"
+          distance: "{{ (states.sensor.garmin_livetrack.attributes.fitnessPointData.distanceMeters | int(0) )/1000 | round(1) if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes }}"
+          heartbeats: "{{ states.sensor.garmin_livetrack.attributes.fitnessPointData.heartRateBeatsPerMin if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes }}"
+          watt: "{{ (states.sensor.garmin_livetrack.attributes.fitnessPointData.powerWatts if 'powerWatts' in states.sensor.garmin_livetrack.attributes.fitnessPointData) if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes }}"
+          event: "{{ states.sensor.garmin_livetrack.attributes.fitnessPointData.eventTypes if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes }}"
+          status: "{{ (states.sensor.garmin_livetrack.attributes.fitnessPointData.pointStatus if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes ) | lower }}"
+
+automation:
+  - alias: Garmin LiveTrack new link
+    id: "garmin_livetrack"
+    mode: restart
+    trigger:
+      - platform: state
+        entity_id: sensor.garmin_livetrack_id
+    condition:
+      - condition: template
+        value_template: "{{ trigger.to_state.state != '' }}"
+      - condition: template
+        value_template: "{{ trigger.to_state.state != 'unknown' }}"
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
+    action:
+      - variables:
+          update_min: 2
+      - alias: "Notify start"
+        service: notify.mobile_app_pixel7
+        data:
+          title: "Garmin LiveTrack"
+          message: "Start"
+          data:
+            group: Garmin
+            tag: garmin_livetrack
+            clickAction: "entityId:binary_sensor.garmin_livetrack"
+            timeout: 180
+            notification_icon: "mdi:run-fast"
+            actions:
+              - action: "URI"
+                uri: "{{ state_attr('sensor.garmin_livetrack_id','link') }}"
+                title: "Show Garmin livetrack"
+      - repeat:
+          until:
+            - condition: or
+              conditions:
+                - condition: template
+                  value_template: "{{ (as_timestamp(states('sensor.garmin_livetrack')) | int(0) ) > 0 }}"
+                - condition: template
+                  value_template: "{{ repeat.index >= 10 }}"
+          sequence:
+            - service: homeassistant.update_entity
+              entity_id: sensor.garmin_livetrack
+            - delay: "00:00:15"
+      - alias: "Turn on automations with actions depending on Livetrack"
+        service: automation.turn_on
+        entity_id:
+          - automation.garmin_livetrack_kilometer
+      - repeat:
+          until:
+            - condition: or
+              conditions:
+                - condition: template
+                  value_template: "{{ 'END' in states.sensor.garmin_livetrack.attributes.fitnessPointData.eventTypes if 'fitnessPointData' in states.sensor.garmin_livetrack.attributes else false }}"
+                - condition: template
+                  value_template: "{{ as_timestamp(now())-int(as_timestamp(states('sensor.garmin_livetrack'),as_timestamp(now())) ) > 60*30 }}"
+                - condition: template
+                  value_template: "{{ trigger.to_state.state != states('sensor.garmin_livetrack_id') }}"
+                - condition: template
+                  value_template: "{{ repeat.index > (11*60/update_min) }}" # 11h * 60 min /2 min
+          sequence:
+            - service: homeassistant.update_entity
+              entity_id: sensor.garmin_livetrack
+            - delay:
+                minutes: "{{ update_min }}"
+
+      - alias: "Notify end"
+        service: notify.mobile_app_pixel7
+        data:
+          title: "Garmin Livetrack"
+          message: |
+            End!
+            {{ state_attr('binary_sensor.garmin_livetrack','duration') }}
+            {{ state_attr('binary_sensor.garmin_livetrack','distance') }}
+            {{ state_attr('binary_sensor.garmin_livetrack','activity') }}
+            {{ state_attr('binary_sensor.garmin_livetrack','event') }}
+          data:
+            group: Garmin
+            tag: garmin_livetrack
+            clickAction: "entityId:binary_sensor.garmin_livetrack"
+            timeout: 300
+            notification_icon: "mdi:stop-circle"
+            actions:
+              - action: "URI"
+                uri: "{{ state_attr('sensor.garmin_livetrack_id','link') }}"
+                title: "Show Garmin Livetrack"
+      - service: automation.turn_off
+        entity_id:
+          - automation.garmin_livetrack_kilometer
