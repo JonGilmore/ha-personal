@@ -136,7 +136,8 @@
       timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: light.exterior_deck_lights
+      target:
+        entity_id: light.exterior_deck_lights
 #########################################
 - alias: "Automatic Lighting: patio lights on when patio door opens"
   id: "Automatic Lighting: patio lights on when patio door opens"
@@ -155,7 +156,8 @@
       timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: light.exterior_patio_cans
+      target:
+        entity_id: light.exterior_patio_cans
 #########################################
 - alias: "Automatic Lighting: workshop lights on when workshop door opens"
   id: "Automatic Lighting: workshop lights on when workshop door opens"
@@ -174,7 +176,8 @@
       timeout: 30
       continue_on_timeout: false
     - service: homeassistant.turn_on
-      entity_id: light.exterior_workshop_light
+      target:
+        entity_id: light.exterior_workshop_light
 #########################################
 - alias: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
   id: "Automatic Lighting: grilldeck lights on when grilldeck door opens"
@@ -209,12 +212,14 @@
       before: "9:30:00"
   action:
     - service: homeassistant.turn_on
-      entity_id: switch.basement_equipment_room_recirculation_pump
+      target:
+        entity_id: switch.basement_equipment_room_recirculation_pump
     - service: homeassistant.turn_off
-      entity_id:
-        - switch.adaptive_lighting_sleep_mode_default
-        - switch.adaptive_lighting_sleep_mode_main_bathroom
-        - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
+      target:
+        entity_id:
+          - switch.adaptive_lighting_sleep_mode_default
+          - switch.adaptive_lighting_sleep_mode_main_bathroom
+          - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
     - choose: # if the power of the hatch is on, turn the light green!
         conditions:
           - condition: state
@@ -245,7 +250,8 @@
                 value_template: '{{ now().strftime("%m")|int < 4 }}'
         sequence:
           - service: homeassistant.turn_on
-            entity_id: light.main_floor_great_room_cabinets
+            target:
+              entity_id: light.main_floor_great_room_cabinets
 ########################################
 - alias: "Day Mode: turn off wake mode morning lamps"
   id: "Day Mode: turn off wake mode morning lamps"
@@ -260,7 +266,8 @@
       before: "10:00:00"
   action:
     - service: homeassistant.turn_off
-      entity_id: light.main_floor_great_room_cabinets
+      target:
+        entity_id: light.main_floor_great_room_cabinets
 ########################################
 - alias: "Automatic Lighting: template turn off lights if no motion detected for x min"
   id: "Automatic Lighting: template turn off lights if no motion detected for x min"
@@ -348,9 +355,10 @@
               id: start
           sequence:
             - service: homeassistant.turn_on
-              entity_id:
-                - switch.adguard_home_protection
-                - switch.adguard_home_protection_2
+              target:
+                entity_id:
+                  - switch.adguard_home_protection
+                  - switch.adguard_home_protection_2
         - conditions: # 5am & vacation off, open some shades
             - condition: trigger
               id: 5am
@@ -404,9 +412,10 @@
               id: 9am
           sequence:
             - service: homeassistant.turn_off
-              entity_id:
-                - switch.basement_equipment_room_recirculation_pump
-                - switch.upstairs_main_bedroom_fan
+              target:
+                entity_id:
+                  - switch.basement_equipment_room_recirculation_pump
+                  - switch.upstairs_main_bedroom_fan
         - conditions: # 10am check the house humidity level
             - condition: trigger
               id: 10am
@@ -423,7 +432,8 @@
               id: 330pm
           sequence:
             - service: homeassistant.turn_off
-              entity_id: fan.evelyns_fan
+              target:
+                entity_id: fan.evelyns_fan
         - conditions: # 4:30pm and if anybody is home, turn on the recirc pump
             - condition: trigger
               id: 430pm
@@ -432,7 +442,8 @@
               state: "on"
           sequence:
             - service: homeassistant.turn_on
-              entity_id: switch.basement_equipment_room_recirculation_pump
+              target:
+                entity_id: switch.basement_equipment_room_recirculation_pump
         - conditions: # 11pm turn off the exterior lights & open the sunroom shades
             - condition: trigger
               id: 11pm
@@ -443,9 +454,10 @@
               entity_id: cover.main_floor_sunroom_west_shades
       default: # at noon and 8am, turn off the sunset run once and driveway sentry
         - service: homeassistant.turn_off
-          entity_id:
-            - input_boolean.sunset_run_once
-            - input_boolean.driveway_sentry
+          target:
+            entity_id:
+              - input_boolean.sunset_run_once
+              - input_boolean.driveway_sentry
 #########################################
 - alias: "Night Mode: bed has either laura or both - turn off main & lower level lights"
   id: "Night Mode: bed has either laura or both - turn off main & lower level lights"
@@ -463,10 +475,11 @@
       after: "18:30:00"
   action:
     - service: homeassistant.turn_on
-      entity_id:
-        - switch.adaptive_lighting_sleep_mode_default
-        - switch.adaptive_lighting_sleep_mode_main_bathroom
-        - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
+      target:
+        entity_id:
+          - switch.adaptive_lighting_sleep_mode_default
+          - switch.adaptive_lighting_sleep_mode_main_bathroom
+          - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
     - choose:
         - conditions: "{{ trigger.id == 'both' }}"
           sequence:
@@ -495,7 +508,8 @@
           {% endif %}
     - service: script.tvs_off_except_mainbed
     - service: homeassistant.turn_off
-      entity_id: switch.basement_equipment_room_recirculation_pump
+      target:
+        entity_id: switch.basement_equipment_room_recirculation_pump
     - service: input_boolean.turn_on
       entity_id:
         - input_boolean.frigate_doorbell_notifier
@@ -532,7 +546,8 @@
         - conditions: "{{ trigger.id == 'leaving' }}"
           sequence: # leaving home
             - service: homeassistant.turn_off
-              entity_id: switch.basement_equipment_room_recirculation_pump
+              target:
+                entity_id: switch.basement_equipment_room_recirculation_pump
             - service: script.tvs_off
             - service: script.interior_lights_off
             - service: script.fans_off
@@ -545,7 +560,8 @@
         - conditions: "{{ trigger.id == 'arriving' }}"
           sequence: # arriving home
             - service: homeassistant.turn_on
-              entity_id: switch.basement_equipment_room_recirculation_pump
+              target:
+                entity_id: switch.basement_equipment_room_recirculation_pump
             - service: button.press
               entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_open
 ########################################
@@ -600,7 +616,8 @@
     - service: button.press
       entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_sunset1
     - service: homeassistant.turn_on
-      entity_id: input_boolean.sunset_run_once
+      target:
+        entity_id: input_boolean.sunset_run_once
     - service: cover.close_cover
       entity_id: cover.main_floor_library_shade
 # ########################################
@@ -628,7 +645,8 @@
       state: "off"
   action:
     - service: homeassistant.turn_on
-      entity_id: switch.upstairs_main_bedroom_fan
+      target:
+        entity_id: switch.upstairs_main_bedroom_fan
 ########################################
 - alias: "Fans: turn off fans in the morning"
   id: "Fans: turn off fans in the morning"
@@ -637,9 +655,10 @@
       at: "08:00:00"
   action:
     - service: homeassistant.turn_off
-      entity_id:
-        - switch.upstairs_main_bedroom_fan
-        - fan.evelyns_fan
+      target:
+        entity_id:
+          - switch.upstairs_main_bedroom_fan
+          - fan.evelyns_fan
 #########################################
 - alias: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
   id: "Moisture: if there is a water leak & notify & close the water valve & turn off recirculation pump"
@@ -649,7 +668,7 @@
       to: "on"
   action:
     - service: homeassistant.turn_off
-      data:
+      target:
         entity_id:
           - switch.basement_equipment_room_recirculation_pump
           - switch.water_main
@@ -866,7 +885,8 @@
               target:
                 entity_id: cover.main_floor_sunroom_west_shades
             - service: homeassistant.turn_on
-              entity_id: input_boolean.west_blinds_run_once
+              target:
+                entity_id: input_boolean.west_blinds_run_once
         - conditions:
             - condition: trigger
               id: east_close
@@ -883,7 +903,8 @@
                   - cover.main_floor_kitchen_east_shades
                   - cover.basement_lounge_east_shade
             - service: homeassistant.turn_on
-              entity_id: input_boolean.east_blinds_run_once
+              target:
+                entity_id: input_boolean.east_blinds_run_once
         - conditions:
             - condition: trigger
               id: west_open
@@ -894,7 +915,8 @@
               target:
                 entity_id: cover.main_floor_sunroom_west_shades
             - service: homeassistant.turn_off
-              entity_id: input_boolean.west_blinds_run_once
+              target:
+                entity_id: input_boolean.west_blinds_run_once
         - conditions:
             - condition: trigger
               id: east_open
@@ -909,7 +931,8 @@
                   - cover.main_floor_kitchen_east_shades
                   - cover.basement_lounge_east_shade
             - service: homeassistant.turn_off
-              entity_id: input_boolean.east_blinds_run_once
+              target:
+                entity_id: input_boolean.east_blinds_run_once
 # #########################################
 # - alias: "Presence: office speakers on/off with presence"
 #   id: "Presence: office speakers on/off with presence"
@@ -1328,9 +1351,10 @@
       before: "21:00:00"
   action:
     - service: homeassistant.turn_on
-      entity_id:
-        - light.jons_lamp
-        - light.lauras_lamp
+      target:
+        entity_id:
+          - light.jons_lamp
+          - light.lauras_lamp
 #########################################
 - alias: "Blinds: office"
   id: "Blinds: office"
@@ -1449,21 +1473,24 @@
               id: jons-on
           sequence:
             - service: homeassistant.turn_on
-              entity_id: light.jons_lamp
+              target:
+                entity_id: light.jons_lamp
         - conditions:
             - condition: trigger
               id: lauras-on
           sequence:
             - service: homeassistant.turn_on
-              entity_id: light.lauras_lamp
+              target:
+                entity_id: light.lauras_lamp
         - conditions:
             - condition: trigger
               id: lamps-off
           sequence:
             - service: homeassistant.turn_off
-              entity_id:
-                - light.jons_lamp
-                - light.lauras_lamp
+              target:
+                entity_id:
+                  - light.jons_lamp
+                  - light.lauras_lamp
 #########################################
 - alias: "Lutron: office pico"
   id: "Lutron: office pico"
@@ -1585,9 +1612,10 @@
   action:
     - delay: 45
     - service: homeassistant.turn_on
-      entity_id:
-        - switch.adguard_home_protection
-        - switch.adguard_home_protection_2
+      target:
+        entity_id:
+          - switch.adguard_home_protection
+          - switch.adguard_home_protection_2
 #########################################
 - alias: "Power: summer mode"
   description: "Power: summer mode"
@@ -1616,3 +1644,26 @@
       target:
         entity_id:
           - select.daily_energy
+#########################################
+- alias: "Notify: edit telegram chat"
+  id: "Notify: edit telegram chat"
+  description: "update the chat_id and message_id input_numbers when a telegram message is sent"
+  mode: parallel
+  max: 10
+  trigger:
+    - platform: event
+      event_type: telegram_sent
+      event_data:
+        message_tag: garmin_message_sent
+      variables:
+        chat_id: input_number.garmin_chat_id
+        message_id: input_number.garmin_message_id
+  action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: "{{ chat_id }}"
+        value: "{{ trigger.event.data.chat_id }}"
+    - service: input_number.set_value
+      data_template:
+        entity_id: "{{ message_id }}"
+        value: "{{ trigger.event.data.message_id }}"

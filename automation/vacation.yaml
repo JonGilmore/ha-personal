@@ -37,7 +37,8 @@
       to: "on"
   action:
     - service: homeassistant.turn_off
-      entity_id: switch.basement_equipment_room_recirculation_pump
+      target:
+        entity_id: switch.basement_equipment_room_recirculation_pump
     - service: cover.close_cover
       entity_id: group.all_shades
     - service: script.tvs_off
@@ -91,7 +92,8 @@
 #       value_template: "{{ not is_state('climate.main_level', 'heat') }}"
 #   action:
 #     - service: homeassistant.turn_on
-#       entity_id: switch.water_main
+#       target: 
+#         entity_id: switch.water_main
 #     - service: climate.set_temperature
 #       data:
 #         entity_id:

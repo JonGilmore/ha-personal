@@ -51,7 +51,8 @@
               id: 430pm
           sequence:
             - service: homeassistant.turn_on
-              entity_id: switch.exterior_roof_outlets
+              target:
+                entity_id: switch.exterior_roof_outlets
             - choose:
                 conditions:
                   - condition: state
@@ -59,7 +60,8 @@
                     state: "home"
                 sequence:
                   - service: homeassistant.turn_on
-                    entity_id: group.christmastrees
+                    target:
+                      entity_id: group.christmastrees
         - conditions: # turn off at 11pm, when sleeping starts, or when laura leaves
             - condition: trigger
               id: xmasoff
@@ -70,7 +72,8 @@
                   after: "04:30:00"
           sequence:
             - service: homeassistant.turn_off
-              entity_id: group.christmaslights
+              target:
+                entity_id: group.christmaslights
             - service: notify.telegram_jon
               data_template:
                 message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees turned off"
@@ -81,7 +84,8 @@
               before: "23:00:00"
           sequence:
             - service: homeassistant.turn_on
-              entity_id: group.christmastrees
+              target:
+                entity_id: group.christmastrees
             - service: notify.telegram_jon
               data_template:
                 message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees turned on"

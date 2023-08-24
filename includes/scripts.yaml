@@ -311,11 +311,12 @@ tvs_off_except_mainbed:
 #   alias: "main bedroom off"
 #   sequence:
 #     - service: homeassistant.turn_off
-#       entity_id:
-#         - light.master_entry_lamp
-#         - light.sitting_room_lamp
-#         - light.jons_lamp_lifx
-#         - switch.lauras_lamp_lifx
+#       target:
+#         entity_id:
+#           - light.master_entry_lamp
+#           - light.sitting_room_lamp
+#           - light.jons_lamp_lifx
+#           - switch.lauras_lamp_lifx
 #     - service: scene.turn_on
 #       entity_id: scene.equipment_room_enclosure_device_001_ph_master_off
 
@@ -343,9 +344,10 @@ interior_lights_off:
     - service: button.press
       entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_interior_off
     - service: homeassistant.turn_off
-      entity_id:
-        - light.jons_lamp
-        - light.lauras_lamp
+      target:
+        entity_id:
+          - light.jons_lamp
+          - light.lauras_lamp
 
 movie_on:
   alias: "movie on"
