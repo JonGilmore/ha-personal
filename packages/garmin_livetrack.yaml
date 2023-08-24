@@ -134,20 +134,12 @@ automation:
       - variables:
           update_min: 2
       - alias: "Notify start"
-        service: notify.mobile_app_pixel7
-        data:
+        service: notify.telegram_jon
+        data_template:
           title: "Garmin LiveTrack"
-          message: "Start"
+          message: "Activity started: {{ state_attr('sensor.garmin_livetrack_id','link') }}"
           data:
-            group: Garmin
-            tag: garmin_livetrack
-            clickAction: "entityId:binary_sensor.garmin_livetrack"
-            timeout: 180
-            notification_icon: "mdi:run-fast"
-            actions:
-              - action: "URI"
-                uri: "{{ state_attr('sensor.garmin_livetrack_id','link') }}"
-                title: "Show Garmin livetrack"
+            message_tag: garmin_message_sent
       - repeat:
           until:
             - condition: or
@@ -183,25 +175,12 @@ automation:
                 minutes: "{{ update_min }}"
 
       - alias: "Notify end"
-        service: notify.mobile_app_pixel7
+        service: telegram_bot.edit_message
         data:
-          title: "Garmin Livetrack"
-          message: |
-            End!
-            {{ state_attr('binary_sensor.garmin_livetrack','duration') }}
-            {{ state_attr('binary_sensor.garmin_livetrack','distance') }}
-            {{ state_attr('binary_sensor.garmin_livetrack','activity') }}
-            {{ state_attr('binary_sensor.garmin_livetrack','event') }}
-          data:
-            group: Garmin
-            tag: garmin_livetrack
-            clickAction: "entityId:binary_sensor.garmin_livetrack"
-            timeout: 300
-            notification_icon: "mdi:stop-circle"
-            actions:
-              - action: "URI"
-                uri: "{{ state_attr('sensor.garmin_livetrack_id','link') }}"
-                title: "Show Garmin Livetrack"
+          message_id: "{{ states.input_number.garmin_message_id.state }}"
+          chat_id: "{{ states.input_number.garmin_chat_id.state }}"
+          title: Activity Finished
+          message: "Activity Finished: {{ state_attr('sensor.garmin_livetrack_id','link') }}"
       - service: automation.turn_off
         entity_id:
           - automation.garmin_livetrack_kilometer
