@@ -214,12 +214,9 @@
     - service: homeassistant.turn_on
       target:
         entity_id: switch.basement_equipment_room_recirculation_pump
-    - service: homeassistant.turn_off
-      target:
-        entity_id:
-          - switch.adaptive_lighting_sleep_mode_default
-          - switch.adaptive_lighting_sleep_mode_main_bathroom
-          - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
+    - service: script.night_adaptive_lighting
+      data:
+        state: turn_off
     - choose: # if the power of the hatch is on, turn the light green!
         conditions:
           - condition: state
@@ -474,17 +471,14 @@
     - condition: time
       after: "18:30:00"
   action:
-    - service: homeassistant.turn_on
-      target:
-        entity_id:
-          - switch.adaptive_lighting_sleep_mode_default
-          - switch.adaptive_lighting_sleep_mode_main_bathroom
-          - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
     - choose:
         - conditions: "{{ trigger.id == 'both' }}"
           sequence:
             - service: button.press
               entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_int_but_mbed_off
+            - service: script.night_adaptive_lighting
+              data:
+                state: turn_on
         - conditions: "{{ trigger.id == 'laura' }}"
           sequence:
             - service: button.press
@@ -506,6 +500,9 @@
           {% else %}
             button.basement_equipment_room_homeowner_kp_position_1_keypad_all_but_mainbed
           {% endif %}
+    - service: script.night_adaptive_lighting
+      data:
+        state: turn_on
     - service: script.tvs_off_except_mainbed
     - service: homeassistant.turn_off
       target:

@@ -338,6 +338,21 @@ send_dynamic_notification:
           notification_icon: "{{ notifIcon }}"
           importance: "{{ importance }}"
 
+night_adaptive_lighting:
+  alias: "night adaptive lighting"
+  description: "script to turn on or off adaptive lighting sleep mode"
+  fields:
+    state:
+      description: "state of adaptive lighting"
+      example: "valid values are turn_on or turn_off"
+  sequence:
+    - service_template: "homeassistant.{{ state }}"
+      target:
+        entity_id:
+          - switch.adaptive_lighting_sleep_mode_default
+          - switch.adaptive_lighting_sleep_mode_main_bathroom
+          - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
+
 interior_lights_off:
   alias: "interior lights off"
   sequence:
@@ -354,10 +369,6 @@ movie_on:
   sequence:
     - service: cover.close_cover
       entity_id: cover.basement_media_room_shades
-    # - service: light.turn_on
-    #   data:
-    #     entity_id: light.basement_media_room_cans
-    #     brightness_pct: 1
     - service: light.turn_on
       entity_id: light.basement_media_room_cabinets
 
