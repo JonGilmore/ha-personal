@@ -476,9 +476,6 @@
           sequence:
             - service: button.press
               entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_int_but_mbed_off
-            - service: script.night_adaptive_lighting
-              data:
-                state: turn_on
         - conditions: "{{ trigger.id == 'laura' }}"
           sequence:
             - service: button.press
@@ -500,9 +497,6 @@
           {% else %}
             button.basement_equipment_room_homeowner_kp_position_1_keypad_all_but_mainbed
           {% endif %}
-    - service: script.night_adaptive_lighting
-      data:
-        state: turn_on
     - service: script.tvs_off_except_mainbed
     - service: homeassistant.turn_off
       target:
@@ -518,11 +512,22 @@
         - input_boolean.frigate_workshop_notifier
     - service: script.garage_doors_check_and_close
     - service: script.lock_doors
-    - service: telegram_bot.send_message
+    - wait_for_trigger:
+        - platform: state
+          entity_id: media_player.main_bedroom_tv
+          to: "off"
+          for: 30
+      timeout:
+        minutes: 90
+      continue_on_timeout: false
+    - service: script.night_adaptive_lighting
       data:
-        message: "Night mode... close blinds?"
-        inline_keyboard:
-          - "Yes:/close_blinds, Ignore:/blinds_do_nothing"
+        state: turn_on
+    # - service: telegram_bot.send_message
+    #   data:
+    #     message: "Night mode... close blinds?"
+    #     inline_keyboard:
+    #       - "Yes:/close_blinds, Ignore:/blinds_do_nothing"
 #########################################
 - alias: "Occupancy: leaving or arriving home"
   id: "Occupancy: leaving or arriving home"
@@ -1257,6 +1262,44 @@
             - service: homeassistant.turn_off
               target:
                 entity_id: "{{light}}"
+#########################################
+- alias: "Automatic Lighting: motion light upstairs stairs"
+  id: "Automatic Lighting: motion light upstairs stairs"
+  description: "on upstairs stair motion, turn on the sconce lights"
+  mode: restart
+  variables:
+    light: light.upstairs_stair_sconces
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_second_hall_pir
+      to: "on"
+      id: pir-on
+    - platform: state
+      entity_id: binary_sensor.elkm1_second_hall_pir
+      to: "off"
+      id: pir-off
+      for: "00:01:00"
+  condition: "{{ (trigger.to_state.state == 'on' and is_state(light, 'off')) or (trigger.to_state.state == 'off' and is_state(light, 'on')) }}"
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
+            - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+          sequence:
+            - service: light.turn_on
+              data_template:
+                entity_id: "{{light}}"
+                brightness_pct: 20
+        - conditions:
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - service: light.turn_off
+              data:
+                entity_id: "{{light}}"
+                transition: 60
 #########################################
 - alias: "Automatic Lighting: motion light back kitchen"
   id: "Automatic Lighting: motion light back kitchen"

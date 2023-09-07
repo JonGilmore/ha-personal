@@ -236,7 +236,8 @@
       device_class: occupancy
       state: >-
         {{ states('sensor.elkm1_main_bath_pir') == "Violated"
-        or states('sensor.elkm1_main_bed_pir') == "Violated" }}
+        or states('sensor.elkm1_main_bed_pir') == "Violated"
+        or states('binary_sensor.bed_occupancy') == "on" }}
     - name: "Christmas Season"
       unique_id: christmas_season
       state: >

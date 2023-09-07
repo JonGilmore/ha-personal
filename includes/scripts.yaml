@@ -351,7 +351,6 @@ night_adaptive_lighting:
         entity_id:
           - switch.adaptive_lighting_sleep_mode_default
           - switch.adaptive_lighting_sleep_mode_main_bathroom
-          - switch.adaptive_lighting_sleep_mode_main_bedroom_lamps
 
 interior_lights_off:
   alias: "interior lights off"
