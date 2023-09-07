@@ -1,14 +1,32 @@
-- name: Main Kitchen Fridge Temperature
-  state_topic: "rtl_433/Acurite-986/16395/temperature_F"
-  json_attributes_topic: "rtl_433/Acurite-986/16395"
-  device_class: temperature
-  unique_id: main_kitchen_fridge_temperature
-  unit_of_measurement: "°F"
-  expire_after: 600 ## Note- this is optional. You can remove it if you like- this causes the sensor to show unavailable if it has not received data in 10 minutes.
-- name: Main Kitchen Freezer Temperature
-  state_topic: "rtl_433/Acurite-986/45848/temperature_F"
-  json_attributes_topic: "rtl_433/Acurite-986/45848"
-  device_class: temperature
-  unique_id: main_kitchen_freezer_temperature
-  unit_of_measurement: "°F"
-  expire_after: 600 ## Note- this is optional. You can remove it if you like- this causes the sensor to show unavailable if it has not received data in 10 minutes.
+- binary_sensor:
+    - name: Main Kitchen Fridge Battery
+      unique_id: main_kitchen_fridge_battery
+      state_topic: "rtl_433/Acurite-986/16395/battery_ok"
+      json_attributes_topic: "rtl_433/Acurite-986/16395"
+      payload_on: 0
+      payload_off: 1
+      device_class: battery
+      value_template: "{{ value_json.battery_ok }}"
+    - name: Main Kitchen Freezer Battery
+      unique_id: main_kitchen_freezer_battery
+      state_topic: "rtl_433/Acurite-986/45848/battery_ok"
+      json_attributes_topic: "rtl_433/Acurite-986/45848"
+      payload_on: 0
+      payload_off: 1
+      device_class: battery
+
+- sensors:
+    - name: Main Kitchen Fridge Temperature
+      state_topic: "rtl_433/Acurite-986/16395/temperature_F"
+      json_attributes_topic: "rtl_433/Acurite-986/16395"
+      device_class: temperature
+      unique_id: main_kitchen_fridge_temperature
+      unit_of_measurement: "°F"
+      expire_after: 600 ## Note- this is optional. You can remove it if you like- this causes the sensor to show unavailable if it has not received data in 10 minutes.
+    - name: Main Kitchen Freezer Temperature
+      state_topic: "rtl_433/Acurite-986/45848/temperature_F"
+      json_attributes_topic: "rtl_433/Acurite-986/45848"
+      device_class: temperature
+      unique_id: main_kitchen_freezer_temperature
+      unit_of_measurement: "°F"
+      expire_after: 600 ## Note- this is optional. You can remove it if you like- this causes the sensor to show unavailable if it has not received data in 10 minutes.

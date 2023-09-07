@@ -121,6 +121,7 @@ input_select: !include includes/input_selects.yaml
 input_text: !include includes/input_text.yaml
 input_number: !include includes/input_number.yaml
 intent_script: !include includes/intent_scripts.yaml
+mqtt: !include includes/mqtt.yaml
 proximity: !include includes/proximity.yaml
 rest_command: !include includes/rest_commands.yaml
 scene: !include includes/scenes.yaml
@@ -144,6 +145,7 @@ config:
 map:
 mobile_app:
 media_source:
+wake_on_lan:
 
 image_processing:
   - platform: platerecognizer
