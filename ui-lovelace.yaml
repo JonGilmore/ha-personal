@@ -160,6 +160,14 @@ views:
               - type: tile
                 icon: mdi:fan
                 entity: group.all_fans
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                icon: mdi:temperature
+                entity: sensor.main_level_temperature
+                tap_action:
+                  action: navigate
+                  navigation_path: "/lovelace/climate"
           - type: custom:frigate-card
             cameras:
               - camera_entity: camera.driveway
@@ -488,6 +496,57 @@ views:
         entity: media_player.main_bedroom_tv
       - type: media-control
         entity: media_player.great_room_tv
+  ##########################################
+  # CLIMATE SUBVIEWS
+  ##########################################
+  - title: Climate
+    id: climate
+    icon: mdi:thermostat
+    subview: true
+    path: climate
+    cards:
+      - type: tile
+        entity: climate.main_level
+        features:
+          - type: target-temperature
+          - type: climate-hvac-modes
+            hvac_modes:
+              - 'off'
+              - heat
+              - cool
+              - fan_only
+        tap_action:
+          action: more-info
+        icon_tap_action:
+          action: more-info
+      - type: tile
+        entity: climate.upper_level
+        features:
+          - type: target-temperature
+          - type: climate-hvac-modes
+            hvac_modes:
+              - 'off'
+              - heat
+              - cool
+              - fan_only
+        tap_action:
+          action: more-info
+        icon_tap_action:
+          action: more-info
+      - type: tile
+        entity: climate.lower_level
+        features:
+          - type: climate-hvac-modes
+            hvac_modes:
+              - 'off'
+              - heat
+              - cool
+              - fan_only
+          - type: target-temperature
+        tap_action:
+          action: more-info
+        icon_tap_action:
+          action: more-info
   ##########################################
   # LIGHT SUBVIEWS
   ##########################################

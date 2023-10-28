@@ -123,8 +123,7 @@ views:
                 features:
                   - type: "cover-open-close"
               - type: tile
-                entity:
-                  - cover.main_floor_kitchen_south_shades
+                entity: cover.main_floor_kitchen_south_shades
                 name: Kitchen
                 icon: mdi:roller-shade
                 features:
