@@ -6,7 +6,6 @@
       payload_on: 0
       payload_off: 1
       device_class: battery
-      value_template: "{{ value_json.battery_ok }}"
     - name: Main Kitchen Freezer Battery
       unique_id: main_kitchen_freezer_battery
       state_topic: "rtl_433/Acurite-986/45848/battery_ok"
@@ -14,8 +13,15 @@
       payload_on: 0
       payload_off: 1
       device_class: battery
+    - name: Gym Acurite Battery
+      unique_id: gym_acurite_battery
+      state_topic: "rtl_433/Acurite-Tower/8093/battery_ok"
+      json_attributes_topic: "rtl_433/Acurite-Tower/8093"
+      payload_on: 0
+      payload_off: 1
+      device_class: battery
 
-- sensors:
+- sensor:
     - name: Main Kitchen Fridge Temperature
       state_topic: "rtl_433/Acurite-986/16395/temperature_F"
       json_attributes_topic: "rtl_433/Acurite-986/16395"
@@ -29,4 +35,19 @@
       device_class: temperature
       unique_id: main_kitchen_freezer_temperature
       unit_of_measurement: "°F"
-      expire_after: 600 ## Note- this is optional. You can remove it if you like- this causes the sensor to show unavailable if it has not received data in 10 minutes.
+      expire_after: 600
+    - name: Gym Acurite Temperature
+      state_topic: "rtl_433/Acurite-Tower/8093/temperature_C"
+      json_attributes_topic: "rtl_433/Acurite-Tower/8093"
+      value_template: "{{ (value | multiply(9/5) + 32) | float | round(1) }}"
+      device_class: temperature
+      unique_id: gym_acurite_temperature
+      unit_of_measurement: "°F"
+      expire_after: 600
+    - name: Gym Acurite Humidity
+      state_topic: "rtl_433/Acurite-Tower/8093/humidity"
+      json_attributes_topic: "rtl_433/Acurite-Tower/8093"
+      device_class: humidity
+      unique_id: gym_acurite_humidity
+      unit_of_measurement: "%"
+      expire_after: 600
