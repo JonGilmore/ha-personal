@@ -217,3 +217,9 @@ weather:
     wind_bearing_template: "{{ states('sensor.weatherflow_tempest_wind_bearing_avg')| int }}"
     visibility_template: "{{ states('sensor.weatherflow_tempest_visibility')| float }}"
     forecast_template: "{{ state_attr('sensor.hub_hb_00069559_weather', 'daily_forecast') }}"
+
+homekit:
+  - filter:
+      include_entities:
+        - binary_sensor.elkm1_kitchen_pir
+        - binary_sensor.elkm1_foyer_pir

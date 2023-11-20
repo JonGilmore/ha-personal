@@ -46,8 +46,24 @@ views:
             {% elif open > 1 %}
             {{ states('sensor.doors_open') }} are open.
             {% endif %}
-      - type: shopping-list
+      - type: todo-list
+        entity: todo.shopping_list
         title: Shopping List
+      - type: custom:state-switch
+        entity: user
+        default: default
+        states:
+          Jon:
+            type: todo-list
+            entity: todo.jons_todo
+            title: Todo's
+          Laura:
+            type: todo-list
+            entity: todo.lauras_todo
+            title: Todo's
+          default:
+            type: markdown
+            content: "## Unknown user, get rekt"
       - type: tile
         entity: alarm_control_panel.elkm1_area_1
         name: Home Alarm
@@ -88,18 +104,27 @@ views:
                 vertical: true
                 tap_action:
                   action: toggle
+                state_content:
+                  - state
+                  - last-changed
               - type: tile
                 entity: lock.workshop_lock
                 name: shop
                 vertical: true
                 tap_action:
                   action: toggle
+                state_content:
+                  - state
+                  - last-changed
               - type: tile
                 entity: lock.mudroom_lock
                 name: deck
                 vertical: true
                 tap_action:
                   action: toggle
+                state_content:
+                  - state
+                  - last-changed
           - type: horizontal-stack
             cards:
               - type: tile
@@ -511,7 +536,7 @@ views:
           - type: target-temperature
           - type: climate-hvac-modes
             hvac_modes:
-              - 'off'
+              - "off"
               - heat
               - cool
               - fan_only
@@ -519,13 +544,19 @@ views:
           action: more-info
         icon_tap_action:
           action: more-info
+        state_content:
+          - current_temperature
+          - state
+          - current_humidity
+          - fan_mode
+          - current_activity
       - type: tile
         entity: climate.upper_level
         features:
           - type: target-temperature
           - type: climate-hvac-modes
             hvac_modes:
-              - 'off'
+              - "off"
               - heat
               - cool
               - fan_only
@@ -533,12 +564,18 @@ views:
           action: more-info
         icon_tap_action:
           action: more-info
+        state_content:
+          - current_temperature
+          - state
+          - current_humidity
+          - fan_mode
+          - current_activity
       - type: tile
         entity: climate.lower_level
         features:
           - type: climate-hvac-modes
             hvac_modes:
-              - 'off'
+              - "off"
               - heat
               - cool
               - fan_only
@@ -547,6 +584,12 @@ views:
           action: more-info
         icon_tap_action:
           action: more-info
+        state_content:
+          - current_temperature
+          - state
+          - current_humidity
+          - fan_mode
+          - current_activity
   ##########################################
   # LIGHT SUBVIEWS
   ##########################################
