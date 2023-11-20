@@ -266,15 +266,55 @@
       target:
         entity_id: light.main_floor_great_room_cabinets
 ########################################
-- alias: "Automatic Lighting: template turn off lights if no motion detected for x min"
-  id: "Automatic Lighting: template turn off lights if no motion detected for x min"
+- alias: "Automatic Lighting: turn off basement lights if no motion detected"
+  id: "Automatic Lighting: turn off basement lights if no motion detected"
   trigger:
     - platform: state
-      entity_id:
-        - binary_sensor.basement_motions
-        - binary_sensor.main_motions
+      entity_id: binary_sensor.basement_motions
       to: "off"
       for: "00:30:00"
+  action:
+    - service: button.press
+      data_template:
+        entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_basement_off
+########################################
+- alias: "Automatic Lighting: turn off main floor lights if no motion detected"
+  id: "Automatic Lighting: turn off main floor lights if no motion detected"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.main_motions
+      to: "off"
+      for: "00:30:00"
+      id: thirty-minutes
+    - platform: state
+      entity_id: binary_sensor.main_motions
+      to: "off"
+      for: "00:60:00"
+      id: sixty-minutes
+  action:
+    - choose:
+        - conditions: # before 4pm, main floor lights will turn off after 30m of inactivity
+            - condition: trigger
+              id: thirty-minutes
+            - condition: time
+              before: "16:00:00"
+          sequence:
+            - service: button.press
+              data_template:
+                entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
+        - conditions: # after 4pm, main floor lights will turn off after 60m of inactivity
+            - condition: trigger
+              id: sixty-minutes
+            - condition: time
+              after: "16:00:00"
+          sequence:
+            - service: button.press
+              data_template:
+                entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
+########################################
+- alias: "Automatic Lighting: turn off main bath lights if no motion detected"
+  id: "Automatic Lighting: turn off main bath lights if no motion detected"
+  trigger:
     - platform: state
       entity_id: binary_sensor.elkm1_main_bath_pir
       to: "off"
@@ -282,14 +322,23 @@
   action:
     - service: button.press
       data_template:
-        entity_id: >
-          {% if trigger.entity_id == 'binary_sensor.basement_motions' %}
-            button.basement_equipment_room_homeowner_kp_position_1_keypad_basement_off
-          {% elif trigger.entity_id == 'binary_sensor.main_motions' %}
-            button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
-          {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
-            button.basement_equipment_room_homeowner_kp01_position_4_keypad_mainbath_off
-          {% endif %}
+        entity_id: button.basement_equipment_room_homeowner_kp01_position_4_keypad_mainbath_off
+########################################
+- alias: "Automatic Lighting: turn off workshop if no motion"
+  id: "Automatic Lighting: turn off workshop if no motion"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_workshop_pir
+      to: "off"
+      for: "00:25:00"
+    - platform: state
+      entity_id: binary_sensor.elkm1_workshop_pir
+      to: "off"
+      for: "00:30:00"
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.basement_workshop_lights
 ########################################
 - alias: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
   id: "Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt been set and no motion detected for 20 min on all motions"
@@ -311,8 +360,7 @@
       for:
         minutes: 20
   action:
-    - service: button.press
-      entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_off
+    - service: script.interior_lights_off
 #########################################
 - alias: "Utility: generic time based triggers"
   id: "Utility: generic time based triggers"
@@ -388,22 +436,22 @@
                       {% endfor %}
                       {% endif %}
                     parse_mode: markdown
-                - service: notify.mobile_app_lauras_iphone
-                  data:
-                    title: >-
-                      {% if as_local(states.sensor.date.last_updated).day == 1 %}*Important Dates in the Next 30 Days!*
-                      {% else %}*Important Upcoming Dates!*
-                      {% endif %}
-                    message: >-
-                      {% if as_local(states.sensor.date.last_updated).day == 1 %}
-                      {% for entity in  state_attr('binary_sensor.events_in_the_next_thirty_days', 'entity_id') -%}
-                      {{ '\n_' + entity.name + '_ - ' + entity.next_date }}
-                      {% endfor %}
-                      {% else %}
-                      {% for entity in  state_attr('binary_sensor.events_in_seven_days', 'entity_id') + state_attr('binary_sensor.events_today', 'entity_id') %}
-                      {{ '\n_' + entity.name + '_ - ' + entity.next_date }}
-                      {% endfor %}
-                      {% endif %}
+                # - service: notify.mobile_app_lauras_iphone
+                #   data:
+                #     title: >-
+                #       {% if as_local(states.sensor.date.last_updated).day == 1 %}*Important Dates in the Next 30 Days!*
+                #       {% else %}*Important Upcoming Dates!*
+                #       {% endif %}
+                #     message: >-
+                #       {% if as_local(states.sensor.date.last_updated).day == 1 %}
+                #       {% for entity in  state_attr('binary_sensor.events_in_the_next_thirty_days', 'entity_id') -%}
+                #       {{ '\n_' + entity.name + '_ - ' + entity.next_date }}
+                #       {% endfor %}
+                #       {% else %}
+                #       {% for entity in  state_attr('binary_sensor.events_in_seven_days', 'entity_id') + state_attr('binary_sensor.events_today', 'entity_id') %}
+                #       {{ '\n_' + entity.name + '_ - ' + entity.next_date }}
+                #       {% endfor %}
+                #       {% endif %}
         - conditions: # 9am turn off the recirc pump
             - condition: trigger
               id: 9am
@@ -472,7 +520,13 @@
       after: "18:30:00"
   action:
     - choose:
-        - conditions: "{{ trigger.id == 'both' }}"
+        - conditions:
+            - "{{ trigger.id == 'both' }}"
+            - condition: state
+              entity_id: binary_sensor.main_motions
+              state: "off"
+              for:
+                seconds: 30
           sequence:
             - service: button.press
               entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_int_but_mbed_off
@@ -613,7 +667,7 @@
       entity_id: input_boolean.sunset_run_once
       state: "off"
     - condition: time
-      after: "15:30:00"
+      after: "16:30:00"
   action:
     - service: button.press
       entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_sunset1
@@ -621,7 +675,9 @@
       target:
         entity_id: input_boolean.sunset_run_once
     - service: cover.close_cover
-      entity_id: cover.main_floor_library_shade
+      entity_id:
+        - cover.main_floor_library_shade
+        - cover.upstairs_stair_shade
 # ########################################
 # - alias: "Night Mode: turn on sunset2 lights at ten min after sunset"
 #   id: "Night Mode: turn on sunset2 lights at ten min after sunset"
@@ -903,7 +959,6 @@
                 entity_id:
                   - cover.main_floor_sunroom_east_shade
                   - cover.basement_office_east_shade
-                  - cover.main_floor_kitchen_east_shades
                   - cover.basement_lounge_east_shade
             - service: homeassistant.turn_on
               target:
@@ -911,6 +966,7 @@
         - conditions:
             - condition: trigger
               id: west_open
+            - "{{ states('binary_sensor.vacation') == 'off' }}"
           sequence:
             - service: cover.set_cover_position
               data:
@@ -923,6 +979,7 @@
         - conditions:
             - condition: trigger
               id: east_open
+            - "{{ states('binary_sensor.vacation') == 'off' }}"
           sequence:
             - service: cover.set_cover_position
               data:
@@ -931,7 +988,6 @@
                 entity_id:
                   - cover.main_floor_sunroom_east_shade
                   - cover.basement_office_east_shade
-                  - cover.main_floor_kitchen_east_shades
                   - cover.basement_lounge_east_shade
             - service: homeassistant.turn_off
               target:
@@ -1095,8 +1151,7 @@
   trigger:
     - platform: state
       entity_id:
-        - binary_sensor.elkm1_office_pir
-        - binary_sensor.elkm1_main_bath_pir
+        - binary_sensor.office_motions
         - binary_sensor.elkm1_lounge_pir
         - binary_sensor.elkm1_mudroom_pir
       id: pir-on
@@ -1104,19 +1159,12 @@
     - platform: state
       entity_id:
         - binary_sensor.elkm1_lounge_pir
-        - binary_sensor.elkm1_office_pir
+        - binary_sensor.office_motions
         - binary_sensor.elkm1_mudroom_pir
       id: pir-off
       to: "off"
       for:
         minutes: 10
-    - platform: state
-      entity_id:
-        - binary_sensor.elkm1_main_bath_pir
-      id: pir-off
-      to: "off"
-      for:
-        minutes: 3
   action:
     - choose:
         - conditions:
@@ -1128,10 +1176,8 @@
             - service: light.turn_on
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                  {% if trigger.entity_id == 'binary_sensor.office_motions' %}
                     light.basement_office_art
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
-                    light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
                     light.basement_bar_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir' %}
@@ -1145,15 +1191,53 @@
             - service: homeassistant.turn_off
               data_template:
                 entity_id: >
-                  {% if trigger.entity_id == 'binary_sensor.elkm1_office_pir' %}
+                  {% if trigger.entity_id == 'binary_sensor.office_motions' %}
                     light.basement_office_art
-                  {% elif trigger.entity_id == 'binary_sensor.elkm1_main_bath_pir' %}
-                    light.upstairs_main_bathroom_toekick
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir' %}
                     light.basement_bar_cabinets
                   {% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir' %}
                     light.main_floor_mudroom_lamp
                   {% endif %}
+#########################################
+- alias: "Automatic Lighting: motion light main bath"
+  id: "Automatic Lighting: motion light main bath"
+  description: "dont turn the light on between 11pm and 5am"
+  mode: restart
+  variables:
+    light: light.upstairs_main_bathroom_toekick
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.elkm1_main_bath_pir
+      id: pir-on
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.elkm1_main_bath_pir
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 3
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
+            - "{{ is_state('binary_sensor.light_inside', 'off') }}"
+            - condition: time
+              before: "23:00:00"
+              after: "05:00:00"
+          sequence:
+            - service: light.turn_on
+              data_template:
+                entity_id: "{{light}}"
+                brightness_pct: "{{ states('sensor.circadian_brightness') }}"
+        - conditions:
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - service: homeassistant.turn_off
+              data_template:
+                entity_id: "{{light}}"
 #########################################
 - alias: "Automatic Lighting: motion light laundry"
   id: "Automatic Lighting: motion light laundry"
@@ -1172,7 +1256,7 @@
       id: pir-off
       to: "off"
       for:
-        minutes: 4
+        minutes: 2
   action:
     - choose:
         - conditions:
@@ -1187,9 +1271,10 @@
             - condition: trigger
               id: pir-off
           sequence:
-            - service: homeassistant.turn_off
-              data_template:
+            - service: light.turn_off
+              data:
                 entity_id: "{{light}}"
+                transition: 120
 #########################################
 - alias: "Automatic Lighting: motion light gym"
   id: "Automatic Lighting: motion light gym"
@@ -1299,7 +1384,7 @@
             - service: light.turn_off
               data:
                 entity_id: "{{light}}"
-                transition: 60
+                transition: 120
 #########################################
 - alias: "Automatic Lighting: motion light back kitchen"
   id: "Automatic Lighting: motion light back kitchen"
@@ -1401,7 +1486,7 @@
   id: "Blinds: office"
   trigger:
     - platform: state
-      entity_id: binary_sensor.elkm1_office_pir
+      entity_id: binary_sensor.office_motions
       to: "on"
   condition:
     - "{{ is_state('binary_sensor.light_inside', 'off') }}"
@@ -1420,7 +1505,7 @@
 #   id: "Automatic Lighting: office"
 #   mode: restart
 #   variables:
-#     # pir: binary_sensor.elkm1_office_pir
+#     # pir: binary_sensor.office_motions
 #     light: light.basement_office_cans
 #     brightness: switch.adaptive_lighting_office
 #   trigger:
