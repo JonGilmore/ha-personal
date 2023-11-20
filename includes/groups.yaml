@@ -149,7 +149,7 @@ all_lights:
     - light.upstairs_stair_chandelier
     - light.upstairs_stair_sconces
     - switch.exterior_back_outlet
-    - switch.exterior_roof_outlets
+    - light.exterior_roof_outlets
 
 basement_lights:
   name: Basement Lights

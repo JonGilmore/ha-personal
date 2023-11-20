@@ -10,8 +10,7 @@
       entity_id: binary_sensor.vacation
       state: "on"
   action:
-    - service: button.press
-      entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_off
+    - service: script.all_off
 #########################################
 - alias: "Vacation Mode: notify if a garage door opens"
   id: "Vacation Mode: notify if a garage door opens"
