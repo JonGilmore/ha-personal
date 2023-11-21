@@ -25,26 +25,33 @@ views:
     cards:
       - type: conditional
         conditions:
-          - entity: sensor.doors_unlocked_number
-            state_not: 0
-          - entity: sensor.number_of_doors_open
-            state_not: 0
+          - condition: "numeric_state"
+            entity: sensor.number_of_doors_open
+            above: 0
         card:
           type: markdown
           content: |
-            {% set unlocked = states('sensor.doors_unlocked_number') | int %}
             {% set open = states('sensor.number_of_doors_open') | int %}
-
-            {% if unlocked == 1 %}
-            {{ states('sensor.doors_unlocked') }} is unlocked.
-            {% elif unlocked > 1 %}
-            {{ states('sensor.doors_unlocked') }} are unlocked.
-            {% endif %}
 
             {% if open == 1 %}
             {{ states('sensor.doors_open') }} is open.
             {% elif open > 1 %}
             {{ states('sensor.doors_open') }} are open.
+            {% endif %}
+      - type: conditional
+        conditions:
+          - condition: "numeric_state"
+            entity: sensor.doors_unlocked_number
+            above: 0
+        card:
+          type: markdown
+          content: |
+            {% set unlocked = states('sensor.doors_unlocked_number') | int %}
+
+            {% if unlocked == 1 %}
+            {{ states('sensor.doors_unlocked') }} is unlocked.
+            {% elif unlocked > 1 %}
+            {{ states('sensor.doors_unlocked') }} are unlocked.
             {% endif %}
       - type: todo-list
         entity: todo.shopping_list
