@@ -17,7 +17,7 @@ resources:
 
 views:
   ##########################################
-  # HOME TAB
+  # HOME VIEW
   ##########################################
   - title: Home
     id: home
@@ -360,15 +360,39 @@ views:
           # - entity: input_select.vacuum_room
 
   ##########################################
-  # CAMERA TAB
+  # CAMERA VIEW
   ##########################################
   - title: Cameras Front
     id: camera-front
     icon: mdi:camera
-    panel: true
+    type: sidebar
     cards:
+      - type: entities
+        title: Sensors
+        view_layout:
+          position: sidebar
+        entities:
+          - entity: sensor.driveway_plate
+          - entity: camera.driveway_roi
+          - entity: camera.driveway_image
+          - entity: binary_sensor.driveway_all_occupancy
+            name: Occupancy
+          - entity: sensor.driveway_all_count
+            name: Count
+      - type: history-graph
+        title: Occupancy
+        hours_to_show: 36
+        view_layout:
+          position: sidebar
+        entities:
+          - entity: binary_sensor.driveway_all_occupancy
+            name: Occupancy
+          - entity: sensor.driveway_all_count
+            name: Count
       - type: custom:layout-card
         layout_type: custom:grid
+        view_layout:
+          position: main
         layout:
           mediaquery:
             "all":
@@ -487,7 +511,7 @@ views:
           #     grid-area: cam2
 
   ##########################################
-  # MUSIC TAB
+  # MUSIC VIEW
   ##########################################
   - title: Music
     id: music
@@ -510,7 +534,7 @@ views:
           - media_player.playroom
           - media_player.sunroom
   ##########################################
-  # TV TAB
+  # TV VIEW
   ##########################################
   - title: TV
     id: tv
@@ -762,7 +786,7 @@ views:
                     group: group.exterior_lights
 
   ##########################################
-  # MAINTENANCE TAB
+  # MAINTENANCE VIEW
   ##########################################
   - title: Maintenance
     id: maintenance
@@ -939,7 +963,7 @@ views:
           {% endfor %}
 
   ##########################################
-  # MOBILE TAB
+  # MOBILE VIEW
   ##########################################
   - title: Mobile
     id: mobile
