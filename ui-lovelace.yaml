@@ -600,19 +600,39 @@ views:
     path: lights-main
     panel: true
     cards:
-      - type: custom:auto-entities
-        card:
-          type: grid
-          columns: 4
-          square: false
-        card_param: cards
-        filter:
-          include:
-            - options:
-                type: tile
-                features:
-                  - type: light-brightness
-              group: group.main_floor_lights
+      - type: vertical-stack
+        cards:
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 0px) and (max-width: 767px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: entities
+                title: Toggle All
+                show_header_toggle: true
+              filter:
+                include:
+                  - group: group.main_floor_lights
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 768px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: grid
+                columns: 4
+                square: false
+              card_param: cards
+              filter:
+                include:
+                  - options:
+                      type: tile
+                      features:
+                        - type: light-brightness
+                    group: group.main_floor_lights
   - title: Lights - Upstairs
     id: lights-upstairs
     icon: mdi:lightbulb
@@ -620,19 +640,39 @@ views:
     path: lights-upstairs
     panel: true
     cards:
-      - type: custom:auto-entities
-        card:
-          type: grid
-          columns: 4
-          square: false
-        card_param: cards
-        filter:
-          include:
-            - options:
-                type: tile
-                features:
-                  - type: light-brightness
-              group: group.upstairs_lights
+      - type: vertical-stack
+        cards:
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 0px) and (max-width: 767px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: entities
+                title: Toggle All
+                show_header_toggle: true
+              filter:
+                include:
+                  - group: group.upstairs_lights
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 768px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: grid
+                columns: 4
+                square: false
+              card_param: cards
+              filter:
+                include:
+                  - options:
+                      type: tile
+                      features:
+                        - type: light-brightness
+                    group: group.upstairs_lights
   - title: Lights - Basement
     id: lights-basement
     icon: mdi:lightbulb
@@ -640,19 +680,39 @@ views:
     path: lights-basement
     panel: true
     cards:
-      - type: custom:auto-entities
-        card:
-          type: grid
-          columns: 4
-          square: false
-        card_param: cards
-        filter:
-          include:
-            - options:
-                type: tile
-                features:
-                  - type: light-brightness
-              group: group.basement_lights
+      - type: vertical-stack
+        cards:
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 0px) and (max-width: 767px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: entities
+                title: Toggle All
+                show_header_toggle: true
+              filter:
+                include:
+                  - group: group.basement_lights
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 768px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: grid
+                columns: 4
+                square: false
+              card_param: cards
+              filter:
+                include:
+                  - options:
+                      type: tile
+                      features:
+                        - type: light-brightness
+                    group: group.basement_lights
   - title: Lights - Exterior
     id: lights-exterior
     icon: mdi:lightbulb
@@ -660,19 +720,39 @@ views:
     path: lights-exterior
     panel: true
     cards:
-      - type: custom:auto-entities
-        card:
-          type: grid
-          columns: 4
-          square: false
-        card_param: cards
-        filter:
-          include:
-            - options:
-                type: tile
-                features:
-                  - type: light-brightness
-              group: group.exterior_lights
+      - type: vertical-stack
+        cards:
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 0px) and (max-width: 767px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: entities
+                title: Toggle All
+                show_header_toggle: true
+              filter:
+                include:
+                  - group: group.exterior_lights
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 768px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: grid
+                columns: 4
+                square: false
+              card_param: cards
+              filter:
+                include:
+                  - options:
+                      type: tile
+                      features:
+                        - type: light-brightness
+                    group: group.exterior_lights
 
   ##########################################
   # MAINTENANCE TAB
