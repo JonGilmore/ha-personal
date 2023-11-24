@@ -252,6 +252,18 @@ views:
                     tap_action:
                       action: url
                       url_path: !secret recycling
+      # if there is an update available, show it
+      - type: conditional
+        conditions:
+          - condition: user
+            users: # Jon
+              - 625dc3c97d4e4ca4a80a18aa9098ee8d
+          - condition: state
+            entity: binary_sensor.home_assistant_versions_update_available
+            state: "on"
+        card:
+          type: entity
+          entity: sensor.home_assistant_versions
       - type: "custom:auto-entities"
         show_empty: true
         card:
