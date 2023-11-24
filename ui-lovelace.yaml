@@ -256,8 +256,8 @@ views:
       - type: conditional
         conditions:
           - condition: user
-            users: # Jon
-              - 625dc3c97d4e4ca4a80a18aa9098ee8d
+            users:
+              - !secret uid_primary
           - condition: state
             entity: binary_sensor.home_assistant_versions_update_available
             state: "on"
