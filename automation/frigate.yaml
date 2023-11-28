@@ -273,6 +273,7 @@
       continue_on_timeout: false
     - service: telegram_bot.send_video
       data_template:
+        disable_notification: true
         file: "/tmp/{{camera}}-{{label}}.mp4"
         inline_keyboard:
           - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
