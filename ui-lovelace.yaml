@@ -1,19 +1,7 @@
 title: !secret name
-resources:
-  - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
-    type: module
-  - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
-    type: module
-  - url: /hacsfiles/lovelace-layout-card/layout-card.js
-    type: module
-  - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
-    type: module
-  - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
-    type: module
-  - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
-    type: module
-  - url: /hacsfiles/lovelace-state-switch/state-switch.js
-    type: module
+
+button_card_templates: !include_dir_merge_named button_card_templates
+decluttering_templates: !include_dir_merge_named decluttering_templates
 
 views:
   ##########################################
@@ -134,61 +122,46 @@ views:
                   - last-changed
           - type: horizontal-stack
             cards:
-              - type: tile
-                entity: group.main_floor_lights
-                name: Main
-                icon: mdi:lightbulb
-                tap_action:
-                  action: navigate
-                  navigation_path: "/lovelace/lights-main"
-                icon_tap_action:
-                  action: call-service
-                  service: button.press
-                  target:
-                    entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
-              - type: tile
-                entity: group.upstairs_lights
-                name: Upstairs
-                icon: mdi:lightbulb
-                tap_action:
-                  action: navigate
-                  navigation_path: "/lovelace/lights-upstairs"
-                icon_tap_action:
-                  action: call-service
-                  service: button.press
-                  target:
-                    entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_second_off
+              - type: custom:decluttering-card
+                template: tile
+                variables:
+                  - group: group.main_floor_lights
+                  - name: Main
+                  - navigation_path: "/lovelace/lights-main"
+                  - button: button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
+              - type: custom:decluttering-card
+                template: tile
+                variables:
+                  - group: group.upstairs_lights
+                  - name: Upstairs
+                  - navigation_path: "/lovelace/lights-upstairs"
+                  - button: button.basement_equipment_room_homeowner_kp01_position_3_keypad_second_off
           - type: horizontal-stack
             cards:
-              - type: tile
-                entity: group.basement_lights
-                name: Basement
-                icon: mdi:lightbulb
-                tap_action:
-                  action: navigate
-                  navigation_path: "/lovelace/lights-basement"
-                icon_tap_action:
-                  action: call-service
-                  service: button.press
-                  target:
-                    entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_basement_off
-              - type: tile
-                entity: group.exterior_lights
-                name: Exterior
-                icon: mdi:lightbulb
-                tap_action:
-                  action: navigate
-                  navigation_path: "/lovelace/lights-exterior"
-                icon_tap_action:
-                  action: call-service
-                  service: button.press
-                  target:
-                    entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_off
+              - type: custom:decluttering-card
+                template: tile
+                variables:
+                  - group: group.basement_lights
+                  - name: Basement
+                  - navigation_path: "/lovelace/lights-basement"
+                  - button: button.basement_equipment_room_homeowner_kp_position_1_keypad_basement_off
+              - type: custom:decluttering-card
+                template: tile
+                variables:
+                  - group: group.exterior_lights
+                  - name: Exterior
+                  - navigation_path: "/lovelace/lights-exterior"
+                  - button: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_off
           - type: horizontal-stack
             cards:
-              - type: tile
-                icon: mdi:roller-shade
-                entity: group.all_shades
+              - type: custom:decluttering-card
+                template: tile
+                variables:
+                  - group: group.all_shades
+                  - name: All Shades
+                  - icon: mdi:roller-shade
+                  - navigation_path: "/lovelace/shades-all"
+                  - button: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_open
               - type: tile
                 icon: mdi:fan
                 entity: group.all_fans
@@ -379,28 +352,38 @@ views:
     icon: mdi:camera
     type: sidebar
     cards:
-      - type: entities
-        title: Sensors
+      - type: conditional
         view_layout:
           position: sidebar
-        entities:
-          - entity: sensor.driveway_plate
-          - entity: camera.driveway_roi
-          - entity: camera.driveway_image
-          - entity: binary_sensor.driveway_all_occupancy
-            name: Occupancy
-          - entity: sensor.driveway_all_count
-            name: Count
-      - type: history-graph
-        title: Occupancy
-        hours_to_show: 36
+        conditions:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+        card:
+          type: entities
+          title: Sensors
+          entities:
+            - entity: sensor.driveway_plate
+            - entity: camera.driveway_roi
+            - entity: camera.driveway_image
+            - entity: binary_sensor.driveway_all_occupancy
+              name: Occupancy
+            - entity: sensor.driveway_all_count
+              name: Count
+      - type: conditional
         view_layout:
           position: sidebar
-        entities:
-          - entity: binary_sensor.driveway_all_occupancy
-            name: Occupancy
-          - entity: sensor.driveway_all_count
-            name: Count
+        conditions:
+          - condition: screen
+            media_query: "(min-width: 768px)"
+        card:
+          type: history-graph
+          title: Occupancy
+          hours_to_show: 36
+          entities:
+            - entity: binary_sensor.driveway_all_occupancy
+              name: Occupancy
+            - entity: sensor.driveway_all_count
+              name: Count
       - type: custom:layout-card
         layout_type: custom:grid
         view_layout:
@@ -634,7 +617,7 @@ views:
           - fan_mode
           - current_activity
   ##########################################
-  # LIGHT SUBVIEWS
+  # LIGHT/BLINDS SUBVIEWS
   ##########################################
   - title: Lights - Main
     id: lights-main
@@ -671,11 +654,11 @@ views:
               card_param: cards
               filter:
                 include:
-                  - options:
+                  - group: group.main_floor_lights
+                    options:
                       type: tile
                       features:
                         - type: light-brightness
-                    group: group.main_floor_lights
   - title: Lights - Upstairs
     id: lights-upstairs
     icon: mdi:lightbulb
@@ -711,11 +694,11 @@ views:
               card_param: cards
               filter:
                 include:
-                  - options:
+                  - group: group.upstairs_lights
+                    options:
                       type: tile
                       features:
                         - type: light-brightness
-                    group: group.upstairs_lights
   - title: Lights - Basement
     id: lights-basement
     icon: mdi:lightbulb
@@ -751,11 +734,11 @@ views:
               card_param: cards
               filter:
                 include:
-                  - options:
+                  - group: group.basement_lights
+                    options:
                       type: tile
                       features:
                         - type: light-brightness
-                    group: group.basement_lights
   - title: Lights - Exterior
     id: lights-exterior
     icon: mdi:lightbulb
@@ -791,12 +774,51 @@ views:
               card_param: cards
               filter:
                 include:
-                  - options:
+                  - group: group.exterior_lights
+                    options:
                       type: tile
                       features:
                         - type: light-brightness
-                    group: group.exterior_lights
-
+  - title: Shades - All
+    id: shades-all
+    icon: mdi:roller-shade
+    subview: true
+    path: shades-all
+    panel: true
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 0px) and (max-width: 767px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: entities
+                title: Toggle All
+                show_header_toggle: true
+              filter:
+                include:
+                  - group: group.all_shades
+          - type: conditional
+            conditions:
+              - condition: screen
+                media_query: "(min-width: 768px)"
+            card:
+              type: custom:auto-entities
+              card:
+                type: grid
+                columns: 4
+                square: false
+              card_param: cards
+              filter:
+                include:
+                  - group: group.all_shades
+                    options:
+                      type: tile
+                      features:
+                        - type: cover-position
   ##########################################
   # MAINTENANCE VIEW
   ##########################################

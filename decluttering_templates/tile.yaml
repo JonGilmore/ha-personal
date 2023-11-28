@@ -1,0 +1,16 @@
+tile:
+  default:
+    - icon: mdi:lightbulb
+  card:
+    type: tile
+    entity: "[[group]]"
+    name: "[[name]]"
+    icon: "[[icon]]"
+    tap_action:
+      action: navigate
+      navigation_path: "[[navigation_path]]"
+    icon_tap_action:
+      action: call-service
+      service: button.press
+      target:
+        entity_id: "[[button]]"

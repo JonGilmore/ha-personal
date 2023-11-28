@@ -38,6 +38,27 @@ frontend:
     - /hacsfiles/lovelace-card-mod/card-mod.js
 lovelace:
   mode: yaml
+  resources:
+    - url: /hacsfiles/button-card/button-card.js
+      type: module
+    - url: /hacsfiles/lovelace-layout-card/layout-card.js
+      type: module
+    - url: /hacsfiles/swipe-card/swipe-card.js
+      type: module
+    - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
+      type: module
+    - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
+      type: module
+    - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
+      type: module
+    - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
+      type: module
+    - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
+      type: module
+    - url: /hacsfiles/lovelace-state-switch/state-switch.js
+      type: module
+    - url: /hacsfiles/decluttering-card/decluttering-card.js
+      type: module
   dashboards:
     wallpanel-dashboard:
       mode: yaml

@@ -22,6 +22,8 @@
 !includes/*.yaml
 !custom_templates
 !custom_templates/*.jinja
+!decluttering_templates
+!decluttering_templates/*.yaml
 
 # Ignore folders.
 .storage
@@ -29,6 +31,7 @@
 .google.token
 
 # Ensure these YAML files are ignored, otherwise your secret data/credentials will leak.
+ll-diff.yaml
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml
