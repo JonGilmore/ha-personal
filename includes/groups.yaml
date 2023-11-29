@@ -10,7 +10,7 @@ exterior_lights:
     - light.exterior_front_lights
     - light.exterior_grilldeck_light
     - light.exterior_landscape_lights
-    - switch.exterior_roof_outlets
+    - light.exterior_roof_outlets
     - light.exterior_workshop_light
 
 interior_lights:
@@ -239,6 +239,7 @@ door_locks_shop_mudroom:
 christmasLights:
   name: Christmas Lights
   entities:
+    - light.exterior_roof_outlets
     - light.great_room_christmas_tree
     - light.sunroom_christmas_tree
     - light.mudroom_christmas_tree
