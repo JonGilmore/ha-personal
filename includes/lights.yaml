@@ -1,0 +1,15 @@
+- platform: group
+  name: Christmas Trees
+  unique_id: christmas_trees
+  entities:
+    - light.great_room_christmas_tree
+    - light.sunroom_christmas_tree
+    - light.mudroom_christmas_tree
+- platform: group
+  name: Christmas Lights
+  unique_id: christmas_lights
+  entities:
+    - light.exterior_roof_outlets
+    - light.great_room_christmas_tree
+    - light.sunroom_christmas_tree
+    - light.mudroom_christmas_tree

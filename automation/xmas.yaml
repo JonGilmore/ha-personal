@@ -59,9 +59,9 @@
                     entity_id: person.laura
                     state: "home"
                 sequence:
-                  - service: homeassistant.turn_on
+                  - service: light.turn_on
                     target:
-                      entity_id: group.christmastrees
+                      entity_id: light.christmas_trees
         - conditions: # turn off at 11pm, when sleeping starts, or when laura leaves
             - condition: trigger
               id: xmasoff
@@ -71,9 +71,9 @@
                   before: "07:00:00"
                   after: "04:30:00"
           sequence:
-            - service: homeassistant.turn_off
+            - service: light.turn_off
               target:
-                entity_id: group.christmaslights
+                entity_id: light.christmas_lights
             - service: notify.telegram_jon
               data_template:
                 message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees turned off"
@@ -83,9 +83,9 @@
             - condition: time
               before: "23:00:00"
           sequence:
-            - service: homeassistant.turn_on
+            - service: light.turn_on
               target:
-                entity_id: group.christmastrees
+                entity_id: light.christmas_trees
             - service: notify.telegram_jon
               data_template:
                 message: "{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state }}. Christmas trees turned on"

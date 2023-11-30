@@ -38,7 +38,8 @@ cloud:
         - button.basement_equipment_room_homeowner_kp01_position_3_keypad_second_off
         - button.basement_equipment_room_homeowner_kp01_position_3_keypad_second_on
         - button.basement_equipment_room_homeowner_kp01_position_3_keypad_sunset1
-        - group.christmastrees
+        - light.christmas_trees
+        - light.christmas_lights
         - script.movie_on
     entity_config:
       button.basement_equipment_room_homeowner_kp_position_1_keypad_all_but_mainbed:
@@ -85,7 +86,9 @@ cloud:
         name: second on
       button.basement_equipment_room_homeowner_kp01_position_3_keypad_sunset1:
         name: sunset
-      group.christmastrees:
+      light.christmas_trees:
         name: christmas trees
+      light.christmas_lights:
+        name: christmas lights
       script.movie_on:
         name: watch a movie

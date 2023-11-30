@@ -137,3 +137,7 @@ switch.exterior_roof_outlets:
   icon: mdi:toggle-switch-variant-off
 switch.basement_equipment_room_recirculation_pump:
   icon: mdi:pump
+light.christmas_lights:
+  icon: mdi:string-lights
+light.christmas_trees:
+  icon: mdi:pine-tree
