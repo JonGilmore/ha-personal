@@ -205,6 +205,14 @@
       unique_id: light_inside
       device_class: light
       state: "{{ states('sensor.outdoor_pir_illuminance') | int > 325 }}"
+    - name: "light outside?"
+      unique_id: light_outside
+      device_class: light
+      state: "{{ states('sensor.weatherflow_tempest_illuminance') | int > 165 }}"
+    - name: "camera day mode lux"
+      unique_id: camera_day_mode_lux
+      device_class: light
+      state: "{{ states('sensor.outdoor_pir_illuminance') | int > 45 }}"
     # - name: "light inside basement?"
     #   unique_id: light_inside_basement
     #   device_class: light

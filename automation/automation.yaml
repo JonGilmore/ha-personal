@@ -678,6 +678,54 @@
       entity_id:
         - cover.main_floor_library_shade
         - cover.upstairs_stair_shade
+########################################
+- alias: "Night Mode: set day or night mode on cameras"
+  id: "Night Mode: set day or night mode on cameras"
+  description: "set day or night mode on cameras at sunset/sunrise and 10m after sunset/sunrise"
+  trigger:
+    - platform: sun
+      event: sunset
+      variables:
+        profile: NIGHT
+        time: NORMAL
+    - platform: sun
+      event: sunset
+      offset: "+00:10:00"
+      variables:
+        profile: NIGHT
+        time: NORMAL
+    - platform: state
+      entity_id: binary_sensor.camera_day_mode_lux
+      to: "off"
+      for:
+        seconds: 45
+      variables:
+        profile: NIGHT
+        time: LOWLIGHT
+    - platform: sun
+      event: sunrise
+      variables:
+        profile: DAY
+        time: NORMAL
+    - platform: sun
+      event: sunrise
+      offset: "+00:10:00"
+      variables:
+        profile: DAY
+        time: NORMAL
+    - platform: state
+      entity_id: binary_sensor.camera_day_mode_lux
+      to: "on"
+      for:
+        seconds: 45
+      variables:
+        profile: DAY
+        time: LOWLIGHT
+  action:
+    - service: shell_command.dahua_profile
+      data:
+        profile: "{{profile}}"
+        time: "{{time}}"
 # ########################################
 # - alias: "Night Mode: turn on sunset2 lights at ten min after sunset"
 #   id: "Night Mode: turn on sunset2 lights at ten min after sunset"

@@ -38,3 +38,4 @@ known_devices.yaml
 anniversaries.yaml
 ._*
 .DS_Store
+cameras.dat
