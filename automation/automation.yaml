@@ -369,6 +369,9 @@
       at: "5:00:00"
       id: 5am
     - platform: time
+      at: "7:15:00"
+      id: 715am
+    - platform: time
       at: "7:30:00"
       id: 730am
     - platform: time
@@ -413,6 +416,19 @@
               entity_id:
                 - cover.main_floor_library_shade
                 - cover.basement_office_shade
+        - conditions: # at 715am, if evelyns rest plus light is on and were not on vacation, turn evelyns rest plus light green
+            - condition: trigger
+              id: 715am
+            - condition: state
+              entity_id: switch.evelyns_room_power_switch
+              state: "on"
+            - "{{ states('binary_sensor.vacation') == 'off' }}"
+          sequence:
+            - service: light.turn_on
+              data:
+                entity_id: light.evelyns_room_light
+                rgb_color: [0, 255, 0]
+                brightness_pct: 6
         - conditions: # 730am and if there is an event 7 days out OR today, send a message. if its the first of the month, send a summary for the next 30 days
             - condition: trigger
               id: 730am
@@ -1841,3 +1857,37 @@
       data_template:
         entity_id: "{{ message_id }}"
         value: "{{ trigger.event.data.message_id }}"
+#########################################
+- alias: "Automatic Lighting: apollo motion light office"
+  id: "Automatic Lighting: apollo motion light office"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.apollo_office_multi_bb2a6c_radar_moving_target
+      to: "off"
+      from: "on"
+      id: multi-off
+    - platform: state
+      entity_id: binary_sensor.apollo_office_multi_bb2a6c_radar_moving_target
+      to: "on"
+      from: "off"
+      id: multi-on
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id:
+                - multi-on
+          sequence:
+            - type: turn_on
+              device_id: 2ae4d70d7417067aa13d13fe9673d743
+              entity_id: 48174ba03cfe9bd6c71098fcbfe5ec98
+              domain: light
+        - conditions:
+            - condition: trigger
+              id:
+                - multi-off
+          sequence:
+            - type: turn_off
+              device_id: 2ae4d70d7417067aa13d13fe9673d743
+              entity_id: 48174ba03cfe9bd6c71098fcbfe5ec98
+              domain: light

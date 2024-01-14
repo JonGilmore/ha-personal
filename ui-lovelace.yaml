@@ -870,6 +870,14 @@ views:
             name: Solar Production
           - entity: sensor.total_consumption
             name: Total Consumption
+      - type: entities
+        title: Evelyns Room
+        show_header_toggle: false
+        entities:
+          - entity: light.evelyns_room_light
+            name: Light
+          - entity: switch.evelyns_room_power_switch
+            name: Power Switch
       - type: vertical-stack
         cards:
           - type: entities
