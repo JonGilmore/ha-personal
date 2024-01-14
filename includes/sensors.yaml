@@ -42,34 +42,6 @@
 
 - platform: websocket_api
 
-- platform: systemmonitor
-  resources:
-    - type: disk_use_percent
-    - type: memory_use_percent
-    - type: swap_use_percent
-    - type: load_1m
-    - type: load_5m
-    - type: load_15m
-    - type: network_in
-      arg: enp42s0
-    - type: network_out
-      arg: enp42s0
-    - type: throughput_network_in
-      arg: enp42s0
-    - type: throughput_network_out
-      arg: enp42s0
-    - type: packets_in
-      arg: enp42s0
-    - type: packets_out
-      arg: enp42s0
-    - type: ipv4_address
-      arg: enp42s0
-    - type: ipv6_address
-      arg: enp42s0
-    - type: processor_use
-    - type: processor_temperature
-    - type: last_boot
-
 - platform: time_date
   display_options:
     - "time"

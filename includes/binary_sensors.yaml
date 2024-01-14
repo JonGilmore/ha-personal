@@ -1,5 +1,0 @@
----
-- platform: ping
-  host: 192.168.30.242
-  name: diskstation
-  scan_interval: 30
