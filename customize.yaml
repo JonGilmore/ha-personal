@@ -34,7 +34,7 @@ light.desk_lights:
 light.exterior_deck_lights:
   icon: mdi:dome-light
 light.exterior_deck_posts:
-  icon: mdi:circular-saw
+  icon: mdi:post-lamp
 light.exterior_front_lights:
   icon: mdi:dome-light
 light.exterior_grilldeck_light:
@@ -50,7 +50,7 @@ light.jons_lamp:
 light.lauras_lamp:
   icon: mdi:lamp
 light.main_floor_back_kitchen_cabinets:
-  icon: mdi:lamp
+  icon: mdi:hockey-puck
 light.main_floor_back_kitchen_lights:
   icon: mdi:dome-light
 light.main_floor_foyer_lights:
