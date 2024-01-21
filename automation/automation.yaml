@@ -505,14 +505,18 @@
             - service: homeassistant.turn_on
               target:
                 entity_id: switch.basement_equipment_room_recirculation_pump
-        - conditions: # 11pm turn off the exterior lights & open the sunroom shades
+        - conditions: # 11pm turn off the exterior lights & optionally open the sunroom shades if vacation is off
             - condition: trigger
               id: 11pm
           sequence:
             - service: button.press
               entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_off
-            - service: cover.open_cover
-              entity_id: cover.main_floor_sunroom_west_shades
+            - choose:
+                - conditions: # as long as vacation is off, open the sunroom shades
+                    - "{{ states('binary_sensor.vacation') == 'off' }}"
+                  sequence:
+                    - service: cover.open_cover
+                      entity_id: cover.main_floor_sunroom_west_shades
       default: # at noon and 8am, turn off the sunset run once and driveway sentry
         - service: homeassistant.turn_off
           target:
