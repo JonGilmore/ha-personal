@@ -597,11 +597,6 @@
     - service: script.night_adaptive_lighting
       data:
         state: turn_on
-    # - service: telegram_bot.send_message
-    #   data:
-    #     message: "Night mode... close blinds?"
-    #     inline_keyboard:
-    #       - "Yes:/close_blinds, Ignore:/blinds_do_nothing"
 #########################################
 - alias: "Occupancy: leaving or arriving home"
   id: "Occupancy: leaving or arriving home"
