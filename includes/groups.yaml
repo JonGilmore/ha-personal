@@ -292,6 +292,7 @@ main_motions:
     - sensor.elkm1_library_pir
     - sensor.elkm1_mudroom_pir
     - sensor.elkm1_sunroom_pir
+    - binary_sensor.main_floor_kitchen_occupancy
 
 upstairs_motions:
   name: Upstairs Motions

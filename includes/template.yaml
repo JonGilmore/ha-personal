@@ -114,7 +114,8 @@
           states('sensor.elkm1_kitchen_pir'),
           states('sensor.elkm1_library_pir'),
           states('sensor.elkm1_mudroom_pir'),
-          states('sensor.elkm1_sunroom_pir')] }}
+          states('sensor.elkm1_sunroom_pir')] or
+          is_state('binary_sensor.main_floor_kitchen_occupancy', 'on') }}
     - name: "Upstairs Motions"
       unique_id: upstairs_motions
       device_class: motion
@@ -149,7 +150,8 @@
           states('sensor.elkm1_main_bath_pir'),
           states('sensor.elkm1_main_bed_pir'),
           states('sensor.elkm1_second_hall_pir'),
-          states('sensor.elkm1_garage_pir')] }}
+          states('sensor.elkm1_garage_pir')] or
+          is_state('binary_sensor.main_floor_kitchen_occupancy', 'on') }}
     - name: "Kitchen Area Motions"
       unique_id: kitchen_area_motions
       device_class: motion
@@ -157,7 +159,8 @@
         {{ states('sensor.elkm1_back_kitchen_pir') == "Violated"
         or states('sensor.elkm1_foyer_pir') == "Violated"
         or states('sensor.elkm1_great_room_pir') == "Violated"
-        or states('sensor.elkm1_kitchen_pir') == "Violated" }}
+        or states('sensor.elkm1_kitchen_pir') == "Violated"
+        or is_state('binary_sensor.main_floor_kitchen_occupancy', 'on') }}
     - name: "Garage Doors"
       unique_id: garage_doors
       device_class: garage_door
