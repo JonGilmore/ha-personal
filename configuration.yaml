@@ -142,7 +142,6 @@ input_number: !include includes/input_number.yaml
 intent_script: !include includes/intent_scripts.yaml
 light: !include includes/lights.yaml
 mqtt: !include includes/mqtt.yaml
-proximity: !include includes/proximity.yaml
 rest_command: !include includes/rest_commands.yaml
 scene: !include includes/scenes.yaml
 script: !include includes/scripts.yaml
@@ -162,27 +161,10 @@ conversation:
 logbook:
 person:
 config:
-map:
 mobile_app:
 media_source:
 wake_on_lan:
 
-image_processing:
-  - platform: platerecognizer
-    api_token: !secret platerecognizer_api
-    regions:
-      - us
-    watched_plates:
-      - !secret plate_subaru
-      - !secret plate_audi
-    save_file_folder: /config/www/platerecognizer/
-    save_timestamped_file: True
-    always_save_latest_file: True
-    mmc: True
-    detection_rule: strict
-    region: strict
-    source:
-      - entity_id: camera.driveway
 rest:
   - headers:
       Authorization: !secret enphase_api
@@ -236,7 +218,40 @@ weather:
     wind_speed_template: "{{ states('sensor.weatherflow_tempest_wind_speed_avg')| float }}"
     wind_bearing_template: "{{ states('sensor.weatherflow_tempest_wind_bearing_avg')| int }}"
     visibility_template: "{{ states('sensor.weatherflow_tempest_visibility')| float }}"
-    forecast_template: "{{ state_attr('sensor.hub_hb_00069559_weather', 'daily_forecast') }}"
+    forecast_hourly_template: >-
+      {% set data = namespace(l = []) %}
+      {% for e in state_attr('sensor.hub_hb_00069559_weather', 'hourly_forecast') %}
+      {%   set data.l = data.l + [ {
+              'datetime': e.datetime,
+              'condition': e.condition,
+              'temperature': e.temperature,
+              'native_apparent_temperature': e.feels_like,
+              'pressure': e.pressure,
+              'humidity': e.humidity,
+              'precipitation': e.precipitation,
+              'precipitation_probability': e.precipitation_probability,
+              'wind_speed': e.wind_speed,
+              'native_wind_gust_speed': e.wind_gust,
+              'wind_bearing': e.wind_bearing,
+              'uv_index': e.uv
+            } ] %}
+      {% endfor %}
+      {{ data.l }}
+    forecast_daily_template: >-
+      {% set data = namespace(l = []) %}
+      {% for e in state_attr('sensor.hub_hb_00069559_weather', 'daily_forecast') %}
+      {%   set data.l = data.l + [ {
+              'datetime': e.datetime,
+              'condition': e.condition,
+              'temperature': e.temperature,
+              'templow': e.templow,
+              'precipitation': e.precipitation,
+              'precipitation_probability': e.precipitation_probability,
+              'wind_speed': e.wind_speed,
+              'wind_bearing': e.wind_bearing
+            } ] %}
+      {% endfor %}
+      {{ data.l }}
 
 homekit:
   - filter:
