@@ -13,3 +13,63 @@
     - light.great_room_christmas_tree
     - light.sunroom_christmas_tree
     - light.mudroom_christmas_tree
+- platform: switch
+  name: basement bar cabinets
+  entity_id: switch.basement_bar_cabinets
+- platform: switch
+  name: basement office hall
+  entity_id: switch.basement_office_hall
+- platform: switch
+  name: basement workshop lights
+  entity_id: switch.basement_workshop_lights
+- platform: switch
+  name: exterior deck lights
+  entity_id: switch.exterior_deck_lights
+- platform: switch
+  name: exterior deck posts
+  entity_id: switch.exterior_deck_posts
+- platform: switch
+  name: exterior front lights
+  entity_id: switch.exterior_front_lights
+- platform: switch
+  name: exterior grilldeck light
+  entity_id: switch.exterior_grilldeck_light
+- platform: switch
+  name: exterior landscape lights
+  entity_id: switch.exterior_landscape_lights
+- platform: switch
+  name: exterior workshop light
+  entity_id: switch.exterior_workshop_light
+- platform: switch
+  name: main floor back kitchen cabinets
+  entity_id: switch.main_floor_back_kitchen_cabinets
+- platform: switch
+  name: main floor foyer lights
+  entity_id: switch.main_floor_foyer_lights
+- platform: switch
+  name: main floor garage hex lights
+  entity_id: switch.main_floor_garage_hex_lights
+- platform: switch
+  name: main floor garage lights
+  entity_id: switch.main_floor_garage_lights
+- platform: switch
+  name: main floor great room lamp
+  entity_id: switch.main_floor_great_room_lamp
+- platform: switch
+  name: main floor kitchen cabinets
+  entity_id: switch.main_floor_kitchen_cabinets
+- platform: switch
+  name: main floor kitchen toekick
+  entity_id: switch.main_floor_kitchen_toekick
+- platform: switch
+  name: main floor library lamp
+  entity_id: switch.main_floor_library_lamp
+- platform: switch
+  name: main floor mudroom lamp
+  entity_id: switch.main_floor_mudroom_lamp
+- platform: switch
+  name: main floor sunroom entry lamp
+  entity_id: switch.main_floor_sunroom_entry_lamp
+- platform: switch
+  name: upstairs jack and jill light
+  entity_id: switch.upstairs_jack_and_jill_light
