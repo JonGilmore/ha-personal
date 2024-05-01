@@ -227,7 +227,7 @@
             data:
               entity_id: light.evelyns_room_light
               rgb_color: [0, 255, 0]
-              brightness_pct: 6
+              brightness_pct: 100
     - wait_for_trigger: # w/in 20m of disarming, if there is foyer motion, turn on the living room
         - platform: state
           entity_id: sensor.elkm1_foyer_pir
@@ -1770,28 +1770,6 @@
             - file: "{{filename}}"
               caption: "New plate recognized: {{ states('sensor.driveway_plate') }}"
 #########################################
-- alias: "Frigate: mount NAS share on startup"
-  id: "Frigate: mount NAS share on startup"
-  trigger:
-    - platform: homeassistant
-      event: start
-  action:
-    - wait_template: "{{ is_state('binary_sensor.diskstation', 'on') }}"
-    - delay:
-        hours: 0
-        minutes: 1
-        seconds: 0
-        milliseconds: 0
-    - service: shell_command.mount_frigate_nas
-      data: {}
-    - service: system_log.write
-      data_template:
-        message: "LOGGING: about to start the frigate addon..."
-        level: error
-    # - service: hassio.addon_start
-    #   data:
-    #     addon: ccab4aaf_frigate
-#########################################
 - alias: "Utility: adblocking on/off"
   id: "Utility: adblocking on/off"
   trigger:
@@ -1890,3 +1868,34 @@
               device_id: 2ae4d70d7417067aa13d13fe9673d743
               entity_id: 48174ba03cfe9bd6c71098fcbfe5ec98
               domain: light
+#########################################
+- alias: "Utility: toggle bedroom lamps on button press"
+  description: "Utility: toggle bedroom lamps on button press"
+  trigger:
+    - platform: event
+      event_type: lutron_caseta_button_event
+      event_data:
+        device_id: 0ed5d17f09fc4a169a55251f422cfa1b
+        leap_button_number: 2
+        action: press
+  action:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: light.jons_lamp
+              state: "off"
+            - condition: state
+              entity_id: light.lauras_lamp
+              state: "off"
+          sequence:
+            - service: light.turn_on
+              target:
+                entity_id:
+                  - light.jons_lamp
+                  - light.lauras_lamp
+      default:
+        - service: light.turn_off
+          target:
+            entity_id:
+              - light.jons_lamp
+              - light.lauras_lamp
