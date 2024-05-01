@@ -440,3 +440,19 @@ delete_lock_garage_code:
           {% elif is_state('input_select.code_slot','04') %}
             input_text.code_slot_garage_user_04
           {% endif %}
+
+main_bed_position:
+  alias: "main bed position"
+  fields:
+    state:
+      description: "bed position"
+      example: "valid values are Not at preset, Favorite, Read, Watch TV, Flat, Zero G, Snore"
+    side:
+      description: "bed side"
+      example: "valid values are left, right"
+  sequence:
+    - service: select.select_option
+      target:
+        entity_id: select.sleepnumber_firmness_control_sleepiq_dual_boxed_foundation_preset_{{side}}
+      data:
+        option: "{{state}}"
