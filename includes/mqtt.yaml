@@ -51,3 +51,8 @@
       unique_id: gym_acurite_humidity
       unit_of_measurement: "%"
       expire_after: 600
+    - name: "License plate"
+      state_topic: "frigate/plate_recognizer"
+      value_template: "{{ value_json.plate_number }}"
+      json_attributes_topic: "frigate/plate_recognizer"
+      icon: mdi:car
