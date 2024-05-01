@@ -423,22 +423,22 @@
       state: "{{ states.light|selectattr('state', 'equalto', 'on')|list|length }}"
       unique_id: lights_on_number
     - name: "Doors Locked"
-      state: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='name')| list|join(', ') }}"
+      state: "{{ expand('lock.garage_lock', 'lock.mudroom_lock', 'lock.workshop_lock')|selectattr('state', 'eq', 'locked')|list|map(attribute='name')|list|join(', ') }}"
       unique_id: doors_locked
     - name: "Doors Locked Entities"
-      state: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|map(attribute='entity_id')| list|join(', ') }}"
+      state: "{{ expand('lock.garage_lock', 'lock.mudroom_lock', 'lock.workshop_lock')|selectattr('state', 'eq', 'locked')|list|map(attribute='entity_id')|list|join(', ') }}"
       unique_id: doors_locked_entities
     - name: "Number of Doors Locked"
-      state: "{{ states.lock|selectattr('state', 'equalto', 'locked')|list|length }}"
+      state: "{{ expand('lock.garage_lock', 'lock.mudroom_lock', 'lock.workshop_lock')|selectattr('state', 'eq', 'locked')|list|length }}"
       unique_id: doors_locked_number
     - name: "Doors Unlocked"
-      state: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
+      state: "{{ expand('lock.garage_lock', 'lock.mudroom_lock', 'lock.workshop_lock')|selectattr('state', 'eq', 'unlocked')|list|map(attribute='name')|list|join(', ') }}"
       unique_id: doors_unlocked
     - name: "Doors Unlocked Entities"
-      state: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='entity_id')| list|join(', ') }}"
+      state: "{{ expand('lock.garage_lock', 'lock.mudroom_lock', 'lock.workshop_lock')|selectattr('state', 'eq', 'unlocked')|list|map(attribute='entity_id')|list|join(', ') }}"
       unique_id: doors_unlocked_entities
     - name: "Number of Doors Unlocked"
-      state: "{{ states.lock|selectattr('state', 'equalto', 'unlocked')|list|length }}"
+      state: "{{ expand('lock.garage_lock', 'lock.mudroom_lock', 'lock.workshop_lock')|selectattr('state', 'eq', 'unlocked')|list|length }}"
       unique_id: doors_unlocked_number
     - name: "Number of Non-vacation Doors Unlocked"
       state: "{{ states | selectattr('entity_id', 'in', state_attr('group.door_locks_shop_mudroom', 'entity_id')) | selectattr('state', 'eq', 'unlocked') | list | count }}"
