@@ -44,21 +44,20 @@ views:
       - type: todo-list
         entity: todo.shopping_list
         title: Shopping List
-      - type: custom:state-switch
-        entity: user
-        default: default
-        states:
-          Jon:
-            type: todo-list
-            entity: todo.jons_todo
-            title: Todo's
-          Laura:
-            type: todo-list
-            entity: todo.lauras_todo
-            title: Todo's
-          default:
-            type: markdown
-            content: "## Unknown user, get rekt"
+      - type: todo-list
+        entity: todo.jons_todo
+        title: Todo's
+        visibility:
+          - condition: user
+            users:
+              - 625dc3c97d4e4ca4a80a18aa9098ee8d
+      - type: todo-list
+        entity: todo.lauras_todo
+        title: Todo's
+        visibility:
+          - condition: user
+            users:
+              - b57624f1ea654d3db5b830d7bc48609b
       - type: tile
         entity: alarm_control_panel.elkm1_area_1
         name: Home Alarm
@@ -144,7 +143,7 @@ views:
                   - group: group.basement_lights
                   - name: Basement
                   - navigation_path: "/lovelace/lights-basement"
-                  - button: button.basement_equipment_room_homeowner_kp_position_1_keypad_basement_off
+                  - button: button.basement_equipment_room_homeowner_kp01_position_1_keypad_basement_off
               - type: custom:decluttering-card
                 template: tile
                 variables:
@@ -874,115 +873,19 @@ views:
         title: Evelyns Room
         show_header_toggle: false
         entities:
+          - entity: input_boolean.actions_on_evelyns_room
+            name: Evelyn's Room Automations
           - entity: light.evelyns_room_light
             name: Light
           - entity: switch.evelyns_room_power_switch
             name: Power Switch
-      - type: vertical-stack
-        cards:
-          - type: entities
-            title: Garage Door Lock Codes
-            entities:
-              - input_select.code_slot
-          - type: custom:state-switch
-            entity: input_select.code_slot
-            states:
-              "01":
-                cards: null
-                type: entities
-                entities:
-                  - entity: input_text.code_slot_garage_user_01
-                  - entity: input_number.garage_code_01
-                  - entity: script.set_lock_garage_code
-                    action_name: Set
-                    type: button
-                    name: Set Lock Code
-                    tap_action:
-                      action: call-service
-                      service: script.set_lock_garage_code
-                      confirmation:
-                        text: Change the lock code for this slot?
-                  - entity: script.delete_lock_garage_code
-                    action_name: Delete
-                    type: button
-                    name: Delete Lock Code
-                    tap_action:
-                      action: call-service
-                      service: script.delete_lock_garage_code
-                      confirmation:
-                        text: Delete the lock code for this slot?
-              "02":
-                cards: null
-                type: entities
-                entities:
-                  - entity: input_text.code_slot_garage_user_02
-                  - entity: input_number.garage_code_02
-                  - entity: script.set_lock_garage_code
-                    action_name: Set
-                    type: button
-                    name: Set Lock Code
-                    tap_action:
-                      action: call-service
-                      service: script.set_lock_garage_code
-                      confirmation:
-                        text: Change the lock code for this slot?
-                  - entity: script.delete_lock_garage_code
-                    action_name: Delete
-                    type: button
-                    name: Delete Lock Code
-                    tap_action:
-                      action: call-service
-                      service: script.delete_lock_garage_code
-                      confirmation:
-                        text: Delete the lock code for this slot?
-              "03":
-                cards: null
-                type: entities
-                entities:
-                  - entity: input_text.code_slot_garage_user_03
-                  - entity: input_number.garage_code_03
-                  - entity: script.set_lock_garage_code
-                    action_name: Set
-                    type: button
-                    name: Set Lock Code
-                    tap_action:
-                      action: call-service
-                      service: script.set_lock_garage_code
-                      confirmation:
-                        text: Change the lock code for this slot?
-                  - entity: script.delete_lock_garage_code
-                    action_name: Delete
-                    type: button
-                    name: Delete Lock Code
-                    tap_action:
-                      action: call-service
-                      service: script.delete_lock_garage_code
-                      confirmation:
-                        text: Delete the lock code for this slot?
-              "04":
-                cards: null
-                type: entities
-                entities:
-                  - entity: input_text.code_slot_garage_user_04
-                  - entity: input_number.garage_code_04
-                  - entity: script.set_lock_garage_code
-                    action_name: Set
-                    type: button
-                    name: Set Lock Code
-                    tap_action:
-                      action: call-service
-                      service: script.set_lock_garage_code
-                      confirmation:
-                        text: Change the lock code for this slot?
-                  - entity: script.delete_lock_garage_code
-                    action_name: Delete
-                    type: button
-                    name: Delete Lock Code
-                    tap_action:
-                      action: call-service
-                      service: script.delete_lock_garage_code
-                      confirmation:
-                        text: Delete the lock code for this slot?
+      - type: entities
+        title: Set Lock Codes
+        entities:
+          - entity: input_select.lock_code_slot
+          - entity: input_number.lock_code
+          - entity: script.set_lock_code
+          - entity: script.delete_lock_code
       - type: entities
         title: Toggles
         show_header_toggle: false

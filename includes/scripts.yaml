@@ -282,18 +282,6 @@ tvs_off_except_mainbed:
 #         params:
 #           "zone_ids": ["foyer"]
 
-# window_status:
-#   sequence:
-#     - service: tts.google_say
-#       entity_id: media_player.kitchen
-#       data_template:
-#         message: |
-#           {% set open_doors = states | selectattr('entity_id', 'in', state_attr('group.windows','entity_id')) | selectattr('state','in',['on','open','Violated']) | map(attribute='name') | list %}
-#           {% set open_windows = '\n'.join(open_doors) %}
-#           The following windows are open:
-#           {{ open_windows }}
-#         cache: false
-
 # jon_meeting:
 #   sequence:
 #     - service: tts.google_say
@@ -323,20 +311,18 @@ tvs_off_except_mainbed:
 send_dynamic_notification:
   alias: "send dynamic notification"
   sequence:
-    - service: notify.mobile_app_pixel5
-      # - service: notify.mobile_app_macbook_pro
+    - service: notify.mobile_app_jons_iphone
       data:
-        message: "{{ message }}"
-        title: "{{ title }}"
+        title: '{{label | title}} detected on {{trigger.payload_json["after"]["camera"] | replace("_", "") | title }}'
+        message: "{{label | title}} detected in {{after_zones[0] }}"
         data:
-          channel: "{{ channel }}"
-          clickAction: "{{ video }}"
-          tag: "{{ notifTag }}"
-          group: "{{ group }}"
-          image: '{% if (importance == "default" and video != null) -%} {{ null }} {%- else-%} {{ image }} {%- endif %}'
-          video: '{% if (importance == "default" and video != null) -%} {{ video }} {%- else-%} {{ null }} {%- endif %}'
-          notification_icon: "{{ notifIcon }}"
-          importance: "{{ importance }}"
+          url: "https://ha.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4"
+          tag: "{{ id }}"
+          group: frigate-notification-{{camera}}
+          clickAction: "https://ha.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4"
+          image: "/api/frigate/notifications/{{id}}/snapshot.jpg"
+          attachment:
+            url: "/api/frigate/notifications/{{id}}/snapshot.jpg"
 
 night_adaptive_lighting:
   alias: "night adaptive lighting"
@@ -367,7 +353,7 @@ all_off:
   alias: "all off"
   sequence:
     - service: button.press
-      entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_off
+      entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_all_off
     - service: homeassistant.turn_off
       target:
         entity_id:
@@ -382,8 +368,8 @@ movie_on:
     - service: light.turn_on
       entity_id: light.basement_media_room_cabinets
 
-set_lock_garage_code:
-  alias: Set Garage Door Lock Code
+set_lock_code:
+  alias: Set Lock Code
   icon: mdi:arrow-right-bold-circle
   sequence:
     - service: zwave_js.set_lock_usercode
@@ -391,19 +377,21 @@ set_lock_garage_code:
         entity_id:
           - lock.garage_lock
           - lock.workshop_lock
+          - lock.mudroom_lock
       data:
-        code_slot: '{{ states("input_select.code_slot") | int }}'
+        code_slot: '{{ states("input_select.lock_code_slot") | int }}'
         usercode: >
-          {% if is_state('input_select.code_slot','01') %}
-            {{ "%04d" % states('input_number.garage_code_01')|int }}
-          {% elif is_state('input_select.code_slot','02') %}
-            {{ "%04d" % states('input_number.garage_code_02')|int }}
-          {% elif is_state('input_select.code_slot','03') %}
-            {{ "%04d" % states('input_number.garage_code_03')|int }}
-          {% elif is_state('input_select.code_slot','04') %}
-            {{ "%04d" % states('input_number.garage_code_04')|int }}
+          {% if is_state('input_select.lock_code_slot','01') %}
+            {{ "%04d" % states('input_number.lock_code')|int }}
+          {% elif is_state('input_select.lock_code_slot','02') %}
+            {{ "%04d" % states('input_number.lock_code')|int }}
+          {% elif is_state('input_select.lock_code_slot','03') %}
+            {{ "%04d" % states('input_number.lock_code')|int }}
+          {% elif is_state('input_select.lock_code_slot','04') %}
+            {{ "%04d" % states('input_number.lock_code')|int }}
           {% endif %}
-delete_lock_garage_code:
+
+delete_lock_code:
   alias: Delete Lock Code
   icon: mdi:delete-circle
   sequence:
@@ -412,34 +400,9 @@ delete_lock_garage_code:
         entity_id:
           - lock.garage_lock
           - lock.workshop_lock
+          - lock.mudroom_lock
       data:
-        code_slot: '{{ states("input_select.code_slot") | int }}'
-    - service: input_number.set_value
-      data:
-        value: 0
-        entity_id: >
-          {% if is_state('input_select.code_slot','01') %}
-            input_number.garage_code_01
-          {% elif is_state('input_select.code_slot','02') %}
-            input_number.garage_code_02
-          {% elif is_state('input_select.code_slot','03') %}
-            input_number.garage_code_03
-          {% elif is_state('input_select.code_slot','04') %}
-            input_number.garage_code_04
-          {% endif %}
-    - service: input_text.set_value
-      data:
-        value: ""
-        entity_id: >
-          {% if is_state('input_select.code_slot','01') %}
-            input_text.code_slot_garage_user_01
-          {% elif is_state('input_select.code_slot','02') %}
-            input_text.code_slot_garage_user_02
-          {% elif is_state('input_select.code_slot','03') %}
-            input_text.code_slot_garage_user_03
-          {% elif is_state('input_select.code_slot','04') %}
-            input_text.code_slot_garage_user_04
-          {% endif %}
+        code_slot: '{{ states("input_select.lock_code_slot") | int }}'
 
 main_bed_position:
   alias: "main bed position"
