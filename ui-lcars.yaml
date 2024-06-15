@@ -184,7 +184,7 @@ views:
                       action: call-service
                       service: button.press
                       data:
-                        entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_basement_off
+                        entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_basement_off
                     double_tap_action:
                       action: navigate
                       navigation_path: "/ui-lcars/lights-basement"
