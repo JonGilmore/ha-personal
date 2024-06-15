@@ -1,0 +1,28 @@
+actions:
+  - name: toggle motion lights
+    background_color: "#000000"
+    label:
+      text: "toggle motion lights"
+      color: "#ff0000"
+    icon:
+      icon: motion-sensor
+      color: "#ffffff"
+    show_in_carplay: false
+  - name: toggle exterior lights
+    background_color: "#000000"
+    label:
+      text: toggle exterior lights
+      color: "#ff0000"
+    icon:
+      icon: coach-lamp
+      color: "#ffffff"
+    show_in_carplay: true
+  - name: toggle all lights
+    background_color: "#000000"
+    label:
+      text: toggle all lights
+      color: "#ff0000"
+    icon:
+      icon: coach-lamp
+      color: "#ffffff"
+    show_in_carplay: true

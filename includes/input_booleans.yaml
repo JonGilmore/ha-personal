@@ -59,3 +59,7 @@ east_blinds_run_once:
   name: East Blinds Run Once
   icon: mdi:roller-shade
   initial: false
+actions_on_evelyns_room:
+  name: Actions on Evelyn's Room
+  icon: mdi:dome-light
+  initial: true

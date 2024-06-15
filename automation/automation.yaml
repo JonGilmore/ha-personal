@@ -222,6 +222,9 @@
           - condition: state
             entity_id: switch.evelyns_room_power_switch
             state: "on"
+          - condition: state
+            entity_id: input_boolean.actions_on_evelyns_room
+            state: "on"
         sequence:
           - service: light.turn_on
             data:
@@ -276,7 +279,7 @@
   action:
     - service: button.press
       data_template:
-        entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_basement_off
+        entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_basement_off
 ########################################
 - alias: "Automatic Lighting: turn off main floor lights if no motion detected"
   id: "Automatic Lighting: turn off main floor lights if no motion detected"
@@ -538,18 +541,17 @@
   condition:
     - condition: time
       after: "18:30:00"
+    - condition: state
+      entity_id: binary_sensor.main_motions
+      state: "off"
+      for:
+        seconds: 45
   action:
     - choose:
-        - conditions:
-            - "{{ trigger.id == 'both' }}"
-            - condition: state
-              entity_id: binary_sensor.main_motions
-              state: "off"
-              for:
-                seconds: 30
+        - conditions: "{{ trigger.id == 'both' }}"
           sequence:
             - service: button.press
-              entity_id: button.basement_equipment_room_homeowner_kp_position_1_keypad_all_int_but_mbed_off
+              entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_all_int_but_mbed_off
         - conditions: "{{ trigger.id == 'laura' }}"
           sequence:
             - service: button.press
@@ -569,7 +571,7 @@
           {% if is_state('input_boolean.guests', 'on') %}
             button.basement_equipment_room_homeowner_kp01_position_4_keypad_main_lower_ext_off
           {% else %}
-            button.basement_equipment_room_homeowner_kp_position_1_keypad_all_but_mainbed
+            button.basement_equipment_room_homeowner_kp01_position_1_keypad_all_but_mainbed
           {% endif %}
     - service: script.tvs_off_except_mainbed
     - service: homeassistant.turn_off
@@ -671,7 +673,7 @@
   id: "Night Mode: turn on sunset lights at dark or sunset"
   trigger:
     - platform: state
-      entity_id: binary_sensor.light_inside
+      entity_id: binary_sensor.light_outside
       to: "off"
       for:
         minutes: 10
@@ -741,16 +743,6 @@
       data:
         profile: "{{profile}}"
         time: "{{time}}"
-# ########################################
-# - alias: "Night Mode: turn on sunset2 lights at ten min after sunset"
-#   id: "Night Mode: turn on sunset2 lights at ten min after sunset"
-#   trigger:
-#     - platform: sun
-#       event: sunset
-#       offset: "00:10:00"
-#   action:
-#     - service: scene.turn_on
-#       entity_id: scene.equipment_room_enclosure_device_001_ph_sunset2
 ########################################
 - alias: "Fans: turn on master fan at night (if AC is on)"
   id: "Fans: turn on master fan at night (if AC is on)"
@@ -1055,39 +1047,8 @@
             - service: homeassistant.turn_off
               target:
                 entity_id: input_boolean.east_blinds_run_once
-# #########################################
-# - alias: "Presence: office speakers on/off with presence"
-#   id: "Presence: office speakers on/off with presence"
-#   initial_state: false
-#   trigger:
-#     - platform: state
-#       entity_id: binary_sensor.office_occupancy
-#       to: "on"
-#     - platform: state
-#       entity_id: binary_sensor.office_occupancy
-#       to: "off"
-#       for:
-#         minutes: 21
-#   action:
-#     - service_template: >
-#         {% if trigger.to_state.state == 'on' %}homeassistant.turn_on
-#         {% else %}homeassistant.turn_off{% endif %}
-#       entity_id: switch.office_speakers
-# #########################################
-- alias: "Utility: Auto-restart NUT add-on"
-  id: "Utility: Auto-restart NUT add-on"
-  trigger:
-    - platform: state
-      entity_id:
-        - sensor.cyberpower_status
-      to: unavailable
-      for:
-        minutes: 1
-  action:
-    - service: hassio.addon_restart
-      data:
-        addon: a0d7b954_nut
-# #########################################
+
+#########################################
 - alias: "Utility: power outage"
   id: "Utility: power outage"
   trigger:
@@ -1563,44 +1524,6 @@
       entity_id:
         - cover.basement_office_shade
         - cover.basement_office_east_shade
-# #########################################
-# - alias: "Automatic Lighting: office"
-#   id: "Automatic Lighting: office"
-#   mode: restart
-#   variables:
-#     # pir: binary_sensor.office_motions
-#     light: light.basement_office_cans
-#     brightness: switch.adaptive_lighting_office
-#   trigger:
-#     - platform: state
-#       entity_id: sensor.elkm1_office_pir
-#       id: pir-on
-#       to: "Violated"
-#     - platform: state
-#       entity_id: sensor.elkm1_office_pir
-#       id: pir-off
-#       to: "Normal"
-#       for:
-#         minutes: 10
-#   action:
-#     - choose:
-#         - conditions:
-#             - condition: trigger
-#               id: pir-on
-#             - "{{ is_state('input_boolean.block_interior_motion_lights', 'off') }}"
-#             - "{{ is_state('binary_sensor.light_inside', 'off') }}"
-#           sequence:
-#             - service: light.turn_on
-#               data_template:
-#                 entity_id: "{{ light }}"
-#                 brightness: "{{ state_attr(brightness, 'brightness_pct') }}"
-#         - conditions:
-#             - condition: trigger
-#               id: pir-off
-#           sequence:
-#             - service: homeassistant.turn_off
-#               data_template:
-#                 entity_id: "{{ light }}"
 #########################################
 - alias: "Lutron: main bedroom pico"
   id: "Lutron: main bedroom pico"
@@ -1899,3 +1822,76 @@
             entity_id:
               - light.jons_lamp
               - light.lauras_lamp
+#########################################
+- alias: "Mobile: toggle office lights"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      id: toggle-all-lights
+      event_data:
+        actionName: toggle all lights
+    - platform: event
+      event_type: ios.action_fired
+      id: toggle-motion
+      event_data:
+        actionName: toggle motion lights
+    - platform: event
+      event_type: ios.action_fired
+      id: toggle-exterior-lights
+      event_data:
+        actionName: toggle exterior lights
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: toggle-all-lights
+          sequence:
+            - service: homeassistant.toggle
+              target:
+                entity_id: group.all_lights
+        - conditions:
+            - condition: trigger
+              id: toggle-motion
+          sequence:
+            - service: homeassistant.toggle
+              target:
+                entity_id: input_boolean.block_interior_motion_lights
+        - conditions:
+            - condition: trigger
+              id: toggle-exterior-lights
+          sequence:
+            - service: homeassistant.toggle
+              target:
+                entity_id: group.exterior_lights
+#########################################
+- alias: "Utility: basement bath motion"
+  id: "Utility: basement bath motion"
+  mode: restart
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.apollo_msr_2_04b470_radar_moving_target
+      id: pir-on
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.apollo_msr_2_04b470_radar_moving_target
+      id: pir-off
+      to: "off"
+      for:
+        minutes: 1
+  action:
+    - choose:
+        - conditions:
+            - condition: trigger
+              id: pir-on
+            - condition: time
+              before: "8:30:00"
+          sequence:
+            - service: light.turn_on
+              entity_id: light.great_room_christmas_tree
+        - conditions:
+            - condition: trigger
+              id: pir-off
+          sequence:
+            - service: homeassistant.turn_off
+              entity_id: light.great_room_christmas_tree

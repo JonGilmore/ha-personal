@@ -278,3 +278,116 @@
         inline_keyboard:
           - "60m:/mutefrigate{{camera}}60, Rest of day:/mutefrigate{{camera}}day"
         caption: "{{label}} detected - {{camera}}"
+#########################################
+# - alias: "Frigate: night time video notifications"
+#   id: "Frigate: night time video notifications"
+#   description: "Video notifications for night time events"
+#   mode: parallel
+#   max: 20
+#   condition:
+#     - condition: time
+#       after: "21:30:00"
+#       before: "07:00:00"
+#   trigger:
+#     - platform: mqtt
+#       topic: frigate/events
+#       payload: new
+#       value_template: "{{ value_json.type }}"
+#   action:
+#     - service: notify.mobile_app_jons_iphone
+#       data:
+#         message: "{{trigger.payload_json['after']['label']}} - {{ trigger.payload_json['after']['camera'] }}"
+#         data:
+#           image: 'https://ha.gilmore.cloud/api/frigate/notifications/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg'
+#           tag: '{{trigger.payload_json["after"]["id"]}}'
+#           when: '{{trigger.payload_json["after"]["start_time"]|int}}'
+#           entity_id: camera.{{trigger.payload_json["after"]["camera"] | replace("-","_") | lower}}
+#########################################
+- alias: "Frigate: night time video notifications"
+  id: "Frigate: night time video notifications"
+  mode: parallel
+  trace:
+    stored_traces: 100
+  max: 10
+  trigger: # The trigger is mqtt and will fire when any camera has an alert
+    - alias: "topic published to /reviews"
+      platform: mqtt
+      topic: frigate/reviews
+      id: frigate-event
+      payload: alert # this ensures notifications are only received for alerts
+      value_template: "{{ value_json['after']['severity'] }}"
+      variables:
+        zones: "{{ trigger.payload_json['after']['data']['zones'] }}"
+        camera: "{{ trigger.payload_json['after']['camera'] }}"
+        id: "{{ trigger.payload_json['after']['id'] }}"
+        before_objects: "{{ trigger.payload_json['before']['data']['objects'] }}"
+        objects: "{{ trigger.payload_json['after']['data']['objects'] }}"
+        sub_labels: "{{ trigger.payload_json['after']['data']['sub_labels'] }}"
+        events: "{{ trigger.payload_json['after']['data']['detections'] }}"
+        type: "{{ trigger.payload_json['type'] }}"
+  # condition:
+  #   - alias: Update has no new objects
+  #     condition: template
+  #     value_template: '{{ type != "update" or before_zones | length < after_zones | length }}'
+  action:
+    - service: system_log.write
+      data_template:
+        message: "Damnit: {{ trigger }}"
+        level: error
+    # - choose:
+    #     - conditions:
+    #         - condition: trigger
+    #           id: frigate-event
+    #       sequence:
+            # - service: script.send_dynamic_notification
+            #   data:
+            #     id: "{{ id }}"
+            #     title: >-
+            #       {% set data = namespace(labels=[]) %} {% for obj in objects %}
+            #           {% if "-verified" in obj %}
+            #           {% else %}
+            #               {% set data.labels = data.labels + [obj] %}
+            #           {% endif %}
+            #       {% endfor %} {% set data.labels = data.labels + sub_labels %} {{
+            #       data.labels | unique | list | sort | join(", ") | title }}{{ '
+            #       was' if type == "end" else '' }} detected in {{ zones | join(',
+            #       ') | replace("_", " ") | title }}
+            #     message: Detected on {{ camera | replace("_", " ") | title }}
+            #     notifTag: "{{ id }}"
+            #     notifIcon: >-
+            #       {% if objects[0] == "cat" -%} mdi:cat {%- elif objects[0] ==
+            #       "dog" -%} mdi:dog-service {%- elif objects[0] == "person" and
+            #       type == "end" -%} mdi:account-outline {%- elif objects[0] ==
+            #       "person" -%} mdi:account-clock-outline {%- elif objects[0] ==
+            #       "person-verified" -%} mdi:account-check-outline {%- elif
+            #       objects[0] == "package" -%} mdi:package-variant-closed-check {%-
+            #       elif objects[0] == "amazon" -%} mdi:truck-delivery-outline {%-
+            #       elif objects[0] == "fedex" -%} mdi:truck-delivery-outline {%-
+            #       elif objects[0] == "ups" -%} mdi:truck-delivery-outline {%- elif
+            #       objects[0] == "car" -%} mdi:car-outline {%- elif objects[0] ==
+            #       "car-verified" -%} mdi:car-outline {%- else -%} mdi:cctv {%-
+            #       endif %}
+            #     group: frigate-notification-{{ camera }}
+            #     channel: Frigate
+            #     importance: '{{ "max" if type != "end" else "default" }}'
+            #     label: "{{objects | join(', ')}}"
+            #     camera: "{{camera}}"
+            #     live: |-
+            #       {% if type == "end" -%}
+            #         https://kgawwududaklfuqlfdclfnadugilmore.cloud/review?id={{id}}
+            #       {%- else -%}
+            #         https://kgawwududaklfuqlfdclfnadugilmore.cloud/#{{camera}}
+            #       {%- endif %}
+            #     image: |-
+            #       {% if type == "end" -%}
+            #         {{undefined}}
+            #       {%- else -%}
+            #         https://ha.gilmore.cloud/api/frigate/notifications/{{events[0]}}/snapshot.jpg?bbox=1
+            #       {%- endif %}
+            #     video: |-
+            #       {% if type == "end" -%}
+            #         https://ha.gilmore.cloud/api/frigate/notifications/{{id}}/review_preview.gif?format=ts
+            #       {%- else -%}
+            #         {{undefined}}
+            #       {%- endif %}
+      # default: []
