@@ -167,6 +167,12 @@ basement_lights:
     - light.basement_workshop_lights
     - light.desk_lights
 
+office_lights:
+  name: Office Lights
+  entities:
+    - light.basement_office_art
+    - light.basement_office_cans
+
 main_floor_lights:
   name: Main Floor Lights
   entities:
