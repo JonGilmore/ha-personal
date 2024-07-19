@@ -211,26 +211,29 @@
       after: "5:45:00"
       before: "9:30:00"
   action:
+    - service: homeassistant.turn_off
+      target:
+        entity_id: switch.garage_dehumidifier
     - service: homeassistant.turn_on
       target:
         entity_id: switch.basement_equipment_room_recirculation_pump
     - service: script.night_adaptive_lighting
       data:
         state: turn_off
-    - choose: # if the power of the hatch is on, turn the light green!
-        conditions:
-          - condition: state
-            entity_id: switch.evelyns_room_power_switch
-            state: "on"
-          - condition: state
-            entity_id: input_boolean.actions_on_evelyns_room
-            state: "on"
-        sequence:
-          - service: light.turn_on
-            data:
-              entity_id: light.evelyns_room_light
-              rgb_color: [0, 255, 0]
-              brightness_pct: 100
+    # - choose: # if the power of the hatch is on, turn the light green!
+    #     conditions:
+    #       - condition: state
+    #         entity_id: switch.evelyns_room_power_switch
+    #         state: "on"
+    #       - condition: state
+    #         entity_id: input_boolean.actions_on_evelyns_room
+    #         state: "on"
+    #     sequence:
+    #       - service: light.turn_on
+    #         data:
+    #           entity_id: light.evelyns_room_light
+    #           rgb_color: [0, 255, 0]
+    #           brightness_pct: 100
     - wait_for_trigger: # w/in 20m of disarming, if there is foyer motion, turn on the living room
         - platform: state
           entity_id: sensor.elkm1_foyer_pir
@@ -371,9 +374,6 @@
     - platform: time
       at: "5:00:00"
       id: 5am
-    - platform: time
-      at: "7:15:00"
-      id: 715am
     - platform: time
       at: "7:30:00"
       id: 730am
@@ -563,6 +563,7 @@
   trigger:
     - platform: state
       entity_id: binary_sensor.sleeping
+      from: "off"
       to: "on"
   action:
     - service: button.press
@@ -577,6 +578,9 @@
     - service: homeassistant.turn_off
       target:
         entity_id: switch.basement_equipment_room_recirculation_pump
+    - service: homeassistant.turn_on
+      target:
+        entity_id: switch.garage_dehumidifier
     - service: input_boolean.turn_on
       entity_id:
         - input_boolean.frigate_doorbell_notifier
