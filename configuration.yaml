@@ -55,6 +55,12 @@ lovelace:
       type: module
     - url: /hacsfiles/decluttering-card/decluttering-card.js
       type: module
+    - url: /hacsfiles/lovelace-card-mod/card-mod.js
+      type: module
+    - url: https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&display=swap
+      type: css
+    - url: https://cdn.jsdelivr.net/gh/th3jesta/ha-lcars@js-main/lcars.js
+      type: js
   dashboards:
     wallpanel-dashboard:
       mode: yaml
@@ -62,18 +68,12 @@ lovelace:
       icon: mdi:tablet-dashboard
       show_in_sidebar: false
       filename: wallpanel.yaml
-    # ui-lcars:
-    #   mode: yaml
-    #   title: ncc-main
-    #   icon: mdi:tablet-dashboard
-    #   show_in_sidebar: true
-    #   filename: ui-lcars.yaml
-    test-dashboard:
+    ui-lcars:
       mode: yaml
-      title: test-dashboard
+      title: ncc-main
       icon: mdi:tablet-dashboard
       show_in_sidebar: true
-      filename: test.yaml
+      filename: ui-lcars.yaml
 system_health:
 
 elkm1:

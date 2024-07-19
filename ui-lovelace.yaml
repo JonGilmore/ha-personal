@@ -923,9 +923,7 @@ views:
           method: state
         filter:
           include:
-            - entity_id: "/^.*pixel.*/"
-          exclude:
-            - state: "Unavailable"
+            - entity_id: "/^.*jons_iphone_.*/"
         show_empty: false
       - type: "custom:auto-entities"
         card:
@@ -937,8 +935,6 @@ views:
         filter:
           include:
             - entity_id: "/^.*lauras_iphone_.*/"
-          exclude:
-            - state: "Unknown"
         show_empty: false
 
   ##########################################

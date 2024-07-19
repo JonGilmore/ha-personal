@@ -1,20 +1,4 @@
 title: !secret name
-resources:
-  - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
-    type: module
-  - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
-    type: module
-  - url: /hacsfiles/lovelace-layout-card/layout-card.js
-    type: module
-  - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
-    type: module
-  - url: /hacsfiles/lovelace-card-tools/card-tools.js
-    type: module
-  - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
-    type: module
-  - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
-    type: module
-
 views:
   - title: panel
     id: home
