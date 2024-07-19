@@ -1,0 +1,276 @@
+- id: '1719096846186'
+  alias: 'Frigate: driveway approaching'
+  description: Line crossing detection, only notify if Jon is not home.
+  use_blueprint:
+    path: djak250/Beta.yaml
+    input:
+      camera: camera.driveway
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: true
+      zones:
+      - frontyard_far
+      - frontyard_near
+      zone_multi: true
+      zone_order_enforced: true
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      subtitle: '{{label}} approaching'
+      state_filter: true
+      state_entity: person.jon
+      state_filter_states:
+      - home
+- id: '1719111900006'
+  alias: 'Frigate: frontyard approaching'
+  description: Line crossing detection, only notify if Jon is not home.
+  use_blueprint:
+    path: djak250/Beta.yaml
+    input:
+      camera: camera.frontyard
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: true
+      zones:
+      - frontyard_far
+      - frontyard_near
+      zone_multi: true
+      zone_order_enforced: true
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      subtitle: '{{label}} approaching'
+      state_filter: true
+      state_entity: person.jon
+      state_filter_states:
+      - home
+- id: '1719111981332'
+  alias: 'Frigate: doorbell approaching'
+  description: Line crossing detection, only notify if Jon is not home.
+  use_blueprint:
+    path: djak250/Beta.yaml
+    input:
+      camera: camera.doorbell
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: true
+      zones:
+      - doorbell_far
+      - doorbell_near
+      zone_multi: true
+      zone_order_enforced: true
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      subtitle: '{{label}} approaching'
+      state_filter: true
+      state_entity: person.jon
+      state_filter_states:
+      - home
+- id: '1719160262618'
+  alias: 'Frigate: driveway object night or away'
+  description: Object detection; only notify if Jon/Laura are away OR it is night
+    OR the alarm is armed away.
+  use_blueprint:
+    path: SgtBatten/Beta.yaml
+    input:
+      camera: camera.driveway
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: false
+      zones: []
+      zone_multi: false
+      zone_order_enforced: false
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+- id: '1719197411471'
+  alias: 'Frigate: frontyard object night or away'
+  description: Object detection; only notify if Jon/Laura are away OR it is night
+    OR the alarm is armed away.
+  use_blueprint:
+    path: SgtBatten/Beta.yaml
+    input:
+      camera: camera.frontyard
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: false
+      zones: []
+      zone_multi: false
+      zone_order_enforced: false
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+- id: '1719197649981'
+  alias: 'Frigate: doorbell object night or away'
+  description: Object detection; only notify if Jon/Laura are away OR it is night
+    OR the alarm is armed away.
+  use_blueprint:
+    path: SgtBatten/Beta.yaml
+    input:
+      camera: camera.doorbell
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: false
+      zones: []
+      zone_multi: false
+      zone_order_enforced: false
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+- id: '1719197971685'
+  alias: 'Frigate: deck object night or away'
+  description: Object detection; only notify if Jon/Laura are away OR it is night
+    OR the alarm is armed away.
+  use_blueprint:
+    path: SgtBatten/Beta.yaml
+    input:
+      camera: camera.deck
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: false
+      zones: []
+      zone_multi: false
+      zone_order_enforced: false
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+- id: '1719198035543'
+  alias: 'Frigate: grilldeck object night or away'
+  description: Object detection; only notify if Jon/Laura are away OR it is night
+    OR the alarm is armed away.
+  use_blueprint:
+    path: SgtBatten/Beta.yaml
+    input:
+      camera: camera.grilldeck
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: false
+      zones: []
+      zone_multi: false
+      zone_order_enforced: false
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+- id: '1719198078716'
+  alias: 'Frigate: patio object night or away'
+  description: Object detection; only notify if Jon/Laura are away OR it is night
+    OR the alarm is armed away.
+  use_blueprint:
+    path: SgtBatten/Beta.yaml
+    input:
+      camera: camera.patio
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: false
+      zones: []
+      zone_multi: false
+      zone_order_enforced: false
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+- id: '1719198109100'
+  alias: 'Frigate: workshop object night or away'
+  description: Object detection; only notify if Jon/Laura are away OR it is night
+    OR the alarm is armed away.
+  use_blueprint:
+    path: SgtBatten/Beta.yaml
+    input:
+      camera: camera.workshop
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://ha.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      tts: false
+      alert_once: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      volume: 50
+      zone_filter: false
+      zones: []
+      zone_multi: false
+      zone_order_enforced: false
+      silence_timer: 60
+      update_thumbnail: true
+      attachment: snapshot.jpg?bbox=1&crop=1
+      debug: true
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'

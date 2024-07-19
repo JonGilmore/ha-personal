@@ -216,6 +216,12 @@
       unique_id: camera_day_mode_lux
       device_class: light
       state: "{{ states('sensor.outdoor_pir_illuminance') | int > 45 }}"
+    - name: "send frigate alerts"
+      unique_id: send_frigate_alerts
+      state: >-
+        {{ (is_state('person.jon', 'not_home') and is_state('person.laura', 'not_home')) or
+            is_state('binary_sensor.occupied_alarm', 'off') or
+            is_state('binary_sensor.sleeping', 'on') }}
     # - name: "light inside basement?"
     #   unique_id: light_inside_basement
     #   device_class: light
@@ -526,24 +532,6 @@
       device_class: humidity
       unit_of_measurement: "%"
       state: "{{ state_attr('weather.tomorrow_io_home_daily', 'humidity') }}"
-    - name: "daily_high"
-      unique_id: daily_high
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].temperature }}"
-      unit_of_measurement: "°F"
-      device_class: temperature
-      icon: mdi:thermometer
-    - name: "Todays Low"
-      unique_id: todays_low
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].templow }}"
-      unit_of_measurement: "°F"
-      device_class: temperature
-      icon: mdi:thermometer
-    - name: "Precipitation Amount"
-      unique_id: precipitation_amount
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation }}"
-    - name: "Precipitation Probability"
-      unique_id: precipitation_probability
-      state: "{{ state_attr('weather.tomorrow_io_home_daily', 'forecast')[0].precipitation_probability | round | int }}"
     - name: "circadian brightness"
       unique_id: circadian_brightness
       state: "{{ state_attr('switch.adaptive_lighting_default', 'brightness_pct') }}"
