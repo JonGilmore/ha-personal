@@ -22,8 +22,6 @@
 !includes/*.yaml
 !custom_templates
 !custom_templates/*.jinja
-!decluttering_templates
-!decluttering_templates/*.yaml
 
 # Ignore folders.
 .storage

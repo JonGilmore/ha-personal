@@ -5,7 +5,6 @@ homeassistant:
   latitude: !secret ha_latitude
   longitude: !secret ha_longitude
   elevation: !secret ha_elevation
-  unit_system: imperial
   currency: USD
   country: US
   time_zone: !secret ha_tz
@@ -21,10 +20,12 @@ homeassistant:
 cloud:
 energy:
 datadog:
+  host: 192.168.30.243
+
 http:
   use_x_forwarded_for: true
   trusted_proxies:
-    - 172.30.33.0/24
+    - 172.19.0.0/24
     - 192.168.30.0/24
     - 192.168.31.0/24
   login_attempts_threshold: 3
@@ -37,7 +38,6 @@ frontend:
   extra_module_url:
     - /hacsfiles/lovelace-card-mod/card-mod.js
 lovelace:
-  mode: yaml
   resources:
     - url: /hacsfiles/button-card/button-card.js
       type: module
@@ -45,15 +45,9 @@ lovelace:
       type: module
     - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
       type: module
-    - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
-      type: module
     - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
       type: module
-    - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
-      type: module
     - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
-      type: module
-    - url: /hacsfiles/decluttering-card/decluttering-card.js
       type: module
     - url: /hacsfiles/lovelace-card-mod/card-mod.js
       type: module
@@ -61,19 +55,6 @@ lovelace:
       type: css
     - url: https://cdn.jsdelivr.net/gh/th3jesta/ha-lcars@js-main/lcars.js
       type: js
-  dashboards:
-    wallpanel-dashboard:
-      mode: yaml
-      title: Wallpanel
-      icon: mdi:tablet-dashboard
-      show_in_sidebar: false
-      filename: wallpanel.yaml
-    ui-lcars:
-      mode: yaml
-      title: ncc-main
-      icon: mdi:tablet-dashboard
-      show_in_sidebar: true
-      filename: ui-lcars.yaml
 system_health:
 
 elkm1:
@@ -125,18 +106,15 @@ calendar:
 adaptive_lighting: !include includes/adaptive_lighting.yaml
 alert: !include includes/alerts.yaml
 automation: !include automations.yaml
-automation yaml: !include_dir_merge_list automation
+automation yaml: !include automation.yaml
 camera: !include includes/cameras.yaml
-climate: !include includes/climate.yaml
 cover: !include includes/covers.yaml
-# fan: !include includes/fans.yaml
 group: !include includes/groups.yaml
 input_boolean: !include includes/input_booleans.yaml
 input_select: !include includes/input_selects.yaml
 input_text: !include includes/input_text.yaml
 input_number: !include includes/input_number.yaml
 intent_script: !include includes/intent_scripts.yaml
-ios: !include includes/ios.yaml
 light: !include includes/lights.yaml
 mqtt: !include includes/mqtt.yaml
 rest_command: !include includes/rest_commands.yaml
@@ -162,96 +140,75 @@ mobile_app:
 media_source:
 wake_on_lan:
 
-rest:
-  - headers:
-      Authorization: !secret enphase_api
-    verify_ssl: False
-    scan_interval: 6
-    resource: https://192.168.31.108/ivp/meters/readings
-    sensor:
-      - name: Power Production
-        unique_id: power_production
-        value_template: "{{ value_json[0].activePower | int(0) }}"
-        device_class: power
-        unit_of_measurement: W
-        state_class: measurement
-        icon: mdi:solar-panel
-      - name: Power Consumption
-        unique_id: power_consumption
-        value_template: "{{ value_json[1].activePower | int(0) }}"
-        device_class: power
-        unit_of_measurement: W
-        state_class: measurement
-        icon: mdi:solar-panel
-      - name: Energy Production
-        unique_id: energy_production
-        value_template: "{{ (value_json[0].actEnergyDlvd / 1000 | float(0)) | round(2) }}"
-        device_class: energy
-        unit_of_measurement: kWh
-        state_class: total_increasing
-        icon: mdi:solar-panel
-      - name: Energy Import
-        unique_id: energy_import
-        value_template: "{{ (value_json[1].actEnergyDlvd / 1000 | float(0)) | round(2) }}"
-        device_class: energy
-        unit_of_measurement: kWh
-        state_class: total_increasing
-        icon: mdi:transmission-tower
-      - name: Energy Export
-        unique_id: energy_export
-        value_template: "{{ (value_json[1].actEnergyRcvd / 1000 | float(0)) | round(2) }}"
-        device_class: energy
-        unit_of_measurement: kWh
-        state_class: total_increasing
-        icon: mdi:transmission-tower
-
-weather:
-  - platform: template
-    name: Local Weather
-    condition_template: "{{ states('sensor.hub_hb_00069559_weather') }}"
-    temperature_template: "{{ states('sensor.weatherflow_tempest_temperature') | float}}"
-    humidity_template: "{{ states('sensor.weatherflow_tempest_humidity')| int }}"
-    pressure_template: "{{ states('sensor.weatherflow_tempest_sea_level_pressure')| float }}"
-    wind_speed_template: "{{ states('sensor.weatherflow_tempest_wind_speed_avg')| float }}"
-    wind_bearing_template: "{{ states('sensor.weatherflow_tempest_wind_bearing_avg')| int }}"
-    visibility_template: "{{ states('sensor.weatherflow_tempest_visibility')| float }}"
-    forecast_hourly_template: >-
-      {% set data = namespace(l = []) %}
-      {% for e in state_attr('sensor.hub_hb_00069559_weather', 'hourly_forecast') %}
-      {%   set data.l = data.l + [ {
-              'datetime': e.datetime,
-              'condition': e.condition,
-              'temperature': e.temperature,
-              'native_apparent_temperature': e.feels_like,
-              'pressure': e.pressure,
-              'humidity': e.humidity,
-              'precipitation': e.precipitation,
-              'precipitation_probability': e.precipitation_probability,
-              'wind_speed': e.wind_speed,
-              'native_wind_gust_speed': e.wind_gust,
-              'wind_bearing': e.wind_bearing,
-              'uv_index': e.uv
-            } ] %}
-      {% endfor %}
-      {{ data.l }}
-    forecast_daily_template: >-
-      {% set data = namespace(l = []) %}
-      {% for e in state_attr('sensor.hub_hb_00069559_weather', 'daily_forecast') %}
-      {%   set data.l = data.l + [ {
-              'datetime': e.datetime,
-              'condition': e.condition,
-              'temperature': e.temperature,
-              'templow': e.templow,
-              'precipitation': e.precipitation,
-              'precipitation_probability': e.precipitation_probability,
-              'wind_speed': e.wind_speed,
-              'wind_bearing': e.wind_bearing
-            } ] %}
-      {% endfor %}
-      {{ data.l }}
+# weather:
+#   - platform: template
+#     name: Local Weather
+#     condition_template: "{{ states('sensor.hub_hb_00069559_weather') }}"
+#     temperature_template: "{{ states('sensor.weatherflow_tempest_temperature') | float}}"
+#     humidity_template: "{{ states('sensor.weatherflow_tempest_humidity')| int }}"
+#     pressure_template: "{{ states('sensor.weatherflow_tempest_sea_level_pressure')| float }}"
+#     wind_speed_template: "{{ states('sensor.weatherflow_tempest_wind_speed_avg')| float }}"
+#     wind_bearing_template: "{{ states('sensor.weatherflow_tempest_wind_bearing_avg')| int }}"
+#     visibility_template: "{{ states('sensor.weatherflow_tempest_visibility')| float }}"
+#     forecast_hourly_template: >-
+#       {% set data = namespace(l = []) %}
+#       {% for e in state_attr('sensor.hub_hb_00069559_weather', 'hourly_forecast') %}
+#       {%   set data.l = data.l + [ {
+#               'datetime': e.datetime,
+#               'condition': e.condition,
+#               'temperature': e.temperature,
+#               'native_apparent_temperature': e.feels_like,
+#               'pressure': e.pressure,
+#               'humidity': e.humidity,
+#               'precipitation': e.precipitation,
+#               'precipitation_probability': e.precipitation_probability,
+#               'wind_speed': e.wind_speed,
+#               'native_wind_gust_speed': e.wind_gust,
+#               'wind_bearing': e.wind_bearing,
+#               'uv_index': e.uv
+#             } ] %}
+#       {% endfor %}
+#       {{ data.l }}
+#     forecast_daily_template: >-
+#       {% set data = namespace(l = []) %}
+#       {% for e in state_attr('sensor.hub_hb_00069559_weather', 'daily_forecast') %}
+#       {%   set data.l = data.l + [ {
+#               'datetime': e.datetime,
+#               'condition': e.condition,
+#               'temperature': e.temperature,
+#               'templow': e.templow,
+#               'precipitation': e.precipitation,
+#               'precipitation_probability': e.precipitation_probability,
+#               'wind_speed': e.wind_speed,
+#               'wind_bearing': e.wind_bearing
+#             } ] %}
+#       {% endfor %}
+#       {{ data.l }}
 
 homekit:
   - filter:
       include_entities:
         - binary_sensor.elkm1_kitchen_pir
         - binary_sensor.elkm1_foyer_pir
+        - cover.single_garage_door
+        - cover.double_garage_door
+
+sonos:
+  media_player:
+    advertise_addr: 192.168.30.249
+    hosts:
+      - 192.168.30.38
+      - 192.168.30.39
+      - 192.168.30.40
+      - 192.168.30.41
+      - 192.168.30.42
+      - 192.168.30.43
+      - 192.168.30.44
+      - 192.168.30.45
+      - 192.168.30.46
+      - 192.168.30.47
+      - 192.168.30.48
+      - 192.168.30.49
+      - 192.168.30.51
+      - 192.168.30.52
+      - 192.168.30.53
