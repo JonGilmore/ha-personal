@@ -1,0 +1,41 @@
+---
+- alias: "Unifi: Port forward enable NAS port forward for nightly backup at 1:58am"
+  id: "Unifi: Port forward enable NAS port forward for nightly backup at 1:58am"
+  triggers:
+    platform: time
+    at: "1:58:00"
+  actions:
+    - action: shell_command.unifi_portfwd
+      data:
+        username: !secret unifi_usr
+        password: !secret unifi_pwd
+        baseurl: !secret unifi_ip
+        name: !secret nas_name
+        enabled: "true"
+        dst_port: !secret nas_port_ext
+        ip: !secret nas_ip
+        fwd_port: !secret nas_port_int
+        proto: !secret nas_proto
+        id: !secret nas_id
+        unifi_site: !secret unifi_site
+        src: any
+- alias: "Unifi: Port forward disable NAS port forward for backup"
+  id: "Unifi: Port forward disable NAS port forward for backup"
+  triggers:
+    platform: time
+    at: "2:58:00"
+  actions:
+    - action: shell_command.unifi_portfwd
+      data:
+        username: !secret unifi_usr
+        password: !secret unifi_pwd
+        baseurl: !secret unifi_ip
+        name: !secret nas_name
+        enabled: "false"
+        dst_port: !secret nas_port_ext
+        ip: !secret nas_ip
+        fwd_port: !secret nas_port_int
+        proto: !secret nas_proto
+        id: !secret nas_id
+        unifi_site: !secret unifi_site
+        src: any

@@ -1,276 +1,2618 @@
-- id: '1719096846186'
-  alias: 'Frigate: driveway approaching'
-  description: Line crossing detection, only notify if Jon is not home.
-  use_blueprint:
-    path: djak250/Beta.yaml
-    input:
-      camera: camera.driveway
-      notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
-      alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
-      volume: 50
-      zone_filter: true
-      zones:
-      - frontyard_far
-      - frontyard_near
-      zone_multi: true
-      zone_order_enforced: true
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
-      subtitle: '{{label}} approaching'
-      state_filter: true
-      state_entity: person.jon
-      state_filter_states:
-      - home
-- id: '1719111900006'
-  alias: 'Frigate: frontyard approaching'
-  description: Line crossing detection, only notify if Jon is not home.
-  use_blueprint:
-    path: djak250/Beta.yaml
-    input:
-      camera: camera.frontyard
-      notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
-      alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
-      volume: 50
-      zone_filter: true
-      zones:
-      - frontyard_far
-      - frontyard_near
-      zone_multi: true
-      zone_order_enforced: true
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
-      subtitle: '{{label}} approaching'
-      state_filter: true
-      state_entity: person.jon
-      state_filter_states:
-      - home
-- id: '1719111981332'
+- id: '1730647673301'
   alias: 'Frigate: doorbell approaching'
   description: Line crossing detection, only notify if Jon is not home.
   use_blueprint:
-    path: djak250/Beta.yaml
+    path: SgtBatten/Stable.yaml
     input:
-      camera: camera.doorbell
+      camera:
+      - camera.doorbell
       notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
+      base_url: https://homeassistant.gilmore.cloud
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
-      alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
-      volume: 50
+      subtitle: '{{label}} approaching'
       zone_filter: true
       zones:
       - doorbell_far
       - doorbell_near
       zone_multi: true
       zone_order_enforced: true
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
+      alert_once: true
+      final_update: false
+      presence_filter:
+      - ''
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      button_1: clip
+      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
+      button_2: snapshot
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
+- id: '1733362531181'
+  alias: 'Automated Lighting: bonus'
+  description: motion triggers the lamps, after 5m of no motion, turn off all bonus
+    lights.
+  triggers:
+  - type: motion
+    device_id: 1f551b2f77b59d23a1f8615be82d15d8
+    entity_id: c92df928d76883c80b5dc6a89c9b18f1
+    domain: binary_sensor
+    trigger: device
+    id: 'on'
+  - type: no_motion
+    device_id: 1f551b2f77b59d23a1f8615be82d15d8
+    entity_id: c92df928d76883c80b5dc6a89c9b18f1
+    domain: binary_sensor
+    trigger: device
+    id: 'off'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - 'on'
+      sequence:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - light.upstairs_bonus_lamp
+          - light.bonus_lamp
+    - conditions:
+      - condition: trigger
+        id:
+        - 'off'
+      sequence:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - light.upstairs_bonus_lamp
+          - light.bonus_lamp
+          - light.upstairs_bonus_cans
+  mode: single
+- id: '1733364646282'
+  alias: workshop motion
+  description: 'turn on workshop lights & the power strip with motion. '
+  triggers:
+  - type: motion
+    device_id: 8bf4ec25a927eb8658b148859dca63cf
+    entity_id: 1d859093d6ba96002668eda0748ed696
+    domain: binary_sensor
+    trigger: device
+    id: 'on'
+  conditions: []
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.basement_workshop_lights
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.workshop_power_strip
+  mode: single
+- id: '1733364868089'
+  alias: 'Automatic Lighting: turn off workshop if no motion'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.workshop_motions
+    to: 'off'
+    for: 00:25:00
+  - trigger: state
+    entity_id: binary_sensor.workshop_motions
+    to: 'off'
+    for: 00:30:00
+  conditions: []
+  actions:
+  - action: light.turn_off
+    data:
+      entity_id: light.basement_workshop_lights
+  mode: single
+- id: '1733366816328'
+  alias: workshop power strip
+  description: turn off the workshop power strip after a period of time.
+  triggers:
+  - trigger: state
+    entity_id:
+    - switch.workshop_power_strip
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  conditions: []
+  actions:
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.workshop_power_strip
+  mode: single
+- id: '1736344718634'
+  alias: 'Frigate: driveway approaching'
+  description: Line crossing detection, only notify if Jon is not home.
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera:
+      - camera.driveway
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://homeassistant.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
       subtitle: '{{label}} approaching'
-      state_filter: true
-      state_entity: person.jon
-      state_filter_states:
-      - home
-- id: '1719160262618'
-  alias: 'Frigate: driveway object night or away'
-  description: Object detection; only notify if Jon/Laura are away OR it is night
-    OR the alarm is armed away.
-  use_blueprint:
-    path: SgtBatten/Beta.yaml
-    input:
-      camera: camera.driveway
-      notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
+      zone_filter: true
+      zones:
+      - frontyard_far
+      - frontyard_near
+      zone_multi: true
+      zone_order_enforced: true
       alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      final_update: false
+      presence_filter:
+      - ''
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      button_1: clip
+      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
+      button_2: snapshot
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
+- id: '1736562512723'
+  alias: turn off main floor tvs after 30m of watching in the morning
+  description: Automatically turn off the Great Room and Sunroom TVs 30 minutes after
+    they turn on between 6:00 AM and 7:45 AM.
+  triggers:
+  - entity_id:
+    - media_player.great_room_tv
+    - media_player.sunroom_tv
+    to: 'on'
+    trigger: state
+  conditions:
+  - condition: time
+    after: 06:00:00
+    before: 07:45:00
+  actions:
+  - delay: 00:30:00
+  - service: notify.mobile_app_jons_iphone
+    data:
+      message: Tturn off the {{ trigger.entity_id }}?
+      data:
+        actions:
+        - action: TURN_OFF_TV
+          title: Turn Off TV
+  - wait_for_trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: TURN_OFF_TV
+  - service: media_player.turn_off
+    target:
+      entity_id: '{{ trigger.entity_id }}'
+  mode: parallel
+- id: '1736947365589'
+  alias: 'frigate: objects detected while away or asleep'
+  description: send frigate notifications when any objects are detected and jon is
+    away or the house is in night mode
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      presence_filter:
+      - ''
+      camera:
+      - camera.deck
+      - camera.driveway
+      - camera.doorbell
+      - camera.frontyard
+      - camera.grilldeck
+      - camera.patio
+      - camera.workshop
+      notify_device: e6d576f356d40ea0180bde4d034162ce
+      base_url: https://homeassistant.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      alert_once: true
+      update_thumbnail: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
       volume: 50
       zone_filter: false
-      zones: []
-      zone_multi: false
-      zone_order_enforced: false
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
       state_filter: true
       state_entity: binary_sensor.send_frigate_alerts
       state_filter_states:
       - 'on'
-- id: '1719197411471'
-  alias: 'Frigate: frontyard object night or away'
-  description: Object detection; only notify if Jon/Laura are away OR it is night
-    OR the alarm is armed away.
+      silence_timer: 60
+- id: '1737382768102'
+  alias: Frigate Laura notify
+  description: send frigate notifications when any objects are detected and jon is
+    away or the house is in night mode
   use_blueprint:
-    path: SgtBatten/Beta.yaml
+    path: SgtBatten/Stable.yaml
     input:
-      camera: camera.frontyard
-      notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
+      presence_filter:
+      - ''
+      camera:
+      - camera.deck
+      - camera.driveway
+      - camera.doorbell
+      - camera.frontyard
+      - camera.grilldeck
+      - camera.patio
+      - camera.workshop
+      notify_device: 73c269e64dff9787a20e6c1734177e58
+      base_url: https://homeassistant.gilmore.cloud
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
       alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      update_thumbnail: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
       volume: 50
       zone_filter: false
-      zones: []
-      zone_multi: false
-      zone_order_enforced: false
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
       state_filter: true
       state_entity: binary_sensor.send_frigate_alerts
       state_filter_states:
       - 'on'
-- id: '1719197649981'
-  alias: 'Frigate: doorbell object night or away'
-  description: Object detection; only notify if Jon/Laura are away OR it is night
-    OR the alarm is armed away.
+      silence_timer: 60
+      labels:
+      - person
+      - dog
+      - cat
+      - car
+      - package
+- id: '1737808752551'
+  alias: 'Frigate: notify if object is near house and we’re away'
+  description: send frigate notifications when any objects are detected and jon is
+    away or the house is in night mode
   use_blueprint:
     path: SgtBatten/Beta.yaml
     input:
-      camera: camera.doorbell
+      presence_filter:
+      - ''
+      camera:
+      - camera.deck
+      - camera.driveway
+      - camera.doorbell
+      - camera.frontyard
+      - camera.grilldeck
+      - camera.patio
+      - camera.workshop
       notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
+      base_url: https://homeassistant.gilmore.cloud
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
       alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
+      update_thumbnail: true
+      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/event_preview.gif?format=ts'
       volume: 50
       zone_filter: false
-      zones: []
-      zone_multi: false
-      zone_order_enforced: false
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
       state_filter: true
       state_entity: binary_sensor.send_frigate_alerts
       state_filter_states:
       - 'on'
-- id: '1719197971685'
-  alias: 'Frigate: deck object night or away'
-  description: Object detection; only notify if Jon/Laura are away OR it is night
-    OR the alarm is armed away.
-  use_blueprint:
-    path: SgtBatten/Beta.yaml
-    input:
-      camera: camera.deck
-      notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
-      alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
-      volume: 50
-      zone_filter: false
-      zones: []
-      zone_multi: false
-      zone_order_enforced: false
       silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
-- id: '1719198035543'
-  alias: 'Frigate: grilldeck object night or away'
-  description: Object detection; only notify if Jon/Laura are away OR it is night
-    OR the alarm is armed away.
+      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
+      final_update: true
+      button_2: Snapshot
+      button_1: Clip
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?format=android'
+      review_severity: []
+- id: '1739057361482'
+  alias: 'Frigate: mudroom telegram testing'
+  description: Line crossing detection, only notify if Jon is not home.
   use_blueprint:
-    path: SgtBatten/Beta.yaml
+    path: SgtBatten/Stable.yaml
     input:
-      camera: camera.grilldeck
+      camera:
+      - camera.mudroom
       notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
+      base_url: https://homeassistant.gilmore.cloud
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
+      subtitle: '{{label}} approaching'
+      zone_filter: true
+      zones:
+      - mudroom_far
+      - mudroom_near
+      zone_multi: true
+      zone_order_enforced: true
       alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
-      volume: 50
-      zone_filter: false
-      zones: []
-      zone_multi: false
-      zone_order_enforced: false
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
-- id: '1719198078716'
-  alias: 'Frigate: patio object night or away'
-  description: Object detection; only notify if Jon/Laura are away OR it is night
-    OR the alarm is armed away.
-  use_blueprint:
-    path: SgtBatten/Beta.yaml
-    input:
-      camera: camera.patio
-      notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
-      alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
-      volume: 50
-      zone_filter: false
-      zones: []
-      zone_multi: false
-      zone_order_enforced: false
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
-- id: '1719198109100'
-  alias: 'Frigate: workshop object night or away'
-  description: Object detection; only notify if Jon/Laura are away OR it is night
-    OR the alarm is armed away.
-  use_blueprint:
-    path: SgtBatten/Beta.yaml
-    input:
-      camera: camera.workshop
-      notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://ha.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      tts: false
-      alert_once: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/clip.mp4'
-      volume: 50
-      zone_filter: false
-      zones: []
-      zone_multi: false
-      zone_order_enforced: false
-      silence_timer: 60
-      update_thumbnail: true
-      attachment: snapshot.jpg?bbox=1&crop=1
-      debug: true
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
+      final_update: false
+      presence_filter:
+      - ''
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      button_1: clip
+      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
+      button_2: snapshot
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
+      notify_telegram_chat_id: '635327867'
+- id: '1740318495813'
+  alias: 'Unraid: array space warning'
+  description: Notify when array space is running low
+  triggers:
+  - entity_id: sensor.unraid_unraid_array_usage
+    above: 70
+    trigger: numeric_state
+  conditions: []
+  actions:
+  - data:
+      title: Unraid Array Space Warning
+      message: 'Array usage is at {{ states(''sensor.unraid_unraid_array_usage'')}}%
+        Free space: {{ state_attr(''sensor.unraid_unraid_array_usage'', ''free_space'')}}'
+    action: notify.mobile_app_jons_iphone
+  mode: single
+- id: '1740318547239'
+  alias: 'Unraid: temperature warning'
+  description: Alert when CPU temperature is too high
+  triggers:
+  - entity_id: sensor.unraid_unraid_cpu_temperature
+    above: 120
+    for:
+      minutes: 3
+    trigger: numeric_state
+  conditions: []
+  actions:
+  - data:
+      title: ⚠️ Unraid Temperature Alert
+      message: CPU Temperature is {{ states('sensor.unraid_unraid_cpu_temperature')}}°F!
+        Please check system cooling.
+    action: notify.mobile_app_jons_iphone
+  - data:
+      entry_id: 192.168.30.249
+      command: echo 'High temperature warning' >> /var/log/temperature_alerts.log
+    action: unraid.execute_command
+  mode: single
+- id: '1740318561229'
+  alias: 'Unraid: UPS protection'
+  description: Safely shutdown when UPS battery is low
+  triggers:
+  - entity_id: sensor.unraid_ups_runtime_remaining
+    below: 10
+    for:
+      minutes: 2
+    trigger: numeric_state
+  conditions: []
+  actions:
+  - data:
+      title: ⚡ UPS Battery Critical
+      message: Initiating safe shutdown of Unraid server
+      data:
+        actions:
+        - action: SHUTDOWN_UNRAID
+          title: 'Yes'
+        - action: CANCEL_SHUTDOWN
+          title: 'No'
+    action: notify.mobile_app_jons_iphone
+  - wait_for_trigger:
+    - event_type: mobile_app_notification_action
+      event_data:
+        action: SHUTDOWN_UNRAID
+      trigger: event
+  - condition: template
+    value_template: '{{ trigger.event.data.action == ''SHUTDOWN_UNRAID'' }}'
+  - data:
+      entry_id: 192.168.30.249
+      command: shutdown -h now
+    action: unraid.execute_command
+  mode: single
+- id: '1740318602615'
+  alias: 'Frigate: mudroom detection based on presence'
+  description: enable/disable detection in the mudroom based on presence
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.anybody_home
+  conditions: []
+  actions:
+  - action: '{% if trigger.to_state.state == ''off'' %}homeassistant.turn_on {% else
+      %}homeassistant.turn_off{% endif %}'
+    entity_id: switch.mudroom_detect
+  mode: single
+- id: '1740318622982'
+  alias: 'Location: laura'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: person.laura
+    to: home
+  conditions: []
+  actions:
+  - action: notify.mobile_app_jons_iphone
+    data_template:
+      message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+        }}.'
+  mode: single
+- id: '1740318878024'
+  alias: 'Vacation Mode: enabled'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.vacation
+    to: 'on'
+  conditions: []
+  actions:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: switch.basement_equipment_room_recirculation_pump
+    data: {}
+  - action: cover.close_cover
+    entity_id: group.all_shades
+  - action: script.tvs_off
+    data: {}
+  - action: notify.telegram_jon
+    data:
+      title: Ran vacation mode on!
+      message: 'Reminder:
+
+        * depending how long you''re gone and the time of year, maybe turn off the
+        water main
+
+
+        This automation already performed the following:
+
+        * turned off recirc pump
+
+        * locked house locks (will happen in 60s)
+
+        * closed all blinds
+
+        * set back temps on thermostats
+
+        * turned off lights, TVs, and fans
+
+        '
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ states(''climate.main_level_thermostat'') == ''cool''
+          }}'
+      sequence:
+      - action: climate.set_temperature
+        data:
+          temperature: 80
+        target:
+          entity_id:
+          - climate.main_level_thermostat
+          - climate.lower_level_thermostat
+          - climate.upper_level_thermostat
+    - conditions:
+      - condition: template
+        value_template: '{{ states(''climate.main_level_thermostat'') == ''heat''
+          }}'
+      sequence:
+      - action: climate.set_temperature
+        data:
+          temperature: 60
+        target:
+          entity_id:
+          - climate.main_level_thermostat
+          - climate.lower_level_thermostat
+          - climate.upper_level_thermostat
+  - action: script.interior_lights_off
+    data: {}
+  - action: script.fans_off
+    data: {}
+  - delay: 60
+  - action: script.lock_doors
+    data: {}
+  mode: single
+- id: '1740318920723'
+  alias: 'Vacation Mode: notify if a garage door opens'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.garage_doors
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.vacation
+    state: 'on'
+  actions:
+  - action: telegram_bot.send_photo
+    data_template:
+      url: http://192.168.30.249:5005/api/garage/latest.jpg
+      caption: "One of the {{ trigger.to_state.attributes.friendly_name }} is open
+        \U0001F480"
+  mode: single
+- id: '1740318950168'
+  alias: 'Vacation Mode: turn off all lights at 23:30'
+  description: ''
+  triggers:
+  - trigger: time
+    at: '23:30:00'
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.vacation
+    state: 'on'
+  actions:
+  - action: script.all_off
+    data: {}
+  mode: single
+- id: '1740319066381'
+  alias: 'Christmas: generic triggers'
+  description: 'at 4:30pm, or if Laura gets home, or when we wake up, turn on the
+    xmas lights. at 11pm, or start sleeping, or laura leaves, or laura gets in bed,
+    or alarm armed away, turn off xmas lights '
+  triggers:
+  - trigger: time
+    at: '16:30:00'
+    id: 430pm
+  - trigger: state
+    entity_id: person.laura
+    to: home
+    id: xmason
+  - trigger: state
+    entity_id: binary_sensor.sleeping
+    from: 'on'
+    to: 'off'
+    id: xmason
+  - trigger: time
+    at: '23:00:00'
+    id: xmasoff-trees
+  - trigger: state
+    entity_id: binary_sensor.sleeping
+    from: 'off'
+    to: 'on'
+    id: xmasoff-trees
+  - trigger: state
+    entity_id: person.laura
+    to: not_home
+    id: xmasoff-trees
+  - trigger: state
+    entity_id: binary_sensor.bed_presence_bed_occupied_right
+    from: 'off'
+    to: 'on'
+    id: xmasoff-trees
+  - trigger: state
+    entity_id: binary_sensor.occupied_alarm
+    from: 'on'
+    to: 'off'
+    id: xmasoff-trees
+  - trigger: time
+    at: '23:00:00'
+    id: xmasoff-all
+  - trigger: time
+    at: '23:30:00'
+    id: xmasoff-all
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.christmas_season
+    state: 'on'
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: 430pm
+      sequence:
+      - action: homeassistant.turn_on
+        target:
+          entity_id: switch.exterior_roof_outlets
+        data: {}
+      - choose:
+          conditions:
+          - condition: state
+            entity_id: person.laura
+            state: home
+          sequence:
+          - action: light.turn_on
+            target:
+              entity_id: light.christmas_trees
+            data: {}
+    - conditions:
+      - condition: trigger
+        id: xmasoff-trees
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.christmas_trees
+        data: {}
+      - action: notify.telegram_jon
+        data_template:
+          disable_notification: true
+          message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+            }}. Christmas trees turned off'
+    - conditions:
+      - condition: trigger
+        id: xmasoff-all
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.christmas_lights
+        data: {}
+      - action: notify.telegram_jon
+        data_template:
+          disable_notification: true
+          message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+            }}. All Christmas lights turned off'
+    - conditions:
+      - condition: trigger
+        id: xmason
+      - condition: time
+        before: '23:00:00'
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id: light.christmas_trees
+        data: {}
+      - action: notify.telegram_jon
+        data_template:
+          disable_notification: true
+          message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+            }}. Christmas trees turned on'
+      - action: notify.mobile_app_jons_iphone
+        metadata: {}
+        data: {}
+  mode: single
+- id: '1740319108907'
+  alias: 'Utility: basement bath motion'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.apollo_msr_2_04b470_radar_moving_target
+    id: pir-on
+    to: 'on'
+  - trigger: state
+    entity_id: binary_sensor.apollo_msr_2_04b470_radar_moving_target
+    id: pir-off
+    to: 'off'
+    for:
+      minutes: 1
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: time
+        before: 08:30:00
+      sequence:
+      - action: homeassistant.turn_on
+        entity_id: switch.basement_bidet
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: homeassistant.turn_off
+        entity_id: switch.basement_bidet
+  mode: restart
+- id: '1740319136477'
+  alias: 'Utility: turn off streamdeck'
+  description: turn off the streamdeck on an interval
+  triggers:
+  - trigger: time_pattern
+    minutes: /10
+  - trigger: time_pattern
+    minutes: '05'
+    hours: '0'
+  conditions: []
+  actions:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: input_boolean.streamdeck
+    data: {}
+  mode: single
+- id: '1740319178951'
+  alias: 'Lutron: run appropriate relax on button press'
+  description: if its light out, dont run all relax lights and if its dark, turn on
+    all relax lights
+  triggers:
+  - trigger: event
+    id: button-press
+    event_type: lutron_caseta_button_event
+    event_data:
+      device_id: 412e736c92914f340d64354b7045e6a4
+      leap_button_number: 5
+      action: press
+  - trigger: state
+    entity_id: binary_sensor.light_inside
+    to: 'off'
+    from: 'on'
+    id: sensor
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+      - '{{ trigger.id == ''button-press'' }}'
+      - '{{ is_state(''group.relax_all'', ''on'') }}'
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_relax_all_off
+    - conditions:
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+      - condition: template
+        value_template: '{{ trigger.id == ''button-press'' }}'
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp02_position_2_keypad_relax_all_on_low
+    - conditions:
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.light_inside'', ''on'') }}'
+      - condition: template
+        value_template: '{{ trigger.id == ''button-press'' }}'
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_relax_day_on
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == ''sensor'' }}'
+      - condition: template
+        value_template: '{{ is_state(''group.relax_day'', ''on'') }}'
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp02_position_2_keypad_relax_all_on_low
+    default:
+    - action: system_log.write
+      data_template:
+        message: 'huh, defaulting: {{ trigger }}'
+        level: error
+  - wait_for_trigger:
+    - trigger: event
+      event_type: lutron_caseta_button_event
+      event_data:
+        device_id: 412e736c92914f340d64354b7045e6a4
+        leap_button_number: 5
+        action: press
+    continue_on_timeout: false
+    timeout:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - action: button.press
+    entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_relax_all_on
+  mode: single
+- id: '1740319232333'
+  alias: 'Utility: toggle bedroom lamps on button press'
+  description: toggle bedroom lamps on button press
+  triggers:
+  - trigger: event
+    event_type: lutron_caseta_button_event
+    event_data:
+      device_id: 0ed5d17f09fc4a169a55251f422cfa1b
+      leap_button_number: 2
+      action: press
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.jons_lamp
+        state: 'off'
+      - condition: state
+        entity_id: light.lauras_lamp
+        state: 'off'
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id:
+          - light.jons_lamp
+          - light.lauras_lamp
+        data: {}
+    default:
+    - action: light.turn_off
+      target:
+        entity_id:
+        - light.jons_lamp
+        - light.lauras_lamp
+      data: {}
+  mode: single
+- id: '1740319287419'
+  alias: 'Utility: adblocking on/off'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.adblocking
+    to: 'off'
+  conditions: []
+  actions:
+  - delay: 45
+  - action: homeassistant.turn_on
+    target:
+      entity_id:
+      - switch.adguard_home_protection
+      - switch.adguard_pi_protection
+    data: {}
+  mode: single
+- id: '1740319351990'
+  alias: 'Lutron: office pico'
+  description: ''
+  triggers:
+  - trigger: event
+    event_type: lutron_caseta_button_event
+    id: fan-on
+    event_data:
+      serial: 44120560
+      button_number: 8
+      action: press
+  - trigger: event
+    event_type: lutron_caseta_button_event
+    id: fan-off
+    event_data:
+      serial: 44120560
+      button_number: 9
+      action: press
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: fan-on
+      sequence:
+      - action: fan.set_percentage
+        target:
+          entity_id: fan.office_fan
+        data:
+          percentage: 33
+    - conditions:
+      - condition: trigger
+        id: fan-off
+      sequence:
+      - action: fan.turn_off
+        entity_id: fan.office_fan
+  mode: single
+- id: '1740319379675'
+  alias: 'Lutron: main bedroom keypad'
+  description: ''
+  triggers:
+  - trigger: device
+    device_id: e9e7f4f32145e5ff86d0dafe818bc9b4
+    domain: lutron_caseta
+    type: press
+    subtype: Jon's
+    id: jons-on
+  - trigger: device
+    device_id: e9e7f4f32145e5ff86d0dafe818bc9b4
+    domain: lutron_caseta
+    type: press
+    subtype: Laura's
+    id: lauras-on
+  - trigger: device
+    device_id: e9e7f4f32145e5ff86d0dafe818bc9b4
+    domain: lutron_caseta
+    type: press
+    subtype: 'Off'
+    id: lamps-off
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: jons-on
+      sequence:
+      - action: homeassistant.turn_on
+        target:
+          entity_id: light.jons_lamp
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: lauras-on
+      sequence:
+      - action: homeassistant.turn_on
+        target:
+          entity_id: light.lauras_lamp
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: lamps-off
+      sequence:
+      - action: homeassistant.turn_off
+        target:
+          entity_id:
+          - light.jons_lamp
+          - light.lauras_lamp
+        data: {}
+  mode: single
+- id: '1740319408134'
+  alias: 'Lutron: main bedroom pico'
+  description: ''
+  triggers:
+  - trigger: device
+    device_id: 3d2b7230702c02d71c1f062b00e9fae7
+    domain: lutron_caseta
+    type: press
+    subtype: button_1
+  - trigger: device
+    device_id: 3d2b7230702c02d71c1f062b00e9fae7
+    domain: lutron_caseta
+    type: press
+    subtype: button_2
+  - trigger: device
+    device_id: 3d2b7230702c02d71c1f062b00e9fae7
+    domain: lutron_caseta
+    type: press
+    subtype: button_3
+  - trigger: device
+    device_id: 3d2b7230702c02d71c1f062b00e9fae7
+    domain: lutron_caseta
+    type: press
+    subtype: button_4
+  conditions: []
+  actions:
+  - action: '{% if trigger.event.data.leap_button_number in [1,3] %}homeassistant.turn_on
+      {% else %}homeassistant.turn_off{% endif %}
+
+      '
+    data_template:
+      entity_id: '{% if trigger.event.data.leap_button_number in [1,2] %}light.lauras_lamp
+        {% else %}light.jons_lamp{% endif %}
+
+        '
+  mode: single
+- id: '1740319430783'
+  alias: 'Blinds: office'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.office_motions
+    to: 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+  - condition: template
+    value_template: '{{ (as_timestamp(now()) - as_timestamp(state_attr(''automation.blinds_office'',
+      ''last_triggered'')) | int(0)) > 21600 }}'
+  - condition: sun
+    after: sunset
+    after_offset: 00:30:00
+  actions:
+  - action: cover.close_cover
+    entity_id:
+    - cover.basement_office_shade
+    - cover.basement_office_east_shade
+  mode: single
+- id: '1740319465724'
+  alias: 'Automatic Lighting: primary bedroom first evening entry'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.elkm1_main_bed_pir
+    to: 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+  - condition: template
+    value_template: '{{ is_state(''binary_sensor.bed_presence_bed_occupied_either'',
+      ''off'') }}'
+  - condition: template
+    value_template: '{{ this.attributes.last_triggered is none or this.attributes.last_triggered
+      < today_at() }}'
+  - condition: time
+    after: '16:30:00'
+    before: '21:00:00'
+  actions:
+  - action: homeassistant.turn_on
+    target:
+      entity_id:
+      - light.jons_lamp
+      - light.lauras_lamp
+    data: {}
+  mode: single
+- id: '1740319503172'
+  alias: 'Automatic Lighting: motion light template - scenes'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.elkm1_kitchen_pir
+    id: pir-on
+    to: 'on'
+  - trigger: state
+    entity_id:
+    - binary_sensor.kitchen_area_motions
+    id: pir-off
+    to: 'off'
+    for:
+      minutes: 12
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.block_interior_motion_lights'',
+          ''off'') }}'
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+      sequence:
+      - action: button.press
+        data_template:
+          entity_id: "{% if trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir'
+            %}\n  button.basement_equipment_room_homeowner_kp01_position_5_keypad_kitchen_low_on\n{%
+            endif %}\n"
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: button.press
+        data_template:
+          entity_id: "{% if trigger.entity_id == 'binary_sensor.kitchen_area_motions'
+            %}\n  button.basement_equipment_room_homeowner_kp01_position_2_keypad_kitchenhall_off\n{%
+            endif %}\n"
+  mode: restart
+- id: '1740319546985'
+  alias: 'Automatic Lighting: motion light back kitchen'
+  description: turn on the back kitchen lights when there is motion. bail out of the
+    automation if the light is already on/off
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.elkm1_back_kitchen_pir
+    to: 'on'
+    id: pir-on
+  - trigger: state
+    entity_id: binary_sensor.elkm1_back_kitchen_pir
+    to: 'off'
+    id: pir-off
+    for: 00:05:00
+  conditions:
+  - condition: template
+    value_template: '{{ (trigger.to_state.state == ''on'' and is_state(light, ''off''))
+      or (trigger.to_state.state == ''off'' and is_state(light, ''on'')) }}'
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.block_interior_motion_lights'',
+          ''off'') }}'
+      sequence:
+      - action: light.turn_on
+        data_template:
+          entity_id: '{{light}}'
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: homeassistant.turn_off
+        target:
+          entity_id: '{{light}}'
+  mode: single
+  variables:
+    light: light.main_floor_back_kitchen_cabinets
+- id: '1740319573095'
+  alias: 'Automatic Lighting: motion light upstairs stairs'
+  description: on upstairs stair motion, turn on the sconce lights
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.elkm1_second_hall_pir
+    to: 'on'
+    id: pir-on
+  - trigger: state
+    entity_id: binary_sensor.elkm1_second_hall_pir
+    to: 'off'
+    id: pir-off
+    for: 00:01:00
+  conditions:
+  - condition: template
+    value_template: '{{ (trigger.to_state.state == ''on'' and is_state(light, ''off''))
+      or (trigger.to_state.state == ''off'' and is_state(light, ''on'')) }}'
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.block_interior_motion_lights'',
+          ''off'') }}'
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+      sequence:
+      - action: light.turn_on
+        data_template:
+          entity_id: '{{light}}'
+          brightness_pct: 20
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: light.turn_off
+        data:
+          entity_id: '{{light}}'
+          transition: 120
+  mode: restart
+  variables:
+    light: light.upstairs_stair_sconces
+- id: '1740319603819'
+  alias: 'Automatic Lighting: motion light basement stairs'
+  description: on basement stair motion, turn on the lights (at 30% of the circadian
+    brightness)
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.elkm1_basmnt_stair_pir
+    to: 'on'
+    id: pir-on
+  - trigger: state
+    entity_id: binary_sensor.elkm1_basmnt_stair_pir
+    to: 'off'
+    id: pir-off
+    for: 00:05:00
+  conditions:
+  - condition: template
+    value_template: '{{ (trigger.to_state.state == ''on'' and is_state(light, ''off''))
+      or (trigger.to_state.state == ''off'' and is_state(light, ''on'')) }}'
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.block_interior_motion_lights'',
+          ''off'') }}'
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+      sequence:
+      - action: light.turn_on
+        data_template:
+          entity_id: '{{light}}'
+          brightness_pct: '{{ states(''sensor.circadian_brightness'') | float * brightness_pct
+            }}'
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: homeassistant.turn_off
+        target:
+          entity_id: '{{light}}'
+  mode: single
+  variables:
+    light: light.basement_stair_lights
+    brightness_pct: 0.3
+- id: '1740319634384'
+  alias: 'Automatic Lighting: motion light gym'
+  description: turn on the gym recessed lights when there is motion. bail out of the
+    automation if the light is already on/off
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.elkm1_gym_pir
+    to: 'on'
+    id: pir-on
+  - trigger: state
+    entity_id: binary_sensor.elkm1_gym_pir
+    to: 'off'
+    id: pir-off
+    for: 00:05:00
+  conditions:
+  - condition: template
+    value_template: '{{ (trigger.to_state.state == ''on'' and is_state(light, ''off''))
+      or (trigger.to_state.state == ''off'' and is_state(light, ''on'')) }}'
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.block_interior_motion_lights'',
+          ''off'') }}'
+      sequence:
+      - action: light.turn_on
+        data_template:
+          entity_id: '{{light}}'
+          brightness_pct: 2
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: homeassistant.turn_off
+        target:
+          entity_id: '{{light}}'
+  mode: single
+  variables:
+    light: light.basement_gym_cans
+- id: '1740319656509'
+  alias: 'Automatic Lighting: motion light laundry'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.elkm1_laundry_pir
+    id: pir-on
+    to: 'on'
+  - trigger: state
+    entity_id:
+    - binary_sensor.elkm1_laundry_pir
+    id: pir-off
+    to: 'off'
+    for:
+      minutes: 2
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.block_interior_motion_lights'',
+          ''off'') }}'
+      sequence:
+      - action: light.turn_on
+        data_template:
+          entity_id: '{{light}}'
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: light.turn_off
+        data:
+          entity_id: '{{light}}'
+          transition: 120
+  mode: restart
+  variables:
+    light: light.upstairs_laundry_cabinets
+- id: '1740319748415'
+  alias: 'Automatic Lighting: motion light main bath'
+  description: dont turn the light on between 11pm and 5am
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.main_bathroom_occupied
+    id: pir-on
+    to: 'on'
+  - trigger: state
+    entity_id: binary_sensor.main_bathroom_occupied
+    id: pir-off
+    to: 'off'
+    for:
+      minutes: 3
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.block_interior_motion_lights'',
+          ''off'') }}'
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+      - condition: time
+        before: '23:00:00'
+        after: 05:00:00
+      sequence:
+      - action: light.turn_on
+        data_template:
+          entity_id: '{{light}}'
+          brightness_pct: '{{ states(''sensor.circadian_brightness'') }}'
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: homeassistant.turn_off
+        data_template:
+          entity_id: '{{light}}'
+  mode: restart
+  variables:
+    light: light.upstairs_main_bathroom_toekick
+- id: '1740319778255'
+  alias: 'Automatic Lighting: motion light template'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.office_motions
+    - binary_sensor.elkm1_lounge_pir
+    - binary_sensor.elkm1_mudroom_pir
+    id: pir-on
+    to: 'on'
+  - trigger: state
+    entity_id:
+    - binary_sensor.elkm1_lounge_pir
+    - binary_sensor.office_motions
+    - binary_sensor.elkm1_mudroom_pir
+    id: pir-off
+    to: 'off'
+    for:
+      minutes: 10
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.block_interior_motion_lights'',
+          ''off'') }}'
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+      sequence:
+      - action: light.turn_on
+        data_template:
+          entity_id: "{% if trigger.entity_id == 'binary_sensor.office_motions' %}\n
+            \ light.basement_office_art\n{% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir'
+            %}\n  light.basement_bar_cabinets\n{% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir'
+            %}\n  light.main_floor_mudroom_lamp\n{% endif %}\n"
+          brightness_pct: '{{ states(''sensor.circadian_brightness'') }}'
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - action: homeassistant.turn_off
+        data_template:
+          entity_id: "{% if trigger.entity_id == 'binary_sensor.office_motions' %}\n
+            \ light.basement_office_art\n{% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir'
+            %}\n  light.basement_bar_cabinets\n{% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir'
+            %}\n  light.main_floor_mudroom_lamp\n{% endif %}\n"
+  mode: restart
+- id: '1740319923404'
+  alias: 'Utility: power outage'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: sensor.cyberpower_ups
+    to: three
+    id: three
+    for:
+      seconds: 30
+  - trigger: state
+    entity_id: sensor.cyberpower_ups
+    to: five
+    id: five
+    for:
+      seconds: 15
+  - trigger: state
+    entity_id: sensor.cyberpower_ups
+    to: ten
+    id: ten
+    for:
+      seconds: 15
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: three
+      sequence:
+      - action: notify.telegram_jon
+        data_template:
+          message: Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime')
+            | float / 60) | round(0) }}min remaining, turning off HA.
+      - action: shell_command.debian_shutdown
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: five
+      sequence:
+      - action: notify.telegram_jon
+        data_template:
+          message: Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime')
+            | float / 60) | round(0) }}min remaining.
+    - conditions:
+      - condition: trigger
+        id: ten
+      sequence:
+      - action: notify.telegram_jon
+        data_template:
+          message: Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime')
+            | float / 60) | round(0) }}min remaining.
+  mode: single
+- id: '1740320118816'
+  alias: 'Work: pagerduty notification - notify'
+  description: if its not daytime and Jon is home turn on his lamp
+  triggers:
+  - trigger: event
+    event_type: imap_content
+    event_data:
+      sender: no-reply@pagerduty.com
+  conditions: []
+  actions:
+  - action: notify.telegram_jon
+    data_template:
+      message: 'ALERT: work page'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ not is_state(''sensor.period_of_day'', ''day'') and is_state(''person.jon'',
+          ''home'') }}'
+      sequence:
+      - action: light.turn_on
+        data_template:
+          entity_id: light.jons_lamp
+          brightness_pct: '{{ states(''sensor.circadian_brightness'') }}'
+  mode: single
+- id: '1740320164349'
+  alias: 'Security: Elk Alarm trouble notification'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: sensor.alarm_trouble
+  conditions:
+  - condition: template
+    value_template: '{{ not is_state(''sensor.alarm_trouble'', '''') }}'
+  actions:
+  - action: notify.telegram_jon
+    data_template:
+      message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+        }}.'
+  mode: single
+- id: '1740320212172'
+  alias: 'Moisture: if there is a water leak & notify & close the water valve & turn
+    off recirculation pump'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.moisture_sensors
+    to: 'on'
+  conditions: []
+  actions:
+  - action: homeassistant.turn_off
+    target:
+      entity_id:
+      - switch.basement_equipment_room_recirculation_pump
+      - switch.water_main
+    data: {}
+  - action: notify.telegram_jon
+    data:
+      title: Water Leak!
+      message: HomeAssistant detected a water leak
+  mode: single
+- id: '1740320253810'
+  alias: 'Fans: turn off fans in the morning'
+  description: ''
+  triggers:
+  - trigger: time
+    at: 08:00:00
+  conditions: []
+  actions:
+  - action: homeassistant.turn_off
+    target:
+      entity_id:
+      - fan.upstairs_main_bedroom_fan
+      - fan.evelyns_fan
+    data: {}
+  mode: single
+- id: '1740320281075'
+  alias: turn on primary bed fan at night (if AC is on)
+  description: ''
+  triggers:
+  - trigger: time
+    at: '20:00:00'
+  conditions:
+  - condition: state
+    entity_id: climate.main_level_thermostat
+    state: cool
+  - condition: state
+    entity_id: binary_sensor.vacation
+    state: 'off'
+  actions:
+  - action: homeassistant.turn_on
+    target:
+      entity_id: fan.upstairs_main_bedroom_fan
+    data: {}
+  mode: single
+- id: '1740320340725'
+  alias: 'Security: doorbell rang'
+  description: send telegram message when the doorbell rings and announce it on the
+    sonos
+  triggers:
+  - type: connected
+    device_id: 498618c4bb775b9d0a1963689f168ddb
+    entity_id: binary_sensor.a8105_e_0_call_button
+    domain: binary_sensor
+    trigger: device
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.doorbell'', ''on'') }}'
+      sequence:
+      - action: media_player.play_media
+        target:
+          entity_id: media_player.kitchen
+        data:
+          media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+          media_content_type: provider
+        metadata:
+          title: ding dong - somebody is at the door
+          thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+          media_class: app
+          children_media_class:
+          navigateIds:
+          - {}
+          - media_content_type: app
+            media_content_id: media-source://tts
+          - media_content_type: provider
+            media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.office
+    data:
+      media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+      media_content_type: provider
+    metadata:
+      title: ding dong - somebody is at the door
+      thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
+      media_class: app
+      children_media_class:
+      navigateIds:
+      - {}
+      - media_content_type: app
+        media_content_id: media-source://tts
+      - media_content_type: provider
+        media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
+  - action: camera.snapshot
+    target:
+      entity_id: camera.doorbell
+    data:
+      filename: '{{filename}}'
+  - parallel:
+    - action: notify.telegram_jon
+      data_template:
+        message: '{{msg}}'
+        data:
+          photo:
+          - file: '{{filename}}'
+            caption: '{{msg}}'
+    - action: notify.mobile_app_lauras_iphone
+      data:
+        message: '{{msg}}'
+        data:
+          image: '{{filename}}'
+  - action: script.tvs_notify
+    data:
+      msg: '{{msg}}'
+  mode: single
+  variables:
+    filename: /tmp/doorbell_latest.jpg
+    msg: Doorbell rang!
+- id: '1740320370360'
+  alias: 'Automatic Lighting: exterior person & dark out - toggle exterior lights'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.exterior_person
+    id: pir-on
+    to: 'on'
+  - trigger: state
+    entity_id: binary_sensor.exterior_person
+    id: pir-off
+    to: 'off'
+    for:
+      minutes: 20
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''input_boolean.exterior_lights_block'', ''off'')
+      }}'
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: pir-on
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+      - condition: state
+        entity_id: sun.sun
+        state: below_horizon
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_on
+    - conditions:
+      - condition: trigger
+        id: pir-off
+      sequence:
+      - choose:
+        - conditions:
+          - condition: time
+            after: '23:00:00'
+            before: '10:00:00'
+          sequence:
+          - action: button.press
+            entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_off
+        default:
+        - action: button.press
+          entity_id: button.basement_equipment_room_homeowner_kp01_position_5_keypad_ext_except_sun_off
+  mode: restart
+- id: '1740320425638'
+  alias: 'Automatic Lighting: deck lights on when deck door opens'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.elkm1_sunroom_pir
+    to: 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+  actions:
+  - wait_for_trigger:
+    - trigger: state
+      entity_id: sensor.elkm1_deck_door
+      to: Violated
+    timeout: 30
+    continue_on_timeout: false
+  - action: homeassistant.turn_on
+    target:
+      entity_id: light.exterior_deck_lights
+    data: {}
+  mode: restart
+- id: '1740320444367'
+  alias: 'Automatic Lighting: patio lights on when patio door opens'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.elkm1_lounge_pir
+    to: 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+  actions:
+  - wait_for_trigger:
+    - trigger: state
+      entity_id: sensor.elkm1_patio_door
+      to: Violated
+    timeout: 30
+    continue_on_timeout: false
+  - action: homeassistant.turn_on
+    target:
+      entity_id: light.exterior_patio_cans
+    data: {}
+  mode: restart
+- id: '1740320464901'
+  alias: 'Automatic Lighting: workshop lights on when workshop door opens'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.elkm1_workshop_pir
+    to: 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+  actions:
+  - wait_for_trigger:
+    - trigger: state
+      entity_id: sensor.elkm1_workshop_door
+      to: Violated
+    timeout: 30
+    continue_on_timeout: false
+  - action: homeassistant.turn_on
+    target:
+      entity_id: light.exterior_workshop_light
+    data: {}
+  mode: restart
+- id: '1740320482906'
+  alias: 'Automatic Lighting: grilldeck lights on when grilldeck door opens'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.elkm1_mudroom_pir
+    to: 'on'
+  conditions:
+  - condition: template
+    value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+  actions:
+  - wait_for_trigger:
+    - trigger: state
+      entity_id: sensor.elkm1_deck_door
+      to: Violated
+    timeout: 30
+    continue_on_timeout: false
+  - action: button.press
+    entity_id: button.basement_equipment_room_homeowner_kp01_position_5_keypad_grilldeck_on
+  mode: restart
+- id: '1740320533697'
+  alias: 'Wake Mode: done sleeping in the morning'
+  description: turns the recirc pump on & checks if the date is between Oct-May &
+    turn on some lights & turns Evelyns Rest Plus to green
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.sleeping
+    from: 'on'
+    to: 'off'
+  conditions:
+  - condition: time
+    after: 05:45:00
+    before: 09:30:00
+  actions:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: switch.garage_dehumidifier
+    data: {}
+  - action: homeassistant.turn_on
+    target:
+      entity_id: switch.basement_equipment_room_recirculation_pump
+    data: {}
+  - action: script.night_adaptive_lighting
+    data:
+      state: turn_off
+  - action: script.crestron_exit_standby
+    data: {}
+  - wait_for_trigger:
+    - trigger: state
+      entity_id: sensor.elkm1_foyer_pir
+      to: Violated
+    timeout: 1200
+    continue_on_timeout: false
+  - choose:
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.light_inside
+        state: 'off'
+      - condition: or
+        conditions:
+        - condition: template
+          value_template: '{{ now().strftime("%m")|int > 10 }}'
+        - condition: template
+          value_template: '{{ now().strftime("%m")|int < 4 }}'
+      sequence:
+      - action: homeassistant.turn_on
+        target:
+          entity_id: light.main_floor_great_room_cabinets
+        data: {}
+  mode: single
+- id: '1740320583219'
+  alias: 'Day Mode: turn off wake mode morning lamps'
+  description: only trigger between 6am and 10am
+  triggers:
+  - trigger: sun
+    event: sunrise
+    offset: +01:00:00
+  conditions:
+  - condition: time
+    after: 06:00:00
+    before: '10:00:00'
+  actions:
+  - action: homeassistant.turn_off
+    target:
+      entity_id:
+      - light.main_floor_great_room_cabinets
+      - light.main_floor_library_cabinets
+    data: {}
+  mode: single
+- id: '1740320626171'
+  alias: 'Automatic Lighting: turn off basement lights if no motion detected'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.basement_motions
+    to: 'off'
+    for: 00:20:00
+  conditions: []
+  actions:
+  - action: button.press
+    data_template:
+      entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_basement_off
+  mode: single
+- id: '1740320646085'
+  alias: 'Automatic Lighting: turn off main floor lights if no motion detected'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.main_motions
+    to: 'off'
+    for: 00:20:00
+    id: twenty-minutes
+  - trigger: state
+    entity_id: binary_sensor.main_motions
+    to: 'off'
+    for: 00:50:00
+    id: fifty-minutes
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: twenty-minutes
+      - condition: time
+        before: '16:00:00'
+      sequence:
+      - action: button.press
+        data_template:
+          entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
+    - conditions:
+      - condition: trigger
+        id: fifty-minutes
+      - condition: time
+        after: '16:00:00'
+      sequence:
+      - action: button.press
+        data_template:
+          entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
+  mode: single
+- id: '1740320666454'
+  alias: 'Automatic Lighting: turn off main bath lights if no motion detected'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.main_bathroom_occupied
+    to: 'off'
+    for: 00:20:00
+  conditions: []
+  actions:
+  - action: button.press
+    data_template:
+      entity_id: button.basement_equipment_room_homeowner_kp01_position_4_keypad_mainbath_off
+  mode: single
+- id: '1740320689199'
+  alias: 'Automatic Lighting: turn off lights between 11pm and 4am if alarm hasnt
+    been set and no motion detected for 20 min on all motions'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.all_motions
+    to: 'off'
+    for:
+      minutes: 20
+  - trigger: time
+    at: '23:30:00'
+  conditions:
+  - condition: time
+    after: '23:00:00'
+    before: 04:00:00
+  - condition: state
+    entity_id: binary_sensor.all_motions
+    state: 'off'
+    for:
+      minutes: 20
+  actions:
+  - action: script.interior_lights_off
+    data: {}
+  mode: single
+- id: '1740320717719'
+  alias: 'Utility: generic time based triggers'
+  description: ''
+  triggers:
+  - trigger: time
+    at: '5:00:00'
+    id: 5am
+  - trigger: time
+    at: 05:30:00
+    id: 530am
+  - trigger: time
+    at: 07:30:00
+    id: 730am
+  - trigger: time
+    at: 08:00:00
+  - trigger: time
+    at: 09:00:00
+    id: 9am
+  - trigger: time
+    at: '10:00:00'
+    id: 10am
+  - trigger: time
+    at: '12:00:00'
+  - trigger: time
+    at: '15:30:00'
+    id: 330pm
+  - trigger: time
+    at: '16:30:00'
+    id: 430pm
+  - trigger: time
+    at: '23:00:00'
+    id: 11pm
+  - trigger: homeassistant
+    event: start
+    id: start
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: start
+      sequence:
+      - action: homeassistant.turn_on
+        target:
+          entity_id:
+          - switch.adguard_home_protection
+          - switch.adguard_pi_protection
+        data: {}
+      - action: elkm1.set_time
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: 5am
+      - condition: template
+        value_template: '{{ states(''binary_sensor.vacation'') == ''off'' }}'
+      sequence:
+      - action: cover.open_cover
+        entity_id:
+        - cover.main_floor_library_shade
+        - cover.basement_office_shade
+    - conditions:
+      - condition: trigger
+        id: 530am
+      sequence:
+      - action: elkm1.set_time
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: 715am
+      - condition: state
+        entity_id: switch.evelyns_room_power_switch
+        state: 'on'
+      - condition: template
+        value_template: '{{ states(''binary_sensor.vacation'') == ''off'' }}'
+      sequence:
+      - action: light.turn_on
+        data:
+          entity_id: light.evelyns_room_light
+          rgb_color:
+          - 0
+          - 255
+          - 0
+          brightness_pct: 6
+    - conditions:
+      - condition: trigger
+        id: 730am
+      - condition: template
+        value_template: '{{ states(''binary_sensor.events_today'') == ''on'' or states(''binary_sensor.events_in_seven_days'')
+          == ''on'' }}'
+      sequence:
+      - parallel:
+        - action: telegram_bot.send_message
+          data_template:
+            title: '{% if as_local(states.sensor.date.last_updated).day == 1 %}*Important
+              Dates in the Next 30 Days!* {% else %}*Important Upcoming Dates!* {%
+              endif %}'
+            message: '{% if as_local(states.sensor.date.last_updated).day == 1 %}
+              {% for entity in  state_attr(''binary_sensor.events_in_the_next_thirty_days'',
+              ''entity_id'') -%} {{ ''\n_'' + entity.name + ''_ - '' + entity.next_date
+              }} {% endfor %} {% else %} {% for entity in  state_attr(''binary_sensor.events_in_seven_days'',
+              ''entity_id'') + state_attr(''binary_sensor.events_today'', ''entity_id'')
+              %} {{ ''\n_'' + entity.name + ''_ - '' + entity.next_date }} {% endfor
+              %} {% endif %}'
+            parse_mode: markdown
+    - conditions:
+      - condition: trigger
+        id: 9am
+      sequence:
+      - action: homeassistant.turn_off
+        target:
+          entity_id:
+          - switch.basement_equipment_room_recirculation_pump
+          - fan.upstairs_main_bedroom_fan
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: 10am
+      - condition: or
+        conditions:
+        - condition: template
+          value_template: '{{ states(''sensor.house_humidity'') > states(''sensor.target_humidity_max'')
+            }}'
+        - condition: template
+          value_template: '{{ states(''sensor.house_humidity'') < states(''sensor.target_humidity_min'')
+            }}'
+      sequence:
+      - action: telegram_bot.send_message
+        data_template:
+          title: '*Humidity Warning!*'
+          message: 'Humidity in the house is: {{ states(''sensor.house_humidity'')
+            }}'
+    - conditions:
+      - condition: trigger
+        id: 330pm
+      sequence:
+      - action: homeassistant.turn_off
+        target:
+          entity_id: fan.evelyns_fan
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: 430pm
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: 'on'
+      sequence:
+      - action: homeassistant.turn_on
+        target:
+          entity_id: switch.basement_equipment_room_recirculation_pump
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: 11pm
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_off
+      - choose:
+        - conditions:
+          - '{{ states(''binary_sensor.vacation'') == ''off'' }}'
+          sequence:
+          - action: cover.open_cover
+            entity_id: cover.main_floor_sunroom_west_shades
+    default:
+    - action: homeassistant.turn_off
+      target:
+        entity_id:
+        - input_boolean.sunset_run_once
+        - input_boolean.driveway_sentry
+      data: {}
+  mode: single
+- id: '1740320758536'
+  alias: 'Night Mode: bed has either laura or both - turn off main & lower level lights'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.bed_presence_bed_occupied_both
+    id: both
+    to: 'on'
+  - trigger: state
+    entity_id: binary_sensor.bed_presence_bed_occupied_right
+    id: laura
+    to: 'on'
+  conditions:
+  - condition: time
+    after: '18:30:00'
+  - condition: state
+    entity_id: binary_sensor.main_motions
+    state: 'off'
+    for:
+      seconds: 45
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == ''both'' }}'
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_all_int_but_mbed_off
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == ''laura'' }}'
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp01_position_5_keypad_chill_off
+  mode: single
+- id: '1740320786131'
+  alias: 'Night Mode: start sleeping & set HVAC fans on & all lights off if no guests
+    (only exterior & lower & main if guests) & and main tv off & recirc pump off &
+    enable driveway notify'
+  description: also check garage doors and locks - notify if they are open or unlocked
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.sleeping
+    from: 'off'
+    to: 'on'
+  conditions: []
+  actions:
+  - action: button.press
+    data_template:
+      entity_id: "{% if is_state('input_boolean.guests', 'on') %}\n  button.basement_equipment_room_homeowner_kp01_position_4_keypad_main_lower_ext_off\n{%
+        else %}\n  button.basement_equipment_room_homeowner_kp01_position_1_keypad_all_but_mainbed\n{%
+        endif %}\n"
+  - action: script.tvs_off_except_mainbed
+    data: {}
+  - action: script.crestron_enter_standby
+    data: {}
+  - action: homeassistant.turn_off
+    target:
+      entity_id: switch.basement_equipment_room_recirculation_pump
+    data: {}
+  - action: homeassistant.turn_on
+    target:
+      entity_id: switch.garage_dehumidifier
+    data: {}
+  - action: input_boolean.turn_on
+    entity_id:
+    - input_boolean.frigate_doorbell_notifier
+    - input_boolean.frigate_deck_notifier
+    - input_boolean.frigate_driveway_notifier
+    - input_boolean.frigate_frontyard_notifier
+    - input_boolean.frigate_grilldeck_notifier
+    - input_boolean.frigate_patio_notifier
+    - input_boolean.frigate_workshop_notifier
+  - action: script.garage_doors_check_and_close
+    data: {}
+  - action: script.lock_doors
+    data: {}
+  - wait_for_trigger:
+    - trigger: state
+      entity_id: media_player.main_bedroom_tv
+      to: 'off'
+      for: 30
+    timeout:
+      minutes: 90
+    continue_on_timeout: false
+  - action: script.night_adaptive_lighting
+    data:
+      state: turn_on
+  mode: single
+- id: '1740320806399'
+  alias: 'Occupancy: leaving or arriving home'
+  description: check locks & lights & recirc pump
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.occupied_alarm
+    from: 'on'
+    to: 'off'
+    id: leaving
+  - trigger: state
+    entity_id: binary_sensor.occupied_alarm
+    from: 'off'
+    to: 'on'
+    id: arriving
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == ''leaving'' }}'
+      sequence:
+      - action: homeassistant.turn_off
+        target:
+          entity_id: switch.basement_equipment_room_recirculation_pump
+        data: {}
+      - action: script.tvs_off
+        data: {}
+      - action: script.interior_lights_off
+        data: {}
+      - action: script.fans_off
+        data: {}
+      - action: script.lock_doors
+        data: {}
+      - action: telegram_bot.send_message
+        data:
+          message: Leaving... close blinds?
+          inline_keyboard:
+          - Yes:/close_blinds, Ignore:/blinds_do_nothing
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == ''arriving'' }}'
+      sequence:
+      - action: homeassistant.turn_on
+        target:
+          entity_id: switch.basement_equipment_room_recirculation_pump
+        data: {}
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_open
+  mode: single
+- id: '1740320929539'
+  alias: 'Night Mode: turn on sunset lights at dark or sunset'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.light_outside
+    to: 'off'
+    for:
+      minutes: 10
+  - trigger: sun
+    event: sunset
+  conditions:
+  - condition: state
+    entity_id: input_boolean.sunset_run_once
+    state: 'off'
+  - condition: time
+    after: '16:30:00'
+  actions:
+  - action: button.press
+    entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_sunset1
+  - action: homeassistant.turn_on
+    target:
+      entity_id: input_boolean.sunset_run_once
+    data: {}
+  - action: cover.close_cover
+    entity_id:
+    - cover.main_floor_library_shade
+    - cover.upstairs_stair_shade
+  mode: single
+- id: '1740320954335'
+  alias: 'Night Mode: set day or night mode on cameras'
+  description: set day or night mode on cameras at sunset/sunrise and 10m after sunset/sunrise
+  triggers:
+  - trigger: sun
+    event: sunset
+    variables:
+      profile: NIGHT
+      time: NORMAL
+  - trigger: sun
+    event: sunset
+    offset: +00:10:00
+    variables:
+      profile: NIGHT
+      time: NORMAL
+  - trigger: state
+    entity_id: binary_sensor.camera_day_mode_lux
+    to: 'off'
+    for:
+      seconds: 45
+    variables:
+      profile: NIGHT
+      time: LOWLIGHT
+  - trigger: sun
+    event: sunrise
+    variables:
+      profile: DAY
+      time: NORMAL
+  - trigger: sun
+    event: sunrise
+    offset: +00:10:00
+    variables:
+      profile: DAY
+      time: NORMAL
+  - trigger: state
+    entity_id: binary_sensor.camera_day_mode_lux
+    to: 'on'
+    for:
+      seconds: 45
+    variables:
+      profile: DAY
+      time: LOWLIGHT
+  conditions: []
+  actions:
+  - action: shell_command.dahua_profile
+    data:
+      profile: '{{profile}}'
+      time: '{{time}}'
+  mode: single
+- id: '1740321033312'
+  alias: 'Alarm: fire active & unlock locks & send videos & lights set to 25% & hvac
+    off & repeat notifications'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: sensor.alarm_state
+    to: fire_alarm
+  conditions: []
+  actions:
+  - action: input_boolean.turn_on
+    entity_id: input_boolean.alarm_notifier
+  - action: lock.unlock
+    data:
+      entity_id:
+      - lock.garage_lock
+      - lock.workshop_lock
+      - lock.mudroom_lock
+  - action: script.alarm
+    data: {}
+  mode: single
+- id: '1740321068345'
+  alias: 'Alarm: burglar active & lights on & send videos & repeat notifications'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: sensor.alarm_state
+    to: burglar_alarm
+  conditions: []
+  actions:
+  - action: button.press
+    entity_id: button.basement_equipment_room_homeowner_kp01_position_4_keypad_burglar
+  - action: script.alarm
+    data: {}
+  mode: single
+- id: '1740321097503'
+  alias: 'Alarm: turn off alarm notifications because of user interaction'
+  description: ''
+  triggers:
+  - trigger: event
+    event_type: telegram_callback
+    event_data:
+      data: /turnoffnotification
+  conditions: []
+  actions:
+  - action: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: Disabling notifications for {{ trigger.id }}
+      show_alert: true
+  - action: input_boolean.turn_off
+    entity_id: input_boolean.alarm_notifier
+  mode: single
+- id: '1740321134403'
+  alias: 'Blinds: close appropriate blinds based on azimuth'
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id: sun.sun
+    value_template: '{{ states.sun.sun.attributes.azimuth }}'
+    above: 244
+    id: west_close
+  - trigger: numeric_state
+    entity_id: sun.sun
+    value_template: '{{ states.sun.sun.attributes.azimuth }}'
+    above: 100
+    below: 170
+    id: east_close
+  - trigger: sun
+    event: sunset
+    id: west_open
+  - trigger: numeric_state
+    entity_id: sun.sun
+    value_template: '{{ states.sun.sun.attributes.azimuth }}'
+    above: 170
+    below: 205
+    id: east_open
+  conditions:
+  - condition: template
+    value_template: '{{ now().month >= 6 or now().month <= 10 }}'
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: west_close
+      - '{{ is_state(''input_boolean.west_blinds_run_once'', ''off'') }}'
+      - '{{ is_state(''binary_sensor.shades_should_close'', ''on'') }}'
+      sequence:
+      - action: cover.set_cover_position
+        data:
+          position: 0
+        target:
+          entity_id: cover.main_floor_sunroom_west_shades
+      - action: homeassistant.turn_on
+        target:
+          entity_id: input_boolean.west_blinds_run_once
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: east_close
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.east_blinds_run_once'', ''off'')
+          }}'
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.shades_should_close'', ''on'')
+          }}'
+      sequence:
+      - action: cover.set_cover_position
+        data:
+          position: 0
+        target:
+          entity_id:
+          - cover.main_floor_sunroom_east_shade
+          - cover.basement_office_east_shade
+          - cover.basement_lounge_east_shade
+      - action: homeassistant.turn_on
+        target:
+          entity_id: input_boolean.east_blinds_run_once
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: west_open
+      - condition: template
+        value_template: '{{ states(''binary_sensor.vacation'') == ''off'' }}'
+      sequence:
+      - action: cover.set_cover_position
+        data:
+          position: 100
+        target:
+          entity_id: cover.main_floor_sunroom_west_shades
+      - action: homeassistant.turn_off
+        target:
+          entity_id: input_boolean.west_blinds_run_once
+        data: {}
+    - conditions:
+      - condition: trigger
+        id: east_open
+      - condition: template
+        value_template: '{{ states(''binary_sensor.vacation'') == ''off'' }}'
+      sequence:
+      - action: cover.set_cover_position
+        data:
+          position: 100
+        target:
+          entity_id:
+          - cover.main_floor_sunroom_east_shade
+          - cover.basement_office_east_shade
+          - cover.basement_lounge_east_shade
+      - action: homeassistant.turn_off
+        target:
+          entity_id: input_boolean.east_blinds_run_once
+        data: {}
+  mode: single
+- id: '1740321170300'
+  alias: 'Garage: acknowledge garage open'
+  description: depending on the telegram callback ignore the appropriate garage door
+    alert
+  triggers:
+  - trigger: event
+    event_type: telegram_callback
+    event_data:
+      command: /ignore_garagesingle
+    variables:
+      alert: alert.garage_door_single
+  - trigger: event
+    event_type: telegram_callback
+    event_data:
+      command: /ignore_garagedouble
+    variables:
+      alert: alert.garage_door_double
+  conditions: []
+  actions:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: '{{ alert }}'
+  mode: single
+- id: '1740321197852'
+  alias: 'Garage: telegram door close'
+  description: send a picture while answering the callback & close the door & disable
+    the alert
+  triggers:
+  - trigger: event
+    id: single
+    event_type: telegram_callback
+    event_data:
+      data: /closegarage_single
+    variables:
+      door: cover.single_garage_door
+      alert: alert.garage_door_single
+  - trigger: event
+    id: double
+    event_type: telegram_callback
+    event_data:
+      data: /closegarage_double
+    variables:
+      door: cover.double_garage_door
+      alert: alert.garage_door_double
+  conditions: []
+  actions:
+  - action: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: "\U0001F697 Closing the {{ trigger.id }} garage!"
+      show_alert: false
+  - action: cover.close_cover
+    data_template:
+      entity_id: '{{ door }}'
+  - action: alert.turn_off
+    data_template:
+      entity_id: '{{ alert }}'
+  - delay: 10
+  - action: telegram_bot.send_photo
+    data_template:
+      url: http://192.168.30.249:5005/api/garage/latest.jpg
+      caption: "\U0001F697 Closing the {{ trigger.id }} garage!"
+  mode: single
+- id: '1740321285652'
+  alias: 'Notify: edit telegram chat'
+  description: update the chat_id and message_id input_numbers when a telegram message
+    is sent
+  triggers:
+  - trigger: event
+    event_type: telegram_sent
+    event_data:
+      message_tag: garmin_message_sent
+    variables:
+      chat_id: input_number.garmin_chat_id
+      message_id: input_number.garmin_message_id
+  conditions: []
+  actions:
+  - action: input_number.set_value
+    data_template:
+      entity_id: '{{ chat_id }}'
+      value: '{{ trigger.event.data.chat_id }}'
+  - action: input_number.set_value
+    data_template:
+      entity_id: '{{ message_id }}'
+      value: '{{ trigger.event.data.message_id }}'
+  mode: parallel
+  max: 10
+- id: '1740321325353'
+  alias: 'Telegram: blinds callback'
+  description: ''
+  triggers:
+  - trigger: event
+    id: close_blinds
+    event_type: telegram_callback
+    event_data:
+      command: /close_blinds
+  - trigger: event
+    id: blinds_do_nothing
+    event_type: telegram_callback
+    event_data:
+      command: /blinds_do_nothing
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == ''close_blinds'' }}'
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_closed
+      - action: telegram_bot.answer_callback_query
+        data:
+          callback_query_id: '{{ trigger.event.data.id }}'
+          message: Closing blinds...
+          show_alert: true
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.id == ''blinds_do_nothing'' }}'
+      sequence:
+      - action: telegram_bot.answer_callback_query
+        data:
+          callback_query_id: '{{ trigger.event.data.id }}'
+          message: Not closing the blinds
+          show_alert: false
+  mode: single
+- id: '1740321359273'
+  alias: 'Utility: general notifications'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.myip
+    - input_boolean.frigate_doorbell_notifier
+    - input_boolean.frigate_deck_notifier
+    - input_boolean.frigate_driveway_notifier
+    - input_boolean.frigate_frontyard_notifier
+    - input_boolean.frigate_grilldeck_notifier
+    - input_boolean.frigate_patio_notifier
+    - input_boolean.frigate_workshop_notifier
+  - trigger: template
+    value_template: '{{ not (is_state(''sensor.alarm_state'', ''no_alarm_active'')
+      or is_state(''sensor.alarm_state'', ''entrance_delay_active'')) }}'
+  - trigger: state
+    entity_id:
+    - binary_sensor.home_assistant_versions_update_available
+    - update.frigate_server
+    to: 'on'
+  - trigger: state
+    entity_id: sensor.elkm1_elkm1
+    to: Disconnected
+  - trigger: numeric_state
+    entity_id:
+    - sensor.elkm1_workshop_keypad
+    above: 85
+    for:
+      minutes: 15
+  - trigger: numeric_state
+    entity_id:
+    - sensor.elkm1_workshop_keypad
+    below: 55
+    for:
+      minutes: 15
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: nut_event
+      sequence:
+      - action: notify.telegram_jon
+        data_template:
+          message: 'Power outage detected by UPS: {{ (states(''sensor.cyberpower_battery_runtime'')
+            | float / 60) | round(0) }} minutes of battery power remaining.'
+    default:
+    - action: notify.telegram_jon
+      data_template:
+        message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+          }}.'
+  mode: single
+- id: '1740331372000'
+  alias: 'Location: leave home & either garage open'
+  description: Leave `home` zone with either garage open, send a photo notification
+    & prompt to close
+  triggers:
+  - entity_id:
+    - person.jon
+    - person.laura
+    to: not_home
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: person.jon
+    state: not_home
+  - condition: state
+    entity_id: person.laura
+    state: not_home
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: cover.single_garage_door
+      state: open
+    - condition: state
+      entity_id: cover.double_garage_door
+      state: open
+  actions:
+  - data:
+      title: Garage Doors Left Open!
+      message: Both of you left home, and the garage is open.
+      data:
+        actions:
+        - action: CLOSE_GARAGE
+          title: Close Garage
+    action: notify.mobile_app_jons_iphone
+  - wait_for_trigger:
+    - event_type: mobile_app_notification_action
+      event_data:
+        action: CLOSE_GARAGE
+      trigger: event
+    timeout: 00:05:00
+    continue_on_timeout: false
+  - target:
+      entity_id:
+      - cover.single_garage_door
+      - cover.double_garage_door
+    action: cover.close_cover
+    data: {}
+  mode: single
