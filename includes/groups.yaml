@@ -39,8 +39,9 @@ interior_lights:
     - light.main_floor_library_cabinets
     - light.main_floor_library_light
     - light.main_floor_sunroom_cans
-    - light.main_floor_sunroom_lamp1
-    - light.main_floor_sunroom_lamp2
+    - light.main_floor_sunroom_left_lamp
+    - light.main_floor_sunroom_right_lamp
+    - light.main_floor_sunroom_entry_lamp
     - light.main_floor_back_kitchen_cabinets
     - light.main_floor_foyer_lights
     - light.main_floor_garage_hex_lights
@@ -125,13 +126,16 @@ all_lights:
     - light.main_floor_mudroom_lights
     - light.main_floor_powder_room_light
     - light.main_floor_sunroom_cans
-    - light.main_floor_sunroom_lamp1
-    - light.main_floor_sunroom_lamp2
-    - light.mudroom_christmas_tree
+    - light.main_floor_sunroom_left_lamp
+    - light.main_floor_sunroom_right_lamp
+    - light.main_floor_sunroom_entry_lamp
+    - light.evelyns_christmas_tree
     - light.sunroom_christmas_tree
     - light.upstairs_bedroom_2_cans
     - light.upstairs_bedroom_3_cans
     - light.upstairs_bonus_cans
+    - light.upstairs_bonus_lamp
+    - light.bonus_lamp
     - light.upstairs_evelyns_cans
     - light.upstairs_evelyns_lamp
     - light.upstairs_hall_lights
@@ -150,6 +154,7 @@ all_lights:
     - light.upstairs_stair_sconces
     - switch.exterior_back_outlet
     - light.exterior_roof_outlets
+    - light.foyer_christmas_lights
 
 basement_lights:
   name: Basement Lights
@@ -188,8 +193,9 @@ main_floor_lights:
     - light.main_floor_library_cabinets
     - light.main_floor_library_light
     - light.main_floor_sunroom_cans
-    - light.main_floor_sunroom_lamp1
-    - light.main_floor_sunroom_lamp2
+    - light.main_floor_sunroom_left_lamp
+    - light.main_floor_sunroom_right_lamp
+    - light.main_floor_sunroom_entry_lamp
     - light.main_floor_back_kitchen_cabinets
     - light.main_floor_foyer_lights
     - light.main_floor_garage_hex_lights
@@ -203,12 +209,35 @@ main_floor_lights:
     - fan.main_floor_powder_room_fan
     - light.main_floor_powder_room_light
 
+relax_all:
+  name: All Relax Lights
+  all: true
+  entities:
+    - light.main_floor_kitchen_toekick
+    - light.main_floor_kitchen_cabinets
+    - light.main_floor_kitchen_dining_art
+    - light.main_floor_great_room_cabinets
+    - light.main_floor_library_cabinets
+    - light.main_floor_kitchen_pendants
+    - light.main_floor_kitchen_dining_chandelier
+    - light.main_floor_sunroom_entry_lamp
+
+relax_day:
+  name: Day Relax Lights
+  all: true
+  entities:
+    - light.main_floor_kitchen_cabinets
+    - light.main_floor_kitchen_pendants
+    - light.main_floor_kitchen_dining_chandelier
+
 upstairs_lights:
   name: Upstairs Lights
   entities:
     - light.upstairs_bedroom_2_cans
     - light.upstairs_bedroom_3_cans
     - light.upstairs_bonus_cans
+    - light.upstairs_bonus_lamp
+    - light.bonus_lamp
     - light.upstairs_evelyns_cans
     - light.upstairs_evelyns_lamp
     - light.upstairs_hall_lights
@@ -230,7 +259,7 @@ upstairs_lights:
 all_fans:
   name: All Fans
   entities:
-    - switch.upstairs_main_bedroom_fan
+    - fan.upstairs_main_bedroom_fan
     - fan.office_fan
     - fan.exterior_patio_fan
     - switch.main_floor_sunroom_fan
@@ -327,7 +356,7 @@ all_shades:
   name: all shades
   entities:
     - cover.basement_lounge_east_shade
-    - cover.basement_lounge_shades
+    - cover.basement_lounge_shade
     - cover.basement_media_room_shades
     - cover.basement_office_shade
     - cover.basement_office_east_shade
@@ -362,7 +391,16 @@ basement_shades:
   name: basement shades
   entities:
     - cover.basement_lounge_east_shade
-    - cover.basement_lounge_shades
+    - cover.basement_lounge_shade
     - cover.basement_media_room_shades
     - cover.basement_office_shade
     - cover.basement_office_east_shade
+
+christmas_lights:
+  name: christmas lights
+  entities:
+    - light.exterior_roof_outlets
+    - light.great_room_christmas_tree
+    - light.sunroom_christmas_tree
+    - light.evelyns_christmas_tree
+    - light.foyer_christmas_lights

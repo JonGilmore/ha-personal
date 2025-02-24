@@ -4,9 +4,10 @@
       unique_id: binary_sensor.shades_should_close
       # inspiration: https://community.home-assistant.io/t/automatic-blinds-sunscreen-control-based-on-sun-platform/573818/193
       state: >
-        {{ (states('sensor.tomorrow_io_home_cloud_cover') | float < 65.0
-        or states('sensor.weatherflow_tempest_illuminance') | float > 7000.0)
-        and states('sensor.weatherflow_tempest_solar_elevation') | float > 5.0 }}
+        {% set cloud_cover = states('sensor.tomorrow_io_home_cloud_cover') | float(0) %}
+        {% set illuminance = states('sensor.weatherflow_tempest_illuminance') | float(0) %}
+        {% set solar_elevation = states('sensor.weatherflow_tempest_solar_elevation') | float(0) %}
+        {{ (cloud_cover < 65.0 or illuminance > 7000.0) and solar_elevation > 5.0 }}
     - name: "Events Today"
       unique_id: events_today # https://community.home-assistant.io/t/filtering-out-anniversaries-in-my-glance-card/275891/17
       icon: "{{ 'mdi:alert-circle' if is_state(this.entity_id, 'on') else 'mdi:check-circle' }}"
@@ -62,33 +63,26 @@
         entity_id: |
           {% from 'events.jinja' import events %}
           {{ events(lessthan=30) }}
+    - name: Events in the Next Forty Five Days
+      unique_id: events_in_the_next_forty_five_days
+      icon: "{{ iif(is_state(this.entity_id, 'on'), 'mdi:alert-circle', 'mdi:check-circle') }}"
+      unit_of_measurement: people
+      state: |
+        {% from 'events.jinja' import events_bool %}
+        {{ events_bool(lessthan=45) }}
+      attributes:
+        entity_id: |
+          {% from 'events.jinja' import events %}
+          {{ events(lessthan=45) }}
     - name: "AdBlocking"
       icon: "{{ iif(states(this.entity_id) == 'on','mdi:advertisements-off','mdi:advertisements') }}"
       unique_id: adblocking
       state: >-
-        {{ states('switch.adguard_home_protection_2') == 'on'
+        {{ states('switch.adguard_pi_protection') == 'on'
         and states('switch.adguard_home_protection') == 'on' }}
     - name: "Has Unavailable States"
       unique_id: has_unavailable_state
       state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | count }}"
-    - name: "Bed Occupancy"
-      icon: mdi:bed
-      unique_id: bed_occupancy
-      device_class: occupancy
-      state: >-
-        {{ states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') == 'on'
-        or states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') == 'on' }}
-      attributes:
-        sleeping: >-
-          {% set jon_in_bed = states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') %}
-          {% set laura_in_bed = states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') %}
-          {% set result = 
-            'both' if jon_in_bed == 'on' and laura_in_bed == 'on' else
-            'jon' if jon_in_bed == 'on' and laura_in_bed == 'off' else
-            'laura' if jon_in_bed == 'off' and laura_in_bed == 'on' else
-            'unoccupied'
-          %}
-          {{ result }}
     - name: "Basement Motions"
       unique_id: basement_motions
       device_class: motion
@@ -102,7 +96,7 @@
       unique_id: office_motions
       device_class: motion
       state: >-
-        {{ states('binary_sensor.apollo_office_multi_bb2a6c_radar_moving_target') == "on"
+        {{ states('binary_sensor.everything_presence_one_d4defc_pir') == "on"
         or states('sensor.elkm1_office_pir') == "Violated" }}
     - name: "Main Motions"
       unique_id: main_motions
@@ -161,6 +155,12 @@
         or states('sensor.elkm1_great_room_pir') == "Violated"
         or states('sensor.elkm1_kitchen_pir') == "Violated"
         or is_state('binary_sensor.main_floor_kitchen_occupancy', 'on') }}
+    - name: "Workshop Motions"
+      unique_id: workshop_motions
+      device_class: motion
+      state: >-
+        {{ states('sensor.elkm1_workshop_pir') == "Violated"
+        or is_state('binary_sensor.workshop_pir_motion_detection', 'on') }}
     - name: "Garage Doors"
       unique_id: garage_doors
       device_class: garage_door
@@ -211,7 +211,9 @@
     - name: "light outside?"
       unique_id: light_outside
       device_class: light
-      state: "{{ states('sensor.weatherflow_tempest_illuminance') | int > 2000 }}"
+      state: >-
+        {% set illuminance = states('sensor.weatherflow_tempest_illuminance') %}
+        {{ illuminance != 'unavailable' and illuminance | int > 2000 }}
     - name: "camera day mode lux"
       unique_id: camera_day_mode_lux
       device_class: light
@@ -254,14 +256,20 @@
       state: >-
         {{ states('sensor.elkm1_main_bath_pir') == "Violated"
         or states('sensor.elkm1_main_bed_pir') == "Violated"
-        or states('binary_sensor.bed_occupancy') == "on" }}
+        or states('binary_sensor.bed_presence_bed_occupied_either') == "on" }}
+    - name: "Main Bathroom Occupied"
+      unique_id: main_bathroom_occupied
+      device_class: occupancy
+      state: >-
+        {{ states('sensor.elkm1_main_bath_pir') == "Violated"
+        or states('sensor.jons_toothbrush') == "running" }}
     - name: "Christmas Season"
       unique_id: christmas_season
       state: >
         {% set today = states('sensor.date').split('-') %}
         {% set month = today[1]|int %}
         {% set day = today[2]|int %}
-        {{ month == 11 and day >= 15
+        {{ month == 11 and day >= 10
         or month == 12
         or month == 1 and day <= 6 }}
     - name: "All Sonos"
@@ -312,95 +320,21 @@
       state: >-
         {% if not now().isocalendar()[1] % 2 %}
           {%- if now().weekday() | int < 1 %}
-            {{ state_attr('schedule.tuesdays', 'next_event') }}
+            {{ state_attr('schedule.tuesdays', 'next_event').strftime('%Y-%m-%d %H:%M') }}
           {%- else -%}
-            {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
+            {{ (state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7)).strftime('%Y-%m-%d %H:%M') }}
           {%- endif -%}
         {%- else -%}
           {%- if (now().weekday() | int < 1) or (now().weekday() | int == 2 and now().hour <= 9 and now().minute < 30) %}
-            {{ state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7) }}
+            {{ (state_attr('schedule.tuesdays', 'next_event') + timedelta(days=7)).strftime('%Y-%m-%d %H:%M') }}
           {%- else -%}
-            {{ state_attr('schedule.tuesdays', 'next_event') }}
+            {{ state_attr('schedule.tuesdays', 'next_event').strftime('%Y-%m-%d %H:%M') }}
           {%- endif -%}
         {%endif%}
-    - name: Power Net
-      unique_id: power_net
-      state_class: measurement
-      icon: mdi:home-lightning-bolt
-      unit_of_measurement: W
-      device_class: power
-      state: "{{ states('sensor.power_consumption') | int(0) - states('sensor.power_production') | int(0) }}"
-    - name: Power Export
-      unique_id: power_export
-      state_class: measurement
-      icon: mdi:transmission-tower
-      unit_of_measurement: W
-      device_class: power
-      state: "{{ [0, states('sensor.power_production') | int(0) - states('sensor.power_consumption') | int(0) ] | max }}"
-    - name: Power Import
-      unique_id: power_import
-      state_class: measurement
-      icon: mdi:transmission-tower
-      unit_of_measurement: W
-      device_class: power
-      state: "{{ [0, states('sensor.power_consumption') | int(0) - states('sensor.power_production') | int(0) ] | max }}"
-    - name: Energy Net
-      unique_id: energy_net
-      state_class: total
-      icon: mdi:transmission-tower
-      unit_of_measurement: kWh
-      device_class: energy
-      state: "{{ (states('sensor.energy_import') | float(0) - states('sensor.energy_export') | float(0)) | round(2) }}"
-    - name: Energy Consumption
-      unique_id: energy_consumption
-      state_class: total
-      icon: mdi:home-lightning-bolt
-      unit_of_measurement: kWh
-      device_class: energy
-      state: "{{ (states('sensor.energy_production') | float(0) + states('sensor.energy_net') | float(0)) | round(2) }}"
-    - name: TOU Period
-      unique_id: tou_period
-      icon: mdi:clock-time-three-outline
-      state: >
-        {% set current_month = now().month %}
-        {% if current_month in [6, 7, 8, 9] %}
-          summer
-        {% else %}
-          winter
-        {% endif %}
-    - name: Tariff Price
-      unique_id: tariff_price
-      unit_of_measurement: ¢/kWh
-      state: >
-        {% if is_state('sensor.tou_period', 'summer') %}
-          {{ states('input_number.summer') | float(0) }}
-        {% else %}
-          {{ states('input_number.winter') | float(0) }}
-        {% endif %}
-    - name: Tariff Price Export
-      unique_id: tariff_price_export
-      unit_of_measurement: ¢/kWh
-      state: >
-        {% if is_state('sensor.tou_period', 'summer') %}
-          {{ states('input_number.summer') | float(0) }}
-        {% else %}
-          {{ states('input_number.winter') | float(0) }}
-        {% endif %}
     - name: trash
       icon: mdi:garbage
       unique_id: trash
-      state: "{{ state_attr('schedule.tuesdays', 'next_event') }}"
-    - name: "Bed Occupancy"
-      icon: mdi:bed
-      unique_id: bed_occupancy_sensor
-      state: >-
-        {% set jon_in_bed = states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_jon_is_in_bed') %}
-        {% set laura_in_bed = states('binary_sensor.sleepnumber_firmness_control_sleepiq_dual_boxed_laura_is_in_bed') %}
-        {% if jon_in_bed == "on" and laura_in_bed == "on" %}both
-        {% elif jon_in_bed == "on" and laura_in_bed == "off" %}jon
-        {% elif jon_in_bed == "off" and laura_in_bed == "on" %}laura
-        {% else %}unoccupied
-        {% endif %}
+      state: "{{ state_attr('schedule.tuesdays', 'next_event').strftime('%Y-%m-%d %H:%M') }}"
     - name: "Armed Status"
       unique_id: armed_status
       state: "{{ state_attr('alarm_control_panel.elkm1_area_1', 'armed_status') }}"
@@ -544,55 +478,59 @@
         {{ (( float(states('sensor.weatherflow_tempest_humidity')) +
               float(states('sensor.outdoor_pir_humidity')) +
               float(states('sensor.current_humidity'))) / 3) | round(2) }}
+    - name: "unraid ups runtime remaining"
+      unique_id: unraid_ups_runtime_remaining
+      state: "{{ state_attr('binary_sensor.unraid_unraid_ups_status', 'runtime_left') }}"
+      icon: mdi:clock-outline
 
     ############################
     ## HVAC Sensors
     - name: "Lower Level Temperature"
       unique_id: lower_level_temperature
-      state: "{{ state_attr('climate.lower_level', 'current_temperature') }}"
+      state: "{{ state_attr('climate.lower_level_thermostat', 'current_temperature') }}"
       unit_of_measurement: "°F"
       icon: mdi:thermometer
     - name: "Main Level Temperature"
       unique_id: main_level_temperature
-      state: "{{ state_attr('climate.main_level', 'current_temperature') }}"
+      state: "{{ state_attr('climate.main_level_thermostat', 'current_temperature') }}"
       unit_of_measurement: "°F"
       icon: mdi:thermometer
     - name: "Upper Level Temperature"
       unique_id: upper_level_temperature
-      state: "{{ state_attr('climate.upper_level', 'current_temperature') }}"
+      state: "{{ state_attr('climate.upper_level_thermostat', 'current_temperature') }}"
       unit_of_measurement: "°F"
       icon: mdi:thermometer
     ##
     - name: "Lower Level Hold State"
       unique_id: lower_level_hold_state
-      state: "{{ state_attr('climate.lower_level', 'hold_state') }}"
+      state: "{{ state_attr('climate.lower_level_thermostat', 'hold_state') }}"
     - name: "Main Level Hold State"
       unique_id: main_level_hold_state
-      state: "{{ state_attr('climate.main_level', 'hold_state') }}"
+      state: "{{ state_attr('climate.main_level_thermostat', 'hold_state') }}"
     - name: "Upper Level Hold State"
       unique_id: upper_level_hold_state
-      state: "{{ state_attr('climate.upper_level', 'hold_state') }}"
+      state: "{{ state_attr('climate.upper_level_thermostat', 'hold_state') }}"
     ##
     - name: "Lower Level HVAC Action"
       unique_id: lower_level_hvac_action
-      state: "{{ state_attr('climate.lower_level', 'hvac_action') }}"
+      state: "{{ state_attr('climate.lower_level_thermostat', 'hvac_action') }}"
       icon: mdi:air-conditioner
     - name: "Main Level HVAC Action"
       unique_id: main_level_hvac_action
-      state: "{{ state_attr('climate.main_level', 'hvac_action') }}"
+      state: "{{ state_attr('climate.main_level_thermostat', 'hvac_action') }}"
       icon: mdi:air-conditioner
     - name: "Upper Level HVAC Action"
       unique_id: upper_level_hvac_action
-      state: "{{ state_attr('climate.upper_level', 'hvac_action') }}"
+      state: "{{ state_attr('climate.upper_level_thermostat', 'hvac_action') }}"
       icon: mdi:air-conditioner
     ##
     - name: "Outdoor HVAC Temperature"
       unique_id: outdoor_hvac_temperature
-      state: "{{ state_attr('climate.main_level', 'outdoor_temperature') }}"
+      state: "{{ state_attr('climate.main_level_thermostat', 'outdoor_temperature') }}"
       unit_of_measurement: "°F"
     ##
     - name: "HVAC Humidity"
       unique_id: hvac_humidity
-      state: "{{ state_attr('climate.main_level', 'current_humidity') }}"
+      state: "{{ state_attr('climate.main_level_thermostat', 'current_humidity') }}"
       unit_of_measurement: "%"
     ############################

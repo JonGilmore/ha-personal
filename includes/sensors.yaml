@@ -34,12 +34,6 @@
     - sensor.current_temperature
     - sensor.outdoor_hvac_temperature
 
-- platform: mold_indicator
-  indoor_temp_sensor: sensor.temperature
-  indoor_humidity_sensor: sensor.humidity
-  outdoor_temp_sensor: sensor.exterior_temperature
-  calibration_factor: 2.0
-
 - platform: websocket_api
 
 - platform: time_date

@@ -63,3 +63,7 @@ actions_on_evelyns_room:
   name: Actions on Evelyn's Room
   icon: mdi:dome-light
   initial: true
+streamdeck:
+  name: streamdeck
+  initial: false
+  icon: mdi:tablet-dashboard

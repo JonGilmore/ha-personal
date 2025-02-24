@@ -21,3 +21,14 @@ lock_code_slot:
     - "02"
     - "03"
     - "04"
+frontyard_ptz:
+  name: frontyard ptz
+  options:
+    - home
+    - right-road
+    - door
+    - right-front-yard
+    - left-front-yard
+    - right-road-zoom
+  initial: home
+  icon: mdi:cctv

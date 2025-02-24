@@ -93,9 +93,11 @@ light.main_floor_powder_room_light:
   icon: mdi:chandelier
 light.main_floor_sunroom_cans:
   icon: mdi:light-recessed
-light.main_floor_sunroom_lamp1:
+light.main_floor_sunroom_left_lamp:
   icon: mdi:lamp
-light.main_floor_sunroom_lamp2:
+light.main_floor_sunroom_right_lamp:
+  icon: mdi:lamp
+light.main_floor_sunroom_entry_lamp:
   icon: mdi:lamp
 light.upstairs_bedroom_2_cans:
   icon: mdi:light-recessed
@@ -140,4 +142,12 @@ switch.basement_equipment_room_recirculation_pump:
 light.christmas_lights:
   icon: mdi:string-lights
 light.christmas_trees:
+  icon: mdi:pine-tree
+light.evelyns_christmas_tree:
+  icon: mdi:pine-tree
+light.great_room_christmas_tree:
+  icon: mdi:pine-tree
+light.sunroom_christmas_tree:
+  icon: mdi:pine-tree
+light.foyer_christmas_lights:
   icon: mdi:pine-tree

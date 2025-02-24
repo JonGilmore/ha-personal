@@ -96,8 +96,8 @@ alarm:
       data:
         entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
         message: "alarm active! disable this on the keypad or on your phone!"
-    - service: script.turn_on
-      entity_id: script.send_videos
+    # - service: script.turn_on
+    #   entity_id: script.send_videos
     - service: script.turn_on
       entity_id: script.alarm_loop
 
@@ -202,6 +202,29 @@ fans_off:
 #         - script.video_driveway
 #         - script.video_doorbell
 #         - script.video_kitchen
+
+tvs_notify:
+  alias: "notify all tvs"
+  fields:
+    msg:
+      description: "message to send to tvs"
+      example: "Doorbell rang!"
+  sequence:
+    - action: notify.sunroom_tv
+      data:
+        message: "{{ msg }}"
+    - action: notify.great_room_tv
+      data:
+        message: "{{ msg }}"
+    - action: notify.garage_tv
+      data:
+        message: "{{ msg }}"
+    - action: notify.media_room_tv
+      data:
+        message: "{{ msg }}"
+    - action: notify.gym_tv
+      data:
+        message: "{{ msg }}"
 
 tvs_off:
   alias: "all tvs off"
@@ -316,10 +339,10 @@ send_dynamic_notification:
         title: '{{label | title}} detected on {{trigger.payload_json["after"]["camera"] | replace("_", "") | title }}'
         message: "{{label | title}} detected in {{after_zones[0] }}"
         data:
-          url: "https://ha.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4"
+          url: "https://homeassistant.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4"
           tag: "{{ id }}"
           group: frigate-notification-{{camera}}
-          clickAction: "https://ha.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4"
+          clickAction: "https://homeassistant.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4"
           image: "/api/frigate/notifications/{{id}}/snapshot.jpg"
           attachment:
             url: "/api/frigate/notifications/{{id}}/snapshot.jpg"
@@ -332,7 +355,7 @@ night_adaptive_lighting:
       description: "state of adaptive lighting"
       example: "valid values are turn_on or turn_off"
   sequence:
-    - service_template: "homeassistant.{{ state }}"
+    - action: "homeassistant.{{ state }}"
       target:
         entity_id:
           - switch.adaptive_lighting_sleep_mode_default
@@ -419,3 +442,98 @@ main_bed_position:
         entity_id: select.sleepnumber_firmness_control_sleepiq_dual_boxed_foundation_preset_{{side}}
       data:
         option: "{{state}}"
+
+crestron_enter_standby:
+  alias: "crestron enter standby"
+  icon: mdi:tablet
+  sequence:
+    - service: shell_command.crestron
+      data:
+        standby_action: 'EnterStandby'
+crestron_exit_standby:
+  alias: "crestron exit standby"
+  icon: mdi:tablet-cellphone
+  sequence:
+    - service: shell_command.crestron
+      data:
+        standby_action: 'ExitStandby'
+
+frontyard_ptz:
+  alias: "frontyard ptz"
+  icon: mdi:cctv
+  sequence:
+    - action: onvif.ptz
+      target:
+        entity_id: camera.frontyard_onvif_mediaprofile_channel1_mainstream
+      data:
+        move_mode: GotoPreset
+        preset: >
+          {% if is_state('input_select.frontyard_ptz', 'home') %}
+            1
+          {% elif is_state('input_select.frontyard_ptz', 'right-road') %}
+            2
+          {% elif is_state('input_select.frontyard_ptz', 'door') %}
+            3
+          {% elif is_state('input_select.frontyard_ptz', 'right-front-yard') %}
+            4
+          {% elif is_state('input_select.frontyard_ptz', 'left-front-yard') %}
+            5
+          {% elif is_state('input_select.frontyard_ptz', 'right-road-zoom') %}
+            6
+          {% endif %}
+
+unlock_grilldeck:
+  alias: unlock grilldeck
+  icon: mdi:lock-open
+  sequence:
+    - service: lock.unlock
+      target:
+        entity_id: lock.mudroom_lock
+
+toggle_single_garage:
+  alias: toggle single garage
+  icon: mdi:garage
+  sequence:
+    - service: cover.toggle
+      target:
+        entity_id: cover.single_garage_door
+
+toggle_motion_lights:
+  alias: toggle motion lights
+  icon: mdi:motion-sensor
+  sequence:
+    - service: homeassistant.toggle
+      target:
+        entity_id: input_boolean.block_interior_motion_lights
+
+exterior_lights_off:
+  alias: exterior lights off
+  icon: mdi:lightbulb-off
+  sequence:
+    - service: homeassistant.turn_off
+      target:
+        entity_id: group.exterior_lights
+
+upstairs_lights_off:
+  alias: upstairs lights off
+  icon: mdi:lightbulb-off
+  sequence:
+    - service: homeassistant.turn_off
+      target:
+        entity_id: group.upstairs_lights
+
+main_lights_off:
+  alias: main lights off
+  icon: mdi:lightbulb-off
+  sequence:
+    - service: homeassistant.turn_off
+      target:
+        entity_id: group.main_floor_lights
+
+basement_lights_off:
+  alias: basement lights off
+  icon: mdi:lightbulb-off
+  sequence:
+    - service: homeassistant.turn_off
+      target:
+        entity_id: group.basement_lights

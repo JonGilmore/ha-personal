@@ -4,12 +4,24 @@
         {% for state in states.sensor %}
             {% if key == 'equal' %}
                 {% if state.object_id.startswith('anniversary_') and state.state | int == value %}
-                    {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
+                    {% set anniversary = {
+                        'name': state.name,
+                        'days': state.state | int,
+                        'next_date': state.attributes.next_date.strftime('%m/%d/%Y'),
+                        'date': state.attributes.date.strftime('%m/%d/%Y'),
+                        'years_at_anniversary': state.attributes.years_at_anniversary if 'years_at_anniversary' in state.attributes else None
+                    } %}
                     {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
                 {% endif %}
             {% else %}
                 {% if state.object_id.startswith('anniversary_') and state.state | int <= value %}
-                    {% set anniversary = {'name': state.name, 'days': state.state | int, 'next_date': state.attributes.next_date.strftime('%m/%d/%Y')} %}
+                    {% set anniversary = {
+                        'name': state.name,
+                        'days': state.state | int,
+                        'next_date': state.attributes.next_date.strftime('%m/%d/%Y'),
+                        'date': state.attributes.date.strftime('%m/%d/%Y'),
+                        'years_at_anniversary': state.attributes.years_at_anniversary if 'years_at_anniversary' in state.attributes else None
+                    } %}
                     {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
                 {% endif %}
             {% endif %}

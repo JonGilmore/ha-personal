@@ -1,4 +1,18 @@
-# ---
+---
+- platform: template
+  switches:
+    doorbell:
+      value_template: "{{ is_state('input_boolean.doorbell', 'on') }}"
+      icon_template: "{{ iif(states(this.entity_id) == 'on','mdi:bell','mdi:bell-off') }}"
+      turn_on:
+        action: homeassistant.turn_on
+        target:
+          entity_id: input_boolean.doorbell
+      turn_off:
+        action: homeassistant.turn_off
+        target:
+          entity_id: input_boolean.doorbell
+
 # # fully kiosk
 # - platform: command_line
 #   switches:
