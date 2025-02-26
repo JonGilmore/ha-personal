@@ -182,21 +182,21 @@
     before: 07:45:00
   actions:
   - delay: 00:30:00
-  - service: notify.mobile_app_jons_iphone
+  - action: notify.mobile_app_jons_iphone
     data:
-      message: Tturn off the {{ trigger.entity_id }}?
+      message: Turn off the {{ trigger.to_state.attributes.friendly_name }}?
       data:
         actions:
         - action: TURN_OFF_TV
           title: Turn Off TV
   - wait_for_trigger:
-    - platform: event
-      event_type: mobile_app_notification_action
+    - event_type: mobile_app_notification_action
       event_data:
         action: TURN_OFF_TV
-  - service: media_player.turn_off
-    target:
+      trigger: event
+  - target:
       entity_id: '{{ trigger.entity_id }}'
+    action: media_player.turn_off
   mode: parallel
 - id: '1736947365589'
   alias: 'frigate: objects detected while away or asleep'
@@ -950,8 +950,9 @@
     entity_id: binary_sensor.office_motions
     to: 'on'
   conditions:
-  - condition: template
-    value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
+  - condition: state
+    entity_id: binary_sensor.light_inside
+    state: 'off'
   - condition: template
     value_template: '{{ (as_timestamp(now()) - as_timestamp(state_attr(''automation.blinds_office'',
       ''last_triggered'')) | int(0)) > 21600 }}'
@@ -960,9 +961,12 @@
     after_offset: 00:30:00
   actions:
   - action: cover.close_cover
-    entity_id:
-    - cover.basement_office_shade
-    - cover.basement_office_east_shade
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - cover.basement_office_shade
+      - cover.basement_office_east_shade
   mode: single
 - id: '1740319465724'
   alias: 'Automatic Lighting: primary bedroom first evening entry'
@@ -1399,19 +1403,34 @@
       sender: no-reply@pagerduty.com
   conditions: []
   actions:
-  - action: notify.telegram_jon
-    data_template:
-      message: 'ALERT: work page'
+  - action: telegram_bot.send_message
+    metadata: {}
+    data:
+      title: Work page!
+      message: wake up!
+  - action: notify.mobile_app_jons_iphone
+    metadata: {}
+    data:
+      message: Work page!
+      data:
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1
   - choose:
     - conditions:
       - condition: template
         value_template: '{{ not is_state(''sensor.period_of_day'', ''day'') and is_state(''person.jon'',
           ''home'') }}'
+        alias: Not day && Jon home
       sequence:
       - action: light.turn_on
-        data_template:
-          entity_id: light.jons_lamp
-          brightness_pct: '{{ states(''sensor.circadian_brightness'') }}'
+        metadata: {}
+        data:
+          brightness_pct: 100
+        target:
+          device_id: 164a22bbc788a3c9f7b1e548e8d562f0
   mode: single
 - id: '1740320164349'
   alias: 'Security: Elk Alarm trouble notification'
@@ -2127,8 +2146,9 @@
   actions:
   - choose:
     - conditions:
-      - condition: template
-        value_template: '{{ trigger.id == ''leaving'' }}'
+      - condition: trigger
+        id:
+        - leaving
       sequence:
       - action: homeassistant.turn_off
         target:
@@ -2148,8 +2168,9 @@
           inline_keyboard:
           - Yes:/close_blinds, Ignore:/blinds_do_nothing
     - conditions:
-      - condition: template
-        value_template: '{{ trigger.id == ''arriving'' }}'
+      - condition: trigger
+        id:
+        - arriving
       sequence:
       - action: homeassistant.turn_on
         target:
