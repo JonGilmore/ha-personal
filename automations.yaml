@@ -199,7 +199,7 @@
     action: media_player.turn_off
   mode: parallel
 - id: '1736947365589'
-  alias: 'frigate: objects detected while away or asleep'
+  alias: 'Frigate: objects detected while away or asleep'
   description: send frigate notifications when any objects are detected and jon is
     away or the house is in night mode
   use_blueprint:
@@ -220,7 +220,6 @@
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
       alert_once: true
       update_thumbnail: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
       volume: 50
       zone_filter: false
       state_filter: true
@@ -228,6 +227,10 @@
       state_filter_states:
       - 'on'
       silence_timer: 60
+      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
+      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
+      subtitle: Away1
 - id: '1737382768102'
   alias: Frigate Laura notify
   description: send frigate notifications when any objects are detected and jon is
@@ -286,7 +289,6 @@
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
       alert_once: true
       update_thumbnail: true
-      video: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/event_preview.gif?format=ts'
       volume: 50
       zone_filter: false
       state_filter: true
@@ -295,11 +297,13 @@
       - 'on'
       silence_timer: 60
       attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      final_update: true
+      final_update: false
       button_2: Snapshot
       button_1: Clip
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?format=android'
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
       review_severity: []
+      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      subtitle: Away2
 - id: '1739057361482'
   alias: 'Frigate: mudroom telegram testing'
   description: Line crossing detection, only notify if Jon is not home.
@@ -348,8 +352,9 @@
   alias: 'Unraid: temperature warning'
   description: Alert when CPU temperature is too high
   triggers:
-  - entity_id: sensor.unraid_unraid_cpu_temperature
-    above: 120
+  - entity_id:
+    - sensor.unraid_unraid_cpu_temperature
+    above: 135
     for:
       minutes: 3
     trigger: numeric_state
@@ -400,15 +405,55 @@
   mode: single
 - id: '1740318602615'
   alias: 'Frigate: mudroom detection based on presence'
-  description: enable/disable detection in the mudroom based on presence
+  description: enable/disable internal cameras detection based on presence
   triggers:
   - trigger: state
     entity_id: binary_sensor.anybody_home
+    id: occupancy
+  - trigger: homeassistant
+    event: start
+    id: ha-start
+  - trigger: time_pattern
+    minutes: /10
   conditions: []
   actions:
-  - action: '{% if trigger.to_state.state == ''off'' %}homeassistant.turn_on {% else
-      %}homeassistant.turn_off{% endif %}'
-    entity_id: switch.mudroom_detect
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: 'on'
+        alias: If anybody is home
+      sequence:
+      - alias: turn off detect on internal cameras
+        action: homeassistant.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - switch.mudroom_detect
+          - switch.mudroom_snapshots
+          - switch.mudroom_recordings
+          - switch.media_detect
+          - switch.media_snapshots
+          - switch.media_recordings
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: 'off'
+        alias: If everybody is away
+      sequence:
+      - action: homeassistant.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id:
+          - switch.mudroom_detect
+          - switch.mudroom_snapshots
+          - switch.mudroom_recordings
+          - switch.media_detect
+          - switch.media_snapshots
+          - switch.media_recordings
+        alias: turn on detect on internal cameras
   mode: single
 - id: '1740318622982'
   alias: 'Location: laura'
@@ -2637,3 +2682,100 @@
     action: cover.close_cover
     data: {}
   mode: single
+- id: '1740835595913'
+  alias: remove completed todo items
+  description: ''
+  triggers:
+  - trigger: time_pattern
+    hours: /1
+  conditions: []
+  actions:
+  - action: todo.remove_completed_items
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - todo.shopping_list
+      - todo.jons_todo
+      - todo.evelyns_todo
+      - todo.lauras_todo
+  mode: single
+- id: '1740858955183'
+  alias: guests mode on
+  description: when guest mode turns on, turn off the crestron screen
+  triggers:
+  - trigger: state
+    entity_id:
+    - input_boolean.guests
+    from: 'off'
+    to: 'on'
+  conditions: []
+  actions:
+  - action: script.crestron_enter_standby
+    metadata: {}
+    data: {}
+  mode: single
+- id: '1740859106802'
+  alias: turn off crestron on interval when guests are present
+  description: ''
+  triggers:
+  - trigger: time_pattern
+    minutes: /5
+  conditions:
+  - condition: state
+    entity_id: input_boolean.guests
+    state: 'on'
+  actions:
+  - action: script.crestron_enter_standby
+    metadata: {}
+    data: {}
+  mode: single
+- id: '1740922556786'
+  alias: add home maintenance item to todo list
+  description: ''
+  triggers:
+  - trigger: calendar
+    entity_id: calendar.home
+    event: start
+    offset: -0:0:0
+  conditions: []
+  actions:
+  - action: todo.add_item
+    target:
+      entity_id: todo.jons_todo
+    data:
+      item: '{{ trigger.calendar_event.summary }}'
+  - action: notify.mobile_app_jons_iphone
+    metadata: {}
+    data:
+      message: '{{ trigger.calendar_event.summary }}'
+      title: TODO
+  mode: single
+- id: '1741377153858'
+  alias: 'frigate: driveway approaching, notify Laura'
+  description: Line crossing detection, only notify if Jon is not home.
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera:
+      - camera.driveway
+      notify_device: 73c269e64dff9787a20e6c1734177e58
+      base_url: https://homeassistant.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      subtitle: '{{label}} approaching'
+      zone_filter: true
+      zones:
+      - frontyard_far
+      - frontyard_near
+      zone_multi: true
+      zone_order_enforced: true
+      alert_once: true
+      final_update: false
+      presence_filter:
+      - ''
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      button_1: clip
+      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
+      button_2: snapshot
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
