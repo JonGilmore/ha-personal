@@ -13,6 +13,18 @@ exterior_lights:
     - light.exterior_roof_outlets
     - light.exterior_workshop_light
 
+exterior_auxiliary_lights:
+  name: Exterior Auxiliary Lights
+  entities:
+    - fan.exterior_patio_fan
+    - light.exterior_patio_cans
+    - switch.exterior_back_outlet
+    - light.exterior_deck_lights
+    - light.exterior_grilldeck_light
+    - light.exterior_landscape_lights
+    - light.exterior_roof_outlets
+    - light.exterior_workshop_light
+
 interior_lights:
   name: Interior Lights
   entities:

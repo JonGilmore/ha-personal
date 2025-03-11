@@ -514,6 +514,14 @@ exterior_lights_off:
       target:
         entity_id: group.exterior_lights
 
+exterior_auxiliary_lights_off:
+  alias: exterior auxiliary lights off
+  icon: mdi:lightbulb-off
+  sequence:
+    - service: homeassistant.turn_off
+      target:
+        entity_id: group.exterior_auxiliary_lights
+
 upstairs_lights_off:
   alias: upstairs lights off
   icon: mdi:lightbulb-off
