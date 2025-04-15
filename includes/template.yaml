@@ -207,13 +207,14 @@
     - name: "light inside?"
       unique_id: light_inside
       device_class: light
-      state: "{{ states('sensor.outdoor_pir_illuminance') | int > 90 }}"
-    - name: "light outside?"
-      unique_id: light_outside
-      device_class: light
       state: >-
-        {% set illuminance = states('sensor.weatherflow_tempest_illuminance') %}
-        {{ illuminance != 'unavailable' and illuminance | int > 2000 }}
+        {% set lux1 = states('sensor.outdoor_pir_illuminance') %}
+        {% set lux2 = states('sensor.weatherflow_tempest_illuminance') %}
+        {% set lux1_valid = lux1 not in ['unavailable', 'unknown'] %}
+        {% set lux2_valid = lux2 not in ['unavailable', 'unknown'] %}
+        {% set is_light1 = lux1_valid and lux1 | int > 150 %}
+        {% set is_light2 = lux2_valid and lux2 | int > 1500 %}
+        {{ is_light1 or is_light2 }}
     - name: "camera day mode lux"
       unique_id: camera_day_mode_lux
       device_class: light

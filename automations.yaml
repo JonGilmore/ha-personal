@@ -2195,7 +2195,7 @@
   description: ''
   triggers:
   - trigger: state
-    entity_id: binary_sensor.light_outside
+    entity_id: binary_sensor.light_inside
     to: 'off'
     for:
       minutes: 10
