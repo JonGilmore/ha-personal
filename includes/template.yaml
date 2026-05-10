@@ -429,11 +429,11 @@
     - name: cyberpower ups
       unique_id: cyberpower_ups
       state: >-
-        {% set runtime = states('sensor.cyberpower_battery_runtime') | int %}
-        {% if runtime < 180 %}three
-        {% elif runtime < 300 %}five
-        {% elif runtime < 600 %}ten
-        {% elif runtime < 1200 %}twenty
+        {% set runtime = states('sensor.cp1500pfcrm2u_runtime') | int %}
+        {% if runtime < 3 %}three
+        {% elif runtime < 5 %}five
+        {% elif runtime < 10 %}ten
+        {% elif runtime < 20 %}twenty
         {% else %}okay
         {% endif %}
     - name: "target humidity max"
@@ -481,57 +481,57 @@
               float(states('sensor.current_humidity'))) / 3) | round(2) }}
     - name: "unraid ups runtime remaining"
       unique_id: unraid_ups_runtime_remaining
-      state: "{{ state_attr('binary_sensor.unraid_unraid_ups_status', 'runtime_left') }}"
+      state: "{{ state_attr('binary_sensor.unraid_ups_status', 'runtime_left') }}"
       icon: mdi:clock-outline
 
     ############################
     ## HVAC Sensors
     - name: "Lower Level Temperature"
       unique_id: lower_level_temperature
-      state: "{{ state_attr('climate.lower_level_thermostat', 'current_temperature') }}"
+      state: "{{ state_attr('climate.infinitude_lower_level', 'current_temperature') }}"
       unit_of_measurement: "°F"
       icon: mdi:thermometer
     - name: "Main Level Temperature"
       unique_id: main_level_temperature
-      state: "{{ state_attr('climate.main_level_thermostat', 'current_temperature') }}"
+      state: "{{ state_attr('climate.infinitude_main_level', 'current_temperature') }}"
       unit_of_measurement: "°F"
       icon: mdi:thermometer
     - name: "Upper Level Temperature"
       unique_id: upper_level_temperature
-      state: "{{ state_attr('climate.upper_level_thermostat', 'current_temperature') }}"
+      state: "{{ state_attr('climate.infinitude_upper_level', 'current_temperature') }}"
       unit_of_measurement: "°F"
       icon: mdi:thermometer
     ##
     - name: "Lower Level Hold State"
       unique_id: lower_level_hold_state
-      state: "{{ state_attr('climate.lower_level_thermostat', 'hold_state') }}"
+      state: "{{ state_attr('climate.infinitude_lower_level', 'hold_state') }}"
     - name: "Main Level Hold State"
       unique_id: main_level_hold_state
-      state: "{{ state_attr('climate.main_level_thermostat', 'hold_state') }}"
+      state: "{{ state_attr('climate.infinitude_main_level', 'hold_state') }}"
     - name: "Upper Level Hold State"
       unique_id: upper_level_hold_state
-      state: "{{ state_attr('climate.upper_level_thermostat', 'hold_state') }}"
+      state: "{{ state_attr('climate.infinitude_upper_level', 'hold_state') }}"
     ##
     - name: "Lower Level HVAC Action"
       unique_id: lower_level_hvac_action
-      state: "{{ state_attr('climate.lower_level_thermostat', 'hvac_action') }}"
+      state: "{{ state_attr('climate.infinitude_lower_level', 'hvac_action') }}"
       icon: mdi:air-conditioner
     - name: "Main Level HVAC Action"
       unique_id: main_level_hvac_action
-      state: "{{ state_attr('climate.main_level_thermostat', 'hvac_action') }}"
+      state: "{{ state_attr('climate.infinitude_main_level', 'hvac_action') }}"
       icon: mdi:air-conditioner
     - name: "Upper Level HVAC Action"
       unique_id: upper_level_hvac_action
-      state: "{{ state_attr('climate.upper_level_thermostat', 'hvac_action') }}"
+      state: "{{ state_attr('climate.infinitude_upper_level', 'hvac_action') }}"
       icon: mdi:air-conditioner
     ##
     - name: "Outdoor HVAC Temperature"
       unique_id: outdoor_hvac_temperature
-      state: "{{ state_attr('climate.main_level_thermostat', 'outdoor_temperature') }}"
+      state: "{{ state_attr('climate.infinitude_main_level', 'outdoor_temperature') }}"
       unit_of_measurement: "°F"
     ##
     - name: "HVAC Humidity"
       unique_id: hvac_humidity
-      state: "{{ state_attr('climate.main_level_thermostat', 'current_humidity') }}"
+      state: "{{ state_attr('climate.infinitude_main_level', 'current_humidity') }}"
       unit_of_measurement: "%"
     ############################

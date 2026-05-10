@@ -47,10 +47,6 @@ driveway_sentry:
   name: Driveway Sentry Mode
 exterior_lights_block:
   name: Exterior Lights Block
-doorbell:
-  name: Doorbell
-  icon: mdi:bell
-  initial: true
 west_blinds_run_once:
   name: West Blinds Run Once
   icon: mdi:roller-shade
@@ -67,3 +63,9 @@ streamdeck:
   name: streamdeck
   initial: false
   icon: mdi:tablet-dashboard
+laura:
+  name: Laura
+  icon: mdi:account
+jon:
+  name: Jon
+  icon: mdi:account

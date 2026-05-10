@@ -1,0 +1,20 @@
+unlock_garage_walking_door:
+  sequence:
+  - action: lock.unlock
+    metadata: {}
+    data: {}
+    target:
+      entity_id: lock.garage_lock
+  alias: unlock garage walking door
+  description: ''
+  icon: mdi:lock-open-variant
+unlock_garage_door:
+  sequence:
+  - action: lock.unlock
+    metadata: {}
+    data: {}
+    target:
+      entity_id: lock.garage_lock
+  alias: unlock garage door
+  description: ''
+  icon: mdi:lock-open-variant

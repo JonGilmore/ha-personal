@@ -13,14 +13,11 @@ homeassistant:
   customize: !include customize.yaml
   packages: !include_dir_named packages
   allowlist_external_dirs:
-    - "/tmp"
     - "/config/www"
   media_dirs:
     local: /media
 cloud:
 energy:
-datadog:
-  host: 192.168.30.243
 
 http:
   use_x_forwarded_for: true
@@ -35,26 +32,7 @@ tts:
     service_name: google_say
 frontend:
   themes: !include_dir_merge_named themes/
-  extra_module_url:
-    - /hacsfiles/lovelace-card-mod/card-mod.js
-lovelace:
-  resources:
-    - url: /hacsfiles/button-card/button-card.js
-      type: module
-    - url: /hacsfiles/lovelace-layout-card/layout-card.js
-      type: module
-    - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
-      type: module
-    - url: /hacsfiles/frigate-hass-card/frigate-hass-card.js
-      type: module
-    - url: /hacsfiles/custom-sonos-card/custom-sonos-card.js
-      type: module
-    - url: /hacsfiles/lovelace-card-mod/card-mod.js
-      type: module
-    - url: https://fonts.googleapis.com/css2?family=Antonio:wght@400;700&display=swap
-      type: css
-    - url: https://cdn.jsdelivr.net/gh/th3jesta/ha-lcars@js-main/lcars.js
-      type: js
+
 system_health:
 
 elkm1:
@@ -83,18 +61,6 @@ lutron_caseta:
     keyfile: caseta.key
     certfile: caseta.crt
     ca_certs: caseta-bridge.crt
-
-notify:
-  - name: telegram_jon
-    platform: telegram
-    chat_id: !secret telegram_chat
-
-telegram_bot:
-  - platform: polling
-    parse_mode: html
-    api_key: !secret telegram_api
-    allowed_chat_ids:
-      - !secret telegram_chat
 
 calendar:
   - platform: todoist
@@ -127,7 +93,9 @@ template: !include includes/template.yaml
 zone: !include includes/zones.yaml
 
 logger:
-  default: error
+  default: warning
+  logs:
+    custom_components.sleepnumber_ble: debug
 
 history:
 websocket_api:
@@ -140,62 +108,18 @@ mobile_app:
 media_source:
 wake_on_lan:
 
-# weather:
-#   - platform: template
-#     name: Local Weather
-#     condition_template: "{{ states('sensor.hub_hb_00069559_weather') }}"
-#     temperature_template: "{{ states('sensor.weatherflow_tempest_temperature') | float}}"
-#     humidity_template: "{{ states('sensor.weatherflow_tempest_humidity')| int }}"
-#     pressure_template: "{{ states('sensor.weatherflow_tempest_sea_level_pressure')| float }}"
-#     wind_speed_template: "{{ states('sensor.weatherflow_tempest_wind_speed_avg')| float }}"
-#     wind_bearing_template: "{{ states('sensor.weatherflow_tempest_wind_bearing_avg')| int }}"
-#     visibility_template: "{{ states('sensor.weatherflow_tempest_visibility')| float }}"
-#     forecast_hourly_template: >-
-#       {% set data = namespace(l = []) %}
-#       {% for e in state_attr('sensor.hub_hb_00069559_weather', 'hourly_forecast') %}
-#       {%   set data.l = data.l + [ {
-#               'datetime': e.datetime,
-#               'condition': e.condition,
-#               'temperature': e.temperature,
-#               'native_apparent_temperature': e.feels_like,
-#               'pressure': e.pressure,
-#               'humidity': e.humidity,
-#               'precipitation': e.precipitation,
-#               'precipitation_probability': e.precipitation_probability,
-#               'wind_speed': e.wind_speed,
-#               'native_wind_gust_speed': e.wind_gust,
-#               'wind_bearing': e.wind_bearing,
-#               'uv_index': e.uv
-#             } ] %}
-#       {% endfor %}
-#       {{ data.l }}
-#     forecast_daily_template: >-
-#       {% set data = namespace(l = []) %}
-#       {% for e in state_attr('sensor.hub_hb_00069559_weather', 'daily_forecast') %}
-#       {%   set data.l = data.l + [ {
-#               'datetime': e.datetime,
-#               'condition': e.condition,
-#               'temperature': e.temperature,
-#               'templow': e.templow,
-#               'precipitation': e.precipitation,
-#               'precipitation_probability': e.precipitation_probability,
-#               'wind_speed': e.wind_speed,
-#               'wind_bearing': e.wind_bearing
-#             } ] %}
-#       {% endfor %}
-#       {{ data.l }}
-
 homekit:
-  - filter:
-      include_entities:
-        - binary_sensor.elkm1_kitchen_pir
-        - binary_sensor.elkm1_foyer_pir
-        - cover.single_garage_door
-        - cover.double_garage_door
+  advertise_ip: !secret hass_ip
+  filter:
+    include_entities:
+      - cover.single_garage_door
+      - cover.double_garage_door
+      - input_boolean.jon
+      - input_boolean.laura
 
 sonos:
   media_player:
-    advertise_addr: 192.168.30.249
+    advertise_addr: !secret hass_ip
     hosts:
       - 192.168.30.38
       - 192.168.30.39

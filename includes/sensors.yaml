@@ -1,20 +1,4 @@
 ---
-- platform: integration
-  name: Riemann Export
-  unique_id: riemann_export
-  source: sensor.power_export
-  unit_prefix: k
-  unit_time: h
-  method: left
-
-- platform: integration
-  name: Riemann Import
-  unique_id: riemann_import
-  source: sensor.power_import
-  unit_prefix: k
-  unit_time: h
-  method: left
-
 - platform: min_max
   name: House Humidity
   unique_id: house_humidity
