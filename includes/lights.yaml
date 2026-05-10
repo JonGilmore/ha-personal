@@ -6,6 +6,7 @@
     - light.sunroom_christmas_tree
     - light.evelyns_christmas_tree
     - light.foyer_christmas_lights
+    - light.ge_outdoor_switch
 - platform: group
   name: Main Floor Christmas Lights
   unique_id: main_floor_christmas_lights
@@ -13,15 +14,17 @@
     - light.great_room_christmas_tree
     - light.sunroom_christmas_tree
     - light.foyer_christmas_lights
+    - light.ge_outdoor_switch
 - platform: group
   name: Christmas Lights
   unique_id: christmas_lights
   entities:
-    - light.exterior_roof_outlets
+    - light.roof_lights_power_switch
     - light.great_room_christmas_tree
     - light.sunroom_christmas_tree
     - light.evelyns_christmas_tree
     - light.foyer_christmas_lights
+    - light.ge_outdoor_switch
 - platform: switch
   name: basement bar cabinets
   entity_id: switch.basement_bar_cabinets

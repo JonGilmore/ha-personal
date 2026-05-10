@@ -1,31 +1,50 @@
 ---
-garage_door_single:
-  name: "Single garage is open. Close it?"
-  entity_id: binary_sensor.elkm1_single_garage
-  state: "on"
-  repeat:
-    - 30
-    - 60
+double_garage_door_open:
+  name: "Double Garage Door Open Alert"
+  entity_id: sensor.elkm1_double_garage
+  state: "Violated"
+  repeat: 20
   can_acknowledge: true
   skip_first: true
-  data:
-    url: "http://192.168.30.249:5005/api/garage/latest.jpg" # TODO: this does not appear to work inside of an alert
-    inline_keyboard:
-      - "Yes:/closegarage_single, Ignore:/ignore_garagesingle"
   notifiers:
-    - telegram_jon
-garage_door_double:
-  name: "Double garage is open. Close it?"
-  entity_id: binary_sensor.elkm1_double_garage
-  state: "on"
-  repeat:
-    - 30
-    - 60
+    - mobile_app_jons_iphone
+  title: "🚪 Double Garage Door Alert"
+  message: "Double garage door is open!"
+  data:
+    tag: "double_garage_door_alert"
+    group: "garage_doors"
+    actions:
+      - action: "CLOSE_DOUBLE_GARAGE_DOOR"
+        title: "close double"
+        icon: "sfsymbols:garage.closed"
+      - action: "ACKNOWLEDGE_DOUBLE_GARAGE_ALERT"
+        title: "acknowledge"
+        icon: "sfsymbols:checkmark.circle"
+      - action: "SNOOZE_DOUBLE_GARAGE_ALERT"
+        title: "snooze 1hr"
+        icon: "sfsymbols:clock.badge.checkmark"
+
+single_garage_door_open:
+  name: "Single Garage Door Open Alert"
+  entity_id: sensor.elkm1_single_garage
+  state: "Violated"
+  repeat: 20
   can_acknowledge: true
   skip_first: true
-  data:
-    url: "http://192.168.30.249:5005/api/garage/latest.jpg"
-    inline_keyboard:
-      - "Yes:/closegarage_double, Ignore:/ignore_garagedouble"
   notifiers:
-    - telegram_jon
+    - mobile_app_jons_iphone
+  title: "🚪 Single Garage Door Alert"
+  message: "Single garage door is open!"
+  data:
+    tag: "single_garage_door_alert"
+    group: "garage_doors"
+    actions:
+      - action: "CLOSE_SINGLE_GARAGE_DOOR"
+        title: "close single"
+        icon: "sfsymbols:garage.closed"
+      - action: "ACKNOWLEDGE_SINGLE_GARAGE_ALERT"
+        title: "acknowledge"
+        icon: "sfsymbols:checkmark.circle"
+      - action: "SNOOZE_SINGLE_GARAGE_ALERT"
+        title: "snooze 1hr"
+        icon: "sfsymbols:clock.badge.checkmark"

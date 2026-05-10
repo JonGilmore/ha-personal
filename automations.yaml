@@ -6,7 +6,7 @@
     input:
       camera:
       - camera.doorbell
-      notify_device: e6d576f356d40ea0180bde4d034162ce
+      notify_device: a0231187bde1dbfa1db22db7f40ace97
       base_url: https://homeassistant.gilmore.cloud
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
       subtitle: '{{label}} approaching'
@@ -146,7 +146,7 @@
     input:
       camera:
       - camera.driveway
-      notify_device: e6d576f356d40ea0180bde4d034162ce
+      notify_device: a0231187bde1dbfa1db22db7f40ace97
       base_url: https://homeassistant.gilmore.cloud
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
       subtitle: '{{label}} approaching'
@@ -216,7 +216,7 @@
       - camera.grilldeck
       - camera.patio
       - camera.workshop
-      notify_device: e6d576f356d40ea0180bde4d034162ce
+      notify_device: a0231187bde1dbfa1db22db7f40ace97
       base_url: https://homeassistant.gilmore.cloud
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
       alert_once: true
@@ -233,87 +233,19 @@
       state_entity: binary_sensor.send_frigate_alerts
       state_filter_states:
       - 'on'
-- id: '1737382768102'
-  alias: Frigate Laura notify
-  description: send frigate notifications when any objects are detected and jon is
-    away or the house is in night mode
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      presence_filter:
-      - ''
-      camera:
-      - camera.deck
-      - camera.driveway
-      - camera.doorbell
-      - camera.frontyard
-      - camera.grilldeck
-      - camera.patio
-      - camera.workshop
-      notify_device: 73c269e64dff9787a20e6c1734177e58
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      alert_once: true
-      update_thumbnail: true
-      volume: 50
-      zone_filter: false
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
-      silence_timer: 60
-      labels:
-      - person
-      - dog
-      - cat
-      - car
-      - package
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-- id: '1739057361482'
-  alias: 'Frigate: mudroom telegram testing'
-  description: Line crossing detection, only notify if Jon is not home.
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera:
-      - camera.mudroom
-      notify_device: e6d576f356d40ea0180bde4d034162ce
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      subtitle: '{{label}} approaching'
-      zone_filter: true
-      zones:
-      - mudroom_far
-      - mudroom_near
-      zone_multi: true
-      zone_order_enforced: true
-      alert_once: true
-      final_update: false
-      presence_filter:
-      - ''
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      button_1: clip
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      button_2: snapshot
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
-      notify_telegram_chat_id: '635327867'
 - id: '1740318495813'
   alias: 'Unraid: array space warning'
   description: Notify when array space is running low
   triggers:
-  - entity_id: sensor.unraid_unraid_array_usage
+  - entity_id: sensor.unraid_array_usage
     above: 70
     trigger: numeric_state
   conditions: []
   actions:
   - data:
       title: Unraid Array Space Warning
-      message: 'Array usage is at {{ states(''sensor.unraid_unraid_array_usage'')}}%
-        Free space: {{ state_attr(''sensor.unraid_unraid_array_usage'', ''free_space'')}}'
+      message: 'Array usage is at {{ states(''sensor.unraid_array_usage'')}}% Free
+        space: {{ state_attr(''sensor.unraid_array_usage'', ''free_space'')}}'
     action: notify.mobile_app_jons_iphone
   mode: single
 - id: '1740318547239'
@@ -321,7 +253,7 @@
   description: Alert when CPU temperature is too high
   triggers:
   - entity_id:
-    - sensor.unraid_unraid_cpu_temperature
+    - sensor.processor_temperature
     above: 135
     for:
       minutes: 3
@@ -330,46 +262,9 @@
   actions:
   - data:
       title: ⚠️ Unraid Temperature Alert
-      message: CPU Temperature is {{ states('sensor.unraid_unraid_cpu_temperature')}}°F!
-        Please check system cooling.
+      message: CPU Temperature is {{ states('sensor.processor_temperature')}}°F! Please
+        check system cooling.
     action: notify.mobile_app_jons_iphone
-  - data:
-      entry_id: 192.168.30.249
-      command: echo 'High temperature warning' >> /var/log/temperature_alerts.log
-    action: unraid.execute_command
-  mode: single
-- id: '1740318561229'
-  alias: 'Unraid: UPS protection'
-  description: Safely shutdown when UPS battery is low
-  triggers:
-  - entity_id: sensor.unraid_ups_runtime_remaining
-    below: 10
-    for:
-      minutes: 2
-    trigger: numeric_state
-  conditions: []
-  actions:
-  - data:
-      title: ⚡ UPS Battery Critical
-      message: Initiating safe shutdown of Unraid server
-      data:
-        actions:
-        - action: SHUTDOWN_UNRAID
-          title: 'Yes'
-        - action: CANCEL_SHUTDOWN
-          title: 'No'
-    action: notify.mobile_app_jons_iphone
-  - wait_for_trigger:
-    - event_type: mobile_app_notification_action
-      event_data:
-        action: SHUTDOWN_UNRAID
-      trigger: event
-  - condition: template
-    value_template: '{{ trigger.event.data.action == ''SHUTDOWN_UNRAID'' }}'
-  - data:
-      entry_id: 192.168.30.249
-      command: shutdown -h now
-    action: unraid.execute_command
   mode: single
 - id: '1740318602615'
   alias: 'Frigate: mudroom detection based on presence'
@@ -430,10 +325,18 @@
   - trigger: state
     entity_id: person.laura
     to: home
+  - trigger: state
+    entity_id:
+    - device_tracker.jon_homekit
+    to:
+  - trigger: state
+    entity_id:
+    - device_tracker.laura_homekit
+    to:
   conditions: []
   actions:
   - action: notify.mobile_app_jons_iphone
-    data_template:
+    data:
       message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
         }}.'
   mode: single
@@ -454,32 +357,18 @@
     entity_id: group.all_shades
   - action: script.tvs_off
     data: {}
-  - action: notify.telegram_jon
+  - action: notify.mobile_app_jons_iphone
+    metadata: {}
     data:
-      title: Ran vacation mode on!
-      message: 'Reminder:
-
-        * depending how long you''re gone and the time of year, maybe turn off the
-        water main
-
-
-        This automation already performed the following:
-
-        * turned off recirc pump
-
-        * locked house locks (will happen in 60s)
-
-        * closed all blinds
-
-        * set back temps on thermostats
-
-        * turned off lights, TVs, and fans
-
-        '
+      message: "Ran vacation mode on! \n  \U0001F4A7 maybe turn off the water main\nPerformed:\n
+        \ \U0001F6E0️ turned off recirc pump\n  \U0001F510 locked house locks (in
+        60s)\n  \U0001FA9F closed all blinds\n  \U0001F321️ set back temps on thermostats\n
+        \ \U0001F916 turned off lights, TVs, and fans\n"
+    alias: notify jon
   - choose:
     - conditions:
       - condition: template
-        value_template: '{{ states(''climate.main_level_thermostat'') == ''cool''
+        value_template: '{{ states(''climate.infinitude_main_level'') == ''cool''
           }}'
       sequence:
       - action: climate.set_temperature
@@ -487,12 +376,12 @@
           temperature: 80
         target:
           entity_id:
-          - climate.main_level_thermostat
-          - climate.lower_level_thermostat
-          - climate.upper_level_thermostat
+          - climate.infinitude_main_level
+          - climate.infinitude_lower_level
+          - climate.infinitude_upper_level
     - conditions:
       - condition: template
-        value_template: '{{ states(''climate.main_level_thermostat'') == ''heat''
+        value_template: '{{ states(''climate.infinitude_main_level'') == ''heat''
           }}'
       sequence:
       - action: climate.set_temperature
@@ -500,9 +389,9 @@
           temperature: 60
         target:
           entity_id:
-          - climate.main_level_thermostat
-          - climate.lower_level_thermostat
-          - climate.upper_level_thermostat
+          - climate.infinitude_main_level
+          - climate.infinitude_lower_level
+          - climate.infinitude_upper_level
   - action: script.interior_lights_off
     data: {}
   - action: script.fans_off
@@ -523,11 +412,19 @@
     entity_id: binary_sensor.vacation
     state: 'on'
   actions:
-  - action: telegram_bot.send_photo
-    data_template:
-      url: http://192.168.30.249:5005/api/garage/latest.jpg
-      caption: "One of the {{ trigger.to_state.attributes.friendly_name }} is open
-        \U0001F480"
+  - delay: 00:00:01
+  - target:
+      entity_id: camera.garage
+    data:
+      filename: /config/www/garage_latest.jpg
+    action: camera.snapshot
+  - delay: 00:00:01
+  - action: notify.mobile_app_jons_iphone
+    metadata: {}
+    data:
+      message: "one of the garage doors is open \U0001F480"
+      data:
+        image: /local/garage_latest.jpg
   mode: single
 - id: '1740318950168'
   alias: 'Vacation Mode: turn off all lights at 23:30'
@@ -601,7 +498,9 @@
       sequence:
       - action: homeassistant.turn_on
         target:
-          entity_id: switch.exterior_roof_outlets
+          entity_id:
+          - switch.exterior_roof_outlets
+          - light.roof_lights_power_switch
         data: {}
       - choose:
           conditions:
@@ -617,15 +516,16 @@
       - condition: trigger
         id: xmasoff-trees
       sequence:
-      - action: light.turn_off
-        target:
-          entity_id: light.christmas_trees
-        data: {}
-      - action: notify.telegram_jon
-        data_template:
-          disable_notification: true
-          message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
-            }}. Christmas trees turned off'
+      - if:
+        - condition: time
+          after: 06:00:00
+          before: 09:00:00
+        then: []
+        else:
+        - action: light.turn_off
+          target:
+            entity_id: light.christmas_trees
+          data: {}
     - conditions:
       - condition: trigger
         id: xmasoff-all
@@ -634,29 +534,32 @@
         target:
           entity_id: light.christmas_lights
         data: {}
-      - action: notify.telegram_jon
-        data_template:
-          disable_notification: true
-          message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
-            }}. All Christmas lights turned off'
     - conditions:
       - condition: trigger
         id: xmason
       - condition: time
         before: '23:00:00'
+        after: 07:00:00
       sequence:
-      - action: light.turn_on
-        target:
-          entity_id: light.christmas_trees
-        data: {}
-      - action: notify.telegram_jon
-        data_template:
-          disable_notification: true
-          message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
-            }}. Christmas trees turned on'
       - action: notify.mobile_app_jons_iphone
-        metadata: {}
-        data: {}
+        data:
+          message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+            }}. Christmas lights turned on'
+      - if:
+        - condition: time
+          after: 07:00:00
+          before: '19:00:00'
+        then:
+        - action: light.turn_on
+          target:
+            entity_id: light.christmas_trees
+          data: {}
+        else:
+        - action: light.turn_on
+          metadata: {}
+          target:
+            entity_id: light.main_floor_christmas_lights
+          data: {}
   mode: single
 - id: '1740319108907'
   alias: 'Utility: basement bath motion'
@@ -667,11 +570,14 @@
     id: pir-on
     to: 'on'
   - trigger: state
-    entity_id: binary_sensor.apollo_msr_2_04b470_radar_moving_target
+    entity_id:
+    - binary_sensor.apollo_msr_2_04b470_radar_moving_target
     id: pir-off
     to: 'off'
     for:
-      minutes: 1
+      hours: 0
+      minutes: 2
+      seconds: 0
   conditions: []
   actions:
   - choose:
@@ -759,7 +665,7 @@
         entity_id: button.basement_equipment_room_homeowner_kp02_position_2_keypad_relax_all_on_low
     default:
     - action: system_log.write
-      data_template:
+      data:
         message: 'huh, defaulting: {{ trigger }}'
         level: error
   - wait_for_trigger:
@@ -949,7 +855,7 @@
       {% else %}homeassistant.turn_off{% endif %}
 
       '
-    data_template:
+    data:
       entity_id: '{% if trigger.event.data.leap_button_number in [1,2] %}light.lauras_lamp
         {% else %}light.jons_lamp{% endif %}
 
@@ -1038,7 +944,7 @@
         value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
       sequence:
       - action: button.press
-        data_template:
+        data:
           entity_id: "{% if trigger.entity_id == 'binary_sensor.elkm1_kitchen_pir'
             %}\n  button.basement_equipment_room_homeowner_kp01_position_5_keypad_kitchen_low_on\n{%
             endif %}\n"
@@ -1047,7 +953,7 @@
         id: pir-off
       sequence:
       - action: button.press
-        data_template:
+        data:
           entity_id: "{% if trigger.entity_id == 'binary_sensor.kitchen_area_motions'
             %}\n  button.basement_equipment_room_homeowner_kp01_position_2_keypad_kitchenhall_off\n{%
             endif %}\n"
@@ -1080,7 +986,7 @@
           ''off'') }}'
       sequence:
       - action: light.turn_on
-        data_template:
+        data:
           entity_id: '{{light}}'
     - conditions:
       - condition: trigger
@@ -1121,7 +1027,7 @@
         value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
       sequence:
       - action: light.turn_on
-        data_template:
+        data:
           entity_id: '{{light}}'
           brightness_pct: 20
     - conditions:
@@ -1165,7 +1071,7 @@
         value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
       sequence:
       - action: light.turn_on
-        data_template:
+        data:
           entity_id: '{{light}}'
           brightness_pct: '{{ states(''sensor.circadian_brightness'') | float * brightness_pct
             }}'
@@ -1208,7 +1114,7 @@
           ''off'') }}'
       sequence:
       - action: light.turn_on
-        data_template:
+        data:
           entity_id: '{{light}}'
           brightness_pct: 2
     - conditions:
@@ -1248,7 +1154,7 @@
           ''off'') }}'
       sequence:
       - action: light.turn_on
-        data_template:
+        data:
           entity_id: '{{light}}'
     - conditions:
       - condition: trigger
@@ -1291,7 +1197,7 @@
         after: 05:00:00
       sequence:
       - action: light.turn_on
-        data_template:
+        data:
           entity_id: '{{light}}'
           brightness_pct: '{{ states(''sensor.circadian_brightness'') }}'
     - conditions:
@@ -1299,7 +1205,7 @@
         id: pir-off
       sequence:
       - action: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: '{{light}}'
   mode: restart
   variables:
@@ -1310,7 +1216,6 @@
   triggers:
   - trigger: state
     entity_id:
-    - binary_sensor.office_motions
     - binary_sensor.elkm1_lounge_pir
     - binary_sensor.elkm1_mudroom_pir
     id: pir-on
@@ -1337,7 +1242,7 @@
         value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
       sequence:
       - action: light.turn_on
-        data_template:
+        data:
           entity_id: "{% if trigger.entity_id == 'binary_sensor.office_motions' %}\n
             \ light.basement_office_art\n{% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir'
             %}\n  light.basement_bar_cabinets\n{% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir'
@@ -1348,7 +1253,7 @@
         id: pir-off
       sequence:
       - action: homeassistant.turn_off
-        data_template:
+        data:
           entity_id: "{% if trigger.entity_id == 'binary_sensor.office_motions' %}\n
             \ light.basement_office_art\n{% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir'
             %}\n  light.basement_bar_cabinets\n{% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir'
@@ -1360,10 +1265,10 @@
   triggers:
   - trigger: state
     entity_id: sensor.cyberpower_ups
-    to: three
-    id: three
+    to: ten
+    id: ten
     for:
-      seconds: 30
+      seconds: 15
   - trigger: state
     entity_id: sensor.cyberpower_ups
     to: five
@@ -1372,39 +1277,71 @@
       seconds: 15
   - trigger: state
     entity_id: sensor.cyberpower_ups
-    to: ten
-    id: ten
+    to: three
+    id: three
     for:
-      seconds: 15
+      seconds: 30
   conditions: []
   actions:
   - choose:
     - conditions:
       - condition: trigger
-        id: three
+        id: ten
       sequence:
-      - action: notify.telegram_jon
-        data_template:
-          message: Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime')
-            | float / 60) | round(0) }}min remaining, turning off HA.
-      - action: shell_command.debian_shutdown
-        data: {}
+      - action: notify.mobile_app_jons_iphone
+        data:
+          message: Cyberpower UPS has {{ state('sensor.ups_battery_runtime') | float
+            | round(0) }}min remaining.
+      - action: shell_command.container_cmd
+        data:
+          cmd: stop
+          container: actual
+      - action: shell_command.container_cmd
+        data:
+          cmd: stop
+          container: browserless
+      - action: shell_command.container_cmd
+        data:
+          cmd: stop
+          container: datadog
+      - action: shell_command.container_cmd
+        data:
+          cmd: stop
+          container: changedetection
+      - action: shell_command.container_cmd
+        data:
+          cmd: stop
+          container: paperless-ngx
+      - action: shell_command.container_cmd
+        data:
+          cmd: stop
+          container: redis
+      - action: shell_command.container_cmd
+        data:
+          cmd: stop
+          container: infinitude
+      - action: shell_command.container_cmd
+        data:
+          cmd: stop
+          container: aircon
     - conditions:
       - condition: trigger
         id: five
       sequence:
-      - action: notify.telegram_jon
-        data_template:
-          message: Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime')
-            | float / 60) | round(0) }}min remaining.
+      - action: notify.mobile_app_jons_iphone
+        data:
+          message: Cyberpower UPS has {{ state('sensor.ups_battery_runtime') | float
+            | round(0) }}min remaining.
     - conditions:
       - condition: trigger
-        id: ten
+        id: three
       sequence:
-      - action: notify.telegram_jon
-        data_template:
-          message: Cyberpower ups has {{ (state('sensor.cyberpower_battery_runtime')
-            | float / 60) | round(0) }}min remaining.
+      - action: notify.mobile_app_jons_iphone
+        data:
+          message: Cyberpower UPS has {{ state('sensor.ups_battery_runtime') | float
+            | round(0) }}min remaining, turning off HA.
+      - action: shell_command.debian_shutdown
+        data: {}
   mode: single
 - id: '1740320118816'
   alias: 'Work: pagerduty notification - notify'
@@ -1416,11 +1353,6 @@
       sender: no-reply@pagerduty.com
   conditions: []
   actions:
-  - action: telegram_bot.send_message
-    metadata: {}
-    data:
-      title: Work page!
-      message: wake up!
   - action: notify.mobile_app_jons_iphone
     metadata: {}
     data:
@@ -1455,8 +1387,8 @@
   - condition: template
     value_template: '{{ not is_state(''sensor.alarm_trouble'', '''') }}'
   actions:
-  - action: notify.telegram_jon
-    data_template:
+  - action: notify.mobile_app_jons_iphone
+    data:
       message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
         }}.'
   mode: single
@@ -1476,7 +1408,7 @@
       - switch.basement_equipment_room_recirculation_pump
       - switch.water_main
     data: {}
-  - action: notify.telegram_jon
+  - action: notify.mobile_app_jons_iphone
     data:
       title: Water Leak!
       message: HomeAssistant detected a water leak
@@ -1504,7 +1436,7 @@
     at: '20:00:00'
   conditions:
   - condition: state
-    entity_id: climate.main_level_thermostat
+    entity_id: climate.infinitude_main_level
     state: cool
   - condition: state
     entity_id: binary_sensor.vacation
@@ -1515,80 +1447,6 @@
       entity_id: fan.upstairs_main_bedroom_fan
     data: {}
   mode: single
-- id: '1740320340725'
-  alias: 'Security: doorbell rang'
-  description: send telegram message when the doorbell rings and announce it on the
-    sonos
-  triggers:
-  - trigger: state
-    entity_id:
-    - binary_sensor.reolink_visitor
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ is_state(''input_boolean.doorbell'', ''on'') }}'
-      sequence:
-      - action: media_player.play_media
-        target:
-          entity_id: media_player.kitchen
-        data:
-          media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-          media_content_type: provider
-        metadata:
-          title: ding dong - somebody is at the door
-          thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
-          media_class: app
-          children_media_class:
-          navigateIds:
-          - {}
-          - media_content_type: app
-            media_content_id: media-source://tts
-          - media_content_type: provider
-            media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-  - action: media_player.play_media
-    target:
-      entity_id: media_player.office
-    data:
-      media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-      media_content_type: provider
-    metadata:
-      title: ding dong - somebody is at the door
-      thumbnail: https://brands.home-assistant.io/_/google_translate/logo.png
-      media_class: app
-      children_media_class:
-      navigateIds:
-      - {}
-      - media_content_type: app
-        media_content_id: media-source://tts
-      - media_content_type: provider
-        media_content_id: media-source://tts/google_translate?message=ding+dong+-+somebody+is+at+the+door
-  - action: camera.snapshot
-    target:
-      entity_id: camera.doorbell
-    data:
-      filename: '{{filename}}'
-  - parallel:
-    - action: notify.telegram_jon
-      data_template:
-        message: '{{msg}}'
-        data:
-          photo:
-          - file: '{{filename}}'
-            caption: '{{msg}}'
-    - action: notify.mobile_app_lauras_iphone
-      data:
-        message: '{{msg}}'
-        data:
-          image: '{{filename}}'
-  - action: script.tvs_notify
-    data:
-      msg: '{{msg}}'
-  mode: single
-  variables:
-    filename: /tmp/doorbell_latest.jpg
-    msg: Doorbell rang!
 - id: '1740320370360'
   alias: 'Automatic Lighting: exterior person & dark out - toggle exterior lights'
   description: ''
@@ -1604,19 +1462,22 @@
     for:
       minutes: 20
   conditions:
-  - condition: template
-    value_template: '{{ is_state(''input_boolean.exterior_lights_block'', ''off'')
-      }}'
+  - condition: state
+    entity_id: input_boolean.exterior_lights_block
+    state:
+    - 'off'
   actions:
   - choose:
     - conditions:
       - condition: trigger
         id: pir-on
-      - condition: template
-        value_template: '{{ is_state(''binary_sensor.light_inside'', ''off'') }}'
       - condition: state
         entity_id: sun.sun
         state: below_horizon
+      - condition: state
+        entity_id: binary_sensor.light_inside
+        state:
+        - 'off'
       sequence:
       - action: button.press
         entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_on
@@ -1749,6 +1610,12 @@
       state: turn_off
   - action: script.crestron_exit_standby
     data: {}
+  - action: climate.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: climate.garage
+    alias: turn off garage hvac
   - wait_for_trigger:
     - trigger: state
       entity_id: sensor.elkm1_foyer_pir
@@ -1801,9 +1668,21 @@
     for: 00:20:00
   conditions: []
   actions:
-  - action: button.press
-    data_template:
-      entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_basement_off
+  - if:
+    - condition: state
+      entity_id: input_boolean.gaming
+      state:
+      - 'on'
+    then:
+    - action: button.press
+      data:
+        entity_id: button.basement_equipment_room_homeowner_kp02_position_2_keypad_basement_off_wo_offc
+      alias: turn off basement lights but skip office art
+    else:
+    - action: button.press
+      data:
+        entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_basement_off
+      alias: turn off basement lights
   mode: single
 - id: '1740320646085'
   alias: 'Automatic Lighting: turn off main floor lights if no motion detected'
@@ -1829,7 +1708,7 @@
         before: '16:00:00'
       sequence:
       - action: button.press
-        data_template:
+        data:
           entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
     - conditions:
       - condition: trigger
@@ -1838,7 +1717,7 @@
         after: '16:00:00'
       sequence:
       - action: button.press
-        data_template:
+        data:
           entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_main_off
   mode: single
 - id: '1740320666454'
@@ -1852,7 +1731,7 @@
   conditions: []
   actions:
   - action: button.press
-    data_template:
+    data:
       entity_id: button.basement_equipment_room_homeowner_kp01_position_4_keypad_mainbath_off
   mode: single
 - id: '1740320689199'
@@ -1885,7 +1764,7 @@
   description: ''
   triggers:
   - trigger: time
-    at: '5:00:00'
+    at: 05:00:00
     id: 5am
   - trigger: time
     at: 05:30:00
@@ -1971,19 +1850,30 @@
           == ''on'' }}'
       sequence:
       - parallel:
-        - action: telegram_bot.send_message
-          data_template:
-            title: '{% if as_local(states.sensor.date.last_updated).day == 1 %}*Important
-              Dates in the Next 30 Days!* {% else %}*Important Upcoming Dates!* {%
-              endif %}'
+        - action: notify.mobile_app_jons_iphone
+          data:
+            title: '{% if as_local(states.sensor.date.last_updated).day == 1 %}Important
+              Dates in the Next 30 Days! {% else %}Important Upcoming Dates! {% endif
+              %}'
             message: '{% if as_local(states.sensor.date.last_updated).day == 1 %}
               {% for entity in  state_attr(''binary_sensor.events_in_the_next_thirty_days'',
-              ''entity_id'') -%} {{ ''\n_'' + entity.name + ''_ - '' + entity.next_date
+              ''entity_id'') -%} {{ ''\n'' + entity.name + '' - '' + entity.next_date
               }} {% endfor %} {% else %} {% for entity in  state_attr(''binary_sensor.events_in_seven_days'',
               ''entity_id'') + state_attr(''binary_sensor.events_today'', ''entity_id'')
-              %} {{ ''\n_'' + entity.name + ''_ - '' + entity.next_date }} {% endfor
+              %} {{ ''\n'' + entity.name + '' - '' + entity.next_date }} {% endfor
               %} {% endif %}'
-            parse_mode: markdown
+        - action: notify.mobile_app_lauras_iphone
+          data:
+            title: '{% if as_local(states.sensor.date.last_updated).day == 1 %}Important
+              Dates in the Next 30 Days! {% else %}Important Upcoming Dates! {% endif
+              %}'
+            message: '{% if as_local(states.sensor.date.last_updated).day == 1 %}
+              {% for entity in  state_attr(''binary_sensor.events_in_the_next_thirty_days'',
+              ''entity_id'') -%} {{ ''\n'' + entity.name + '' - '' + entity.next_date
+              }} {% endfor %} {% else %} {% for entity in  state_attr(''binary_sensor.events_in_seven_days'',
+              ''entity_id'') + state_attr(''binary_sensor.events_today'', ''entity_id'')
+              %} {{ ''\n'' + entity.name + '' - '' + entity.next_date }} {% endfor
+              %} {% endif %}'
     - conditions:
       - condition: trigger
         id: 9am
@@ -2006,11 +1896,10 @@
           value_template: '{{ states(''sensor.house_humidity'') < states(''sensor.target_humidity_min'')
             }}'
       sequence:
-      - action: telegram_bot.send_message
-        data_template:
+      - action: notify.mobile_app_jons_iphone
+        data:
           title: '*Humidity Warning!*'
-          message: 'Humidity in the house is: {{ states(''sensor.house_humidity'')
-            }}'
+          message: 'Humidity in the house is: {{ states(''sensor.house_humidity'')}}'
     - conditions:
       - condition: trigger
         id: 330pm
@@ -2038,7 +1927,8 @@
         entity_id: button.basement_equipment_room_homeowner_kp01_position_2_keypad_exterior_off
       - choose:
         - conditions:
-          - '{{ states(''binary_sensor.vacation'') == ''off'' }}'
+          - condition: template
+            value_template: '{{ states(''binary_sensor.vacation'') == ''off'' }}'
           sequence:
           - action: cover.open_cover
             entity_id: cover.main_floor_sunroom_west_shades
@@ -2098,7 +1988,7 @@
   conditions: []
   actions:
   - action: button.press
-    data_template:
+    data:
       entity_id: "{% if is_state('input_boolean.guests', 'on') %}\n  button.basement_equipment_room_homeowner_kp01_position_4_keypad_main_lower_ext_off\n{%
         else %}\n  button.basement_equipment_room_homeowner_kp01_position_1_keypad_all_but_mainbed\n{%
         endif %}\n"
@@ -2127,6 +2017,20 @@
     data: {}
   - action: script.lock_doors
     data: {}
+    alias: run lock doors script
+  - action: climate.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: climate.garage
+    alias: turn on garage hvac
+  - alias: Set garage to cool
+    action: climate.set_hvac_mode
+    metadata: {}
+    data:
+      hvac_mode: cool
+    target:
+      entity_id: climate.garage
   - wait_for_trigger:
     - trigger: state
       entity_id: media_player.main_bedroom_tv
@@ -2173,11 +2077,6 @@
         data: {}
       - action: script.lock_doors
         data: {}
-      - action: telegram_bot.send_message
-        data:
-          message: Leaving... close blinds?
-          inline_keyboard:
-          - Yes:/close_blinds, Ignore:/blinds_do_nothing
     - conditions:
       - condition: trigger
         id:
@@ -2187,18 +2086,29 @@
         target:
           entity_id: switch.basement_equipment_room_recirculation_pump
         data: {}
-      - action: button.press
-        entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_open
+      - if:
+        - condition: state
+          entity_id: binary_sensor.light_inside
+          state:
+          - 'on'
+        then:
+        - action: button.press
+          entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_open
+          enabled: true
   mode: single
 - id: '1740320929539'
   alias: 'Night Mode: turn on sunset lights at dark or sunset'
   description: ''
   triggers:
   - trigger: state
-    entity_id: binary_sensor.light_inside
-    to: 'off'
+    entity_id:
+    - binary_sensor.light_inside
+    to:
+    - 'off'
     for:
-      minutes: 10
+      hours: 0
+      minutes: 7
+      seconds: 0
   - trigger: sun
     event: sunset
   conditions:
@@ -2208,16 +2118,27 @@
   - condition: time
     after: '16:30:00'
   actions:
-  - action: button.press
-    entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_sunset1
+  - action: cover.close_cover
+    target:
+      entity_id:
+      - cover.main_floor_library_shade
+      - cover.upstairs_stair_shade
+    data: {}
   - action: homeassistant.turn_on
     target:
       entity_id: input_boolean.sunset_run_once
     data: {}
-  - action: cover.close_cover
-    entity_id:
-    - cover.main_floor_library_shade
-    - cover.upstairs_stair_shade
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.christmas_season
+        state:
+        - 'off'
+      sequence:
+      - action: button.press
+        entity_id: button.basement_equipment_room_homeowner_kp01_position_3_keypad_sunset1
+        alias: run sunset1 lutron action
+    alias: run sunset1 if christmas is off
   mode: single
 - id: '1740320954335'
   alias: 'Night Mode: set day or night mode on cameras'
@@ -2302,24 +2223,6 @@
     entity_id: button.basement_equipment_room_homeowner_kp01_position_4_keypad_burglar
   - action: script.alarm
     data: {}
-  mode: single
-- id: '1740321097503'
-  alias: 'Alarm: turn off alarm notifications because of user interaction'
-  description: ''
-  triggers:
-  - trigger: event
-    event_type: telegram_callback
-    event_data:
-      data: /turnoffnotification
-  conditions: []
-  actions:
-  - action: telegram_bot.answer_callback_query
-    data_template:
-      callback_query_id: '{{ trigger.event.data.id }}'
-      message: Disabling notifications for {{ trigger.id }}
-      show_alert: true
-  - action: input_boolean.turn_off
-    entity_id: input_boolean.alarm_notifier
   mode: single
 - id: '1740321134403'
   alias: 'Blinds: close appropriate blinds based on azimuth'
@@ -2421,131 +2324,6 @@
           entity_id: input_boolean.east_blinds_run_once
         data: {}
   mode: single
-- id: '1740321170300'
-  alias: 'Garage: acknowledge garage open'
-  description: depending on the telegram callback ignore the appropriate garage door
-    alert
-  triggers:
-  - trigger: event
-    event_type: telegram_callback
-    event_data:
-      command: /ignore_garagesingle
-    variables:
-      alert: alert.garage_door_single
-  - trigger: event
-    event_type: telegram_callback
-    event_data:
-      command: /ignore_garagedouble
-    variables:
-      alert: alert.garage_door_double
-  conditions: []
-  actions:
-  - action: homeassistant.turn_off
-    target:
-      entity_id: '{{ alert }}'
-  mode: single
-- id: '1740321197852'
-  alias: 'Garage: telegram door close'
-  description: send a picture while answering the callback & close the door & disable
-    the alert
-  triggers:
-  - trigger: event
-    id: single
-    event_type: telegram_callback
-    event_data:
-      data: /closegarage_single
-    variables:
-      door: cover.single_garage_door
-      alert: alert.garage_door_single
-  - trigger: event
-    id: double
-    event_type: telegram_callback
-    event_data:
-      data: /closegarage_double
-    variables:
-      door: cover.double_garage_door
-      alert: alert.garage_door_double
-  conditions: []
-  actions:
-  - action: telegram_bot.answer_callback_query
-    data_template:
-      callback_query_id: '{{ trigger.event.data.id }}'
-      message: "\U0001F697 Closing the {{ trigger.id }} garage!"
-      show_alert: false
-  - action: cover.close_cover
-    data_template:
-      entity_id: '{{ door }}'
-  - action: alert.turn_off
-    data_template:
-      entity_id: '{{ alert }}'
-  - delay: 10
-  - action: telegram_bot.send_photo
-    data_template:
-      url: http://192.168.30.249:5005/api/garage/latest.jpg
-      caption: "\U0001F697 Closing the {{ trigger.id }} garage!"
-  mode: single
-- id: '1740321285652'
-  alias: 'Notify: edit telegram chat'
-  description: update the chat_id and message_id input_numbers when a telegram message
-    is sent
-  triggers:
-  - trigger: event
-    event_type: telegram_sent
-    event_data:
-      message_tag: garmin_message_sent
-    variables:
-      chat_id: input_number.garmin_chat_id
-      message_id: input_number.garmin_message_id
-  conditions: []
-  actions:
-  - action: input_number.set_value
-    data_template:
-      entity_id: '{{ chat_id }}'
-      value: '{{ trigger.event.data.chat_id }}'
-  - action: input_number.set_value
-    data_template:
-      entity_id: '{{ message_id }}'
-      value: '{{ trigger.event.data.message_id }}'
-  mode: parallel
-  max: 10
-- id: '1740321325353'
-  alias: 'Telegram: blinds callback'
-  description: ''
-  triggers:
-  - trigger: event
-    id: close_blinds
-    event_type: telegram_callback
-    event_data:
-      command: /close_blinds
-  - trigger: event
-    id: blinds_do_nothing
-    event_type: telegram_callback
-    event_data:
-      command: /blinds_do_nothing
-  conditions: []
-  actions:
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ trigger.id == ''close_blinds'' }}'
-      sequence:
-      - action: button.press
-        entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_closed
-      - action: telegram_bot.answer_callback_query
-        data:
-          callback_query_id: '{{ trigger.event.data.id }}'
-          message: Closing blinds...
-          show_alert: true
-    - conditions:
-      - condition: template
-        value_template: '{{ trigger.id == ''blinds_do_nothing'' }}'
-      sequence:
-      - action: telegram_bot.answer_callback_query
-        data:
-          callback_query_id: '{{ trigger.event.data.id }}'
-          message: Not closing the blinds
-          show_alert: false
-  mode: single
 - id: '1740321359273'
   alias: 'Utility: general notifications'
   description: ''
@@ -2590,13 +2368,13 @@
       - condition: trigger
         id: nut_event
       sequence:
-      - action: notify.telegram_jon
-        data_template:
-          message: 'Power outage detected by UPS: {{ (states(''sensor.cyberpower_battery_runtime'')
+      - action: notify.mobile_app_jons_iphone
+        data:
+          message: 'Power outage detected by UPS: {{ (states(''sensor.ups_battery_runtime'')
             | float / 60) | round(0) }} minutes of battery power remaining.'
     default:
-    - action: notify.telegram_jon
-      data_template:
+    - action: notify.mobile_app_jons_iphone
+      data:
         message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
           }}.'
   mode: single
@@ -2807,15 +2585,132 @@
     target:
       entity_id: light.main_floor_foyer_lights
   mode: single
-- id: '1744677703876'
-  alias: 'Frigate: testing'
+- id: '1751732016148'
+  alias: 'garage: handle notification actions'
+  description: handle garage door notification actions
+  triggers:
+  - trigger: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: CLOSE_DOUBLE_GARAGE_DOOR
+    alias: CLOSE_DOUBLE_GARAGE_DOOR
+  - trigger: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: CLOSE_SINGLE_GARAGE_DOOR
+    alias: CLOSE_SINGLE_GARAGE_DOOR
+  - trigger: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: ACKNOWLEDGE_DOUBLE_GARAGE_ALERT
+    alias: ACKNOWLEDGE_DOUBLE_GARAGE_ALERT
+  - trigger: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: ACKNOWLEDGE_SINGLE_GARAGE_ALERT
+    alias: ACKNOWLEDGE_SINGLE_GARAGE_ALERT
+  - trigger: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: SNOOZE_DOUBLE_GARAGE_ALERT
+    alias: SNOOZE_DOUBLE_GARAGE_ALERT
+  - trigger: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: SNOOZE_SINGLE_GARAGE_ALERT
+    alias: SNOOZE_SINGLE_GARAGE_ALERT
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.action == "CLOSE_DOUBLE_GARAGE_DOOR"
+          }}'
+      sequence:
+      - action: cover.close_cover
+        target:
+          entity_id: cover.double_garage_door
+        data: {}
+      - action: alert.turn_off
+        entity_id: alert.double_garage_door_open
+      - action: notify.mobile_app_jons_iphone
+        data:
+          title: "\U0001F6AA Double Garage Door"
+          message: Closing double garage door...
+          data:
+            tag: double_garage_door_alert
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.action == "CLOSE_SINGLE_GARAGE_DOOR"
+          }}'
+      sequence:
+      - action: cover.close_cover
+        target:
+          entity_id: cover.single_garage_door
+        data: {}
+      - action: alert.turn_off
+        entity_id: alert.single_garage_door_open
+      - action: notify.mobile_app_jons_iphone
+        data:
+          title: "\U0001F6AA Single Garage Door"
+          message: Closing single garage door...
+          data:
+            tag: single_garage_door_alert
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.action == "ACKNOWLEDGE_DOUBLE_GARAGE_ALERT"
+          }}'
+      sequence:
+      - action: alert.turn_off
+        entity_id: alert.double_garage_door_open
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.action == "ACKNOWLEDGE_SINGLE_GARAGE_ALERT"
+          }}'
+      sequence:
+      - action: alert.turn_off
+        entity_id: alert.single_garage_door_open
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.action == "SNOOZE_DOUBLE_GARAGE_ALERT"
+          }}'
+      sequence:
+      - action: alert.turn_off
+        entity_id: alert.double_garage_door_open
+      - delay:
+          hours: 1
+      - condition: state
+        entity_id: sensor.elkm1_double_garage
+        state: Violated
+      - action: alert.turn_on
+        entity_id: alert.double_garage_door_open
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.event.data.action == "SNOOZE_SINGLE_GARAGE_ALERT"
+          }}'
+      sequence:
+      - action: alert.turn_off
+        entity_id: alert.single_garage_door_open
+      - delay:
+          hours: 1
+      - condition: state
+        entity_id: sensor.elkm1_single_garage
+        state: Violated
+      - action: alert.turn_on
+        entity_id: alert.single_garage_door_open
+  mode: parallel
+- id: '1753617437359'
+  alias: 'Frigate: objects detected while away or asleep - driveway'
+  description: send frigate notifications for driveway camera when any objects are
+    detected and jon is away or the house is in night mode
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
       camera:
-      - camera.mudroom
-      notify_device: e6d576f356d40ea0180bde4d034162ce
+      - camera.driveway
+      notify_device: a0231187bde1dbfa1db22db7f40ace97
       base_url: https://homeassistant.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
       alert_once: true
       final_update: false
       presence_filter:
@@ -2826,4 +2721,325 @@
       attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
       button_2: snapshot
       attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+      review_severity:
+      - alert
+- id: '1754224795250'
+  alias: 'Utility: low battery notification'
+  description: ''
+  use_blueprint:
+    path: Blackshome/low-battery-notifications-and-actions.yaml
+    input:
+      include_time: time_enabled
+      time: 07:45:00
+      include_easy_notify: enable_easy_notify
+      notify_device:
+      - a0231187bde1dbfa1db22db7f40ace97
+      notify_title: Low Battery
+      exclude_sensors:
+        entity_id:
+        - sensor.water_main_battery_level
+        - sensor.jons_iphone_battery_level
+        - sensor.lauras_iphone_battery_level
+        - sensor.jons_iphone_watch_battery_level
+        - sensor.lauras_iphone_watch_battery
+        - sensor.ipad_battery_level
+      include_button: enable_button_trigger
+      button_entity: input_button.check_low_battery
+      notify_action_buttons: enable_to_do_list_button
+      to_do_list: todo.jons_todo
+- id: '1755835135022'
+  alias: Garage temperature warning
+  description: ''
+  triggers:
+  - type: temperature
+    device_id: 2ae4d70d7417067aa13d13fe9673d743
+    entity_id: 1c936e024153492c6fc7a616ced237f8
+    domain: sensor
+    trigger: device
+    above: 85
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  conditions: []
+  actions:
+  - action: notify.mobile_app_jons_iphone
+    metadata: {}
+    data:
+      message: Garage is very hot
+  - action: notify.mobile_app_lauras_iphone
+    metadata: {}
+    data:
+      message: Garage is very hot
+  mode: single
+- id: '1757367686224'
+  alias: changedetection.io page changed
+  description: ''
+  triggers:
+  - trigger: persistent_notification
+    update_type:
+    - added
+    notification_id: changedetection
+  conditions: []
+  actions:
+  - action: notify.mobile_app_jons_iphone
+    data:
+      title: change detected
+      message: 'hit up: https://festoolrecon.com'
+  mode: single
+- id: '1764972206895'
+  alias: 'Location: sync presence to person entities'
+  description: Sync iPhone HomeKit presence switches to person entities
+  triggers:
+  - trigger: state
+    entity_id: input_boolean.laura
+    id: laura
+  - trigger: state
+    entity_id: input_boolean.jon
+    id: jon
+  - trigger: homeassistant
+    event: start
+    id: startup
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: startup
+      sequence:
+      - action: input_boolean.turn_{{ 'on' if is_state('device_tracker.jons_iphone',
+          'home') else 'off' }}
+        target:
+          entity_id: input_boolean.jon
+      - action: input_boolean.turn_{{ 'on' if is_state('device_tracker.lauras_iphone',
+          'home') else 'off' }}
+        target:
+          entity_id: input_boolean.laura
+      - action: device_tracker.see
+        data:
+          dev_id: laura_homekit
+          location_name: '{{ ''home'' if is_state(''device_tracker.lauras_iphone'',
+            ''home'') else ''not_home'' }}'
+      - action: device_tracker.see
+        data:
+          dev_id: jon_homekit
+          location_name: '{{ ''home'' if is_state(''device_tracker.jons_iphone'',
+            ''home'') else ''not_home'' }}'
+    - conditions:
+      - condition: trigger
+        id: laura
+      sequence:
+      - action: device_tracker.see
+        data:
+          dev_id: laura_homekit
+          location_name: '{{ ''home'' if trigger.to_state.state == ''on'' else ''not_home''
+            }}'
+    - conditions:
+      - condition: trigger
+        id: jon
+      sequence:
+      - action: device_tracker.see
+        data:
+          dev_id: jon_homekit
+          location_name: '{{ ''home'' if trigger.to_state.state == ''on'' else ''not_home''
+            }}'
+  mode: parallel
+- id: '1769649870019'
+  alias: Gaming Mode - Office Art + KVM
+  description: Toggle office art and KVM based on gaming mode
+  triggers:
+  - entity_id: input_boolean.gaming
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.light_inside
+    state: 'off'
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.gaming
+        state: 'on'
+      sequence:
+      - target:
+          entity_id: light.basement_office_art
+        action: homeassistant.turn_on
+      - target:
+          device_id: ca75e6c618c8760884bd285d1ef2d5f0
+        data:
+          device: KVM
+          command: Desktop
+        action: remote.send_command
+    - conditions:
+      - condition: state
+        entity_id: input_boolean.gaming
+        state: 'off'
+      sequence:
+      - target:
+          entity_id: light.basement_office_art
+        action: homeassistant.turn_off
+      - target:
+          device_id: ca75e6c618c8760884bd285d1ef2d5f0
+        data:
+          device: KVM
+          command: PersonalMac
+        action: remote.send_command
+  mode: single
+- id: '1771163240178'
+  alias: Trash out notification
+  description: ''
+  triggers:
+  - trigger: time
+    at: '19:40:00'
+    weekday:
+    - mon
+  conditions:
+  - condition: state
+    entity_id: sensor.driveway_trash_out_classification
+    state:
+    - missing
+  actions:
+  - action: notify.mobile_app_lauras_iphone
+    metadata: {}
+    data:
+      message: Make sure to take the trash out!
+      title: Trash
+    enabled: true
+  - action: notify.mobile_app_jons_iphone
+    metadata: {}
+    data:
+      message: Make sure to take the trash out!
+      title: Trash
+  mode: single
+- id: '1773883250082'
+  alias: 'HVAC: morning solar offset request'
+  description: check if its going to be mostly sunny. if it is, then send a notification
+    to see if i want to set temps back 2°F on the main/upper levels.
+  triggers:
+  - at: 07:30:00
+    trigger: time
+  actions:
+  - target:
+      entity_id: weather.tomorrow_io_home_hourly
+    data:
+      type: hourly
+    response_variable: hourly_data
+    action: weather.get_forecasts
+  - condition: and
+    conditions:
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: climate.infinitude_main_level
+        state: heat
+      - condition: state
+        entity_id: climate.infinitude_upper_level
+        state: heat
+      alias: check if both main and upper levels are set to heat
+    - condition: template
+      value_template: '{% set forecast = hourly_data[''weather.tomorrow_io_home_hourly''][''forecast''][:12]
+        %} {% set sunny_hours = forecast | selectattr(''condition'', ''in'', [''sunny'',
+        ''clear'', ''partlycloudy'']) | list | length %} {{ sunny_hours >= 5 }}
+
+        '
+      alias: at least 5 of the next 12hrs are sunny
+    - condition: state
+      entity_id: binary_sensor.vacation
+      state:
+      - 'off'
+  - data:
+      message: It looks like a mostly sunny day ahead. Drop the heat by 2 degrees
+        to prevent overheating?
+      title: ☀️ warm day expected
+      data:
+        actions:
+        - action: APPROVE_TEMP_DROP
+          title: Yes, drop temps
+        - action: DECLINE_TEMP_DROP
+          title: No, leave it
+    action: notify.mobile_app_jons_iphone
+  - wait_for_trigger:
+    - event_type: mobile_app_notification_action
+      event_data:
+        action: APPROVE_TEMP_DROP
+      trigger: event
+    - event_type: mobile_app_notification_action
+      event_data:
+        action: DECLINE_TEMP_DROP
+      trigger: event
+    timeout: 02:00:00
+    continue_on_timeout: false
+  - condition: template
+    value_template: '{{ wait.trigger.event.data.action == ''APPROVE_TEMP_DROP'' }}'
+    alias: if user elects to drop temps
+  - target:
+      entity_id: input_boolean.solar_offset_active
+    action: input_boolean.turn_on
+  - target:
+      entity_id: climate.infinitude_main_level
+    data:
+      temperature: 68
+    action: climate.set_temperature
+  - target:
+      entity_id: climate.infinitude_upper_level
+    data:
+      temperature: 67
+    action: climate.set_temperature
+  mode: single
+- id: '1773883402094'
+  alias: 'HVAC: evening solar offset revert'
+  description: ''
+  triggers:
+  - event: sunset
+    offset: -00:30:00
+    trigger: sun
+    alias: 30min before sunset
+  conditions:
+  - condition: state
+    entity_id: input_boolean.solar_offset_active
+    state: 'on'
+  actions:
+  - target:
+      entity_id: climate.infinitude_main_level
+    data:
+      temperature: 70
+    action: climate.set_temperature
+  - target:
+      entity_id: climate.infinitude_upper_level
+    data:
+      temperature: 69
+    action: climate.set_temperature
+  - target:
+      entity_id: input_boolean.solar_offset_active
+    action: input_boolean.turn_off
+  mode: single
+- id: '1775312359467'
+  alias: stair shade
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.sleeping
+    from:
+    - 'on'
+    to:
+    - 'off'
+  - trigger: time
+    at: 08:00:00
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.vacation
+    state:
+    - 'off'
+  actions:
+  - device_id: 6c222de0e75672a6c3a404b5e5ba6799
+    domain: cover
+    entity_id: 45a51f86ce6064586e15e22c4257cf4d
+    type: set_position
+    metadata:
+      secondary: false
+    position: 100
+  mode: single

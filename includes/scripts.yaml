@@ -10,7 +10,7 @@
 #     - delay:
 #         seconds: 12
 #     - service: telegram_bot.send_video
-#       data_template:
+#       data:
 #         file: "/tmp/driveway.mp4"
 # video_daisy:
 #   alias: "Daisy video"
@@ -21,7 +21,7 @@
 #     - delay:
 #         seconds: 13
 #     - service: telegram_bot.send_video
-#       data_template:
+#       data:
 #         file: "/tmp/daisy.mp4"
 # video_deck:
 #   alias: "deck video"
@@ -32,7 +32,7 @@
 #     - delay:
 #         seconds: 12
 #     - service: telegram_bot.send_video
-#       data_template:
+#       data:
 #         file: "/tmp/deck.mp4"
 # video_deckstairs:
 #   alias: "deckstairs video"
@@ -43,7 +43,7 @@
 #     - delay:
 #         seconds: 12
 #     - service: telegram_bot.send_video
-#       data_template:
+#       data:
 #         file: "/tmp/deckstairs.mp4"
 # video_garage:
 #   alias: "garage video"
@@ -54,7 +54,7 @@
 #     - delay:
 #         seconds: 12
 #     - service: telegram_bot.send_video
-#       data_template:
+#       data:
 #         file: "/tmp/garage.mp4"
 # video_kitchen:
 #   alias: "kitchen video"
@@ -65,7 +65,7 @@
 #     - delay:
 #         seconds: 12
 #     - service: telegram_bot.send_video
-#       data_template:
+#       data:
 #         file: "/tmp/kitchen.mp4"
 # video_doorbell:
 #   alias: "doorbell video"
@@ -76,26 +76,26 @@
 #     - delay:
 #         seconds: 12
 #     - service: telegram_bot.send_video
-#       data_template:
+#       data:
 #         file: "/tmp/doorbell.mp4"
 
 alarm:
   alias: "alarm"
   sequence:
-    - service: notify.telegram_jon
-      data_template:
+    - service: notify.mobile_app_jons_iphone
+      data:
         message: "⚠️ alarm active, do you want to disable this?"
         data:
           inline_keyboard:
             - "Yes:/turnoffnotification, No:/do_nothing"
-    - service: media_player.volume_set
-      data:
-        entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
-        volume_level: "0.90"
-    - service: tts.google_say
-      data:
-        entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
-        message: "alarm active! disable this on the keypad or on your phone!"
+    # - service: media_player.volume_set
+    #   data:
+    #     entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
+    #     volume_level: "0.90"
+    # - service: tts.google_say
+    #   data:
+    #     entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
+    #     message: "alarm active! disable this on the keypad or on your phone!"
     # - service: script.turn_on
     #   entity_id: script.send_videos
     - service: script.turn_on
@@ -127,8 +127,8 @@ garage_doors_check_and_close:
               entity_id: sensor.elkm1_single_garage
               state: "Violated"
         sequence:
-          - service: notify.telegram_jon
-            data_template:
+          - service: notify.mobile_app_jons_iphone
+            data:
               message: >
                 {% set double_garage_status = states('sensor.elkm1_double_garage') %}
                 {% set single_garage_status = states('sensor.elkm1_single_garage') %}
@@ -148,43 +148,81 @@ garage_doors_check_and_close:
                 - cover.single_garage_door
       default:
         - service: system_log.write
-          data_template:
+          data:
             message: "Garage door check was all good, nothing to do because both doors are closed."
             level: info
+
+check_lock_health:
+  alias: "check lock health"
+  sequence:
+    - variables:
+        unavailable_locks: >
+          {% set locks = ['lock.garage_lock', 'lock.workshop_lock', 'lock.mudroom_lock'] %}
+          {% set unavailable = [] %}
+          {% for lock in locks %}
+            {% if states(lock) == 'unavailable' %}
+              {% set unavailable = unavailable + [lock.split('.')[1].replace('_lock', '').title()] %}
+            {% endif %}
+          {% endfor %}
+          {{ unavailable }}
+    - condition: template
+      value_template: "{{ unavailable_locks | length > 0 }}"
+    - service: notify.mobile_app_jons_iphone
+      data:
+        title: "🔋 Lock Battery Alert!"
+        message: "{{ unavailable_locks | join(', ') }} lock(s) are unavailable. Check batteries!"
 
 lock_doors:
   alias: "lock doors"
   sequence:
-    - choose: # check  if vacation mode is on, then lock all doors
+    - choose: # check if vacation mode is on, then lock all doors
         - conditions: "{{ states('binary_sensor.vacation') == 'on' }}"
           sequence:
-            - service: notify.telegram_jon
-              data_template:
+            - service: notify.mobile_app_jons_iphone
+              data:
                 title: "🔒 Vacation is on, locked all doors"
                 message: "Hopefully you dont get locked out... 💀"
-            - delay: "00:01:30" # wait 90s before locking the doors so we can get out the garage
+            - delay: "00:01:30"
             - service: lock.lock
-              data:
+              target:
                 entity_id:
                   - lock.garage_lock
                   - lock.workshop_lock
                   - lock.mudroom_lock
-    - choose: # check the locks, notify & lock if unlocked
-        - conditions: "{{ states('sensor.number_of_non_vacation_doors_unlocked') | int > 0 }}"
+              continue_on_error: true
+    - choose: # check the locks, notify & lock if unlocked OR unavailable
+        - conditions: >
+            {{ states('sensor.number_of_non_vacation_doors_unlocked') | int > 0 
+               or states('lock.garage_lock') == 'unavailable'
+               or states('lock.workshop_lock') == 'unavailable'
+               or states('lock.mudroom_lock') == 'unavailable' }}
           sequence:
-            - service: notify.telegram_jon
-              data_template:
-                title: "🔒 {{ states('sensor.number_of_non_vacation_doors_unlocked') }} door(s) UNLOCKED!"
-                message: "Locking {{ states('sensor.non_vacation_doors_unlocked') }}"
-            - service: lock.lock
+            - service: notify.mobile_app_jons_iphone
               data:
+                title: "🔒 Locking doors..."
+                message: >
+                  {% set unlocked = states('sensor.non_vacation_doors_unlocked') %}
+                  {% set unavailable_locks = [
+                    states('lock.garage_lock') == 'unavailable' and 'Garage',
+                    states('lock.workshop_lock') == 'unavailable' and 'Workshop', 
+                    states('lock.mudroom_lock') == 'unavailable' and 'Mudroom'
+                  ] | select | list %}
+                  {% if unlocked != 'none' %}
+                    Locking {{ unlocked }}
+                  {% endif %}
+                  {% if unavailable_locks %}
+                    ⚠️ Warning: {{ unavailable_locks | join(', ') }} lock(s) unavailable (dead battery?)
+                  {% endif %}
+            - service: lock.lock
+              target:
                 entity_id:
                   - lock.workshop_lock
                   - lock.mudroom_lock
+              continue_on_error: true
       default:
         - service: system_log.write
-          data_template:
-            message: "Leaving, nothing to do though."
+          data:
+            message: "Leaving, all locks are secured or unavailable."
             level: info
 
 fans_off:
@@ -252,7 +290,7 @@ tvs_off_except_mainbed:
 # popup_camera:
 #   sequence:
 #     - service: browser_mod.command
-#       data_template:
+#       data:
 #         command: more-info
 #         entity_id: "{{ camera }}"
 #         deviceID:
@@ -261,7 +299,7 @@ tvs_off_except_mainbed:
 # set_temperature:
 #   sequence:
 #     - service: climate.set_temperature
-#       data_template:
+#       data:
 #         entity_id: "{{ entity_id }}"
 #         temperature: "{{ temperature }}"
 #         hvac_mode: "{{ mode }}"
@@ -269,22 +307,22 @@ tvs_off_except_mainbed:
 # sonos_say:
 #   sequence:
 #     - service: sonos.snapshot
-#       data_template:
+#       data:
 #         entity_id: "{{ sonos_entity }}"
 #     - service: sonos.unjoin
-#       data_template:
+#       data:
 #         entity_id: "{{ sonos_entity }}"
 #     - service: media_player.volume_set
-#       data_template:
+#       data:
 #         entity_id: "{{ sonos_entity }}"
 #         volume_level: "{{ volume }}"
 #     - service: tts.google_say
-#       data_template:
+#       data:
 #         entity_id: "{{ sonos_entity }}"
 #         message: "{{ message }}"
 #     - delay: "{{ delay }}"
 #     - service: sonos.restore
-#       data_template:
+#       data:
 #         entity_id: "{{ sonos_entity }}"
 
 # vacuum_kitchen:
@@ -309,7 +347,7 @@ tvs_off_except_mainbed:
 #   sequence:
 #     - service: tts.google_say
 #       entity_id: media_player.kitchen
-#       data_template:
+#       data:
 #         message: |
 #           {% if is_state("binary_sensor.macbook_pro_camera_in_use", "on") -%}
 #             Jon is probably in a meeting right now.
@@ -439,7 +477,7 @@ main_bed_position:
   sequence:
     - service: select.select_option
       target:
-        entity_id: select.sleepnumber_firmness_control_sleepiq_dual_boxed_foundation_preset_{{side}}
+        entity_id: select.sleep_number_bed_foundation_preset_{{side}}
       data:
         option: "{{state}}"
 
@@ -449,38 +487,14 @@ crestron_enter_standby:
   sequence:
     - service: shell_command.crestron
       data:
-        standby_action: 'EnterStandby'
+        standby_action: "EnterStandby"
 crestron_exit_standby:
   alias: "crestron exit standby"
   icon: mdi:tablet-cellphone
   sequence:
     - service: shell_command.crestron
       data:
-        standby_action: 'ExitStandby'
-
-frontyard_ptz:
-  alias: "frontyard ptz"
-  icon: mdi:cctv
-  sequence:
-    - action: onvif.ptz
-      target:
-        entity_id: camera.frontyard_onvif_mediaprofile_channel1_mainstream
-      data:
-        move_mode: GotoPreset
-        preset: >
-          {% if is_state('input_select.frontyard_ptz', 'home') %}
-            1
-          {% elif is_state('input_select.frontyard_ptz', 'right-road') %}
-            2
-          {% elif is_state('input_select.frontyard_ptz', 'door') %}
-            3
-          {% elif is_state('input_select.frontyard_ptz', 'right-front-yard') %}
-            4
-          {% elif is_state('input_select.frontyard_ptz', 'left-front-yard') %}
-            5
-          {% elif is_state('input_select.frontyard_ptz', 'right-road-zoom') %}
-            6
-          {% endif %}
+        standby_action: "ExitStandby"
 
 unlock_grilldeck:
   alias: unlock grilldeck
@@ -545,3 +559,11 @@ basement_lights_off:
     - service: homeassistant.turn_off
       target:
         entity_id: group.basement_lights
+
+bidet_toggle:
+  alias: toggle bidet
+  icon: mdi:toilet
+  sequence:
+    - service: homeassistant.toggle
+      target:
+        entity_id: switch.basement_bidet
