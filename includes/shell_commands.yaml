@@ -1,19 +1,9 @@
 ---
-# cam_driveway_vid: !secret cam_driveway_vid
-# cam_daisy_vid: !secret cam_daisy_vid
-# cam_deck_vid: !secret cam_deck_vid
-# cam_deckstairs_vid: !secret cam_deckstairs_vid
-# cam_garage_vid: !secret cam_garage_vid
-# cam_kitchen_vid: !secret cam_kitchen_vid
-# cam_doorbell_vid: !secret cam_doorbell_vid
-unifi_portfwd: /bin/bash /config/scripts/unifi.sh portfwd {{ username }} {{ password }} {{ baseurl }} {{ name }} {{ enabled }} {{ dst_port }} {{ ip }} {{ fwd_port }} {{ proto }} {{ id }} {{ unifi_site }} {{ src }}
-unifi_powercycle: /bin/bash /config/scripts/unifi.sh powercycleport {{ username }} {{ password }} {{ baseurl }} {{ mac }} {{ port }} {{ cmd }}
 unifi_powercycle_device: /bin/bash /config/scripts/unifi.sh powercycledevice {{ username }} {{ password }} {{ baseurl }} {{ mac }} {{ reboot_type }} {{ cmd }}
 trim_video: /usr/bin/ffmpeg -i {{ clip }} -t {{ duration }} -c copy {{ path }} -y
 download_file: /usr/bin/wget {{ url }} -O {{ download }}
 debian_shutdown: /usr/bin/ssh -i /config/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@192.168.30.249 "/usr/sbin/shutdown -h now"
 debian_restart: /usr/bin/ssh -i /config/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@192.168.30.249 "/usr/sbin/shutdown -r now"
-mount_frigate_nas: /usr/bin/ssh -i /config/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@192.168.30.249 -C "docker exec homeassistant bash -c 'mkdir -p /mnt/data/supervisor/media/frigate; if ! mountpoint /mnt/data/supervisor/media/frigate; then mount -t nfs4 192.168.30.242:/volume1/NetBackup /mnt/data/supervisor/media/frigate; fi'"
 cert_expiration: /usr/bin/ssh -i /config/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@192.168.30.249 -C "/usr/bin/openssl s_client -servername {{ server }} -connect {{ server }}:443 </dev/null 2>/dev/null | /usr/bin/openssl x509 -noout -enddate | sed 's/notAfter=//' | xargs -0 date +'%Y-%m-%d' -u -d | tr -d '\n'"
 container_cmd: /usr/bin/ssh -i /config/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@192.168.30.249 -C "docker {{ cmd }} {{ container }}"
 dahua_profile: /bin/bash /config/scripts/dahua.sh {{ profile }} {{ time }}

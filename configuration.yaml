@@ -72,7 +72,6 @@ calendar:
 adaptive_lighting: !include includes/adaptive_lighting.yaml
 alert: !include includes/alerts.yaml
 automation: !include automations.yaml
-automation yaml: !include automation.yaml
 camera: !include includes/cameras.yaml
 cover: !include includes/covers.yaml
 group: !include includes/groups.yaml
