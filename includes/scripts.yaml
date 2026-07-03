@@ -1,116 +1,79 @@
 ---
-# #############################
-# # 10 second videos
-# video_driveway:
-#   alias: "driveway video"
-#   sequence:
-#     - service: shell_command.cam_driveway_vid
-#       data:
-#         filename: /tmp/driveway.mp4
-#     - delay:
-#         seconds: 12
-#     - service: telegram_bot.send_video
-#       data:
-#         file: "/tmp/driveway.mp4"
-# video_daisy:
-#   alias: "Daisy video"
-#   sequence:
-#     - service: shell_command.cam_daisy_vid
-#       data:
-#         filename: /tmp/daisy.mp4
-#     - delay:
-#         seconds: 13
-#     - service: telegram_bot.send_video
-#       data:
-#         file: "/tmp/daisy.mp4"
-# video_deck:
-#   alias: "deck video"
-#   sequence:
-#     - service: shell_command.cam_deck_vid
-#       data:
-#         filename: /tmp/deck.mp4
-#     - delay:
-#         seconds: 12
-#     - service: telegram_bot.send_video
-#       data:
-#         file: "/tmp/deck.mp4"
-# video_deckstairs:
-#   alias: "deckstairs video"
-#   sequence:
-#     - service: shell_command.cam_deckstairs_vid
-#       data:
-#         filename: /tmp/deckstairs.mp4
-#     - delay:
-#         seconds: 12
-#     - service: telegram_bot.send_video
-#       data:
-#         file: "/tmp/deckstairs.mp4"
-# video_garage:
-#   alias: "garage video"
-#   sequence:
-#     - service: shell_command.cam_garage_vid
-#       data:
-#         filename: /tmp/garage.mp4
-#     - delay:
-#         seconds: 12
-#     - service: telegram_bot.send_video
-#       data:
-#         file: "/tmp/garage.mp4"
-# video_kitchen:
-#   alias: "kitchen video"
-#   sequence:
-#     - service: shell_command.cam_kitchen_vid
-#       data:
-#         filename: /tmp/kitchen.mp4
-#     - delay:
-#         seconds: 12
-#     - service: telegram_bot.send_video
-#       data:
-#         file: "/tmp/kitchen.mp4"
-# video_doorbell:
-#   alias: "doorbell video"
-#   sequence:
-#     - service: shell_command.cam_doorbell_vid
-#       data:
-#         filename: /tmp/doorbell.mp4
-#     - delay:
-#         seconds: 12
-#     - service: telegram_bot.send_video
-#       data:
-#         file: "/tmp/doorbell.mp4"
-
 alarm:
   alias: "alarm"
+  mode: restart
+  fields:
+    alarm_type:
+      description: "Type of alarm: burglar or fire (defaults to burglar)"
+      default: burglar
+      selector:
+        select:
+          options:
+            - burglar
+            - fire
   sequence:
-    - service: notify.mobile_app_jons_iphone
-      data:
-        message: "⚠️ alarm active, do you want to disable this?"
-        data:
-          inline_keyboard:
-            - "Yes:/turnoffnotification, No:/do_nothing"
-    # - service: media_player.volume_set
-    #   data:
-    #     entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
-    #     volume_level: "0.90"
-    # - service: tts.google_say
-    #   data:
-    #     entity_id: media_player.office_googlehome, media_player.main_display, media_player.basement_googlehome
-    #     message: "alarm active! disable this on the keypad or on your phone!"
-    # - service: script.turn_on
-    #   entity_id: script.send_videos
-    - service: script.turn_on
-      entity_id: script.alarm_loop
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.alarm_notifier
 
-alarm_loop:
-  alias: "alarm loop"
+    - repeat:
+        while:
+          - condition: state
+            entity_id: input_boolean.alarm_notifier
+            state: "on"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ (alarm_type | default('burglar')) == 'fire' }}"
+                sequence:
+                  - service: notify.mobile_app_jons_iphone
+                    data:
+                      title: "🔥 FIRE ALARM"
+                      message: "Fire alarm active. Tap to acknowledge."
+                      data:
+                        push:
+                          sound:
+                            name: default
+                            critical: 1
+                            volume: 1.0
+                          interruption-level: critical
+                        tag: "fire_alarm"
+                        actions:
+                          - action: "ACKNOWLEDGE_FIRE_ALARM"
+                            title: "✅ Acknowledge"
+                            destructive: true
+            default:
+              - service: notify.mobile_app_jons_iphone
+                data:
+                  title: "🚨 BURGLAR ALARM"
+                  message: "Burglar alarm active. Tap to disable."
+                  data:
+                    push:
+                      sound:
+                        name: default
+                        critical: 1
+                        volume: 1.0
+                      interruption-level: critical
+                    tag: "burglar_alarm"
+                    actions:
+                      - action: "DISABLE_BURGLAR_ALARM"
+                        title: "🛑 Disable Alarm"
+                        destructive: true
+          - delay:
+              seconds: 60
+
+disarm_elk:
+  alias: "disarm elk panel"
   sequence:
-    - condition: state
-      entity_id: input_boolean.alarm_notifier
-      state: "on"
-    - delay:
-        seconds: 60
-    - service: script.turn_on
-      entity_id: script.alarm
+    - service: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.alarm_notifier
+    - service: alarm_control_panel.alarm_disarm
+      target:
+        entity_id: alarm_control_panel.elkm1_area_1
+      data:
+        code: !secret elk_disarm_code
 
 # check if the garage doors are violated & notify & close
 garage_doors_check_and_close:
@@ -477,7 +440,7 @@ main_bed_position:
   sequence:
     - service: select.select_option
       target:
-        entity_id: select.sleep_number_bed_foundation_preset_{{side}}
+        entity_id: select.64_db_a0_b1_1e_5a_foundation_preset_{{side}}
       data:
         option: "{{state}}"
 

@@ -1,0 +1,18 @@
+- resource: http://192.168.31.64:8000/bio?arg=MADX
+  scan_interval: 5
+  sensor:
+    - name: "Sleep Number Right Normalized"
+      value_template: >
+        {{ value | regex_findall('normalized<\\s*(\\d+)>') | first | int(0) }}
+    - name: "Sleep Number Left Normalized"
+      value_template: >
+        {{ value | regex_findall('normalized<\\s*(\\d+)>') | last | int(0) }}
+- resource: "https://api.pagerduty.com/incidents?user_ids[]=PY1YWIV&statuses[]=triggered"
+  headers:
+    Authorization: !secret pagerduty_token
+  scan_interval: 15
+  sensor:
+    - name: "PagerDuty Triggered Incidents"
+      value_template: "{{ value_json.incidents | length }}"
+      json_attributes:
+        - incidents

@@ -84,6 +84,7 @@ intent_script: !include includes/intent_scripts.yaml
 light: !include includes/lights.yaml
 mqtt: !include includes/mqtt.yaml
 rest_command: !include includes/rest_commands.yaml
+rest: !include includes/rest.yaml
 scene: !include includes/scenes.yaml
 script: !include includes/scripts.yaml
 sensor: !include includes/sensors.yaml
@@ -94,8 +95,6 @@ zone: !include includes/zones.yaml
 
 logger:
   default: warning
-  logs:
-    custom_components.sleepnumber_ble: debug
 
 history:
 websocket_api:

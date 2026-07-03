@@ -1343,40 +1343,6 @@
       - action: shell_command.debian_shutdown
         data: {}
   mode: single
-- id: '1740320118816'
-  alias: 'Work: pagerduty notification - notify'
-  description: if its not daytime and Jon is home turn on his lamp
-  triggers:
-  - trigger: event
-    event_type: imap_content
-    event_data:
-      sender: no-reply@pagerduty.com
-  conditions: []
-  actions:
-  - action: notify.mobile_app_jons_iphone
-    metadata: {}
-    data:
-      message: Work page!
-      data:
-        push:
-          sound:
-            name: default
-            critical: 1
-            volume: 1
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ not is_state(''sensor.period_of_day'', ''day'') and is_state(''person.jon'',
-          ''home'') }}'
-        alias: Not day && Jon home
-      sequence:
-      - action: light.turn_on
-        metadata: {}
-        data:
-          brightness_pct: 100
-        target:
-          device_id: 164a22bbc788a3c9f7b1e548e8d562f0
-  mode: single
 - id: '1740320164349'
   alias: 'Security: Elk Alarm trouble notification'
   description: ''
@@ -2199,8 +2165,6 @@
     to: fire_alarm
   conditions: []
   actions:
-  - action: input_boolean.turn_on
-    entity_id: input_boolean.alarm_notifier
   - action: lock.unlock
     data:
       entity_id:
@@ -2208,7 +2172,8 @@
       - lock.workshop_lock
       - lock.mudroom_lock
   - action: script.alarm
-    data: {}
+    data:
+      alarm_type: fire
   mode: single
 - id: '1740321068345'
   alias: 'Alarm: burglar active & lights on & send videos & repeat notifications'
@@ -2222,7 +2187,8 @@
   - action: button.press
     entity_id: button.basement_equipment_room_homeowner_kp01_position_4_keypad_burglar
   - action: script.alarm
-    data: {}
+    data:
+      alarm_type: burglar
   mode: single
 - id: '1740321134403'
   alias: 'Blinds: close appropriate blinds based on azimuth'
@@ -2251,13 +2217,21 @@
   conditions:
   - condition: template
     value_template: '{{ now().month >= 6 or now().month <= 10 }}'
+  - condition: state
+    entity_id: binary_sensor.vacation
+    state:
+    - 'off'
   actions:
   - choose:
     - conditions:
       - condition: trigger
         id: west_close
-      - '{{ is_state(''input_boolean.west_blinds_run_once'', ''off'') }}'
-      - '{{ is_state(''binary_sensor.shades_should_close'', ''on'') }}'
+      - condition: template
+        value_template: '{{ is_state(''input_boolean.west_blinds_run_once'', ''off'')
+          }}'
+      - condition: template
+        value_template: '{{ is_state(''binary_sensor.shades_should_close'', ''on'')
+          }}'
       sequence:
       - action: cover.set_cover_position
         data:
@@ -2560,9 +2534,85 @@
     metadata: {}
     data:
       message: button pressed
+      title: Doorbell
       data:
         image: /local/doorbell_latest.jpg
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1
+  - action: notify.mobile_app_lauras_iphone
+    metadata: {}
+    data:
+      message: button pressed
       title: Doorbell
+      data:
+        image: /local/doorbell_latest.jpg
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1
+    enabled: true
+  - if:
+    - condition: time
+      after: 08:00:00
+      before: '20:00:00'
+    then:
+    - data: {}
+      action: sonos.snapshot
+      target:
+        device_id:
+        - 07b29092f142cd2ba3b632feeadb4326
+        - f3e123bf7ccc3b4b49ec333993fe1319
+    - action: media_player.media_stop
+      metadata: {}
+      data: {}
+      target:
+        device_id:
+        - 07b29092f142cd2ba3b632feeadb4326
+        - f3e123bf7ccc3b4b49ec333993fe1319
+    - action: media_player.volume_set
+      metadata: {}
+      data:
+        volume_level: 0.5
+      target:
+        device_id:
+        - 07b29092f142cd2ba3b632feeadb4326
+        - f3e123bf7ccc3b4b49ec333993fe1319
+    - data:
+        media:
+          media_content_id: media-source://media_source/local/misc/chime.mp3
+          media_content_type: audio/mpeg
+          metadata:
+            title: chime.mp3
+            thumbnail:
+            media_class: music
+            children_media_class:
+            navigateIds:
+            - {}
+            - media_content_type: app
+              media_content_id: media-source://media_source
+            - media_content_type: ''
+              media_content_id: media-source://media_source/local/misc
+            browse_entity_id: media_player.kitchen
+      action: media_player.play_media
+      target:
+        device_id:
+        - 07b29092f142cd2ba3b632feeadb4326
+        - f3e123bf7ccc3b4b49ec333993fe1319
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 3
+        milliseconds: 0
+    - data: {}
+      action: sonos.restore
+      target:
+        device_id:
+        - 07b29092f142cd2ba3b632feeadb4326
+        - f3e123bf7ccc3b4b49ec333993fe1319
   mode: single
 - id: '1742136950218'
   alias: foyer motion lights
@@ -3020,20 +3070,15 @@
   alias: stair shade
   description: ''
   triggers:
-  - trigger: state
-    entity_id:
-    - binary_sensor.sleeping
-    from:
-    - 'on'
-    to:
-    - 'off'
   - trigger: time
-    at: 08:00:00
+    at: 09:00:00
   conditions:
   - condition: state
     entity_id: binary_sensor.vacation
     state:
     - 'off'
+  - condition: time
+    after: 06:30:00
   actions:
   - device_id: 6c222de0e75672a6c3a404b5e5ba6799
     domain: cover
@@ -3043,3 +3088,111 @@
       secondary: false
     position: 100
   mode: single
+- id: '1779970969083'
+  alias: close main bathroom shade when fan turns on at night
+  description: if the main bathroom fan turns on, it likely means somebody is going
+    to shower, so go ahead and close the shade.
+  triggers:
+  - trigger: state
+    entity_id:
+    - switch.upstairs_main_bathroom_fan
+    from:
+    - 'off'
+    to:
+    - 'on'
+  conditions:
+  - condition: time
+    after: '18:00:00'
+  actions:
+  - action: cover.close_cover
+    metadata: {}
+    target:
+      entity_id: cover.upstairs_main_bathroom_shade
+    data: {}
+  mode: single
+- id: '1780007538273'
+  alias: PagerDuty Alert
+  description: Fires when Jon gets a PagerDuty page. Sends critical push notification
+    and turns on bedroom light if nighttime and home.
+  triggers:
+  - entity_id: sensor.pagerduty_triggered_incidents
+    above: 0
+    trigger: numeric_state
+  actions:
+  - action: notify.mobile_app_jons_iphone
+    data:
+      message: "\U0001F6A8 PagerDuty: {{ state_attr('sensor.pagerduty_triggered_incidents','incidents')[0].title
+        }}\nService: {{ state_attr('sensor.pagerduty_triggered_incidents','incidents')[0].service.summary
+        }}\nUrgency: {{ state_attr('sensor.pagerduty_triggered_incidents','incidents')[0].urgency
+        }}"
+      data:
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1
+          interruption-level: critical
+        url: '{{ state_attr(''sensor.pagerduty_triggered_incidents'',''incidents'')[0].html_url
+          }}'
+      title: Work Page!
+  - choose:
+    - alias: Not day and Jon home
+      conditions:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: sensor.period_of_day
+          state: day
+      - condition: state
+        entity_id: person.jon
+        state: home
+      sequence:
+      - action: light.turn_on
+        data:
+          brightness_pct: 100
+        target:
+          device_id: 164a22bbc788a3c9f7b1e548e8d562f0
+  mode: single
+- id: '1782675725134'
+  alias: 'Alarm: handle notification actions'
+  description: iOS actionable notification handler for burglar/fire alarm events.
+    Turns off the alarm_notifier kill-switch (silencing script.alarm's repeat loop),
+    then disarms Elk for burglar or just confirms acknowledgment for fire.
+  triggers:
+  - trigger: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: DISABLE_BURGLAR_ALARM
+    id: disable_burglar
+  - trigger: event
+    event_type: mobile_app_notification_action
+    event_data:
+      action: ACKNOWLEDGE_FIRE_ALARM
+    id: ack_fire
+  actions:
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.alarm_notifier
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: disable_burglar
+      sequence:
+      - action: script.disarm_elk
+      - action: notify.mobile_app_jons_iphone
+        data:
+          title: ✅ Burglar Alarm Disabled
+          message: Panel disarmed via notification.
+          data:
+            tag: burglar_alarm
+    - conditions:
+      - condition: trigger
+        id: ack_fire
+      sequence:
+      - action: notify.mobile_app_jons_iphone
+        data:
+          title: ✅ Fire Alarm Acknowledged
+          message: Repeat notifications silenced. Verify physically.
+          data:
+            tag: fire_alarm
+  mode: parallel

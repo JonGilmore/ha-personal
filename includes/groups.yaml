@@ -272,7 +272,7 @@ all_fans:
   name: All Fans
   entities:
     - fan.upstairs_main_bedroom_fan
-    - fan.office_fan
+    - fan.basement_office_basement_office_fan
     - fan.exterior_patio_fan
     - switch.main_floor_sunroom_fan
     - fan.evelyns_fan
@@ -377,6 +377,7 @@ all_shades:
     - cover.main_floor_kitchen_south_shades
     - cover.main_floor_library_shade
     - cover.main_floor_sunroom_door_shades
+    - cover.main_floor_sunroom_east_shade
     - cover.main_floor_sunroom_west_shades
     - cover.upstairs_main_bathroom_shade
     - cover.upstairs_main_bedroom_shade
@@ -390,6 +391,7 @@ main_floor_shades:
     - cover.main_floor_kitchen_south_shades
     - cover.main_floor_library_shade
     - cover.main_floor_sunroom_door_shades
+    - cover.main_floor_sunroom_east_shade
     - cover.main_floor_sunroom_west_shades
 
 upstairs_shades:

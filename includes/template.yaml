@@ -1,5 +1,15 @@
 # yaml-language-server: $schema=https://cdn.jsdelivr.net/npm/homeassistant-js-yaml-schema@1.1.1/src/index.min.js
 - binary_sensor:
+    - name: "Sleep Number Right Occupied"
+      device_class: occupancy
+      state: "{{ states('sensor.sleep_number_right_normalized') | int(0) > 9200 }}"
+      delay_on: "00:00:03"
+      delay_off: "00:00:15"
+    - name: "Sleep Number Left Occupied"
+      device_class: occupancy
+      state: "{{ states('sensor.sleep_number_left_normalized') | int(0) > 4950 }}"
+      delay_on: "00:00:03"
+      delay_off: "00:00:15"
     - name: "Shades Should Close"
       unique_id: binary_sensor.shades_should_close
       # inspiration: https://community.home-assistant.io/t/automatic-blinds-sunscreen-control-based-on-sun-platform/573818/193
@@ -307,10 +317,6 @@
         or states('sensor.upper_level_hvac_action') == "cooling" }}
 
 - sensor:
-    - name: "Platerecognizer API Calls Remaining"
-      unique_id: platerecognizer_api_calls_remaining
-      icon: mdi:api
-      state: "{{ state_attr('image_processing.platerecognizer_driveway', 'statistics').calls_remaining }}"
     - name: recycle
       icon: mdi:garbage
       unique_id: recycle
@@ -382,11 +388,11 @@
       state: "{{ expand('lock.garage_lock', 'lock.mudroom_lock', 'lock.workshop_lock')|selectattr('state', 'eq', 'unlocked')|list|length }}"
       unique_id: doors_unlocked_number
     - name: "Number of Non-vacation Doors Unlocked"
-      state: "{{ states | selectattr('entity_id', 'in', state_attr('group.door_locks_shop_mudroom', 'entity_id')) | selectattr('state', 'eq', 'unlocked') | list | count }}"
+      state: "{{ states | selectattr('entity_id', 'in', state_attr('group.door_locks_shop_mudroom', 'entity_id') or []) | selectattr('state', 'eq', 'unlocked') | list | count }}"
       unique_id: number_of_non_vacation_doors_unlocked
       # icon: "{{ 'mdi:lock-open' if states(this.entity_id) | int > 0 else 'mdi:lock' }}"
     - name: "Non-vacation Doors Unlocked"
-      state: "{{ states | selectattr('entity_id', 'in', state_attr('group.door_locks_shop_mudroom', 'entity_id'))|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
+      state: "{{ states | selectattr('entity_id', 'in', state_attr('group.door_locks_shop_mudroom', 'entity_id') or [])|selectattr('state', 'equalto', 'unlocked')|list|map(attribute='name')| list|join(', ') }}"
       unique_id: non_vacation_doors_unlocked
       # icon: "{{ 'mdi:lock-open' if states(this.entity_id) | int > 0 else 'mdi:lock' }}"
     - name: "Doors Open"

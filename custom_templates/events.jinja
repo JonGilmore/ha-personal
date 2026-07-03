@@ -1,31 +1,19 @@
 {% macro events() %}
     {% set anniversaries = namespace(sensors=[]) %}
     {% for key, value in kwargs.items() %}
-        {% for state in states.sensor %}
-            {% if key == 'equal' %}
-                {% if state.object_id.startswith('template_anniversary_') and state.state | int == value %}
-                    {% set anniversary = {
-                        'name': state.attributes.friendly_name.replace('Anniversary ', ''),
-                        'days': state.state | int,
-                        'next_date': as_timestamp(state.attributes.next_date) | timestamp_custom('%m/%d/%Y'),
-                        'date': as_timestamp(state.attributes.date) | timestamp_custom('%m/%d/%Y'),
-                        'years_at_anniversary': state.attributes.years_at_anniversary if 'years_at_anniversary' in state.attributes else None
-                    } %}
-                    {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-                {% endif %}
-            {% else %}
-                {% if state.object_id.startswith('template_anniversary_') and state.state | int <= value %}
-                    {% set anniversary = {
-                        'name': state.attributes.friendly_name.replace('Anniversary ', ''),
-                        'days': state.state | int,
-                        'next_date': as_timestamp(state.attributes.next_date) | timestamp_custom('%m/%d/%Y'),
-                        'date': as_timestamp(state.attributes.date) | timestamp_custom('%m/%d/%Y'),
-                        'years_at_anniversary': state.attributes.years_at_anniversary if 'years_at_anniversary' in state.attributes else None
-                    } %}
-                    {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-                {% endif %}
+        {% for state in states.sensor if state.object_id.startswith('template_anniversary_') and state.state is not none and state.state not in ['unavailable', 'unknown', 'none'] %}
+            {% set days = state.state | int(-1) %}
+            {% if days >= 0 and ((key == 'equal' and days == value) or (key != 'equal' and days <= value)) %}
+                {% set anniversary = {
+                    'name': state.attributes.friendly_name.replace('Anniversary ', ''),
+                    'days': days,
+                    'next_date': as_timestamp(state.attributes.next_date) | timestamp_custom('%m/%d/%Y'),
+                    'date': as_timestamp(state.attributes.date) | timestamp_custom('%m/%d/%Y'),
+                    'years_at_anniversary': state.attributes.years_at_anniversary if 'years_at_anniversary' in state.attributes else None
+                } %}
+                {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
             {% endif %}
-        {% endfor %}        
+        {% endfor %}
     {%- endfor -%}
     {{ anniversaries.sensors | sort(attribute='days') }}
 {% endmacro %}
@@ -33,19 +21,13 @@
 {% macro events_bool() %}
     {% set anniversaries = namespace(sensors=[]) %}
     {% for key, value in kwargs.items() %}
-        {% for state in states.sensor %}
-            {% if key == 'equal' %}
-                {% if state.object_id.startswith('template_anniversary_') and state.state | int == value %}
-                    {% set anniversary = {'name': state.attributes.friendly_name.replace('Anniversary ', '')} %}
-                    {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-                {% endif %}
-            {% else %}
-                {% if state.object_id.startswith('template_anniversary_') and state.state | int <= value %}
-                    {% set anniversary = {'name': state.attributes.friendly_name.replace('Anniversary ', '')} %}
-                    {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
-                {% endif %}
+        {% for state in states.sensor if state.object_id.startswith('template_anniversary_') and state.state is not none and state.state not in ['unavailable', 'unknown', 'none'] %}
+            {% set days = state.state | int(-1) %}
+            {% if days >= 0 and ((key == 'equal' and days == value) or (key != 'equal' and days <= value)) %}
+                {% set anniversary = {'name': state.attributes.friendly_name.replace('Anniversary ', '')} %}
+                {% set anniversaries.sensors = anniversaries.sensors + [anniversary] %}
             {% endif %}
-        {% endfor %}        
+        {% endfor %}
     {%- endfor -%}
     {{ anniversaries.sensors | length > 0 }}
 {% endmacro %}
