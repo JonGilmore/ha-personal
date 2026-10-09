@@ -1,8 +1,4 @@
 ---
-# todoist:
-#   method: post
-#   url: "https://api.todoist.com/sync/v9/{{ url }}"
-#   payload: "{{ payload }}"
-#   headers:
-#     Authorization: !secret todoist
-#   content_type: "application/x-www-form-urlencoded"
+frame_launch_app:
+  url: "http://192.168.30.23:8001/api/v2/applications/{{ app_id }}"
+  method: post

@@ -1,0 +1,12 @@
+---
+disarm_elk:
+  alias: disarm elk panel
+  sequence:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.alarm_notifier
+    - action: alarm_control_panel.alarm_disarm
+      target:
+        entity_id: alarm_control_panel.elkm1_area_1
+      data:
+        code: !secret elk_disarm_code
