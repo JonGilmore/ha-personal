@@ -1,6 +1,4 @@
 ---
-scene.equipment_room_enclosure_device_001_ph_all_off:
-  friendly_name: all off
 fan.exterior_patio_fan:
   icon: mdi:ceiling-fan
 fan.main_floor_powder_room_fan:

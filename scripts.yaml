@@ -18,3 +18,667 @@ unlock_garage_door:
   alias: unlock garage door
   description: ''
   icon: mdi:lock-open-variant
+unlock_grilldeck:
+  alias: unlock grilldeck
+  icon: mdi:lock-open
+  sequence:
+  - target:
+      entity_id: lock.mudroom_lock
+    action: lock.unlock
+all_off:
+  alias: all off
+  sequence:
+  - action: button.press
+    entity_id: button.basement_equipment_room_homeowner_kp01_position_1_keypad_all_off
+  - action: homeassistant.turn_off
+    target:
+      entity_id:
+      - light.jons_lamp
+      - light.lauras_lamp
+alarm:
+  alias: alarm
+  fields:
+    alarm_type:
+      default: burglar
+      description: 'Type of alarm: burglar or fire (defaults to burglar)'
+      selector:
+        select:
+          options:
+          - burglar
+          - fire
+  mode: restart
+  sequence:
+  - action: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.alarm_notifier
+  - repeat:
+      sequence:
+      - choose:
+        - conditions:
+          - condition: template
+            value_template: '{{ (alarm_type | default(''burglar'')) == ''fire'' }}'
+          sequence:
+          - action: notify.mobile_app_jons_iphone
+            data:
+              data:
+                actions:
+                - action: ACKNOWLEDGE_FIRE_ALARM
+                  destructive: true
+                  title: ✅ Acknowledge
+                push:
+                  interruption-level: critical
+                  sound:
+                    critical: 1
+                    name: default
+                    volume: 1
+                tag: fire_alarm
+              message: Fire alarm active. Tap to acknowledge.
+              title: "\U0001F525 FIRE ALARM"
+        default:
+        - action: notify.mobile_app_jons_iphone
+          data:
+            data:
+              actions:
+              - action: DISABLE_BURGLAR_ALARM
+                destructive: true
+                title: "\U0001F6D1 Disable Alarm"
+              push:
+                interruption-level: critical
+                sound:
+                  critical: 1
+                  name: default
+                  volume: 1
+              tag: burglar_alarm
+            message: Burglar alarm active. Tap to disable.
+            title: "\U0001F6A8 BURGLAR ALARM"
+      - delay:
+          seconds: 60
+      while:
+      - condition: state
+        entity_id: input_boolean.alarm_notifier
+        state: 'on'
+tvs_off:
+  alias: all tvs off
+  sequence:
+  - alias: LG TVs off (Glasshouse MQTT)
+    action: button.press
+    continue_on_error: true
+    target:
+      entity_id:
+      - button.sunroom_power_off_tv
+      - button.great_room_power_off_tv
+      - button.media_room_power_off_tv
+      - button.gym_power_off_tv
+      - button.garage_power_off_tv
+  - alias: Non-LG TVs off
+    action: media_player.turn_off
+    continue_on_error: true
+    target:
+      entity_id:
+      - media_player.office_tv
+      - media_player.main_bedroom_tv
+      - media_player.workshop_tv
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.show_screen
+      - light.kitchen_screen
+tvs_off_except_mainbed:
+  alias: all tvs off except main bed
+  sequence:
+  - alias: LG TVs off (Glasshouse MQTT)
+    action: button.press
+    continue_on_error: true
+    target:
+      entity_id:
+      - button.sunroom_power_off_tv
+      - button.great_room_power_off_tv
+      - button.media_room_power_off_tv
+      - button.gym_power_off_tv
+      - button.garage_power_off_tv
+  - alias: Non-LG TVs off
+    action: media_player.turn_off
+    continue_on_error: true
+    target:
+      entity_id:
+      - media_player.office_tv
+      - media_player.workshop_tv
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.show_screen
+      - light.kitchen_screen
+basement_lights_off:
+  alias: basement lights off
+  icon: mdi:lightbulb-off
+  sequence:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: group.basement_lights
+check_lock_health:
+  alias: check lock health
+  sequence:
+  - variables:
+      unavailable_locks: "{% set locks = ['lock.garage_lock', 'lock.workshop_lock',
+        'lock.mudroom_lock'] %} {% set unavailable = [] %} {% for lock in locks %}\n
+        \ {% if states(lock) == 'unavailable' %}\n    {% set unavailable = unavailable
+        + [lock.split('.')[1].replace('_lock', '').title()] %}\n  {% endif %}\n{%
+        endfor %} {{ unavailable }}\n"
+  - condition: template
+    value_template: '{{ unavailable_locks | length > 0 }}'
+  - action: notify.mobile_app_jons_iphone
+    data:
+      message: '{{ unavailable_locks | join('', '') }} lock(s) are unavailable. Check
+        batteries!'
+      title: "\U0001F50B Lock Battery Alert!"
+crestron_enter_standby:
+  alias: crestron enter standby
+  icon: mdi:tablet
+  sequence:
+  - action: shell_command.crestron
+    data:
+      standby_action: EnterStandby
+crestron_exit_standby:
+  alias: crestron exit standby
+  icon: mdi:tablet-cellphone
+  sequence:
+  - action: shell_command.crestron
+    data:
+      standby_action: ExitStandby
+delete_lock_code:
+  alias: Delete Lock Code
+  icon: mdi:delete-circle
+  sequence:
+  - action: zwave_js.clear_lock_usercode
+    data:
+      code_slot: '{{ states("input_select.lock_code_slot") | int }}'
+    target:
+      entity_id:
+      - lock.garage_lock
+      - lock.workshop_lock
+      - lock.mudroom_lock
+exterior_auxiliary_lights_off:
+  alias: exterior auxiliary lights off
+  icon: mdi:lightbulb-off
+  sequence:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: group.exterior_auxiliary_lights
+exterior_lights_off:
+  alias: exterior lights off
+  icon: mdi:lightbulb-off
+  sequence:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: group.exterior_lights
+fans_off:
+  alias: fans off
+  sequence:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: group.all_fans
+garage_doors_check_and_close:
+  alias: Garage Doors Check and Close
+  sequence:
+  - choose:
+      conditions:
+        condition: or
+        conditions:
+        - condition: state
+          entity_id: sensor.elkm1_double_garage
+          state: Violated
+        - condition: state
+          entity_id: sensor.elkm1_single_garage
+          state: Violated
+      sequence:
+      - action: notify.mobile_app_jons_iphone
+        data:
+          message: "{% set double_garage_status = states('sensor.elkm1_double_garage')
+            %} {% set single_garage_status = states('sensor.elkm1_single_garage')
+            %} {% if double_garage_status == 'Violated' %}\n  Double garage door is
+            open.\n{% endif %} {% if single_garage_status == 'Violated' %}\n  Single
+            garage door is open.\n{% endif %} {% if double_garage_status == 'Violated'
+            and single_garage_status == 'Violated' %}\n  Both garage doors are open.\n{%
+            endif %}\n"
+      - action: cover.close_cover
+        target:
+          entity_id:
+          - cover.double_garage_door
+          - cover.single_garage_door
+    default:
+    - action: system_log.write
+      data:
+        level: info
+        message: Garage door check was all good, nothing to do because both doors
+          are closed.
+interior_lights_off:
+  alias: interior lights off
+  sequence:
+  - action: button.press
+    entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_interior_lights_off
+  - action: homeassistant.turn_off
+    target:
+      entity_id:
+      - light.jons_lamp
+      - light.lauras_lamp
+lock_doors:
+  alias: lock doors
+  sequence:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.vacation
+        state: 'on'
+      sequence:
+      - action: notify.mobile_app_jons_iphone
+        data:
+          message: "Hopefully you dont get locked out... \U0001F480"
+          title: "\U0001F512 Vacation is on, locked all doors"
+      - delay: 00:01:30
+      - action: lock.lock
+        continue_on_error: true
+        target:
+          entity_id:
+          - lock.garage_lock
+          - lock.workshop_lock
+          - lock.mudroom_lock
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: numeric_state
+          entity_id: sensor.number_of_non_vacation_doors_unlocked
+          above: 0
+        - condition: state
+          entity_id:
+          - lock.garage_lock
+          - lock.workshop_lock
+          - lock.mudroom_lock
+          state: unavailable
+          match: any
+      sequence:
+      - action: notify.mobile_app_jons_iphone
+        data:
+          message: "{% set unlocked = states('sensor.non_vacation_doors_unlocked')
+            %}{% set unavailable_locks = [\n  states('lock.garage_lock') == 'unavailable'
+            and 'Garage',\n  states('lock.workshop_lock') == 'unavailable' and 'Workshop',\n
+            \ states('lock.mudroom_lock') == 'unavailable' and 'Mudroom'\n] | select
+            | list %}{% if unlocked not in ['', 'none', 'unknown', 'unavailable']
+            %}\n  Locking {{ unlocked }}\n{% endif %}{% if unavailable_locks %}\n
+            \ ⚠️ Warning: {{ unavailable_locks | join(', ') }} lock(s) unavailable
+            (dead battery?)\n{% endif %}\n"
+          title: "\U0001F512 Locking doors..."
+      - action: lock.lock
+        continue_on_error: true
+        target:
+          entity_id:
+          - lock.workshop_lock
+          - lock.mudroom_lock
+    default:
+    - action: system_log.write
+      data:
+        level: info
+        message: Leaving, all locks are secured or unavailable.
+main_bed_position:
+  alias: main bed position
+  fields:
+    side:
+      description: bed side
+      example: valid values are left, right
+    state:
+      description: bed position
+      example: valid values are Not at preset, Favorite, Read, Watch TV, Flat, Zero
+        G, Snore
+  sequence:
+  - action: select.select_option
+    data:
+      option: '{{state}}'
+    target:
+      entity_id: select.64_db_a0_b1_1e_5a_foundation_preset_{{side}}
+main_lights_off:
+  alias: main lights off
+  icon: mdi:lightbulb-off
+  sequence:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: group.main_floor_lights
+movie_on:
+  alias: movie on
+  sequence:
+  - action: cover.close_cover
+    entity_id: cover.basement_media_room_shades
+  - action: light.turn_on
+    entity_id: light.basement_media_room_cabinets
+night_adaptive_lighting:
+  alias: night adaptive lighting
+  description: script to turn on or off adaptive lighting sleep mode
+  fields:
+    state:
+      description: state of adaptive lighting
+      example: valid values are turn_on or turn_off
+  sequence:
+  - action: homeassistant.{{ state }}
+    target:
+      entity_id:
+      - switch.adaptive_lighting_sleep_mode_default
+      - switch.adaptive_lighting_sleep_mode_main_bathroom
+tvs_notify:
+  alias: notify all tvs
+  fields:
+    msg:
+      description: message to send to tvs
+      example: Doorbell rang!
+  sequence:
+  - alias: Toast on LG TVs (Glasshouse MQTT)
+    action: text.set_value
+    continue_on_error: true
+    target:
+      entity_id:
+      - text.sunroom_screen_notification
+      - text.great_room_screen_notification
+      - text.garage_screen_notification
+      - text.media_room_screen_notification
+      - text.gym_screen_notification
+    data:
+      value: '{{ msg }}'
+send_dynamic_notification:
+  alias: send dynamic notification
+  sequence:
+  - action: notify.mobile_app_jons_iphone
+    data:
+      data:
+        attachment:
+          url: /api/frigate/notifications/{{id}}/snapshot.jpg
+        clickAction: https://homeassistant.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4
+        group: frigate-notification-{{camera}}
+        image: /api/frigate/notifications/{{id}}/snapshot.jpg
+        tag: '{{ id }}'
+        url: https://homeassistant.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4
+      message: '{{label | title}} detected in {{after_zones[0] }}'
+      title: '{{label | title}} detected on {{trigger.payload_json["after"]["camera"]
+        | replace("_", "") | title }}'
+set_lock_code:
+  alias: Set Lock Code
+  icon: mdi:arrow-right-bold-circle
+  sequence:
+  - action: zwave_js.set_lock_usercode
+    data:
+      code_slot: '{{ states("input_select.lock_code_slot") | int }}'
+      usercode: "{% if is_state('input_select.lock_code_slot','01') %}\n  {{ \"%04d\"
+        % states('input_number.lock_code')|int }}\n{% elif is_state('input_select.lock_code_slot','02')
+        %}\n  {{ \"%04d\" % states('input_number.lock_code')|int }}\n{% elif is_state('input_select.lock_code_slot','03')
+        %}\n  {{ \"%04d\" % states('input_number.lock_code')|int }}\n{% elif is_state('input_select.lock_code_slot','04')
+        %}\n  {{ \"%04d\" % states('input_number.lock_code')|int }}\n{% endif %}\n"
+    target:
+      entity_id:
+      - lock.garage_lock
+      - lock.workshop_lock
+      - lock.mudroom_lock
+bidet_toggle:
+  alias: toggle bidet
+  icon: mdi:toilet
+  sequence:
+  - action: homeassistant.toggle
+    target:
+      entity_id: switch.basement_bidet
+toggle_motion_lights:
+  alias: toggle motion lights
+  icon: mdi:motion-sensor
+  sequence:
+  - action: homeassistant.toggle
+    target:
+      entity_id: input_boolean.block_interior_motion_lights
+toggle_single_garage:
+  alias: toggle single garage
+  icon: mdi:garage
+  sequence:
+  - action: cover.toggle
+    target:
+      entity_id: cover.single_garage_door
+upstairs_lights_off:
+  alias: upstairs lights off
+  icon: mdi:lightbulb-off
+  sequence:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: group.upstairs_lights
+tv_remote_press:
+  alias: 'TV Remote: Press'
+  description: 'Sends a remote key to the TV chosen in input_select.tv_remote_target
+    (or the ''tv'' field). LG (Glasshouse): presses button.<tv>_<key> (''mute'' toggles
+    switch.<tv>_mute). Roku (office, workshop): remote.send_command on remote.<tv>_tv.
+    Samsung Frame (main_bedroom): KEY_* via remote.samsung_the_frame_55; play_pause
+    via media_player.media_play_pause.'
+  icon: mdi:remote-tv
+  mode: queued
+  max: 20
+  fields:
+    key:
+      name: Key
+      required: true
+      selector:
+        select:
+          custom_value: true
+          options:
+          - remote_up
+          - remote_down
+          - remote_left
+          - remote_right
+          - remote_ok
+          - remote_back
+          - remote_home
+          - play
+          - pause
+          - play_pause
+          - stop
+          - volume_up
+          - volume_down
+          - mute
+          - power_on_tv
+          - power_off_tv
+          - restart_tv
+          - start_screensaver
+    tv:
+      name: TV prefix
+      description: Optional. Defaults to the TV Remote Target selection.
+      required: false
+      selector:
+        text: {}
+  sequence:
+  - variables:
+      target: '{{ tv if tv is defined and tv else states(''input_select.tv_remote_target'')
+        }}'
+      roku_keys:
+        remote_up: up
+        remote_down: down
+        remote_left: left
+        remote_right: right
+        remote_ok: select
+        remote_back: back
+        remote_home: home
+        play: play
+        pause: play
+        play_pause: play
+        volume_up: volume_up
+        volume_down: volume_down
+        mute: volume_mute
+        power_on_tv: power
+        power_off_tv: power
+      samsung_keys:
+        remote_up: KEY_UP
+        remote_down: KEY_DOWN
+        remote_left: KEY_LEFT
+        remote_right: KEY_RIGHT
+        remote_ok: KEY_ENTER
+        remote_back: KEY_RETURN
+        remote_home: KEY_HOME
+        play: KEY_PLAY
+        pause: KEY_PAUSE
+        stop: KEY_STOP
+        volume_up: KEY_VOLUP
+        volume_down: KEY_VOLDOWN
+        mute: KEY_MUTE
+  - choose:
+    - alias: Roku
+      conditions:
+      - condition: template
+        value_template: '{{ target in [''office'', ''workshop''] }}'
+      sequence:
+      - condition: template
+        value_template: '{{ key in roku_keys }}'
+        alias: skip keys Roku doesn't have
+      - action: remote.send_command
+        target:
+          entity_id: remote.{{ target }}_tv
+        data:
+          command: '{{ roku_keys[key] }}'
+    - alias: Samsung Frame
+      conditions:
+      - condition: template
+        value_template: '{{ target == ''main_bedroom'' }}'
+      sequence:
+      - if:
+        - condition: template
+          value_template: '{{ key == ''play_pause'' }}'
+        then:
+        - action: media_player.media_play_pause
+          target:
+            entity_id: media_player.main_bedroom_tv
+        else:
+        - condition: template
+          value_template: '{{ key in samsung_keys }}'
+          alias: skip keys the Frame doesn't have
+        - action: remote.send_command
+          target:
+            entity_id: remote.samsung_the_frame_55
+          data:
+            command: '{{ samsung_keys[key] }}'
+    - alias: LG mute
+      conditions:
+      - condition: template
+        value_template: '{{ key == ''mute'' }}'
+      sequence:
+      - action: switch.toggle
+        target:
+          entity_id: switch.{{ target }}_mute
+    default:
+    - action: button.press
+      target:
+        entity_id: button.{{ target }}_{{ key }}
+tv_remote_power:
+  alias: 'TV Remote: Power Toggle'
+  description: 'Toggles power on the selected LG TV. Off: presses power_off_tv. On:
+    Wake-on-LAN (MAC from the map below, falling back to the device registry), then
+    power_on_tv if the TV is in Active Standby. Add new TVs to the ''macs'' map. Roku
+    (office, workshop): media_player.toggle. Samsung Frame (main_bedroom): turn_off
+    when on, Wake-on-LAN when off.'
+  icon: mdi:power
+  mode: single
+  fields:
+    tv:
+      name: TV prefix
+      description: Optional. Defaults to the TV Remote Target selection.
+      required: false
+      selector:
+        text: {}
+  sequence:
+  - variables:
+      macs:
+        sunroom: 74:e6:b8:a5:b4:9a
+        great_room: 74:e6:b8:a5:b5:00
+        gym: 74:e6:b8:4a:72:31
+        media_room: 74:e6:b8:c3:5c:95
+        garage: a8:23:fe:0c:92:af
+      target: '{{ tv if tv is defined and tv else states(''input_select.tv_remote_target'')
+        }}'
+      did: '{{ device_id(''binary_sensor.'' ~ target ~ ''_power'') }}'
+      mac: '{{ macs.get(target) or ((device_attr(did, ''connections'') | selectattr(''0'',
+        ''eq'', ''mac'') | map(attribute=''1'') | first | default('''')) if did else
+        '''') }}'
+  - alias: Roku
+    if:
+    - condition: template
+      value_template: '{{ target in [''office'', ''workshop''] }}'
+    then:
+    - action: media_player.toggle
+      target:
+        entity_id: media_player.{{ target }}_tv
+    - stop: Roku handled
+  - alias: Samsung Frame
+    if:
+    - condition: template
+      value_template: '{{ target == ''main_bedroom'' }}'
+    then:
+    - if:
+      - condition: state
+        entity_id: media_player.main_bedroom_tv
+        state: 'on'
+      then:
+      - action: media_player.turn_off
+        target:
+          entity_id: media_player.main_bedroom_tv
+      else:
+      - action: wake_on_lan.send_magic_packet
+        continue_on_error: true
+        data:
+          mac: 80:47:86:c6:ed:7d
+    - stop: Samsung handled
+  - if:
+    - condition: template
+      value_template: '{{ is_state(''binary_sensor.'' ~ target ~ ''_power'', ''on'')
+        }}'
+    then:
+    - action: button.press
+      target:
+        entity_id: button.{{ target }}_power_off_tv
+    else:
+    - alias: Wake from standby
+      if:
+      - condition: template
+        value_template: '{{ mac != '''' }}'
+      then:
+      - action: wake_on_lan.send_magic_packet
+        continue_on_error: true
+        data:
+          mac: '{{ mac }}'
+    - alias: Wake from Active Standby
+      if:
+      - condition: template
+        value_template: '{{ has_value(''button.'' ~ target ~ ''_power_on_tv'') }}'
+      then:
+      - action: button.press
+        continue_on_error: true
+        target:
+          entity_id: button.{{ target }}_power_on_tv
+all_echos_on_off:
+  alias: all echos on/off
+  mode: queued
+  icon: mdi:television
+  fields:
+    power:
+      description: on or off
+      required: true
+      selector:
+        select:
+          options:
+          - 'on'
+          - 'off'
+    entities:
+      description: Optional override of the default list
+      selector:
+        entity:
+          multiple: true
+  variables:
+    default_entities:
+    - light.show_screen
+    - light.kitchen_screen
+    targets: '{{ entities if entities is defined and entities | count > 0 else default_entities
+      }}
+
+      '
+  sequence:
+  - condition: template
+    value_template: '{{ power in [''on'', ''off''] }}'
+  - action: homeassistant.turn_{{ power }}
+    target:
+      entity_id: '{{ targets }}'

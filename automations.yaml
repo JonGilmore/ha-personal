@@ -54,6 +54,16 @@
       - condition: trigger
         id:
         - 'on'
+      - condition: illuminance.is_value
+        target:
+          device_id: 1f551b2f77b59d23a1f8615be82d15d8
+        options:
+          behavior: all
+          threshold:
+            type: below
+            value:
+              active_choice: number
+              number: 65
       sequence:
       - action: light.turn_on
         metadata: {}
@@ -171,35 +181,39 @@
   description: Automatically turn off the Great Room and Sunroom TVs 30 minutes after
     they turn on between 6:00 AM and 7:45 AM.
   triggers:
-  - entity_id:
-    - media_player.great_room_tv
-    - media_player.sunroom_tv
+  - trigger: state
+    entity_id:
+    - binary_sensor.great_room_power
+    - binary_sensor.sunroom_power
     to: 'on'
-    trigger: state
   conditions:
   - condition: time
     after: 06:00:00
     before: 07:45:00
   actions:
+  - variables:
+      room: '{{ trigger.entity_id | replace(''binary_sensor.'', '''') | replace(''_power'',
+        '''') }}'
+      tv_name: '{{ room | replace(''_'', '' '') | title }} TV'
   - delay: 00:30:00
   - condition: template
     value_template: '{{ is_state(trigger.entity_id, ''on'') }}'
     alias: check to make sure that the triggered TV is actually on
   - action: notify.mobile_app_jons_iphone
     data:
-      message: Turn off the {{ trigger.to_state.attributes.friendly_name }}?
+      message: Turn off the {{ tv_name }}?
       data:
         actions:
         - action: TURN_OFF_TV
           title: Turn Off TV
   - wait_for_trigger:
-    - event_type: mobile_app_notification_action
+    - trigger: event
+      event_type: mobile_app_notification_action
       event_data:
         action: TURN_OFF_TV
-      trigger: event
-  - target:
-      entity_id: '{{ trigger.entity_id }}'
-    action: media_player.turn_off
+  - action: button.press
+    target:
+      entity_id: button.{{ room }}_power_off_tv
   mode: parallel
 - id: '1736947365589'
   alias: 'Frigate: objects detected while away or asleep'
@@ -327,11 +341,11 @@
     to: home
   - trigger: state
     entity_id:
-    - device_tracker.jon_homekit
+    - device_tracker.jon_presence
     to:
   - trigger: state
     entity_id:
-    - device_tracker.laura_homekit
+    - device_tracker.laura_presence
     to:
   conditions: []
   actions:
@@ -1254,8 +1268,7 @@
       sequence:
       - action: homeassistant.turn_off
         data:
-          entity_id: "{% if trigger.entity_id == 'binary_sensor.office_motions' %}\n
-            \ light.basement_office_art\n{% elif trigger.entity_id == 'binary_sensor.elkm1_lounge_pir'
+          entity_id: "{% if trigger.entity_id == 'binary_sensor.elkm1_lounge_pir'
             %}\n  light.basement_bar_cabinets\n{% elif trigger.entity_id == 'binary_sensor.elkm1_mudroom_pir'
             %}\n  light.main_floor_mudroom_lamp\n{% endif %}\n"
   mode: restart
@@ -1392,25 +1405,6 @@
       entity_id:
       - fan.upstairs_main_bedroom_fan
       - fan.evelyns_fan
-    data: {}
-  mode: single
-- id: '1740320281075'
-  alias: turn on primary bed fan at night (if AC is on)
-  description: ''
-  triggers:
-  - trigger: time
-    at: '20:00:00'
-  conditions:
-  - condition: state
-    entity_id: climate.infinitude_main_level
-    state: cool
-  - condition: state
-    entity_id: binary_sensor.vacation
-    state: 'off'
-  actions:
-  - action: homeassistant.turn_on
-    target:
-      entity_id: fan.upstairs_main_bedroom_fan
     data: {}
   mode: single
 - id: '1740320370360'
@@ -1569,7 +1563,10 @@
     data: {}
   - action: homeassistant.turn_on
     target:
-      entity_id: switch.basement_equipment_room_recirculation_pump
+      entity_id:
+      - switch.basement_equipment_room_recirculation_pump
+      - light.show_screen
+      - light.kitchen_screen
     data: {}
   - action: script.night_adaptive_lighting
     data:
@@ -1984,6 +1981,20 @@
   - action: script.lock_doors
     data: {}
     alias: run lock doors script
+  - alias: lock garage entry door (night only)
+    if:
+    - condition: state
+      entity_id: lock.garage_lock
+      state: unlocked
+    then:
+    - action: notify.mobile_app_jons_iphone
+      data:
+        title: "\U0001F512 Locking doors..."
+        message: Locking Garage
+    - action: lock.lock
+      continue_on_error: true
+      target:
+        entity_id: lock.garage_lock
   - action: climate.turn_on
     metadata: {}
     data: {}
@@ -2035,6 +2046,13 @@
         target:
           entity_id: switch.basement_equipment_room_recirculation_pump
         data: {}
+      - action: script.turn_on
+        target:
+          entity_id: script.all_echos_on_off
+        data:
+          variables:
+            power: 'off'
+        alias: non-blocking call to turn off echos using script
       - action: script.tvs_off
         data: {}
       - action: script.interior_lights_off
@@ -2043,6 +2061,7 @@
         data: {}
       - action: script.lock_doors
         data: {}
+      alias: leaving home
     - conditions:
       - condition: trigger
         id:
@@ -2061,6 +2080,14 @@
         - action: button.press
           entity_id: button.basement_equipment_room_homeowner_kp02_position_1_keypad_shades_all_open
           enabled: true
+      - action: script.turn_on
+        target:
+          entity_id: script.all_echos_on_off
+        data:
+          variables:
+            power: 'on'
+        alias: non-blocking call to turn on echos using script
+      alias: arriving home
   mode: single
 - id: '1740320929539'
   alias: 'Night Mode: turn on sunset lights at dark or sunset'
@@ -2833,70 +2860,59 @@
   - trigger: persistent_notification
     update_type:
     - added
+    - updated
     notification_id: changedetection
   conditions: []
   actions:
+  - variables:
+      msg: '{{ trigger.notification.message }}'
+      link: '{{ (msg | regex_findall(''https?://\S+'') | last) | default('''', true)
+        }}'
   - action: notify.mobile_app_jons_iphone
     data:
-      title: change detected
-      message: 'hit up: https://festoolrecon.com'
-  mode: single
+      title: '{{ trigger.notification.title or ''change detected'' }}'
+      message: '{{ msg[:400] }}'
+      data:
+        url: '{{ link }}'
+        group: changedetection
+  - action: persistent_notification.dismiss
+    data:
+      notification_id: changedetection
+  mode: queued
 - id: '1764972206895'
   alias: 'Location: sync presence to person entities'
-  description: Sync iPhone HomeKit presence switches to person entities
+  description: At HA startup, seed the HomeKit presence booleans from the iPhone device
+    trackers. The template device trackers (device_tracker.jon_presence / device_tracker.laura_presence)
+    follow those booleans continuously, so no per-change sync action is needed.
   triggers:
-  - trigger: state
-    entity_id: input_boolean.laura
-    id: laura
-  - trigger: state
-    entity_id: input_boolean.jon
-    id: jon
   - trigger: homeassistant
     event: start
-    id: startup
   actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id: startup
-      sequence:
-      - action: input_boolean.turn_{{ 'on' if is_state('device_tracker.jons_iphone',
-          'home') else 'off' }}
-        target:
-          entity_id: input_boolean.jon
-      - action: input_boolean.turn_{{ 'on' if is_state('device_tracker.lauras_iphone',
-          'home') else 'off' }}
-        target:
-          entity_id: input_boolean.laura
-      - action: device_tracker.see
-        data:
-          dev_id: laura_homekit
-          location_name: '{{ ''home'' if is_state(''device_tracker.lauras_iphone'',
-            ''home'') else ''not_home'' }}'
-      - action: device_tracker.see
-        data:
-          dev_id: jon_homekit
-          location_name: '{{ ''home'' if is_state(''device_tracker.jons_iphone'',
-            ''home'') else ''not_home'' }}'
-    - conditions:
-      - condition: trigger
-        id: laura
-      sequence:
-      - action: device_tracker.see
-        data:
-          dev_id: laura_homekit
-          location_name: '{{ ''home'' if trigger.to_state.state == ''on'' else ''not_home''
-            }}'
-    - conditions:
-      - condition: trigger
-        id: jon
-      sequence:
-      - action: device_tracker.see
-        data:
-          dev_id: jon_homekit
-          location_name: '{{ ''home'' if trigger.to_state.state == ''on'' else ''not_home''
-            }}'
-  mode: parallel
+  - if:
+    - condition: state
+      entity_id: device_tracker.jons_iphone
+      state: home
+    then:
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.jon
+    else:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.jon
+  - if:
+    - condition: state
+      entity_id: device_tracker.lauras_iphone
+      state: home
+    then:
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.laura
+    else:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.laura
+  mode: single
 - id: '1769649870019'
   alias: Gaming Mode - Office Art + KVM
   description: Toggle office art and KVM based on gaming mode
@@ -2946,11 +2962,7 @@
     at: '19:40:00'
     weekday:
     - mon
-  conditions:
-  - condition: state
-    entity_id: sensor.driveway_trash_out_classification
-    state:
-    - missing
+  conditions: []
   actions:
   - action: notify.mobile_app_lauras_iphone
     metadata: {}
@@ -3068,25 +3080,34 @@
   mode: single
 - id: '1775312359467'
   alias: stair shade
-  description: ''
+  description: Opens the upstairs stair shade once the sun has moved past the east-facing
+    window plane (~103 deg heading, so cutoff azimuth 193 deg). Keeps direct morning
+    sun/heat out until the sun is no longer shining into the glass. Recovers on HA
+    restart via the homeassistant start trigger + daytime guard.
   triggers:
-  - trigger: time
-    at: 09:00:00
+  - trigger: numeric_state
+    entity_id: sun.sun
+    attribute: azimuth
+    above: 193
+  - trigger: homeassistant
+    event: start
   conditions:
   - condition: state
     entity_id: binary_sensor.vacation
     state:
     - 'off'
-  - condition: time
-    after: 06:30:00
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: azimuth
+    above: 193
+  - condition: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    above: 0
   actions:
-  - device_id: 6c222de0e75672a6c3a404b5e5ba6799
-    domain: cover
-    entity_id: 45a51f86ce6064586e15e22c4257cf4d
-    type: set_position
-    metadata:
-      secondary: false
-    position: 100
+  - action: cover.open_cover
+    target:
+      entity_id: cover.upstairs_stair_shade
   mode: single
 - id: '1779970969083'
   alias: close main bathroom shade when fan turns on at night
@@ -3196,3 +3217,176 @@
           data:
             tag: fire_alarm
   mode: parallel
+- id: '1787517543695'
+  alias: 'HVAC: overnight cool setback'
+  description: At 20:00, set upper level to 75 and main level to 77 for overnight,
+    when not on vacation and it is above 70F outside. Each zone is only touched if
+    it is actually in cool mode, so this is a no-op in heating season. Sets input_boolean.overnight_cool_setback
+    so the morning restore knows a setback was applied.
+  triggers:
+  - at: '20:00:00'
+    trigger: time
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.vacation
+    state: 'off'
+  - alias: Outdoor above 70F - Infinitude primary, PIR fallback
+    condition: template
+    value_template: '{% set primary = states(''sensor.infinitude_outdoor_temperature'')
+      | float(-99) %}{% set backup = states(''sensor.outdoor_pir_air_temperature'')
+      | float(-99) %}{% set t = primary if primary > -99 else backup %}{{ t > 70 }}'
+  actions:
+  - alias: Main & Upper level changes if cooling
+    if:
+    - condition: state
+      entity_id: climate.infinitude_upper_level
+      state: cool
+    then:
+    - action: climate.set_temperature
+      data:
+        temperature: 75
+      target:
+        entity_id: climate.infinitude_upper_level
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.overnight_cool_setback
+    - action: homeassistant.turn_on
+      target:
+        entity_id: fan.upstairs_main_bedroom_fan
+      data: {}
+      alias: turn on main bedroom fan
+    - action: climate.set_temperature
+      data:
+        temperature: 77
+      target:
+        entity_id: climate.infinitude_main_level
+  mode: single
+- id: '1787517553194'
+  alias: 'HVAC: morning cool restore'
+  description: Restores both zones to 76 in the morning - on wake (binary_sensor.sleeping
+    on->off) or at 07:00, whichever comes first. Fires at 07:00 even if still asleep,
+    by design. Only runs if the evening setback actually applied. Each zone is only
+    touched if in cool mode; the flag clears either way so it never gets stuck on
+    in heating season.
+  triggers:
+  - entity_id: binary_sensor.sleeping
+    from: 'on'
+    id: woke
+    to: 'off'
+    trigger: state
+  - at: 07:00:00
+    id: fallback
+    trigger: time
+  conditions:
+  - condition: state
+    entity_id: input_boolean.overnight_cool_setback
+    state: 'on'
+  actions:
+  - alias: Main & Upper level change back if cooling
+    if:
+    - condition: state
+      entity_id: climate.infinitude_upper_level
+      state: cool
+    then:
+    - action: climate.set_temperature
+      data:
+        temperature: 76
+      target:
+        entity_id: climate.infinitude_upper_level
+    - action: climate.set_temperature
+      data:
+        temperature: 76
+      target:
+        entity_id: climate.infinitude_main_level
+  - alias: Clear the setback flag regardless of zone modes
+    action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.overnight_cool_setback
+  mode: single
+- id: '1789952425578'
+  alias: 'Voice: all lights off'
+  description: Voice sentences that run script.all_off (Lutron All_off plus the two
+    non-Lutron lights).
+  triggers:
+  - command:
+    - turn off the lights
+    - turn the lights off
+    - turn off all the lights
+    - turn off all lights
+    - turn all the lights off
+    - lights off
+    - all lights off
+    - turn everything off
+    - shut off the lights
+    - kill the lights
+    trigger: conversation
+  conditions: []
+  actions:
+  - action: script.turn_on
+    target:
+      entity_id: script.all_off
+  - set_conversation_response: Lights off.
+  mode: single
+- id: '1789953400854'
+  alias: 'Voice: main floor lights off'
+  description: Voice sentences that run script.main_lights_off.
+  triggers:
+  - command:
+    - main floor off
+    - turn off the main floor
+    - turn off main floor
+    - main floor lights off
+    - turn off the main floor lights
+    - turn off main floor lights
+    - turn off the main lights
+    - main lights off
+    trigger: conversation
+  conditions: []
+  actions:
+  - action: script.turn_on
+    target:
+      entity_id: script.main_lights_off
+  - set_conversation_response: Turning off the main floor.
+  mode: single
+- id: '1789953403844'
+  alias: 'Voice: basement lights off'
+  description: Voice sentences that run script.basement_lights_off.
+  triggers:
+  - command:
+    - basement off
+    - turn off the basement
+    - turn off basement
+    - basement lights off
+    - turn off the basement lights
+    - turn off basement lights
+    - turn off downstairs
+    - downstairs off
+    trigger: conversation
+  conditions: []
+  actions:
+  - action: script.turn_on
+    target:
+      entity_id: script.basement_lights_off
+  - set_conversation_response: Turning off the basement.
+  mode: single
+- id: '1789953406566'
+  alias: 'Voice: upstairs lights off'
+  description: Voice sentences that run script.upstairs_lights_off.
+  triggers:
+  - command:
+    - upstairs off
+    - turn off upstairs
+    - turn off the upstairs
+    - upstairs lights off
+    - turn off the upstairs lights
+    - turn off upstairs lights
+    - turn off the second floor
+    - second floor off
+    trigger: conversation
+  conditions: []
+  actions:
+  - action: script.turn_on
+    target:
+      entity_id: script.upstairs_lights_off
+  - set_conversation_response: Turning off upstairs.
+  mode: single

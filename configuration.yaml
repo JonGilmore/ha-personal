@@ -18,21 +18,38 @@ homeassistant:
     local: /media
 cloud:
 energy:
-
-http:
-  use_x_forwarded_for: true
-  trusted_proxies:
-    - 172.19.0.0/24
-    - 192.168.30.0/24
-    - 192.168.31.0/24
-  login_attempts_threshold: 3
-  ip_ban_enabled: false
-tts:
-  - platform: google_translate
-    service_name: google_say
 frontend:
   themes: !include_dir_merge_named themes/
 
+recorder:
+  purge_keep_days: 8
+  exclude:
+    entity_globs:
+      - sensor.unraid_*
+      - sensor.load_*
+      - sensor.weatherflow_tempest_wind_*
+      - sensor.*_radar_*_energy
+      - sensor.*_uptime*
+      - sensor.*_signal_strength
+      - sensor.*_free_space
+      - sensor.system_monitor_disk_*
+      - sensor.bed_presence_*pressure
+      - sensor.*_cpu_usage
+      - sensor.*_memory_usage
+      - sensor.*_swap_usage
+      - sensor.*_soc_temperature
+      - sensor.*_soc_current
+      - sensor.*_download_rate
+      - sensor.*_upload_rate
+      - sensor.*_wi_fi_signal
+      - sensor.*_app_storage_free
+      - sensor.garage_gpu_clock
+    entities:
+      - sensor.frigate_detection_fps
+      - sensor.processor_use
+      - sensor.time
+      - sensor.memory_use_percent
+      - sensor.processor_temperature
 system_health:
 
 elkm1:
@@ -62,10 +79,6 @@ lutron_caseta:
     certfile: caseta.crt
     ca_certs: caseta-bridge.crt
 
-calendar:
-  - platform: todoist
-    token: !secret todoist
-
 ####################################################
 #                     Includes                     #
 ####################################################
@@ -85,7 +98,8 @@ mqtt: !include includes/mqtt.yaml
 rest_command: !include includes/rest_commands.yaml
 rest: !include includes/rest.yaml
 scene: !include includes/scenes.yaml
-script: !include includes/scripts.yaml
+script: !include scripts.yaml
+script manual: !include includes/scripts_manual.yaml
 sensor: !include includes/sensors.yaml
 shell_command: !include includes/shell_commands.yaml
 switch: !include includes/switches.yaml
@@ -131,6 +145,7 @@ sonos:
       - 192.168.30.47
       - 192.168.30.48
       - 192.168.30.49
+      - 192.168.30.50
       - 192.168.30.51
       - 192.168.30.52
       - 192.168.30.53
