@@ -48,3 +48,42 @@ single_garage_door_open:
       - action: "SNOOZE_SINGLE_GARAGE_ALERT"
         title: "snooze 1hr"
         icon: "sfsymbols:clock.badge.checkmark"
+oven_door_open:
+  name: Oven door open
+  entity_id: binary_sensor.oven_doors
+  state: "on"
+  repeat: [15, 5]
+  skip_first: true
+  can_acknowledge: true
+  title: "🔥 Oven open"
+  message: >-
+    {{ expand('binary_sensor.oven_doors') | selectattr('state', 'eq', 'on')
+        | map(attribute='name') | join(', ') }} still open
+  done_message: "Oven closed"
+  notifiers:
+    - mobile_app_jons_iphone
+    - mobile_app_lauras_iphone
+  data:
+    tag: oven_door_open
+    push:
+      interruption-level: time-sensitive
+
+fridge_door_open:
+  name: Fridge door open
+  entity_id: binary_sensor.fridge_doors
+  state: "on"
+  repeat: [4, 2]
+  skip_first: true
+  can_acknowledge: true
+  title: "🧊 Fridge open"
+  message: >-
+    {{ expand('binary_sensor.fridge_doors') | selectattr('state', 'eq', 'on')
+        | map(attribute='name') | join(', ') }} still open
+  done_message: "Fridge closed"
+  notifiers:
+    - mobile_app_jons_iphone
+    - mobile_app_lauras_iphone
+  data:
+    tag: fridge_door_open
+    push:
+      interruption-level: time-sensitive

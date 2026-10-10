@@ -2834,13 +2834,13 @@
   triggers:
   - type: temperature
     device_id: 2ae4d70d7417067aa13d13fe9673d743
-    entity_id: 1c936e024153492c6fc7a616ced237f8
+    entity_id: f6e92ebb0a83c7d9bdd3e09cf64aff66
     domain: sensor
     trigger: device
-    above: 85
+    above: 88
     for:
       hours: 0
-      minutes: 1
+      minutes: 5
       seconds: 0
   conditions: []
   actions:
@@ -3390,3 +3390,63 @@
       entity_id: script.upstairs_lights_off
   - set_conversation_response: Turning off upstairs.
   mode: single
+- id: '1791637969793'
+  alias: 'Dishwasher: notify when finished'
+  description: Silent (passive) push to Jon and Laura when the dishwashers finish.
+    If the other dishwasher is still running when one finishes, waits (up to 4h) for
+    it and sends a single 'Both dishwashers finished'. Only fires on a real on ->
+    off transition, so the integration's unavailable blips don't trigger it.
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.left_dishwasher_wash_cycle_active
+    - binary_sensor.right_dishwasher_wash_cycle_active
+    from: 'on'
+    to: 'off'
+    for: 00:01:00
+  conditions: []
+  actions:
+  - variables:
+      dishwasher: '{{ ''Left'' if ''left'' in trigger.entity_id else ''Right'' }}'
+      msg: '{{ dishwasher }} dishwasher finished.'
+  - if:
+    - condition: state
+      entity_id:
+      - binary_sensor.left_dishwasher_wash_cycle_active
+      - binary_sensor.right_dishwasher_wash_cycle_active
+      state: 'on'
+      match: any
+      note: The triggering one is already off, so any still on = the other is running.
+    then:
+    - wait_for_trigger:
+      - trigger: state
+        entity_id:
+        - binary_sensor.left_dishwasher_wash_cycle_active
+        - binary_sensor.right_dishwasher_wash_cycle_active
+        from: 'on'
+        to: 'off'
+        for: 00:01:00
+      timeout: 04:00:00
+      continue_on_timeout: true
+      note: 'Other dishwasher still running: wait for it so we send one combined message.'
+    - variables:
+        msg: '{{ ''Both dishwashers finished.'' if wait.trigger else msg }}'
+  - parallel:
+    - action: notify.mobile_app_jons_iphone
+      data:
+        title: "\U0001F37D️ Dishwasher done"
+        message: '{{ msg }}'
+        data:
+          tag: dishwasher_done
+          push:
+            interruption-level: passive
+    - action: notify.mobile_app_lauras_iphone
+      data:
+        title: "\U0001F37D️ Dishwasher done"
+        message: '{{ msg }}'
+        data:
+          tag: dishwasher_done
+          push:
+            interruption-level: passive
+  mode: single
+  max_exceeded: silent
