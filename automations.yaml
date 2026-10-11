@@ -216,9 +216,10 @@
       entity_id: button.{{ room }}_power_off_tv
   mode: parallel
 - id: '1736947365589'
-  alias: 'Frigate: objects detected while away or asleep'
-  description: send frigate notifications when any objects are detected and jon is
-    away or the house is in night mode
+  alias: 'Frigate: person while away or asleep'
+  description: Person in any Frigate zone (alerts + detections) on exterior cameras,
+    while away or in night mode (binary_sensor.send_frigate_alerts). Zone gating comes
+    from Frigate review required_zones.
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
@@ -247,6 +248,11 @@
       state_entity: binary_sensor.send_frigate_alerts
       state_filter_states:
       - 'on'
+      labels:
+      - person
+      review_severity:
+      - alert
+      - detection
 - id: '1740318495813'
   alias: 'Unraid: array space warning'
   description: Notify when array space is running low
@@ -416,30 +422,123 @@
   mode: single
 - id: '1740318920723'
   alias: 'Vacation Mode: notify if a garage door opens'
-  description: ''
+  description: 'On vacation, when a ratgdo garage door starts opening: (1) driveway
+    snapshot pushed immediately, (2) garage-cam snapshot ~3s after the door is fully
+    open, with open %. Both go to Jon and Laura with a ''Close door'' button that
+    stays live for 10 minutes.'
   triggers:
   - trigger: state
-    entity_id: binary_sensor.garage_doors
-    to: 'on'
+    entity_id:
+    - cover.double_garage_door
+    - cover.single_garage_door
+    from: closed
+    to: opening
   conditions:
   - condition: state
     entity_id: binary_sensor.vacation
     state: 'on'
   actions:
-  - delay: 00:00:01
-  - target:
-      entity_id: camera.garage
-    data:
-      filename: /config/www/garage_latest.jpg
-    action: camera.snapshot
-  - delay: 00:00:01
-  - action: notify.mobile_app_jons_iphone
-    metadata: {}
-    data:
-      message: "one of the garage doors is open \U0001F480"
-      data:
-        image: /local/garage_latest.jpg
-  mode: single
+  - variables:
+      door_entity: '{{ trigger.entity_id }}'
+      door: '{{ ''double'' if ''double'' in trigger.entity_id else ''single'' }}'
+      door_name: '{{ door | capitalize }}'
+      close_action: VACATION_CLOSE_{{ door | upper }}_GARAGE
+      ts: '{{ now().timestamp() | int }}'
+  - parallel:
+    - sequence:
+      - action: camera.snapshot
+        target:
+          entity_id: camera.driveway
+        data:
+          filename: /config/www/garage_{{ door }}_driveway.jpg
+      - parallel:
+        - action: notify.mobile_app_jons_iphone
+          data:
+            title: "\U0001F697 {{ door_name }} garage door opening"
+            message: Driveway at {{ now().strftime('%H:%M:%S') }}
+            data:
+              image: /local/garage_{{ door }}_driveway.jpg?t={{ ts }}
+              group: garage_{{ door }}
+              push:
+                interruption-level: time-sensitive
+              actions:
+              - action: '{{ close_action }}'
+                title: Close door
+                destructive: true
+        - action: notify.mobile_app_lauras_iphone
+          data:
+            title: "\U0001F697 {{ door_name }} garage door opening"
+            message: Driveway at {{ now().strftime('%H:%M:%S') }}
+            data:
+              image: /local/garage_{{ door }}_driveway.jpg?t={{ ts }}
+              group: garage_{{ door }}
+              push:
+                interruption-level: time-sensitive
+              actions:
+              - action: '{{ close_action }}'
+                title: Close door
+                destructive: true
+      - wait_template: '{{ is_state(door_entity, ''open'') }}'
+        timeout: 00:00:30
+        continue_on_timeout: true
+        note: Wait for this door to be fully open (~12s on the double door). Template
+          because the door is per-run.
+      - delay: 00:00:03
+      - action: camera.snapshot
+        target:
+          entity_id: camera.garage
+        data:
+          filename: /config/www/garage_{{ door }}_interior.jpg
+      - variables:
+          pos: '{{ state_attr(door_entity, ''current_position'') | int(0) }}'
+      - parallel:
+        - action: notify.mobile_app_jons_iphone
+          data:
+            title: "\U0001F697 {{ door_name }} garage door {{ pos }}% open"
+            message: Garage cam at {{ now().strftime('%H:%M:%S') }}
+            data:
+              image: /local/garage_{{ door }}_interior.jpg?t={{ ts }}
+              group: garage_{{ door }}
+              push:
+                interruption-level: time-sensitive
+              actions:
+              - action: '{{ close_action }}'
+                title: Close door
+                destructive: true
+        - action: notify.mobile_app_lauras_iphone
+          data:
+            title: "\U0001F697 {{ door_name }} garage door {{ pos }}% open"
+            message: Garage cam at {{ now().strftime('%H:%M:%S') }}
+            data:
+              image: /local/garage_{{ door }}_interior.jpg?t={{ ts }}
+              group: garage_{{ door }}
+              push:
+                interruption-level: time-sensitive
+              actions:
+              - action: '{{ close_action }}'
+                title: Close door
+                destructive: true
+    - sequence:
+      - wait_for_trigger:
+        - trigger: event
+          event_type: mobile_app_notification_action
+          event_data:
+            action: VACATION_CLOSE_DOUBLE_GARAGE
+        - trigger: event
+          event_type: mobile_app_notification_action
+          event_data:
+            action: VACATION_CLOSE_SINGLE_GARAGE
+        timeout: 00:10:00
+        continue_on_timeout: false
+        note: Listens from the first notification on, so an early tap works too.
+      - condition: template
+        value_template: '{{ wait.trigger.event.data.action == close_action }}'
+        note: Ignore a tap meant for the other door's run.
+      - action: cover.close_cover
+        target:
+          entity_id: '{{ door_entity }}'
+  mode: parallel
+  max: 4
 - id: '1740318950168'
   alias: 'Vacation Mode: turn off all lights at 23:30'
   description: ''
@@ -1790,23 +1889,6 @@
         data: {}
     - conditions:
       - condition: trigger
-        id: 715am
-      - condition: state
-        entity_id: switch.evelyns_room_power_switch
-        state: 'on'
-      - condition: template
-        value_template: '{{ states(''binary_sensor.vacation'') == ''off'' }}'
-      sequence:
-      - action: light.turn_on
-        data:
-          entity_id: light.evelyns_room_light
-          rgb_color:
-          - 0
-          - 255
-          - 0
-          brightness_pct: 6
-    - conditions:
-      - condition: trigger
         id: 730am
       - condition: template
         value_template: '{{ states(''binary_sensor.events_today'') == ''on'' or states(''binary_sensor.events_in_seven_days'')
@@ -1852,12 +1934,12 @@
         id: 10am
       - condition: or
         conditions:
-        - condition: template
-          value_template: '{{ states(''sensor.house_humidity'') > states(''sensor.target_humidity_max'')
-            }}'
-        - condition: template
-          value_template: '{{ states(''sensor.house_humidity'') < states(''sensor.target_humidity_min'')
-            }}'
+        - condition: numeric_state
+          entity_id: sensor.house_humidity
+          above: sensor.target_humidity_max
+        - condition: numeric_state
+          entity_id: sensor.house_humidity
+          below: sensor.target_humidity_min
       sequence:
       - action: notify.mobile_app_jons_iphone
         data:
@@ -2242,8 +2324,6 @@
     below: 205
     id: east_open
   conditions:
-  - condition: template
-    value_template: '{{ now().month >= 6 or now().month <= 10 }}'
   - condition: state
     entity_id: binary_sensor.vacation
     state:
@@ -2777,14 +2857,15 @@
         entity_id: alert.single_garage_door_open
   mode: parallel
 - id: '1753617437359'
-  alias: 'Frigate: objects detected while away or asleep - driveway'
-  description: send frigate notifications for driveway camera when any objects are
-    detected and jon is away or the house is in night mode
+  alias: 'Frigate: car while away or asleep'
+  description: Car in frontyard_near on driveway/frontyard cameras, while away or
+    in night mode (binary_sensor.send_frigate_alerts).
   use_blueprint:
     path: SgtBatten/Stable.yaml
     input:
       camera:
       - camera.driveway
+      - camera.frontyard
       notify_device: a0231187bde1dbfa1db22db7f40ace97
       base_url: https://homeassistant.gilmore.cloud
       message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
@@ -2804,6 +2885,12 @@
       - 'on'
       review_severity:
       - alert
+      - detection
+      labels:
+      - car
+      zone_filter: true
+      zones:
+      - frontyard_near
 - id: '1754224795250'
   alias: 'Utility: low battery notification'
   description: ''
@@ -3267,7 +3354,8 @@
     on->off) or at 07:00, whichever comes first. Fires at 07:00 even if still asleep,
     by design. Only runs if the evening setback actually applied. Each zone is only
     touched if in cool mode; the flag clears either way so it never gets stuck on
-    in heating season.
+    in heating season. Skips the temperature restore (but still clears the flag) when
+    vacation is armed.
   triggers:
   - entity_id: binary_sensor.sleeping
     from: 'on'
@@ -3287,6 +3375,11 @@
     - condition: state
       entity_id: climate.infinitude_upper_level
       state: cool
+    - condition: state
+      entity_id: binary_sensor.vacation
+      state: 'off'
+      note: Don't override the vacation setback if vacation was armed after the 20:00
+        setback.
     then:
     - action: climate.set_temperature
       data:
@@ -3450,3 +3543,75 @@
             interruption-level: passive
   mode: single
   max_exceeded: silent
+- id: '1791724928748'
+  alias: 'Frigate: person while away or asleep, notify Laura'
+  description: Person in any Frigate zone (alerts + detections) on exterior cameras,
+    while away or in night mode (binary_sensor.send_frigate_alerts). Laura's copy.
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera:
+      - camera.deck
+      - camera.driveway
+      - camera.doorbell
+      - camera.frontyard
+      - camera.grilldeck
+      - camera.patio
+      - camera.workshop
+      notify_device: 73c269e64dff9787a20e6c1734177e58
+      base_url: https://homeassistant.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      alert_once: true
+      final_update: false
+      presence_filter:
+      - ''
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      button_1: clip
+      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
+      button_2: snapshot
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+      labels:
+      - person
+      review_severity:
+      - alert
+      - detection
+- id: '1791724933804'
+  alias: 'Frigate: car while away or asleep, notify Laura'
+  description: Car in frontyard_near on driveway/frontyard cameras, while away or
+    in night mode (binary_sensor.send_frigate_alerts). Laura's copy.
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera:
+      - camera.driveway
+      - camera.frontyard
+      notify_device: 73c269e64dff9787a20e6c1734177e58
+      base_url: https://homeassistant.gilmore.cloud
+      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
+      alert_once: true
+      final_update: false
+      presence_filter:
+      - ''
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      button_1: clip
+      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
+      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
+      button_2: snapshot
+      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
+      state_filter: true
+      state_entity: binary_sensor.send_frigate_alerts
+      state_filter_states:
+      - 'on'
+      labels:
+      - car
+      zone_filter: true
+      zones:
+      - frontyard_near
+      review_severity:
+      - alert
+      - detection
