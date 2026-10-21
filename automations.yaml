@@ -1316,8 +1316,8 @@
       sequence:
       - action: notify.mobile_app_jons_iphone
         data:
-          message: Cyberpower UPS has {{ state('sensor.ups_battery_runtime') | float
-            | round(0) }}min remaining.
+          message: Cyberpower UPS has {{ states('sensor.cp1500pfcrm2u_runtime') |
+            float(0) | round(0) }}min remaining.
       - action: shell_command.container_cmd
         data:
           cmd: stop
@@ -1356,16 +1356,16 @@
       sequence:
       - action: notify.mobile_app_jons_iphone
         data:
-          message: Cyberpower UPS has {{ state('sensor.ups_battery_runtime') | float
-            | round(0) }}min remaining.
+          message: Cyberpower UPS has {{ states('sensor.cp1500pfcrm2u_runtime') |
+            float(0) | round(0) }}min remaining.
     - conditions:
       - condition: trigger
         id: three
       sequence:
       - action: notify.mobile_app_jons_iphone
         data:
-          message: Cyberpower UPS has {{ state('sensor.ups_battery_runtime') | float
-            | round(0) }}min remaining, turning off HA.
+          message: Cyberpower UPS has {{ states('sensor.cp1500pfcrm2u_runtime') |
+            float(0) | round(0) }}min remaining, turning off HA.
       - action: shell_command.debian_shutdown
         data: {}
   mode: single
@@ -2341,20 +2341,10 @@
       minutes: 15
   conditions: []
   actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id: nut_event
-      sequence:
-      - action: notify.mobile_app_jons_iphone
-        data:
-          message: 'Power outage detected by UPS: {{ (states(''sensor.ups_battery_runtime'')
-            | float / 60) | round(0) }} minutes of battery power remaining.'
-    default:
-    - action: notify.mobile_app_jons_iphone
-      data:
-        message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
-          }}.'
+  - action: notify.mobile_app_jons_iphone
+    data:
+      message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+        }}.'
   mode: single
 - id: '1740331372000'
   alias: 'Location: leave home & either garage open'
