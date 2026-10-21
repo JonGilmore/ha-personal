@@ -16,7 +16,7 @@
     - sensor.weatherflow_tempest_temperature
     - sensor.outdoor_pir_air_temperature
     - sensor.current_temperature
-    - sensor.outdoor_hvac_temperature
+    - sensor.infinitude_outdoor_temperature
 
 - platform: websocket_api
 

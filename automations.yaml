@@ -1,31 +1,3 @@
-- id: '1730647673301'
-  alias: 'Frigate: doorbell approaching'
-  description: Line crossing detection, only notify if Jon is not home.
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera:
-      - camera.doorbell
-      notify_device: a0231187bde1dbfa1db22db7f40ace97
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      subtitle: '{{label}} approaching'
-      zone_filter: true
-      zones:
-      - doorbell_far
-      - doorbell_near
-      zone_multi: true
-      zone_order_enforced: true
-      alert_once: true
-      final_update: false
-      presence_filter:
-      - ''
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      button_1: clip
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      button_2: snapshot
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
 - id: '1733362531181'
   alias: 'Automated Lighting: bonus'
   description: motion triggers the lamps, after 5m of no motion, turn off all bonus
@@ -148,34 +120,6 @@
     target:
       entity_id: switch.workshop_power_strip
   mode: single
-- id: '1736344718634'
-  alias: 'Frigate: driveway approaching'
-  description: Line crossing detection, only notify if Jon is not home.
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera:
-      - camera.driveway
-      notify_device: a0231187bde1dbfa1db22db7f40ace97
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      subtitle: '{{label}} approaching'
-      zone_filter: true
-      zones:
-      - frontyard_far
-      - frontyard_near
-      zone_multi: true
-      zone_order_enforced: true
-      alert_once: true
-      final_update: false
-      presence_filter:
-      - ''
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      button_1: clip
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      button_2: snapshot
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
 - id: '1736562512723'
   alias: turn off main floor tvs after 30m of watching in the morning
   description: Automatically turn off the Great Room and Sunroom TVs 30 minutes after
@@ -215,44 +159,6 @@
     target:
       entity_id: button.{{ room }}_power_off_tv
   mode: parallel
-- id: '1736947365589'
-  alias: 'Frigate: person while away or asleep'
-  description: Person in any Frigate zone (alerts + detections) on exterior cameras,
-    while away or in night mode (binary_sensor.send_frigate_alerts). Zone gating comes
-    from Frigate review required_zones.
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera:
-      - camera.deck
-      - camera.driveway
-      - camera.doorbell
-      - camera.frontyard
-      - camera.grilldeck
-      - camera.patio
-      - camera.workshop
-      notify_device: a0231187bde1dbfa1db22db7f40ace97
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      alert_once: true
-      final_update: false
-      presence_filter:
-      - ''
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      button_1: clip
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      button_2: snapshot
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
-      labels:
-      - person
-      review_severity:
-      - alert
-      - detection
 - id: '1740318495813'
   alias: 'Unraid: array space warning'
   description: Notify when array space is running low
@@ -457,7 +363,8 @@
             title: "\U0001F697 {{ door_name }} garage door opening"
             message: Driveway at {{ now().strftime('%H:%M:%S') }}
             data:
-              image: /local/garage_{{ door }}_driveway.jpg?t={{ ts }}
+              image: https://homeassistant.gilmore.cloud/local/garage_{{ door }}_driveway.jpg?t={{
+                ts }}
               group: garage_{{ door }}
               push:
                 interruption-level: time-sensitive
@@ -465,12 +372,14 @@
               - action: '{{ close_action }}'
                 title: Close door
                 destructive: true
+              url: /lovelace/cameras
         - action: notify.mobile_app_lauras_iphone
           data:
             title: "\U0001F697 {{ door_name }} garage door opening"
             message: Driveway at {{ now().strftime('%H:%M:%S') }}
             data:
-              image: /local/garage_{{ door }}_driveway.jpg?t={{ ts }}
+              image: https://homeassistant.gilmore.cloud/local/garage_{{ door }}_driveway.jpg?t={{
+                ts }}
               group: garage_{{ door }}
               push:
                 interruption-level: time-sensitive
@@ -478,6 +387,7 @@
               - action: '{{ close_action }}'
                 title: Close door
                 destructive: true
+              url: /lovelace/cameras
       - wait_template: '{{ is_state(door_entity, ''open'') }}'
         timeout: 00:00:30
         continue_on_timeout: true
@@ -497,7 +407,8 @@
             title: "\U0001F697 {{ door_name }} garage door {{ pos }}% open"
             message: Garage cam at {{ now().strftime('%H:%M:%S') }}
             data:
-              image: /local/garage_{{ door }}_interior.jpg?t={{ ts }}
+              image: https://homeassistant.gilmore.cloud/local/garage_{{ door }}_interior.jpg?t={{
+                ts }}
               group: garage_{{ door }}
               push:
                 interruption-level: time-sensitive
@@ -505,12 +416,14 @@
               - action: '{{ close_action }}'
                 title: Close door
                 destructive: true
+              url: /lovelace/cameras
         - action: notify.mobile_app_lauras_iphone
           data:
             title: "\U0001F697 {{ door_name }} garage door {{ pos }}% open"
             message: Garage cam at {{ now().strftime('%H:%M:%S') }}
             data:
-              image: /local/garage_{{ door }}_interior.jpg?t={{ ts }}
+              image: https://homeassistant.gilmore.cloud/local/garage_{{ door }}_interior.jpg?t={{
+                ts }}
               group: garage_{{ door }}
               push:
                 interruption-level: time-sensitive
@@ -518,6 +431,7 @@
               - action: '{{ close_action }}'
                 title: Close door
                 destructive: true
+              url: /lovelace/cameras
     - sequence:
       - wait_for_trigger:
         - trigger: event
@@ -2022,8 +1936,7 @@
   mode: single
 - id: '1740320786131'
   alias: 'Night Mode: start sleeping & set HVAC fans on & all lights off if no guests
-    (only exterior & lower & main if guests) & and main tv off & recirc pump off &
-    enable driveway notify'
+    (only exterior & lower & main if guests) & and main tv off & recirc pump off'
   description: also check garage doors and locks - notify if they are open or unlocked
   triggers:
   - trigger: state
@@ -2049,15 +1962,6 @@
     target:
       entity_id: switch.garage_dehumidifier
     data: {}
-  - action: input_boolean.turn_on
-    entity_id:
-    - input_boolean.frigate_doorbell_notifier
-    - input_boolean.frigate_deck_notifier
-    - input_boolean.frigate_driveway_notifier
-    - input_boolean.frigate_frontyard_notifier
-    - input_boolean.frigate_grilldeck_notifier
-    - input_boolean.frigate_patio_notifier
-    - input_boolean.frigate_workshop_notifier
   - action: script.garage_doors_check_and_close
     data: {}
   - action: script.lock_doors
@@ -2412,13 +2316,6 @@
   - trigger: state
     entity_id:
     - sensor.myip
-    - input_boolean.frigate_doorbell_notifier
-    - input_boolean.frigate_deck_notifier
-    - input_boolean.frigate_driveway_notifier
-    - input_boolean.frigate_frontyard_notifier
-    - input_boolean.frigate_grilldeck_notifier
-    - input_boolean.frigate_patio_notifier
-    - input_boolean.frigate_workshop_notifier
   - trigger: template
     value_template: '{{ not (is_state(''sensor.alarm_state'', ''no_alarm_active'')
       or is_state(''sensor.alarm_state'', ''entrance_delay_active'')) }}'
@@ -2576,34 +2473,6 @@
       message: '{{ trigger.calendar_event.summary }}'
       title: TODO
   mode: single
-- id: '1741377153858'
-  alias: 'Frigate: driveway approaching, notify Laura'
-  description: Line crossing detection, only notify if Jon is not home.
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera:
-      - camera.driveway
-      notify_device: 73c269e64dff9787a20e6c1734177e58
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      subtitle: '{{label}} approaching'
-      zone_filter: true
-      zones:
-      - frontyard_far
-      - frontyard_near
-      zone_multi: true
-      zone_order_enforced: true
-      alert_once: true
-      final_update: false
-      presence_filter:
-      - ''
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      button_1: clip
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      button_2: snapshot
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
 - id: '1742135041479'
   alias: doorbell rang
   description: ''
@@ -2667,59 +2536,16 @@
       after: 08:00:00
       before: '20:00:00'
     then:
-    - data: {}
-      action: sonos.snapshot
+    - action: music_assistant.play_announcement
       target:
-        device_id:
-        - 07b29092f142cd2ba3b632feeadb4326
-        - f3e123bf7ccc3b4b49ec333993fe1319
-    - action: media_player.media_stop
-      metadata: {}
-      data: {}
-      target:
-        device_id:
-        - 07b29092f142cd2ba3b632feeadb4326
-        - f3e123bf7ccc3b4b49ec333993fe1319
-    - action: media_player.volume_set
-      metadata: {}
+        entity_id:
+        - media_player.kitchen
+        - media_player.office
       data:
-        volume_level: 0.5
-      target:
-        device_id:
-        - 07b29092f142cd2ba3b632feeadb4326
-        - f3e123bf7ccc3b4b49ec333993fe1319
-    - data:
-        media:
-          media_content_id: media-source://media_source/local/misc/chime.mp3
-          media_content_type: audio/mpeg
-          metadata:
-            title: chime.mp3
-            thumbnail:
-            media_class: music
-            children_media_class:
-            navigateIds:
-            - {}
-            - media_content_type: app
-              media_content_id: media-source://media_source
-            - media_content_type: ''
-              media_content_id: media-source://media_source/local/misc
-            browse_entity_id: media_player.kitchen
-      action: media_player.play_media
-      target:
-        device_id:
-        - 07b29092f142cd2ba3b632feeadb4326
-        - f3e123bf7ccc3b4b49ec333993fe1319
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 3
-        milliseconds: 0
-    - data: {}
-      action: sonos.restore
-      target:
-        device_id:
-        - 07b29092f142cd2ba3b632feeadb4326
-        - f3e123bf7ccc3b4b49ec333993fe1319
+        url: https://homeassistant.gilmore.cloud/local/chime.mp3
+        announce_volume: 50
+        use_pre_announce: false
+      alias: Chime on kitchen + office (MA ducks/resumes music itself)
   mode: single
 - id: '1742136950218'
   alias: foyer motion lights
@@ -2856,41 +2682,6 @@
       - action: alert.turn_on
         entity_id: alert.single_garage_door_open
   mode: parallel
-- id: '1753617437359'
-  alias: 'Frigate: car while away or asleep'
-  description: Car in frontyard_near on driveway/frontyard cameras, while away or
-    in night mode (binary_sensor.send_frigate_alerts).
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera:
-      - camera.driveway
-      - camera.frontyard
-      notify_device: a0231187bde1dbfa1db22db7f40ace97
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      alert_once: true
-      final_update: false
-      presence_filter:
-      - ''
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      button_1: clip
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      button_2: snapshot
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
-      review_severity:
-      - alert
-      - detection
-      labels:
-      - car
-      zone_filter: true
-      zones:
-      - frontyard_near
 - id: '1754224795250'
   alias: 'Utility: low battery notification'
   description: ''
@@ -2905,12 +2696,14 @@
       notify_title: Low Battery
       exclude_sensors:
         entity_id:
-        - sensor.water_main_battery_level
         - sensor.jons_iphone_battery_level
         - sensor.lauras_iphone_battery_level
-        - sensor.jons_iphone_watch_battery_level
-        - sensor.lauras_iphone_watch_battery
         - sensor.ipad_battery_level
+        - sensor.great_room_remote_battery
+        - sensor.gym_remote_battery
+        - sensor.media_room_remote_battery
+        - sensor.sunroom_remote_battery
+        - sensor.jons_iphone_apple_watch_battery_level
       include_button: enable_button_trigger
       button_entity: input_button.check_low_battery
       notify_action_buttons: enable_to_do_list_button
@@ -3543,75 +3336,127 @@
             interruption-level: passive
   mode: single
   max_exceeded: silent
-- id: '1791724928748'
-  alias: 'Frigate: person while away or asleep, notify Laura'
-  description: Person in any Frigate zone (alerts + detections) on exterior cameras,
-    while away or in night mode (binary_sensor.send_frigate_alerts). Laura's copy.
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera:
-      - camera.deck
-      - camera.driveway
-      - camera.doorbell
-      - camera.frontyard
-      - camera.grilldeck
-      - camera.patio
-      - camera.workshop
-      notify_device: 73c269e64dff9787a20e6c1734177e58
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      alert_once: true
-      final_update: false
-      presence_filter:
-      - ''
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      button_1: clip
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      button_2: snapshot
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
-      labels:
-      - person
-      review_severity:
-      - alert
-      - detection
-- id: '1791724933804'
-  alias: 'Frigate: car while away or asleep, notify Laura'
-  description: Car in frontyard_near on driveway/frontyard cameras, while away or
-    in night mode (binary_sensor.send_frigate_alerts). Laura's copy.
-  use_blueprint:
-    path: SgtBatten/Stable.yaml
-    input:
-      camera:
-      - camera.driveway
-      - camera.frontyard
-      notify_device: 73c269e64dff9787a20e6c1734177e58
-      base_url: https://homeassistant.gilmore.cloud
-      message: '{{ label }} detected - {{ camera_name }} at {{event[''after''][''start_time'']|timestamp_custom(''%H:%M'')}}'
-      alert_once: true
-      final_update: false
-      presence_filter:
-      - ''
-      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      button_1: clip
-      url_1: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/{{camera}}/master.m3u8'
-      attachment_2: '{{base_url}}/api/frigate{{client_id}}/notifications/{{review_id}}/review_preview.gif'
-      button_2: snapshot
-      attachment: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg?crop=1'
-      state_filter: true
-      state_entity: binary_sensor.send_frigate_alerts
-      state_filter_states:
-      - 'on'
-      labels:
-      - car
-      zone_filter: true
-      zones:
-      - frontyard_near
-      review_severity:
-      - alert
-      - detection
+- id: '1792587861058'
+  alias: 'Frigate: car'
+  description: 'One notification per Frigate review when a car first enters frontyard_near/frontyard_far
+    (driveway + frontyard cameras). Awake: waits up to 5s for classification and skips
+    known household cars (sub label r1s/q7). Asleep (binary_sensor.sleeping on): notifies
+    for every car immediately. Sends via script.frigate_notify. Note: keys within
+    one variables block must not reference each other (HA stores them sorted).'
+  triggers:
+  - topic: frigate/reviews
+    trigger: mqtt
+  conditions:
+  - alias: New/updated review on driveway or frontyard camera
+    condition: template
+    value_template: '{{ trigger.payload_json.type in [''new'', ''update''] and camera
+      in [''driveway'', ''frontyard''] }}'
+  - alias: Car just entered a driveway zone (fires once per review)
+    condition: template
+    value_template: '{{ after_hit and not before_hit }}'
+  - alias: Asleep, or not already a known car
+    condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.sleeping
+      state: 'on'
+    - condition: template
+      value_template: '{{ not known }}'
+  actions:
+  - alias: 'Awake: wait up to 5s for classification, skip known cars'
+    if:
+    - condition: state
+      entity_id: binary_sensor.sleeping
+      state: 'off'
+    then:
+    - continue_on_timeout: true
+      timeout:
+        seconds: 5
+      wait_for_trigger:
+      - payload: '{{ review_id }}'
+        topic: frigate/reviews
+        trigger: mqtt
+        value_template: '{{ value_json.after.id if value_json.after.data.sub_labels
+          | select(''in'', [''r1s'', ''q7'']) | list else '''' }}'
+    - if:
+      - condition: template
+        value_template: '{{ wait.trigger is not none }}'
+      then:
+      - stop: Known household car
+  - action: script.frigate_notify
+    data:
+      camera: '{{ camera }}'
+      detection_id: '{{ trigger.payload_json.after.data.detections[0] }}'
+      message: Car detected - {{ camera | title }} at {{ trigger.payload_json.after.start_time
+        | timestamp_custom('%H:%M') }}
+      review_id: '{{ review_id }}'
+  max: 10
+  mode: parallel
+  variables:
+    after_hit: '{% set d = trigger.payload_json.after.data %}{{ ''car'' in (d.objects
+      | map(''regex_replace'', ''-verified$'', '''') | list) and (d.zones | select(''in'',
+      [''frontyard_near'', ''frontyard_far'']) | list | count > 0) }}'
+    before_hit: '{% set d = trigger.payload_json.before.data %}{{ trigger.payload_json.type
+      != ''new'' and ''car'' in (d.objects | map(''regex_replace'', ''-verified$'',
+      '''') | list) and (d.zones | select(''in'', [''frontyard_near'', ''frontyard_far''])
+      | list | count > 0) }}'
+    camera: '{{ trigger.payload_json.after.camera }}'
+    known: '{{ trigger.payload_json.after.data.sub_labels | select(''in'', [''r1s'',
+      ''q7'']) | list | count > 0 }}'
+    review_id: '{{ trigger.payload_json.after.id }}'
+- id: '1792587873994'
+  alias: 'Frigate: person'
+  description: 'One notification per Frigate review when a person first matches any
+    rule: (1) driveway camera, entered frontyard_far then frontyard_near (always);
+    (2) doorbell camera, entered doorbell_far then doorbell_near (always); (3) any
+    exterior camera while binary_sensor.send_frigate_alerts is on (away, alarm unoccupied,
+    or sleeping). Sends via script.frigate_notify. Note: keys within one variables
+    block must not reference each other (HA stores them sorted).'
+  triggers:
+  - topic: frigate/reviews
+    trigger: mqtt
+  conditions:
+  - alias: New/updated review
+    condition: template
+    value_template: '{{ trigger.payload_json.type in [''new'', ''update''] }}'
+  - alias: Person just matched a rule (fires once per review)
+    condition: template
+    value_template: '{{ after_match and not before_match }}'
+  actions:
+  - action: script.frigate_notify
+    data:
+      camera: '{{ camera }}'
+      detection_id: '{{ trigger.payload_json.after.data.detections[0] }}'
+      message: Person {{ 'approaching' if approaching else 'detected' }} - {{ camera
+        | title }} at {{ trigger.payload_json.after.start_time | timestamp_custom('%H:%M')
+        }}
+      review_id: '{{ review_id }}'
+  max: 10
+  mode: parallel
+  variables:
+    after_match: '{% macro match(m) -%}{%- set objs = m.data.objects | map(''regex_replace'',
+      ''-verified$'', '''') | list -%}{%- set z = m.data.zones -%}{{ ''person'' in
+      objs and ((m.camera == ''driveway'' and (z | select(''in'', [''frontyard_far'',
+      ''frontyard_near'']) | list) == [''frontyard_far'', ''frontyard_near'']) or
+      (m.camera == ''doorbell'' and (z | select(''in'', [''doorbell_far'', ''doorbell_near''])
+      | list) == [''doorbell_far'', ''doorbell_near'']) or (m.camera in [''deck'',
+      ''driveway'', ''doorbell'', ''frontyard'', ''grilldeck'', ''patio'', ''workshop'']
+      and is_state(''binary_sensor.send_frigate_alerts'', ''on''))) }}{%- endmacro
+      %}{{ match(trigger.payload_json.after) == ''True'' }}'
+    approaching: '{% set m = trigger.payload_json.after %}{% set z = m.data.zones
+      %}{{ (m.camera == ''driveway'' and (z | select(''in'', [''frontyard_far'', ''frontyard_near''])
+      | list) == [''frontyard_far'', ''frontyard_near'']) or (m.camera == ''doorbell''
+      and (z | select(''in'', [''doorbell_far'', ''doorbell_near'']) | list) == [''doorbell_far'',
+      ''doorbell_near'']) }}'
+    before_match: '{% macro match(m) -%}{%- set objs = m.data.objects | map(''regex_replace'',
+      ''-verified$'', '''') | list -%}{%- set z = m.data.zones -%}{{ ''person'' in
+      objs and ((m.camera == ''driveway'' and (z | select(''in'', [''frontyard_far'',
+      ''frontyard_near'']) | list) == [''frontyard_far'', ''frontyard_near'']) or
+      (m.camera == ''doorbell'' and (z | select(''in'', [''doorbell_far'', ''doorbell_near''])
+      | list) == [''doorbell_far'', ''doorbell_near'']) or (m.camera in [''deck'',
+      ''driveway'', ''doorbell'', ''frontyard'', ''grilldeck'', ''patio'', ''workshop'']
+      and is_state(''binary_sensor.send_frigate_alerts'', ''on''))) }}{%- endmacro
+      %}{{ trigger.payload_json.type != ''new'' and match(trigger.payload_json.before)
+      == ''True'' }}'
+    camera: '{{ trigger.payload_json.after.camera }}'
+    review_id: '{{ trigger.payload_json.after.id }}'
