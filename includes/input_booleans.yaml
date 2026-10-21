@@ -13,34 +13,6 @@ alarm_notifier:
   name: Alarm Notifier
   initial: true
   icon: mdi:alarm-bell
-frigate_driveway_notifier:
-  name: Frigate Driveway Notifier
-  initial: true
-  icon: mdi:cctv
-frigate_grilldeck_notifier:
-  name: Frigate Grilldeck Notifier
-  initial: true
-  icon: mdi:cctv
-frigate_deck_notifier:
-  name: Frigate Deck Notifier
-  initial: true
-  icon: mdi:cctv
-frigate_frontyard_notifier:
-  name: Frigate Frontyard Notifier
-  initial: true
-  icon: mdi:cctv
-frigate_patio_notifier:
-  name: Frigate Patio Notifier
-  initial: true
-  icon: mdi:cctv
-frigate_workshop_notifier:
-  name: Frigate Workshop Notifier
-  initial: true
-  icon: mdi:cctv
-frigate_doorbell_notifier:
-  name: Frigate Doorbell Notifier
-  initial: true
-  icon: mdi:cctv
 main_bed_override:
   name: Master Lights Override
 driveway_sentry:

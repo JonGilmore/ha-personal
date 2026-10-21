@@ -381,22 +381,6 @@ tvs_notify:
       - text.gym_screen_notification
     data:
       value: '{{ msg }}'
-send_dynamic_notification:
-  alias: send dynamic notification
-  sequence:
-  - action: notify.mobile_app_jons_iphone
-    data:
-      data:
-        attachment:
-          url: /api/frigate/notifications/{{id}}/snapshot.jpg
-        clickAction: https://homeassistant.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4
-        group: frigate-notification-{{camera}}
-        image: /api/frigate/notifications/{{id}}/snapshot.jpg
-        tag: '{{ id }}'
-        url: https://homeassistant.gilmore.cloud/api/{{id}}/{{camera}}/clip.mp4
-      message: '{{label | title}} detected in {{after_zones[0] }}'
-      title: '{{label | title}} detected on {{trigger.payload_json["after"]["camera"]
-        | replace("_", "") | title }}'
 set_lock_code:
   alias: Set Lock Code
   icon: mdi:arrow-right-bold-circle
@@ -682,3 +666,75 @@ all_echos_on_off:
   - action: homeassistant.turn_{{ power }}
     target:
       entity_id: '{{ targets }}'
+frigate_notify:
+  alias: Frigate notify
+  description: Send one Frigate review notification (snapshot + clip/snapshot buttons)
+    to Jon's and Laura's iPhones. Called by the Frigate car/person automations.
+  fields:
+    camera:
+      description: Frigate camera name
+      name: Camera
+      required: true
+      selector:
+        text: {}
+    detection_id:
+      description: Frigate detection (event) id for snapshot/clip
+      name: Detection ID
+      required: true
+      selector:
+        text: {}
+    message:
+      name: Message
+      required: true
+      selector:
+        text: {}
+    review_id:
+      description: Frigate review id (used as the notification tag)
+      name: Review ID
+      required: true
+      selector:
+        text: {}
+  icon: mdi:cctv
+  max: 20
+  mode: parallel
+  sequence:
+  - variables:
+      clip: https://homeassistant.gilmore.cloud/api/frigate/notifications/{{ detection_id
+        }}/{{ camera }}/master.m3u8
+      snap: https://homeassistant.gilmore.cloud/api/frigate/notifications/{{ detection_id
+        }}/snapshot.jpg
+  - parallel:
+    - action: notify.mobile_app_jons_iphone
+      data:
+        data:
+          actions:
+          - action: URI
+            title: clip
+            uri: '{{ clip }}'
+          - action: URI
+            title: snapshot
+            uri: '{{ snap }}'
+          attachment:
+            content-type: jpeg
+            url: '{{ snap }}?crop=1'
+          group: '{{ camera }}-frigate-notification'
+          tag: '{{ review_id }}'
+          url: '{{ clip }}'
+        message: '{{ message }}'
+    - action: notify.mobile_app_lauras_iphone
+      data:
+        data:
+          actions:
+          - action: URI
+            title: clip
+            uri: '{{ clip }}'
+          - action: URI
+            title: snapshot
+            uri: '{{ snap }}'
+          attachment:
+            content-type: jpeg
+            url: '{{ snap }}?crop=1'
+          group: '{{ camera }}-frigate-notification'
+          tag: '{{ review_id }}'
+          url: '{{ clip }}'
+        message: '{{ message }}'
