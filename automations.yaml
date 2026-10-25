@@ -251,20 +251,21 @@
   - trigger: state
     entity_id: person.laura
     to: home
+    not_from:
+    - unknown
+    - unavailable
   - trigger: state
-    entity_id:
-    - device_tracker.jon_presence
-    to:
-  - trigger: state
-    entity_id:
-    - device_tracker.laura_presence
-    to:
+    entity_id: person.laura
+    from: home
+    not_to:
+    - unknown
+    - unavailable
   conditions: []
   actions:
   - action: notify.mobile_app_jons_iphone
     data:
-      message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
-        }}.'
+      message: Laura is {{ 'home' if trigger.to_state.state == 'home' else 'away'
+        }}.
   mode: single
 - id: '1740318878024'
   alias: 'Vacation Mode: enabled'
@@ -3329,10 +3330,11 @@
 - id: '1792587861058'
   alias: 'Frigate: car'
   description: 'One notification per Frigate review when a car first enters frontyard_near/frontyard_far
-    (driveway + frontyard cameras). Awake: waits up to 5s for classification and skips
-    known household cars (sub label r1s/q7). Asleep (binary_sensor.sleeping on): notifies
-    for every car immediately. Sends via script.frigate_notify. Note: keys within
-    one variables block must not reference each other (HA stores them sorted).'
+    (driveway + frontyard cameras). Awake: waits up to 10s for classification and
+    skips known household cars (sub label r1s/q7). Asleep (binary_sensor.sleeping
+    on): notifies for every car immediately. Sends via script.frigate_notify. Note:
+    keys within one variables block must not reference each other (HA stores them
+    sorted).'
   triggers:
   - topic: frigate/reviews
     trigger: mqtt
@@ -3353,7 +3355,7 @@
     - condition: template
       value_template: '{{ not known }}'
   actions:
-  - alias: 'Awake: wait up to 5s for classification, skip known cars'
+  - alias: 'Awake: wait up to 10s for classification, skip known cars'
     if:
     - condition: state
       entity_id: binary_sensor.sleeping
@@ -3361,7 +3363,7 @@
     then:
     - continue_on_timeout: true
       timeout:
-        seconds: 5
+        seconds: 10
       wait_for_trigger:
       - payload: '{{ review_id }}'
         topic: frigate/reviews
