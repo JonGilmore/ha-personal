@@ -1,21 +1,8 @@
 ---
 default_config:
 homeassistant:
-  name: !secret name
-  latitude: !secret ha_latitude
-  longitude: !secret ha_longitude
-  elevation: !secret ha_elevation
-  currency: USD
-  country: US
-  time_zone: !secret ha_tz
-  external_url: !secret ext_hass_url
-  internal_url: !secret int_hass_url
   customize: !include customize.yaml
   packages: !include_dir_named packages
-  allowlist_external_dirs:
-    - "/config/www"
-  media_dirs:
-    local: /media
 cloud:
 energy:
 frontend:

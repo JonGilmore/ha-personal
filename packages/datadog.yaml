@@ -1,0 +1,84 @@
+# Home Assistant package: homelab health metrics for Datadog.
+template:
+  - triggers:
+      - trigger: time_pattern
+        minutes: "/1"
+    sensor:
+      - name: Homelab Unavailable Entities
+        unique_id: homelab_unavailable_entities
+        state_class: measurement
+        state: >
+          {{ states | rejectattr('domain','in',['button','scene','event','image','update','input_button'])
+             | selectattr('state','eq','unavailable') | list | count }}
+      - name: Homelab Zwave Dead Nodes
+        unique_id: homelab_zwave_dead_nodes
+        state_class: measurement
+        state: >
+          {{ states.sensor | selectattr('entity_id','search','_node_status$')
+             | selectattr('state','eq','dead') | list | count }}
+      - name: Homelab Unavailable esphome
+        unique_id: homelab_unavailable_esphome
+        state_class: measurement
+        state: "{{ integration_entities('esphome') | select('is_state','unavailable') | list | count }}"
+      - name: Homelab Unavailable mqtt
+        unique_id: homelab_unavailable_mqtt
+        state_class: measurement
+        state: "{{ integration_entities('mqtt') | select('is_state','unavailable') | list | count }}"
+      - name: Homelab Unavailable zwave_js
+        unique_id: homelab_unavailable_zwave_js
+        state_class: measurement
+        state: "{{ integration_entities('zwave_js') | select('is_state','unavailable') | list | count }}"
+      - name: Homelab Unavailable lutron_caseta
+        unique_id: homelab_unavailable_lutron_caseta
+        state_class: measurement
+        state: "{{ integration_entities('lutron_caseta') | select('is_state','unavailable') | list | count }}"
+      - name: Homelab Unavailable frigate
+        unique_id: homelab_unavailable_frigate
+        state_class: measurement
+        state: "{{ integration_entities('frigate') | select('is_state','unavailable') | list | count }}"
+      - name: Homelab Unavailable reolink
+        unique_id: homelab_unavailable_reolink
+        state_class: measurement
+        state: "{{ integration_entities('reolink') | select('is_state','unavailable') | list | count }}"
+      - name: Homelab Unavailable elkm1
+        unique_id: homelab_unavailable_elkm1
+        state_class: measurement
+        state: "{{ integration_entities('elkm1') | select('is_state','unavailable') | list | count }}"
+      - name: Homelab Unavailable sonos
+        unique_id: homelab_unavailable_sonos
+        state_class: measurement
+        state: "{{ integration_entities('sonos') | select('is_state','unavailable') | list | count }}"
+      - name: Homelab Unavailable music_assistant
+        unique_id: homelab_unavailable_music_assistant
+        state_class: measurement
+        state: "{{ integration_entities('music_assistant') | select('is_state','unavailable') | list | count }}"
+
+  - binary_sensor:
+      - name: Homelab UPS On Battery
+        unique_id: homelab_ups_on_battery
+        device_class: problem
+        availability: "{{ has_value('sensor.cp1500pfcrm2u_status') }}"
+        state: "{{ not states('sensor.cp1500pfcrm2u_status').startswith('ONLINE') }}"
+      - name: Homelab Unraid Array Problem
+        unique_id: homelab_unraid_array_problem
+        device_class: problem
+        state: >
+          {% set disks = ['sensor.unraid_disk1_status','sensor.unraid_parity_status',
+                          'sensor.unraid_cache_status','sensor.unraid_cache2_status'] %}
+          {{ not is_state('sensor.unraid_array_state','started')
+             or disks | reject('is_state','disk_ok') | list | count > 0 }}
+
+prometheus:
+  requires_auth: true
+  filter:
+    include_entity_globs:
+      - sensor.homelab_*
+      - binary_sensor.homelab_*
+      - sensor.unraid_*_temperature
+      - sensor.unraid_*_usage
+      - sensor.cp1500pfcrm2u_*
+    include_entities:
+      - sensor.unraid_cpu_utilization
+      - sensor.unraid_cpu_power
+      - sensor.unraid_parity_check_errors
+      - sensor.unraid_parity_check_progress
