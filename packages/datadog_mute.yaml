@@ -1,0 +1,41 @@
+# HA package: mute all [Homelab] Datadog monitors (tag team:homelab) for 1h when HA shuts down.
+# Covers HA restarts, container stops, and Unraid reboots (docker stop -> graceful HA shutdown).
+#
+# secrets.yaml:
+#   datadog_api_key: <API key>
+#   datadog_app_key: <application key, needs monitors_downtime scope>
+#
+# Manual use (e.g. before VM testing): Developer Tools -> Actions ->
+#   action: rest_command.datadog_mute_homelab
+#   data: {hours: 2, reason: "VM testing"}
+
+rest_command:
+  datadog_mute_homelab:
+    url: https://api.datadoghq.com/api/v2/downtime
+    method: POST
+    content_type: application/json
+    timeout: 5
+    headers:
+      DD-API-KEY: !secret datadog_api_key
+      DD-APPLICATION-KEY: !secret datadog_app_key
+    payload: >-
+      {"data":{"type":"downtime","attributes":{
+        "scope":"*",
+        "monitor_identifier":{"monitor_tags":["team:homelab"]},
+        "schedule":{"end":"{{ (utcnow() + timedelta(hours=(hours | default(1) | float))).strftime('%Y-%m-%dT%H:%M:%SZ') }}"},
+        "message":"Auto-muted by Home Assistant: {{ reason | default('HA shutdown') }}",
+        "display_timezone":"America/Chicago",
+        "mute_first_recovery_notification":true}}}
+
+automation:
+  - id: datadog_mute_on_ha_shutdown
+    alias: Datadog - mute homelab monitors on HA shutdown
+    mode: single
+    triggers:
+      - trigger: homeassistant
+        event: shutdown
+    actions:
+      - action: rest_command.datadog_mute_homelab
+        data:
+          hours: 1
+          reason: HA shutdown

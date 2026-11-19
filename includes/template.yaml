@@ -261,14 +261,15 @@
       device_class: occupancy
       state: >-
         {{ states('sensor.elkm1_main_bath_pir') == "Violated"
-        or states('sensor.jons_toothbrush') == "running" }}
+        or (is_state('sensor.jons_toothbrush', 'running')
+            and (now() - states.sensor.jons_toothbrush.last_updated).total_seconds() < 300) }}
     - name: "Christmas Season"
       unique_id: christmas_season
       state: >
         {% set today = states('sensor.date').split('-') %}
         {% set month = today[1]|int %}
         {% set day = today[2]|int %}
-        {{ month == 11 and day >= 10
+        {{ month == 11 and day >= 1
         or month == 12
         or month == 1 and day <= 6 }}
     - name: "All Sonos"

@@ -468,127 +468,6 @@
   - action: script.all_off
     data: {}
   mode: single
-- id: '1740319066381'
-  alias: 'Christmas: generic triggers'
-  description: 'at 4:30pm, or if Laura gets home, or when we wake up, turn on the
-    xmas lights. at 11pm, or start sleeping, or laura leaves, or laura gets in bed,
-    or alarm armed away, turn off xmas lights '
-  triggers:
-  - trigger: time
-    at: '16:30:00'
-    id: 430pm
-  - trigger: state
-    entity_id: person.laura
-    to: home
-    id: xmason
-  - trigger: state
-    entity_id: binary_sensor.sleeping
-    from: 'on'
-    to: 'off'
-    id: xmason
-  - trigger: time
-    at: '23:00:00'
-    id: xmasoff-trees
-  - trigger: state
-    entity_id: binary_sensor.sleeping
-    from: 'off'
-    to: 'on'
-    id: xmasoff-trees
-  - trigger: state
-    entity_id: person.laura
-    to: not_home
-    id: xmasoff-trees
-  - trigger: state
-    entity_id: binary_sensor.bed_presence_bed_occupied_right
-    from: 'off'
-    to: 'on'
-    id: xmasoff-trees
-  - trigger: state
-    entity_id: binary_sensor.occupied_alarm
-    from: 'on'
-    to: 'off'
-    id: xmasoff-trees
-  - trigger: time
-    at: '23:00:00'
-    id: xmasoff-all
-  - trigger: time
-    at: '23:30:00'
-    id: xmasoff-all
-  conditions:
-  - condition: state
-    entity_id: binary_sensor.christmas_season
-    state: 'on'
-  actions:
-  - choose:
-    - conditions:
-      - condition: trigger
-        id: 430pm
-      sequence:
-      - action: homeassistant.turn_on
-        target:
-          entity_id:
-          - switch.exterior_roof_outlets
-          - light.roof_lights_power_switch
-        data: {}
-      - choose:
-          conditions:
-          - condition: state
-            entity_id: person.laura
-            state: home
-          sequence:
-          - action: light.turn_on
-            target:
-              entity_id: light.christmas_trees
-            data: {}
-    - conditions:
-      - condition: trigger
-        id: xmasoff-trees
-      sequence:
-      - if:
-        - condition: time
-          after: 06:00:00
-          before: 09:00:00
-        then: []
-        else:
-        - action: light.turn_off
-          target:
-            entity_id: light.christmas_trees
-          data: {}
-    - conditions:
-      - condition: trigger
-        id: xmasoff-all
-      sequence:
-      - action: light.turn_off
-        target:
-          entity_id: light.christmas_lights
-        data: {}
-    - conditions:
-      - condition: trigger
-        id: xmason
-      - condition: time
-        before: '23:00:00'
-        after: 07:00:00
-      sequence:
-      - action: notify.mobile_app_jons_iphone
-        data:
-          message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
-            }}. Christmas lights turned on'
-      - if:
-        - condition: time
-          after: 07:00:00
-          before: '19:00:00'
-        then:
-        - action: light.turn_on
-          target:
-            entity_id: light.christmas_trees
-          data: {}
-        else:
-        - action: light.turn_on
-          metadata: {}
-          target:
-            entity_id: light.main_floor_christmas_lights
-          data: {}
-  mode: single
 - id: '1740319108907'
   alias: 'Utility: basement bath motion'
   description: ''
@@ -716,36 +595,33 @@
   alias: 'Utility: toggle bedroom lamps on button press'
   description: toggle bedroom lamps on button press
   triggers:
-  - trigger: event
-    event_type: lutron_caseta_button_event
-    event_data:
+  - event_data:
+      action: press
       device_id: 0ed5d17f09fc4a169a55251f422cfa1b
       leap_button_number: 2
-      action: press
+    event_type: lutron_caseta_button_event
+    trigger: event
   conditions: []
   actions:
-  - choose:
-    - conditions:
-      - condition: state
-        entity_id: light.jons_lamp
-        state: 'off'
-      - condition: state
-        entity_id: light.lauras_lamp
-        state: 'off'
-      sequence:
-      - action: light.turn_on
-        target:
-          entity_id:
-          - light.jons_lamp
-          - light.lauras_lamp
-        data: {}
-    default:
+  - else:
     - action: light.turn_off
       target:
         entity_id:
         - light.jons_lamp
         - light.lauras_lamp
-      data: {}
+    if:
+    - condition: state
+      entity_id: light.jons_lamp
+      state: 'off'
+    - condition: state
+      entity_id: light.lauras_lamp
+      state: 'off'
+    then:
+    - action: light.turn_on
+      target:
+        entity_id:
+        - light.jons_lamp
+        - light.lauras_lamp
   mode: single
 - id: '1740319287419'
   alias: 'Utility: adblocking on/off'
@@ -1559,8 +1435,8 @@
   mode: restart
 - id: '1740320533697'
   alias: 'Wake Mode: done sleeping in the morning'
-  description: turns the recirc pump on & checks if the date is between Oct-May &
-    turn on some lights & turns Evelyns Rest Plus to green
+  description: checks if the date is between Oct-May & turn on some lights & turns
+    Evelyns Rest Plus to green
   triggers:
   - trigger: state
     entity_id: binary_sensor.sleeping
@@ -1578,7 +1454,6 @@
   - action: homeassistant.turn_on
     target:
       entity_id:
-      - switch.basement_equipment_room_recirculation_pump
       - light.show_screen
       - light.kitchen_screen
     data: {}
@@ -1763,9 +1638,6 @@
     at: '15:30:00'
     id: 330pm
   - trigger: time
-    at: '16:30:00'
-    id: 430pm
-  - trigger: time
     at: '23:00:00'
     id: 11pm
   - trigger: homeassistant
@@ -1841,7 +1713,6 @@
       - action: homeassistant.turn_off
         target:
           entity_id:
-          - switch.basement_equipment_room_recirculation_pump
           - fan.upstairs_main_bedroom_fan
         data: {}
     - conditions:
@@ -1867,17 +1738,6 @@
       - action: homeassistant.turn_off
         target:
           entity_id: fan.evelyns_fan
-        data: {}
-    - conditions:
-      - condition: trigger
-        id: 430pm
-      - condition: state
-        entity_id: binary_sensor.anybody_home
-        state: 'on'
-      sequence:
-      - action: homeassistant.turn_on
-        target:
-          entity_id: switch.basement_equipment_room_recirculation_pump
         data: {}
     - conditions:
       - condition: trigger
@@ -2054,10 +1914,6 @@
         id:
         - arriving
       sequence:
-      - action: homeassistant.turn_on
-        target:
-          entity_id: switch.basement_equipment_room_recirculation_pump
-        data: {}
       - if:
         - condition: state
           entity_id: binary_sensor.light_inside
@@ -2695,6 +2551,7 @@
         - sensor.media_room_remote_battery
         - sensor.sunroom_remote_battery
         - sensor.jons_iphone_apple_watch_battery_level
+        - sensor.lg_tv4_remote_battery
       include_button: enable_button_trigger
       button_entity: input_button.check_low_battery
       notify_action_buttons: enable_to_do_list_button
@@ -3330,19 +3187,20 @@
 - id: '1792587861058'
   alias: 'Frigate: car'
   description: 'One notification per Frigate review when a car first enters frontyard_near/frontyard_far
-    (driveway + frontyard cameras). Awake: waits up to 10s for classification and
-    skips known household cars (sub label r1s/q7). Asleep (binary_sensor.sleeping
-    on): notifies for every car immediately. Sends via script.frigate_notify. Note:
-    keys within one variables block must not reference each other (HA stores them
-    sorted).'
+    (driveway camera only; frontyard uses Dahua auto-tracking, so its zones are unreliable).
+    Awake: waits up to 10s for classification and skips known household cars (sub
+    label r1s/q7). Asleep (binary_sensor.sleeping on): notifies for every car immediately.
+    Sends via script.frigate_notify. Note: keys within one variables block must not
+    reference each other (HA stores them sorted).'
   triggers:
   - topic: frigate/reviews
     trigger: mqtt
   conditions:
-  - alias: New/updated review on driveway or frontyard camera
+  - alias: New/updated review on driveway camera (fixed; frontyard is PTZ-tracking
+      so zones are unreliable)
     condition: template
     value_template: '{{ trigger.payload_json.type in [''new'', ''update''] and camera
-      in [''driveway'', ''frontyard''] }}'
+      == ''driveway'' }}'
   - alias: Car just entered a driveway zone (fires once per review)
     condition: template
     value_template: '{{ after_hit and not before_hit }}'
@@ -3452,3 +3310,498 @@
       == ''True'' }}'
     camera: '{{ trigger.payload_json.after.camera }}'
     review_id: '{{ trigger.payload_json.after.id }}'
+- id: '1793537780976'
+  alias: 'Automatic Lighting: front lights dusk to dawn'
+  description: 'Front lights on while binary_sensor.outside_dark is on (outdoor PIR
+    < 5 lux and Tempest < 230 lux), off otherwise. During Christmas season the front
+    lights stay off and the Govee roof lights come on at dark instead; Christmas:
+    all lights off at night turns the roof lights off at 11pm. 5-minute hold on each
+    transition. Re-syncs front lights on HA start.'
+  triggers:
+  - entity_id: binary_sensor.outside_dark
+    for:
+      minutes: 5
+    to: 'on'
+    trigger: state
+    id: dark
+  - entity_id: binary_sensor.outside_dark
+    for:
+      minutes: 5
+    to: 'off'
+    trigger: state
+    id: light
+  - event: start
+    trigger: homeassistant
+    id: start
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.outside_dark
+        state: 'on'
+      - condition: state
+        entity_id: binary_sensor.christmas_season
+        state: 'on'
+      sequence:
+      - action: switch.turn_off
+        target:
+          entity_id: switch.exterior_front_lights
+      - if:
+        - condition: trigger
+          id: dark
+        then:
+        - action: light.turn_on
+          target:
+            entity_id: light.roof_lights
+        note: Only at the dark transition, so an HA restart after 11pm does not turn
+          the roof lights back on.
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.outside_dark
+        state: 'on'
+      sequence:
+      - action: switch.turn_on
+        target:
+          entity_id: switch.exterior_front_lights
+    default:
+    - action: switch.turn_off
+      target:
+        entity_id: switch.exterior_front_lights
+  mode: restart
+- id: '1793581066843'
+  alias: 'Automatic Lighting: lights off when camera sees no person'
+  description: 'Turns off a camera area''s lights after its Frigate person occupancy
+    has been clear for 10 minutes. To add an area: add its occupancy sensor to the
+    trigger and a matching entry in the `areas` map.'
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.grilldeck_person_occupancy
+    - binary_sensor.patio_person_occupancy
+    - binary_sensor.garage_person_occupancy
+    from: 'on'
+    to: 'off'
+    for:
+      minutes: 10
+    note: 'from: on so an unavailable -> off blip after a restart doesn''t count.
+      Keep this list in sync with the areas map.'
+  conditions: []
+  actions:
+  - action: light.turn_off
+    target:
+      entity_id: '{{ areas[trigger.entity_id] }}'
+    data: {}
+  max: 10
+  mode: parallel
+  variables:
+    areas:
+      binary_sensor.grilldeck_person_occupancy:
+      - light.exterior_grilldeck_light
+      binary_sensor.patio_person_occupancy:
+      - light.exterior_patio_cans
+      binary_sensor.garage_person_occupancy:
+      - light.main_floor_garage_lights
+- id: '1793845261415'
+  alias: 'Christmas: foyer lights on motion'
+  description: During Christmas season, foyer Christmas lights on when the foyer or
+    kitchen Elk PIR sees motion while it's dark out (binary_sensor.outside_dark) and
+    we're awake; off after 20 min with no motion on either.
+  triggers:
+  - entity_id:
+    - binary_sensor.elkm1_foyer_pir
+    - binary_sensor.elkm1_kitchen_pir
+    id: motion
+    to: 'on'
+    trigger: state
+  - entity_id:
+    - binary_sensor.elkm1_foyer_pir
+    - binary_sensor.elkm1_kitchen_pir
+    for:
+      minutes: 20
+    id: clear
+    note: Elk PIRs have no device_class, so motion.* purpose-specific triggers don't
+      apply.
+    to: 'off'
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.christmas_season
+    state: 'on'
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: motion
+      - condition: state
+        entity_id: binary_sensor.sleeping
+        state: 'off'
+      - condition: state
+        entity_id: binary_sensor.outside_dark
+        state: 'on'
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id: light.foyer_christmas_lights
+    - conditions:
+      - condition: trigger
+        id: clear
+      - condition: state
+        entity_id: binary_sensor.elkm1_foyer_pir
+        for:
+          minutes: 20
+        state: 'off'
+      - condition: state
+        entity_id: binary_sensor.elkm1_kitchen_pir
+        for:
+          minutes: 20
+        state: 'off'
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.foyer_christmas_lights
+  mode: restart
+- id: '1794193482750'
+  alias: 'Security Lighting: front lights on person in frontyard_near'
+  description: When it's dark out (binary_sensor.outside_dark), a person in Frigate's
+    frontyard_near zone (either camera) turns the front exterior lights on; off 10
+    min after the zone clears. Outside Christmas season the dusk-to-dawn automation
+    already keeps the front lights on all night, so this only turns them off during
+    the season.
+  triggers:
+  - target:
+      entity_id:
+      - binary_sensor.frontyard_near_person_occupancy
+    trigger: occupancy.detected
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.outside_dark
+    state: 'on'
+  actions:
+  - action: switch.turn_on
+    target:
+      entity_id: switch.exterior_front_lights
+  - continue_on_timeout: true
+    note: Stay on while someone is still in the zone.
+    timeout: 02:00:00
+    wait_template: '{{ is_state(''binary_sensor.frontyard_near_person_occupancy'',
+      ''off'') }}'
+  - delay:
+      minutes: 10
+  - if:
+    - condition: state
+      entity_id: binary_sensor.christmas_season
+      state: 'on'
+    note: Outside the season the dusk-to-dawn automation owns the front lights at
+      night.
+    then:
+    - action: switch.turn_off
+      target:
+        entity_id: switch.exterior_front_lights
+  mode: restart
+- id: '1794193483405'
+  alias: 'Security Lighting: grilldeck + workshop lights on person nearby'
+  description: When it's dark out (binary_sensor.outside_dark), a person in Frigate's
+    workshop_near or grilldeck_near zone turns on the grilldeck and workshop exterior
+    lights; off 10 min after both zones clear.
+  triggers:
+  - target:
+      entity_id:
+      - binary_sensor.workshop_near_person_occupancy
+      - binary_sensor.grilldeck_near_person_occupancy
+    trigger: occupancy.detected
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.outside_dark
+    state: 'on'
+  actions:
+  - action: light.turn_on
+    target:
+      entity_id:
+      - light.exterior_grilldeck_light
+      - light.exterior_workshop_light
+  - continue_on_timeout: true
+    note: Stay on while someone is still in either zone.
+    timeout: 02:00:00
+    wait_template: '{{ is_state(''binary_sensor.workshop_near_person_occupancy'',
+      ''off'') and is_state(''binary_sensor.grilldeck_near_person_occupancy'', ''off'')
+      }}'
+  - delay:
+      minutes: 10
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.exterior_grilldeck_light
+      - light.exterior_workshop_light
+  mode: restart
+- id: '1794836152829'
+  alias: 'Christmas: lights on at 4:30pm'
+  description: Roof outlets on; main floor trees on if Laura is home. Evelyn's tree
+    is never auto-on.
+  triggers:
+  - at: '16:30:00'
+    trigger: time
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.christmas_season
+    state: 'on'
+  actions:
+  - action: switch.turn_on
+    target:
+      entity_id: switch.exterior_roof_outlets
+  - if:
+    - condition: state
+      entity_id: person.laura
+      state: home
+    then:
+    - action: light.turn_on
+      target:
+        entity_id: light.main_floor_christmas_lights
+  mode: single
+- id: '1794836153853'
+  alias: 'Christmas: lights on when Laura gets home or we wake up'
+  description: Main floor trees on between 7am and 11pm. Evelyn's tree is never auto-on.
+  triggers:
+  - entity_id: person.laura
+    to: home
+    trigger: state
+  - entity_id: binary_sensor.sleeping
+    from: 'on'
+    to: 'off'
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.christmas_season
+    state: 'on'
+  - after: 07:00:00
+    before: '23:00:00'
+    condition: time
+  actions:
+  - action: notify.mobile_app_jons_iphone
+    data:
+      message: '{{ trigger.to_state.attributes.friendly_name }} is {{ trigger.to_state.state
+        }}. Christmas lights turned on'
+  - action: light.turn_on
+    target:
+      entity_id: light.main_floor_christmas_lights
+  mode: single
+- id: '1794836155506'
+  alias: 'Christmas: trees off at bedtime or when leaving'
+  description: Trees off when sleeping, Jon's side of bed occupied, Laura leaves,
+    or alarm armed away. Skipped 6am-9am.
+  triggers:
+  - entity_id: binary_sensor.sleeping
+    from: 'off'
+    to: 'on'
+    trigger: state
+  - entity_id: binary_sensor.bed_presence_bed_occupied_right
+    from: 'off'
+    to: 'on'
+    trigger: state
+  - entity_id: person.laura
+    to: not_home
+    trigger: state
+  - entity_id: binary_sensor.occupied_alarm
+    from: 'on'
+    to: 'off'
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.christmas_season
+    state: 'on'
+  - after: 09:00:00
+    before: 06:00:00
+    condition: time
+  actions:
+  - action: light.turn_off
+    target:
+      entity_id: light.christmas_trees
+  mode: single
+- id: '1794836156414'
+  alias: 'Christmas: all lights off at night'
+  description: All Christmas and roof lights off at 11pm, with an 11:30pm retry.
+  triggers:
+  - at: '23:00:00'
+    trigger: time
+  - at: '23:30:00'
+    trigger: time
+  conditions:
+  - condition: state
+    entity_id: binary_sensor.christmas_season
+    state: 'on'
+  actions:
+  - action: light.turn_off
+    target:
+      entity_id:
+      - light.christmas_lights
+      - light.roof_lights
+  mode: single
+- id: '1794889473359'
+  alias: 'Frigate: thingino animal'
+  description: Notify (via script.frigate_notify) on every new Frigate review from
+    the garage thingino cam. That camera only tracks animals, so any review = animal.
+  triggers:
+  - payload: thingino-new
+    topic: frigate/reviews
+    trigger: mqtt
+    value_template: '{{ value_json.after.camera }}-{{ value_json.type }}'
+  conditions: []
+  actions:
+  - action: script.frigate_notify
+    data:
+      camera: thingino
+      detection_id: '{{ trigger.payload_json.after.data.detections[0] }}'
+      message: '{{ trigger.payload_json.after.data.objects | map(''regex_replace'',
+        ''-verified$'', '''') | unique | join('', '') | title }} in garage at {{ trigger.payload_json.after.start_time
+        | timestamp_custom(''%H:%M'') }}'
+      review_id: '{{ trigger.payload_json.after.id }}'
+  max: 10
+  mode: parallel
+- id: '1794889474855'
+  alias: 'Frigate: thingino garage motion'
+  description: Notify Jon on motion from the garage thingino cam while the single
+    garage door has been closed 2+ min (skips door open/close motion). Max one notification
+    per 10 min.
+  triggers:
+  - entity_id: binary_sensor.thingino_motion
+    to: 'on'
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: cover.single_garage_door
+    for:
+      minutes: 2
+    state: closed
+  actions:
+  - action: notify.mobile_app_jons_iphone
+    data:
+      data:
+        entity_id: camera.thingino
+        group: thingino-motion
+        tag: thingino-motion
+      message: Motion on thingino cam at {{ now().strftime('%H:%M') }}
+      title: Garage motion
+  - delay:
+      minutes: 10
+  max_exceeded: silent
+  mode: single
+- id: '1795056298269'
+  alias: 'Utility: bedroom keypad lamps LED follows lamps'
+  description: Keypad Lamps LED on when either bedroom lamp is on.
+  triggers:
+  - entity_id:
+    - light.jons_lamp
+    - light.lauras_lamp
+    id: lamp
+    to:
+    - 'on'
+    - 'off'
+    trigger: state
+  - event: start
+    id: lamp
+    trigger: homeassistant
+  - entity_id: switch.upstairs_main_bedroom_main_bedroom_position_3_keypad_lamps_led
+    id: lamp
+    note: Re-sync if Lutron flips the LED on a press.
+    trigger: state
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: lamp
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: light.jons_lamp
+          state: 'on'
+        - condition: state
+          entity_id: light.lauras_lamp
+          state: 'on'
+      sequence:
+      - condition: state
+        entity_id: switch.upstairs_main_bedroom_main_bedroom_position_3_keypad_lamps_led
+        state: 'off'
+      - action: switch.turn_on
+        target:
+          entity_id: switch.upstairs_main_bedroom_main_bedroom_position_3_keypad_lamps_led
+    - conditions:
+      - condition: trigger
+        id: lamp
+      sequence:
+      - condition: state
+        entity_id: switch.upstairs_main_bedroom_main_bedroom_position_3_keypad_lamps_led
+        state: 'on'
+      - action: switch.turn_off
+        target:
+          entity_id: switch.upstairs_main_bedroom_main_bedroom_position_3_keypad_lamps_led
+  max: 10
+  mode: queued
+- id: '1795057983168'
+  alias: 'Recirc: run pump 10 on / 20 off in usage windows'
+  description: 'Hot water recirculation. Mornings (wake until 9am) and evenings (5-9pm):
+    pump 10 min on, 20 min off, while someone is home and awake, not on vacation,
+    and the water main is open. Leak/vacation/leaving/night shut-offs live in their
+    own automations.'
+  triggers:
+  - entity_id: binary_sensor.sleeping
+    from: 'on'
+    note: Wake-up starts the morning window.
+    to: 'off'
+    trigger: state
+  - at: '17:00:00'
+    note: Evening window start.
+    trigger: time
+  - entity_id: binary_sensor.occupied_alarm
+    from: 'off'
+    note: Arriving home mid-window.
+    to: 'on'
+    trigger: state
+  - event: start
+    note: Resume after an HA restart mid-window.
+    trigger: homeassistant
+  conditions:
+  - condition: or
+    conditions:
+    - after: 04:30:00
+      before: 09:00:00
+      condition: time
+    - after: '17:00:00'
+      before: '21:00:00'
+      condition: time
+  actions:
+  - repeat:
+      sequence:
+      - action: switch.turn_on
+        target:
+          entity_id: switch.basement_equipment_room_recirculation_pump
+      - delay:
+          minutes: 10
+      - action: switch.turn_off
+        target:
+          entity_id: switch.basement_equipment_room_recirculation_pump
+      - delay:
+          minutes: 20
+      while:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: 'on'
+      - condition: state
+        entity_id: binary_sensor.sleeping
+        state: 'off'
+      - condition: state
+        entity_id: binary_sensor.vacation
+        state: 'off'
+      - condition: state
+        entity_id: valve.water_main
+        state: open
+      - condition: or
+        conditions:
+        - after: 04:30:00
+          before: 09:00:00
+          condition: time
+        - after: '17:00:00'
+          before: '21:00:00'
+          condition: time
+  max_exceeded: silent
+  mode: single
